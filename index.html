@@ -23,7 +23,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 input{font:inherit;color:inherit}
 [hidden]{display:none!important}
+*{-webkit-tap-highlight-color:transparent}
+:focus{outline:none}
 :focus-visible{outline:2px solid var(--p2);outline-offset:2px}
+@media (hover:none){:focus-visible{outline:none}}
+button,[role=button]{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button:not(.pin):not(.isl){transition:transform .12s ease,background-color .15s,opacity .15s}
+button:active:not(:disabled),[role=button]:active{transform:scale(.97)}
+.row:active{transform:scale(.985)}
 .num{font-variant-numeric:tabular-nums}
 svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 
