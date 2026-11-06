@@ -1125,9 +1125,12 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   /* full pages + drawer: glass over the blurred map */
   html body.m2on .m-page,html body.m2on .m-drawer{background:rgba(14,14,18,.62)!important;backdrop-filter:blur(34px) saturate(140%);-webkit-backdrop-filter:blur(34px) saturate(140%)}
   html body.m2on .m-scrim{background:rgba(0,0,0,.35)}
-  html body.m2on .m-foot{background:linear-gradient(180deg,rgba(14,14,18,0),rgba(14,14,18,.85) 40%)!important}
+  html body.m2on .m-foot{margin:0 -16px;padding:12px 16px max(10px,env(safe-area-inset-bottom));z-index:5;background:#151519!important;box-shadow:0 -1px 0 rgba(255,255,255,.08)}
+  html body.m2on .m-page:has(.m-foot){padding-bottom:0}
+  html body.m2on .m-rv .rh .stz{margin-left:0}
+  html body.m2on .m-rv .stz svg.off{fill:rgba(255,255,255,.25)}
   /* cards, rows, tiles */
-  html body.m2on .m-card,html body.m2on .m-lst,html body.m2on .m-chat,html body.m2on .m-al,html body.m2on .m-tile,html body.m2on .m-list,html body.m2on .m-fee,html body.m2on .m-field,html body.m2on .m-rv,html body.m2on .m-price,html body.m2on .m-who{background:rgba(255,255,255,.07)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)!important;color:#F4F3F7}
+  html body.m2on .m-card,html body.m2on .m-lst,html body.m2on .m-chat,html body.m2on .m-al,html body.m2on .m-tile,html body.m2on .m-list,html body.m2on .m-fee,html body.m2on .m-field,html body.m2on .m-xx{background:rgba(255,255,255,.07)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)!important;color:#F4F3F7}
   html body.m2on .m-li,html body.m2on .m-dg .m-li{border-color:rgba(255,255,255,.08)!important}
   html body.m2on .m-hr{background:rgba(255,255,255,.1)}
   html body.m2on .mlg,html body.m2on .m-tile .ci,html body.m2on .m-al .ai,html body.m2on .m-df .ai,html body.m2on .m-wab{background:rgba(255,255,255,.10)!important;color:#fff!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)!important}
