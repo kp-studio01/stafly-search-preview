@@ -1541,8 +1541,8 @@ input[type=search]::-webkit-search-cancel-button{display:none}
 </style>
 <style id="lv-view">
 @media (max-width:820px){
-  .lv-view{position:fixed;inset:0;z-index:2600;background:#0B0B0D;color:#fff;opacity:0;pointer-events:none;transform:scale(.97);transition:opacity .25s,transform .3s cubic-bezier(.2,.9,.2,1);overflow:hidden}
-  body.lv-on .lv-view{opacity:1;pointer-events:auto;transform:none}
+  .lv-view{position:fixed;inset:0;z-index:2600;visibility:hidden;background:#0B0B0D;color:#fff;opacity:0;pointer-events:none;transform:scale(.97);transition:opacity .25s,transform .3s cubic-bezier(.2,.9,.2,1);overflow:hidden}
+  body.lv-on .lv-view{opacity:1;pointer-events:auto;transform:none;visibility:visible}
   .lv-bg{position:absolute;inset:0;overflow:hidden}
   .lv-zoom{position:absolute;inset:0;transform:scale(1.9);transform-origin:50% 46%}
   .lv-bg .g-tiles{position:absolute;width:768px}.lv-bg .g-tiles img{position:absolute;width:256px;height:256px}
@@ -1593,8 +1593,16 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   /* small tags on card photos: plain tint, no blur */
   html body.m2on.m2on .g-tag,html body.m2on.m2on .g-time{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(16,16,20,.62)}
   html body.m2on.m2on .g-tag.hot{background:rgba(229,72,77,.9)}
-  /* status row: keep it on its own layer so it never drops out while scrolling */
-  html body.m2on.m2on .lv-row{transform:translateZ(0)}
+  /* lighter for the phone's graphics memory: no filters/layers on photo tiles, pulses via opacity only */
+  html body.m2on.m2on .g-tiles{filter:none!important}
+  html body.m2on.m2on .g-shade{background:linear-gradient(180deg,rgba(10,10,12,.42) 0%,rgba(10,10,12,.08) 30%,rgba(10,10,12,.1) 45%,rgba(10,10,12,.85) 100%)!important}
+  html body.m2on.m2on .lv-now i,html body.m2on.m2on .lvd{animation:lvBlink 1.6s ease-in-out infinite!important;box-shadow:none!important}
+  html body.m2on.m2on .g-tag.hot .lvd{animation:none!important}
+  @keyframes lvBlink{0%,100%{opacity:1}50%{opacity:.35}}
+  html body.m2on.m2on .g-card{box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 8px 20px rgba(0,0,0,.22)!important}
+  html body.m2on.m2on.m-light .g-card{box-shadow:0 0 0 1px rgba(18,18,21,.05),0 8px 20px rgba(18,18,21,.08)!important}
+  /* nothing on the hidden map keeps animating under a page */
+  html body.m2on.m2on.m-pgon .youwrap .you::before,html body.m2on.m2on.m-subon .youwrap .you::before{animation:none!important}
 }
 </style>
 </head>
@@ -2443,7 +2451,7 @@ function lvShow(){const d=DROPS[LVI],v=vOf(d.id),o=$('#lvView');if(!o)return;
   <div class="lv-ft"><span class="lv-cat">${catL(v.cat)} · ${dtxt(v)}</span><p>${d.t}</p><div class="g-act"><button type="button" class="g-ghost" data-lvmap="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div>`;
   clearTimeout(LVT);LVT=setTimeout(()=>lvStep(1),5000);}
 function lvStep(k){const n=LVI+k;if(n<0){LVI=0;return lvShow();}if(n>=DROPS.length)return lvClose();LVI=n;lvShow();}
-function lvClose(){clearTimeout(LVT);document.body.classList.remove('lv-on');}
+function lvClose(){clearTimeout(LVT);document.body.classList.remove('lv-on');setTimeout(()=>{if(!document.body.classList.contains('lv-on')){const o=$('#lvView');if(o)o.innerHTML='';}},320);}
 function lvFire(attr,val){const b=document.createElement('button');b.type='button';b.setAttribute(attr,val);b.style.display='none';document.body.appendChild(b);b.click();b.remove();}
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let el;const stop=()=>{e.stopImmediatePropagation();e.preventDefault();};
   if(el=t.closest('[data-lvgo]')){stop();return lvOpen(DROPS.findIndex(d=>d.id===el.dataset.lvgo));}
