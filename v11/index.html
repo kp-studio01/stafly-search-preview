@@ -523,7 +523,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   .m2 button{color:inherit}
   .m2 svg.i{stroke-width:1.9}
   /* pins */
-  .tp{position:relative;width:40px;height:48px;cursor:pointer}
+  .tp{width:40px;height:48px;cursor:pointer}.maplibregl-marker.tp{position:absolute}
   .tp .tpb{position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:#0E0E10;display:grid;place-items:center;box-shadow:0 6px 14px rgba(0,0,0,.28);transition:background .2s,transform .2s}
   .tp .tpb svg{transform:rotate(45deg);width:19px;height:19px;color:#fff;stroke-width:2}
   .tp.shut .tpb{background:#A9A8AE}
@@ -745,6 +745,21 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   .m-df .ai svg{width:15px;height:15px}
   body.m2on:not(.m-subon) .m-sub{transform:translateX(104%);pointer-events:none}
   .m-dg{flex:none}
+
+  body.m2on .isl{display:none!important}
+  .m-ban{position:fixed;left:10px;right:10px;top:max(10px,env(safe-area-inset-top));z-index:2200;background:#fff;color:var(--ink);border-radius:24px;box-shadow:0 14px 36px rgba(14,14,16,.18),0 0 0 1px rgba(14,14,16,.05);padding:12px 12px 12px 12px;display:flex;align-items:center;gap:12px;transform:translateY(calc(-100% - 30px));transition:transform .45s cubic-bezier(.2,.9,.2,1);text-align:left;touch-action:pan-x}
+  .m-ban.on{transform:none}
+  .m-ban .logo{width:44px;height:44px;font-size:13.5px;border-radius:50%}
+  .m-ban .bt{flex:1;min-width:0}
+  .m-ban .bk{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mu);margin-bottom:1px}
+  .m-ban .bk i{width:7px;height:7px;border-radius:50%;background:var(--ac)}
+  .m-ban .bk.lv i{background:#FF4D5E}
+  .m-ban .bk span{font-weight:400}
+  .m-ban b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-ban p{margin:1px 0 0;font-size:13.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-ban .ba{height:38px;padding:0 16px;border-radius:19px;background:var(--ink);color:#fff!important;font-size:14px;font-weight:600;flex:none}
+  .m-ban .ba.ac{background:var(--ac)}
+  .m-ban .gr{position:absolute;left:50%;bottom:5px;width:34px;height:4px;margin-left:-17px;border-radius:2px;background:#E4E3DF}
   .m2 svg.sv{fill:#FF4D5E;stroke:#FF4D5E}
   body.m2on .logo{box-shadow:inset 0 0 0 1px rgba(14,14,16,.08)}
   body.m2on .isl{background:#0E0E10}
@@ -1121,7 +1136,7 @@ const STYLE={version:8,glyphs:OFM+'/fonts/{fontstack}/{range}.pbf',sources:{ofm:
   {id:'place',type:'symbol',source:'ofm','source-layer':'place',layout:{'text-field':['get','name'],'text-font':['Noto Sans Regular'],'text-size':13,'text-letter-spacing':.04},paint:{'text-color':M2?'#6E6D75':'#B5B3BE','text-halo-color':C.halo,'text-halo-width':1.6}}
  ]};
 const ll2=ll=>[ll[1],ll[0]];
-const map=new maplibregl.Map({container:'map',style:STYLE,center:[4.5262,7.5185],zoom:16,pitch:58,bearing:-18,maxPitch:70,antialias:true,attributionControl:false});
+const map=new maplibregl.Map({container:'map',style:STYLE,center:[4.5262,7.5185],zoom:16,pitch:58,bearing:-18,maxPitch:70,minZoom:13.5,maxBounds:[[4.47,7.47],[4.58,7.56]],antialias:true,attributionControl:false});
 map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:'© OpenStreetMap contributors · OpenFreeMap'}),'bottom-left');
 let ready=false;
 map.on('load',()=>{ready=true;
@@ -1348,8 +1363,8 @@ let tt;
 function toast(v,title,sub,o){return notify(Object.assign({v,title,body:sub,kind:'live'},o||{}));const el=$('#toast');el.innerHTML=`${logo(v)}<div><b>${title}</b><span>${sub}</span></div>`;el.dataset.id=v.id;el.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('on'),5200);}
 $('#toast').addEventListener('click',()=>{const id=$('#toast').dataset.id;$('#toast').classList.remove('on');if(id)select(id,false);});
 function joinGroup(id){joined.add(id);drawMarkers();select(id,true);const g=GROUPS[id];notify({v:V.find(x=>x.id===id),kind:'group',me:true,title:"You're in. Delivery is split "+(g.n+1)+" ways",short:"You joined the group",body:'Your share of delivery to '+g.hall.replace(' Hall','')+' drops as more people join.',group:{n:g.n+1,need:g.need,closes:g.closes},acts:[['View on map','data-nview="'+id+'"',''],['Chat to order','data-chat="'+id+'"','pri']]});}
-setTimeout(()=>{const g=GROUPS.mamatee;notify({v:V.find(x=>x.id==='mamatee'),kind:'group',title:'Group order to Moremi is filling up',short:'Moremi group order · '+g.n+' of '+g.need,body:"Join Mama Tee's lunch run and split one delivery with people in your hall.",group:g,acts:[['View on map','data-nview="mamatee"',''],['Join group','data-njoin="mamatee"','pri']]});},2500);
-setTimeout(()=>{DROPS.forEach(d=>d.m+=1);DROPS.unshift(LATE);drawMarkers();renderShelf();notify({v:V.find(x=>x.id==='kemi'),title:"Kemi's Thrift just posted",short:"Kemi's Thrift is live",body:LATE.t+'. First come, first served.'});},12000);
+setTimeout(()=>{const g=GROUPS.mamatee;notify({v:V.find(x=>x.id==='mamatee'),kind:'group',title:'Group order to Moremi is filling up',short:'Moremi group order · '+g.n+' of '+g.need,body:"Join Mama Tee's lunch run and split one delivery with people in your hall.",group:g,acts:[['View on map','data-nview="mamatee"',''],['Join group','data-njoin="mamatee"','pri']]});},M2?9000:2500);
+setTimeout(()=>{DROPS.forEach(d=>d.m+=1);DROPS.unshift(LATE);drawMarkers();renderShelf();notify({v:V.find(x=>x.id==='kemi'),title:"Kemi's Thrift just posted",short:"Kemi's Thrift is live",body:LATE.t+'. First come, first served.'});},M2?26000:12000);
 setInterval(()=>{DROPS.forEach(d=>d.m+=1);if(!st.q)renderLive();},60000);
 /* phone sheet */
 let sheet='mid';
@@ -1406,13 +1421,13 @@ addEventListener('popstate',e=>{if(!window.__m2)return;CUR=Object.assign({t:'exp
 function m2Apply(){const b=document.body;b.classList.remove('m-drw');
   const pg=CUR.t!=='explore';b.classList.toggle('m-pgon',pg);b.classList.toggle('m-subon',!!CUR.s);
   if(pg){$('#mPage').innerHTML=m2Page(CUR.t);$('#mPage').scrollTop=0;}
-  if(CUR.s){$('#mSub').innerHTML=m2Sub(CUR.s,CUR.id);$('#mSub').scrollTop=0;if(CUR.s==='alerts'){ALSEEN=true;}}
+  if(CUR.s){$('#mSub').innerHTML=m2Sub(CUR.s,CUR.id);$('#mSub').scrollTop=0;if(CUR.s==='alerts'){UNSEEN=0;}}
   if(CUR.sel&&!pg&&!CUR.s)m2Sheet(CUR.sel);else m2Hide();
   m2Tabs();m2Top();
   if(CUR.t==='places')m2PlacesList();
 }
 function m2Hide(){document.body.classList.remove('m-sheeton');if(st.sel){st.sel=null;setRoute([]);for(const k in markers)markers[k].getElement().classList.remove('sel');}}
-function m2Top(){const d=document.querySelector('.m-top .dot');if(d)d.style.display=ALSEEN?'none':'';}
+function m2Top(){const d=document.querySelector('.m-top .dot');if(d)d.style.display=UNSEEN?'':'none';}
 function m2Tabs(){const fresh=DROPS.some(d=>d.m<2),un=CHATS.filter(c=>c.n).length;
   $('#mTabs').innerHTML=[['explore','Explore','compass'],['places','Places','list'],['live','Live','radio'],['groups','Groups','users'],['chats','Chats','chat']].map(([k,l,ic])=>`<button class="m-tab${CUR.t===k?' on':''}" type="button" data-mtab="${k}" aria-label="${l}">${mS(ic)}<span>${l}</span>${(k==='live'&&fresh)||(k==='chats'&&un)?'<i></i>':''}</button>`).join('');}
 function m2Chips(){return CATS.map(([k,l])=>`<button class="mc${st.cat===k?' on':''}" type="button" data-cat="${k}">${k==='all'?mS('grid'):S(ICON[k])}${k==='all'?'All':catL(k)}</button>`).join('');}
@@ -1466,8 +1481,9 @@ function m2Sub(k,id){
   if(k==='alerts'){const g=GROUPS.mamatee,mt=vOf('mamatee'),kem=DROPS.includes(LATE);
     const al=(ic,bg,col,b,p,tm,a)=>`<button class="m-al" type="button" ${a}><span class="ai" style="background:${bg};color:${col}">${mS(ic)}</span><span><b>${b}</b><p>${p}</p><time>${tm}</time></span></button>`;
     return`<div class="m-h c">${back()}<h1>Alerts</h1><span style="width:46px"></span></div>
-    ${kem?al('radio','#FFF1F2','#E5394F',"Kemi's Thrift just went live",LATE.t+'. First come, first served.','Just now','data-mshop="kemi"'):''}
-    ${al('users','var(--act)','var(--ac)','Group order to Moremi is filling up',`${g.n+(joined.has('mamatee')?1:0)} of ${g.need} joined for ${mt.name}. Your share of delivery drops to ${naira(share(mt,g.n+1))}.`,'2 min ago','data-mtab="groups"')}
+    ${NOTES.length?'<div class="m-sh" style="margin-top:0"><b>New</b><span>'+NOTES.length+'</span></div>':''}
+    ${NOTES.map(n=>{const B=banOf(n);return al(n.kind==='group'?'users':'radio',n.kind==='group'?'var(--act)':'#FFF1F2',n.kind==='group'?'var(--ac)':'#E5394F',B.lt||n.title,B.long,Date.now()-n.at<60000?'Just now':Math.round((Date.now()-n.at)/60000)+' min ago',B.go);}).join('')}
+    <div class="m-sh"><b>Earlier</b></div>
     ${al('chat','var(--okt)','var(--ok)',mt.name+' replied',CHATS[0].t,'8 min ago','data-chat="mamatee"')}
     ${al('zap','var(--amt)','var(--am)','PrintPro OAU has no queue',dropOf('printpro')?dropOf('printpro').t:'Walk in now.','11 min ago','data-mshop="printpro"')}
     ${al('info','#fff','var(--ink)','Welcome to Stafly Search','Tap any pin to see the walk, prices and reviews. Ordering happens in a WhatsApp chat with the shop.','Today','data-mabout="1"')}`;}
@@ -1500,7 +1516,7 @@ function m2Sheet(id){const v=vOf(id),s=status(v),d=dropOf(id),g=GROUPS[id],sv=SA
   map.fitBounds(bounds([YOU,v.ll]),{padding:{top:150,bottom:Math.min(sh+30,h-260),left:60,right:60},maxZoom:17.4,pitch:58,bearing:map.getBearing(),duration:900});
   route(v);
 }
-function m2Join(id,go){const v=vOf(id),g=GROUPS[id];if(joined.has(id)){joined.delete(id);}else{joined.add(id);notify({v,kind:'group',me:true,title:"You're in. Delivery is split "+(g.n+1)+" ways",short:"You joined the group",body:'Your share of delivery to '+g.hall.replace(' Hall','')+' is now '+naira(share(v,g.n+1))+'. We’ll message you on WhatsApp when the rider leaves.',group:{n:g.n+1,need:g.need,closes:g.closes},acts:[['View on map','data-nview="'+id+'"',''],['Chat to order','data-chat="'+id+'"','pri']]});}
+function m2Join(id,go){const v=vOf(id),g=GROUPS[id];if(joined.has(id)){joined.delete(id);}else{joined.add(id);if(0)notify({v,kind:'group',me:true,title:"You're in. Delivery is split "+(g.n+1)+" ways",short:"You joined the group",body:'Your share of delivery to '+g.hall.replace(' Hall','')+' is now '+naira(share(v,g.n+1))+'. We’ll message you on WhatsApp when the rider leaves.',group:{n:g.n+1,need:g.need,closes:g.closes},acts:[['View on map','data-nview="'+id+'"',''],['Chat to order','data-chat="'+id+'"','pri']]});}
   drawMarkers();if(go&&!joined.has(id))return;if(go)return m2Nav({t:'groups'});m2Apply();}
 function m2Drawer(){const c=shellCounts(),row=(a,ic,l,n,r)=>`<button class="m-li" type="button" ${a}>${mS(ic)}<span>${l}</span>${n?`<em class="${r?'r':''}">${n}</em>`:''}${mS('chev')}</button>`;
   $('#mDrawer').innerHTML=`<div class="m-dh"><span class="m-circ">${mS('user')}</span><div><b>Good afternoon</b><span>Moremi Hall · OAU</span></div></div>
@@ -1531,7 +1547,33 @@ document.addEventListener('input',e=>{if(e.target.id==='mQ'){st.q=e.target.value
 placeVendors();menus();drawMarkers();
 const fitAll=()=>{if(phone()){map.jumpTo({center:ll2(YOU),zoom:15.5,pitch:58,bearing:-18});const q=map.project(ll2(YOU)),w=map.getContainer().clientWidth;const h=map.getContainer().clientHeight;map.jumpTo({center:map.unproject([w/2+q.x-w*0.62,h/2+q.y-Math.min(h*0.33,260)])});return;}map.fitBounds(bounds(V.filter(v=>!['staff','gate'].includes(v.near)).map(v=>v.ll).concat([YOU])),{padding:phone()?{top:80,bottom:420,left:40,right:40}:{top:100,bottom:100,left:100,right:100},pitch:58,bearing:-18,duration:0,maxZoom:17.2});};
 fitAll();
-if(M2){window.__m2=1;document.body.classList.add('m2on');history.replaceState(CUR,'','#');render();m2Apply();}
+
+
+document.addEventListener('input',e=>{if(e.target.id==='mQ')window.__typed=Date.now();});
+/* ---- M2 banner notifications: small, on every screen, only when it makes sense ---- */
+var NOTES=[],BQ=[],BNOW=null,bHide,bWait,UNSEEN=0;
+function banOf(n){const v=n.v,g=n.group;
+  if(n.kind==='group'){const nn=g.n+(joined.has(v.id)?1:0);return{k:'Group order',cls:'',lt:'Group order to '+(g.hall||GROUPS[v.id].hall).replace(' Hall','')+' is filling up',t:v.name,b:`To ${(g.hall||GROUPS[v.id].hall).replace(' Hall','')} · ${nn} of ${g.need} joined · ${g.closes} min left`,long:`${nn} of ${g.need} joined for ${v.name}. Join and your share of delivery drops to ${naira(share(v,g.n+1))}.`,go:'data-mtab="groups"',act:joined.has(v.id)?null:['Join','data-mbjoin="'+v.id+'"','ac']};}
+  return{k:'Live',cls:'lv',t:n.v.name,b:(dropOf(n.v.id)||{t:n.body}).t,long:n.body,go:'data-mshop="'+v.id+'"',act:['View','data-mshop="'+v.id+'"','']};}
+function m2Notify(o){const n=Object.assign({},o,{at:Date.now()});if(n.group&&!n.group.hall)n.group=Object.assign({hall:GROUPS[n.v.id].hall},n.group);NOTES.unshift(n);UNSEEN++;m2Top();if(CUR.s==='alerts')$('#mSub').innerHTML=m2Sub('alerts');BQ.push(n);m2BanNext();}
+function m2Busy(){return document.body.classList.contains('m-drw')||$('#scrim').classList.contains('on')||(Date.now()-(window.__typed||0)<4000)||CUR.s==='alerts';}
+function m2BanNext(){if(BNOW||!BQ.length)return;clearTimeout(bWait);if(m2Busy()){bWait=setTimeout(m2BanNext,1500);return;}
+  const n=BNOW=BQ.shift(),B=banOf(n),el=$('#mBan');
+  el.innerHTML=`${logo(n.v)}<span class="bt"><span class="bk ${B.cls}"><i></i>${B.k}<span>· now</span></span><b>${B.t}</b><p>${B.b}</p></span>${B.act?`<button class="ba ${B.act[2]}" type="button" ${B.act[1]}>${B.act[0]}</button>`:''}<i class="gr"></i>`;
+  el.dataset.go=B.go;el.offsetWidth;setTimeout(()=>el.classList.add('on'),30);bHide=setTimeout(()=>m2BanHide(n),6500);}
+function m2BanHide(n){clearTimeout(bHide);const el=$('#mBan');if(!BNOW||(n&&n!==BNOW))return;el.classList.remove('on');el.style.transform='';setTimeout(()=>{BNOW=null;m2BanNext();},500);}
+(function(){const el=document.createElement('div');el.className='m-ban';el.id='mBan';el.setAttribute('role','status');document.body.appendChild(el);
+  let y0=null;el.addEventListener('touchstart',e=>{y0=e.touches[0].clientY;clearTimeout(bHide);},{passive:true});
+  el.addEventListener('touchmove',e=>{if(y0===null)return;const dy=Math.min(0,e.touches[0].clientY-y0);el.style.transition='none';el.style.transform=`translateY(${dy}px)`;},{passive:true});
+  el.addEventListener('touchend',e=>{const dy=e.changedTouches[0].clientY-(y0??0);el.style.transition='';y0=null;if(dy<-30)return m2BanHide();el.style.transform='';const cur=BNOW;clearTimeout(bHide);if(cur)bHide=setTimeout(()=>m2BanHide(cur),4000);});
+})();
+document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,ban=t.closest('#mBan');if(!ban)return;e.stopPropagation();e.preventDefault();
+  const j=t.closest('[data-mbjoin]'),sh=t.closest('[data-mshop]'),go=ban.dataset.go||'';m2BanHide();
+  if(j)return m2Join(j.dataset.mbjoin,true);
+  const id=(sh&&sh.dataset.mshop)||(go.match(/data-mshop="([^"]+)"/)||[])[1];if(id)return m2Nav({t:CUR.t,s:'shop',id});
+  if(go.includes('groups'))return m2Nav({t:'groups'});},true);
+
+if(M2){notify=m2Notify;window.__m2=1;document.body.classList.add('m2on');history.replaceState(CUR,'','#');render();m2Apply();}
 </script>
 </body>
 </html>
