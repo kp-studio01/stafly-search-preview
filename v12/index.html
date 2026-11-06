@@ -876,6 +876,48 @@ input[type=search]::-webkit-search-cancel-button{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<style id="dash-tokens">
+/* Stafly dashboard tokens (ui/core.css + pages.css, light): canvas F8F8F7, surface FFF, inset F3F2EF, line E9E7E3,
+   ink 121215, ink-2 3A3A42, muted 6B6B75, brand 7551DC, brand-ink 5B3CC4, brand-tint F3EFFE, brand-text 6A45D6 */
+@media (max-width:820px){
+  html body.m2on{--ink:#121215;--ink2:#3A3A42;--mu:#6B6B75;--ln:#E9E7E3;--cv:#F8F8F7;--wh:#FFFFFF;--soft:#F3F2EF;--ac:#7551DC;--act:#F3EFFE;--brand:#7551DC;--brand2:#5B3CC4;--btxt:#6A45D6;--ok:#018145;--okt:#EAF7EF;--am:#A16309;--amt:#FEF5E6;--brandt:rgba(255,255,255,.76)}
+  html body.m2on .mapwrap{background:#EEEDEA}
+  html body.m2on .mlg{background:#F3EFFE!important;color:#6A45D6!important;border:0}
+  html body.m2on .mlg.off{background:#F3F2EF!important;color:#9C9CA6!important}
+  html body.m2on .m-row2 .sb i{background:#C9C7CF}
+  html body.m2on .m-row2 .sb svg{fill:#121215}
+  html body.m2on .m-trk .st,html body.m2on .m-trk .ln{background:#E9E7E3}
+  html body.m2on .m-trk .st.f,html body.m2on .m-trk .ln.f{background:var(--brand)}
+  html body.m2on .m-trk .st.me{background:#121215}
+  html body.m2on .pill.shut{background:#F3F2EF;color:#3A3A42}
+  html body.m2on .pill.ac{background:#F3EFFE;color:#6A45D6}
+  html body.m2on .pill.soon{background:#FEF5E6;color:#A16309}
+  html body.m2on .m-grab{background:#E4E1DC}
+  html body.m2on .m-dg .m-li{border-color:#F0EEEB}
+  html body.m2on .m-dg .m-li em{background:#F3EFFE;color:#6A45D6}
+  html body.m2on .m-dg .m-li em.r{background:#E5484D;color:#fff}
+  html body.m2on .m-auth .halls button,html body.m2on .m-auth .ph,html body.m2on .m-auth .code,html body.m2on .m-auth .nm{background:#F3F2EF}
+  html body.m2on .m-auth .halls button.on{background:var(--brand);color:#fff}
+  html body.m2on .m-auth .m-cta:disabled{background:#E4E1DC!important;color:#fff!important}
+  html body.m2on .m-two button{background:#F3F2EF}
+  html body.m2on .m-two button.k,html body.m2on .m-two button.ac{background:var(--brand);color:#fff}
+  html body.m2on .m-fee{background:#F3F2EF}
+  html body.m2on .m-foot{background:linear-gradient(180deg,rgba(248,248,247,0),#F8F8F7 30%)}
+  html body.m2on .m-circ,html body.m2on .m-search,html body.m2on .mc{box-shadow:0 1px 2px rgba(18,18,21,.05),0 4px 14px rgba(18,18,21,.06)}
+  html body.m2on .m-tabs{box-shadow:0 1px 2px rgba(18,18,21,.06),0 10px 28px rgba(18,18,21,.10)}
+  html body.m2on .m-card,html body.m2on .m-lst,html body.m2on .m-chat,html body.m2on .m-al,html body.m2on .m-tile,html body.m2on .m-qa button{box-shadow:0 0 0 1px #F0EEEB}
+  html body.m2on .m-live{background:#FDEEEE;color:#8A1F23}
+  html body.m2on .m-live b{color:#E5484D}
+  html body.m2on .m-chat .cm em{background:var(--brand)}
+  html body.m2on .m-field .flt em{background:#121215}
+  html body.m2on .m-hero .big em,html body.m2on .m-near small,html body.m2on .m-hero small{color:rgba(255,255,255,.76)}
+  html body.m2on .m-near button{color:var(--brand2)}
+  .tp .tpb{background:#7551DC!important;box-shadow:0 4px 12px rgba(18,18,21,.22)}
+  .tp.sel .tpb{background:#121215!important}
+  .tp.shut .tpb{background:#B5B3BC!important}
+  html body.m2on .youwrap .you{background:#121215}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1217,7 +1259,7 @@ function toggleMenu(id){['m-cat','m-sort','m-f'].forEach(m=>{$('#'+m).hidden=m!=
 /* map: OpenFreeMap vector tiles (OpenStreetMap data), styled dark with 3D buildings */
 const OFM='https://tiles.openfreemap.org';
 const M2=matchMedia('(max-width:820px)').matches;
-const C=M2?{bg:'#ECE8F5',land:'#EEEAF7',green:'#E3E9E2',green2:'#DCE4DB',water:'#D8DFF2',minor:'#FFFFFF',major:'#FFFFFF',path:'#DCD6EA',b1:'#F8F6FD',b2:'#FFFFFF',label:'#8E86A3',halo:'#F6F3FD'}:{bg:'#202023',land:'#232327',green:'#24302A',green2:'#273428',water:'#1B2433',minor:'#36363D',major:'#4A4A53',path:'#2F2F35',b1:'#2E2E35',b2:'#3B3B44',label:'#9C9AA6',halo:'#18181B'};
+const C=M2?{bg:'#EEEDEA',land:'#F1F0ED',green:'#E4EADF',green2:'#DDE5D8',water:'#DCE4EE',minor:'#FFFFFF',major:'#FFFFFF',path:'#E2E0DC',b1:'#FAFAF9',b2:'#FFFFFF',label:'#7C7C88',halo:'#F8F8F7'}:{bg:'#202023',land:'#232327',green:'#24302A',green2:'#273428',water:'#1B2433',minor:'#36363D',major:'#4A4A53',path:'#2F2F35',b1:'#2E2E35',b2:'#3B3B44',label:'#9C9AA6',halo:'#18181B'};
 const STYLE={version:8,glyphs:OFM+'/fonts/{fontstack}/{range}.pbf',sources:{ofm:{type:'vector',url:OFM+'/planet'}},
  layers:[
   {id:'bg',type:'background',paint:{'background-color':C.bg}},
