@@ -1488,6 +1488,26 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   html body.m2on.m2on .mc.on svg{opacity:1!important;filter:none!important}
 }
 </style>
+<style id="you-top">
+@media (max-width:820px){
+  /* soft fade behind the top controls, so the far edge of the map never shows as a line */
+  html body.m2on.m2on .mapwrap::after{content:"";position:absolute;left:0;right:0;top:0;height:calc(max(14px,env(safe-area-inset-top)) + 150px);pointer-events:none;z-index:5;
+    background:linear-gradient(180deg,rgba(18,18,22,.78) 0%,rgba(18,18,22,.45) 55%,rgba(18,18,22,0) 100%)}
+  html body.m2on.m2on.m-light .mapwrap::after{background:linear-gradient(180deg,rgba(241,240,237,.95) 0%,rgba(241,240,237,.6) 55%,rgba(241,240,237,0) 100%)}
+  html body.m2on.m2on .m-top .mnu{width:22px;height:22px}
+  /* You: a clean location dot with a soft breathing halo */
+  html body.m2on.m2on .youwrap .you{position:relative;width:20px!important;height:20px!important;margin:0 auto;background:#7551DC!important;border:3px solid #fff!important;border-radius:50%;
+    box-shadow:0 0 0 1px rgba(0,0,0,.06),0 3px 10px rgba(30,15,90,.45)!important}
+  html body.m2on.m2on .youwrap .you::before{content:"";position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(117,81,220,.28);
+    animation:youHalo 2.6s cubic-bezier(.2,.7,.3,1) infinite;pointer-events:none}
+  html body.m2on.m2on .youwrap .you::after{content:"";position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:rgba(117,81,220,.18);pointer-events:none;z-index:-1}
+  @keyframes youHalo{0%{transform:scale(.35);opacity:.9}100%{transform:scale(1);opacity:0}}
+  html body.m2on.m2on .youwrap .youlbl{margin-top:8px!important;padding:3px 9px!important;border-radius:999px!important;font-size:11.5px!important;font-weight:600!important;letter-spacing:.01em;
+    background:#7551DC!important;color:#fff!important;box-shadow:0 4px 12px rgba(30,15,90,.35)!important;border:0!important}
+  html body.m2on.m2on.m-light .youwrap .youlbl{background:#7551DC!important;color:#fff!important}
+}
+@media (max-width:820px) and (prefers-reduced-motion:reduce){ html body.m2on.m2on .youwrap .you::before{animation:none;opacity:.35;transform:scale(.6)} }
+</style>
 </head>
 <body>
 <div class="app">
@@ -1541,7 +1561,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   <section class="page" id="page" aria-live="polite"><div class="pgh"><button class="bk" type="button" data-back="1" aria-label="Back"><svg class="i" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg></button><div><h2 id="pgt"></h2><p id="pgs"></p></div></div><div class="pgb" id="pgb"></div></section>
 </div>
 <div class="m2" id="m2">
-  <div class="m-top"><button class="m-circ" type="button" data-mdrw="1" aria-label="Menu"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></svg></button><button class="m-search" type="button" data-mtab="places" data-mfocus="1"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg><span>Search food, printing, lashes…</span><i class="flt"><svg class="i" viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4" /><line x1="10" x2="3" y1="4" y2="4" /><line x1="21" x2="12" y1="12" y2="12" /><line x1="8" x2="3" y1="12" y2="12" /><line x1="21" x2="16" y1="20" y2="20" /><line x1="12" x2="3" y1="20" y2="20" /><line x1="14" x2="14" y1="2" y2="6" /><line x1="8" x2="8" y1="10" y2="14" /><line x1="16" x2="16" y1="18" y2="22" /></svg></i></button><button class="m-circ" type="button" data-msub="alerts" aria-label="Alerts"><svg class="i" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg><i class="dot"></i></button></div>
+  <div class="m-top"><button class="m-circ" type="button" data-mdrw="1" aria-label="Menu"><svg class="i mnu" viewBox="0 0 24 24"><path d="M4 8.5h16M4 15.5h11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button><button class="m-search" type="button" data-mtab="places" data-mfocus="1"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg><span>Search food, printing, lashes…</span><i class="flt"><svg class="i" viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4" /><line x1="10" x2="3" y1="4" y2="4" /><line x1="21" x2="12" y1="12" y2="12" /><line x1="8" x2="3" y1="12" y2="12" /><line x1="21" x2="16" y1="20" y2="20" /><line x1="12" x2="3" y1="20" y2="20" /><line x1="14" x2="14" y1="2" y2="6" /><line x1="8" x2="8" y1="10" y2="14" /><line x1="16" x2="16" y1="18" y2="22" /></svg></i></button><button class="m-circ" type="button" data-msub="alerts" aria-label="Alerts"><svg class="i" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg><i class="dot"></i></button></div>
   <div class="m-chips" id="mChips"></div>
   <div class="m-near" id="mNear"></div>
   <section class="m-page" id="mPage"></section>
@@ -1865,7 +1885,7 @@ function setSat(on){SAT=on;try{localStorage.setItem('stafly_sat',on?'1':'0');}ca
   ['roadname','poi','place'].forEach(id=>{map.setPaintProperty(id,'text-color',on?'#FFFFFF':(id==='place'?C.tplace:id==='poi'?C.label:C.troad));map.setPaintProperty(id,'text-halo-color',on?'rgba(0,0,0,.6)':C.halo);});
   document.body.classList.toggle('m-sat',on);const b=document.getElementById('mSatB');if(b)b.innerHTML=(on?MI.mapic:MI.satic)+'<span>'+(on?'Map':'Satellite')+'</span>';}
 const ll2=ll=>[ll[1],ll[0]];
-const map=new maplibregl.Map({container:'map',style:STYLE,center:[4.5262,7.5185],zoom:16,pitch:58,bearing:-18,maxPitch:70,minZoom:13.5,maxBounds:[[4.47,7.47],[4.58,7.56]],antialias:!M2,pixelRatio:M2?Math.min(devicePixelRatio||1,2):(devicePixelRatio||1),attributionControl:false,fadeDuration:M2?120:300});
+const map=new maplibregl.Map({container:'map',style:STYLE,center:[4.5262,7.5185],zoom:16,pitch:M2?50:58,bearing:-18,maxPitch:M2?60:70,minZoom:13.5,maxBounds:[[4.47,7.47],[4.58,7.56]],antialias:!M2,pixelRatio:M2?Math.min(devicePixelRatio||1,2):(devicePixelRatio||1),attributionControl:false,fadeDuration:M2?120:300});
 map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:'© OpenStreetMap contributors · OpenFreeMap'}),'bottom-left');
 let ready=false;
 map.on('load',()=>{ready=true;if(M2){applyTheme();setSat(SAT);}
