@@ -1068,6 +1068,16 @@ input[type=search]::-webkit-search-cancel-button{display:none}
 }
 @media (max-width:820px){.dright{display:none}}
 </style>
+<style id="sat-phone">
+@media (max-width:820px){
+  .m-satb{position:absolute;right:14px;top:calc(max(14px,env(safe-area-inset-top)) + 112px);z-index:600;height:40px;padding:0 14px 0 11px;border-radius:20px;display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:#121215;
+    background:linear-gradient(180deg,#FFFFFF 0%,#FAFAF9 100%);box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(18,18,21,.05),0 1px 2px rgba(18,18,21,.05),0 6px 18px rgba(18,18,21,.07)}
+  .m-satb svg{width:18px;height:18px}
+  body.m2on.m-pgon .m-satb,body.m2on.m-sheeton .m-satb{display:none}
+  body.m2on.m-sat .mapwrap{background:#2a2f27}
+  body.m2on.m-sat .youwrap .youlbl{background:#fff}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1434,11 +1444,21 @@ if(!M2){STYLE.sources.sat={type:'raster',tiles:['https://server.arcgisonline.com
     if(l.id==='paths'){l.paint['line-color']='rgba(255,255,255,.28)';}
     if(l.type==='symbol'){l.paint['text-color']='rgba(255,255,255,.88)';l.paint['text-halo-color']='rgba(0,0,0,.55)';l.paint['text-halo-width']=1.4;}});
   STYLE.layers=[{id:'bg',type:'background',paint:{'background-color':'#1a1d1a'}},{id:'sat',type:'raster',source:'sat',paint:{'raster-brightness-max':.74,'raster-saturation':-.18,'raster-contrast':.1,'raster-fade-duration':200}},{id:'shade',type:'background',paint:{'background-color':'#0b0b10','background-opacity':.18}}].concat(keep);}
+if(M2){STYLE.sources.sat={type:'raster',tiles:['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],tileSize:256,maxzoom:19,attribution:'Imagery © Esri, Maxar'};
+  STYLE.layers.splice(1,0,{id:'sat',type:'raster',source:'sat',paint:{'raster-brightness-max':.92,'raster-saturation':-.05,'raster-contrast':.05,'raster-fade-duration':200}});}
+var SAT=M2;try{const v=localStorage.getItem('stafly_sat');if(v!==null)SAT=v==='1';}catch(_){}
+function setSat(on){SAT=on;try{localStorage.setItem('stafly_sat',on?'1':'0');}catch(_){}if(!M2||!map.getLayer('sat'))return;
+  map.setLayoutProperty('sat','visibility',on?'visible':'none');
+  ['landuse','green','park','water','bld'].forEach(id=>map.getLayer(id)&&map.setLayoutProperty(id,'visibility',on?'none':'visible'));
+  map.setPaintProperty('minor','line-color',on?'rgba(255,255,255,.35)':C.minor);map.setPaintProperty('major','line-color',on?'rgba(255,255,255,.55)':C.major);
+  map.setPaintProperty('paths','line-color',on?'rgba(255,255,255,.35)':C.path);
+  ['roadname','poi','place'].forEach(id=>{map.setPaintProperty(id,'text-color',on?'#FFFFFF':(id==='place'?'#6E6D75':id==='poi'?C.label:'#9A99A0'));map.setPaintProperty(id,'text-halo-color',on?'rgba(0,0,0,.6)':C.halo);});
+  document.body.classList.toggle('m-sat',on);const b=document.getElementById('mSatB');if(b)b.innerHTML=(on?MI.mapic:MI.satic)+'<span>'+(on?'Map':'Satellite')+'</span>';}
 const ll2=ll=>[ll[1],ll[0]];
 const map=new maplibregl.Map({container:'map',style:STYLE,center:[4.5262,7.5185],zoom:16,pitch:58,bearing:-18,maxPitch:70,minZoom:13.5,maxBounds:[[4.47,7.47],[4.58,7.56]],antialias:true,attributionControl:false});
 map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:'© OpenStreetMap contributors · OpenFreeMap'}),'bottom-left');
 let ready=false;
-map.on('load',()=>{ready=true;
+map.on('load',()=>{ready=true;if(M2)setSat(SAT);
   map.addSource('route',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
   map.addLayer({id:'route-glow',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':M2?'#5B2FD4':'#A98BFA','line-width':M2?10:14,'line-blur':M2?6:10,'line-opacity':M2?.18:.55}});
   map.addLayer({id:'route-line',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':M2?'#5B2FD4':'#CBB8FF','line-width':M2?5:4}});
@@ -1828,6 +1848,10 @@ function m2Drawer(){const c=shellCounts(),row=(a,ic,l,n,r)=>`<button class="m-li
   <div class="m-df"><span class="ai">${APPI}</span>Stafly Search · OAU, Ile-Ife</div>`;
   document.body.classList.add('m-drw');}
 
+
+
+MI.satic='<svg class="i" viewBox="0 0 24 24"><g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,16a87.5,87.5,0,0,1,48,14.28V74L153.83,99.74,122.36,104l-.31-.22L102.38,90.92A16,16,0,0,0,79.87,95.1L58.93,126.4a16,16,0,0,0-2.7,8.81L56,171.44l-3.27,2.15A88,88,0,0,1,128,40ZM62.29,186.47l2.52-1.65A16,16,0,0,0,72,171.53l.21-36.23L93.17,104a3.62,3.62,0,0,0,.32.22l19.67,12.87a15.94,15.94,0,0,0,11.35,2.77L156,115.59a16,16,0,0,0,10-5.41l22.17-25.76A16,16,0,0,0,192,74V67.67A87.87,87.87,0,0,1,211.77,155l-16.14-14.76a16,16,0,0,0-16.93-3l-30.46,12.65a16.08,16.08,0,0,0-9.68,12.45l-2.39,16.19a16,16,0,0,0,11.77,17.81L169.4,202l2.36,2.37A87.88,87.88,0,0,1,62.29,186.47ZM185,195l-4.3-4.31a16,16,0,0,0-7.26-4.18L152,180.85l2.39-16.19L184.84,152,205,170.48A88.43,88.43,0,0,1,185,195Z"/></g></svg>';MI.mapic='<svg class="i" viewBox="0 0 24 24"><g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></g></svg>';
+(function(){if(!M2)return;const b=document.createElement('button');b.type='button';b.id='mSatB';b.className='m-satb';b.setAttribute('aria-label','Switch map view');b.innerHTML=(SAT?MI.mapic:MI.satic)+'<span>'+(SAT?'Map':'Satellite')+'</span>';b.onclick=e=>{e.stopPropagation();setSat(!SAT);};document.getElementById('m2').appendChild(b);})();
 
 /* ---- buyer chat: in Stafly or on WhatsApp, the seller decides ---- */
 MI.wa='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></g>';MI.send='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M240,127.89a16,16,0,0,1-8.18,14L63.9,237.9A16.15,16.15,0,0,1,56,240a16,16,0,0,1-15-21.33l27-79.95A4,4,0,0,1,71.72,136H144a8,8,0,0,0,8-8.53,8.19,8.19,0,0,0-8.26-7.47h-72a4,4,0,0,1-3.79-2.72l-27-79.94A16,16,0,0,1,63.84,18.07l168,95.89A16,16,0,0,1,240,127.89Z"/></g>';
