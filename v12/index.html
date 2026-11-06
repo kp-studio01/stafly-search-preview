@@ -1429,6 +1429,66 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   html body.m2on.m2on.m-light .m-th{background:rgba(255,255,255,.97)!important}
 }
 </style>
+<style id="g-cards">
+@media (max-width:820px){
+  /* group cards: photo-led, like the reference cards */
+  html body.m2on .g-card{border-radius:28px;overflow:hidden;margin-bottom:16px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 18px 40px rgba(0,0,0,.25)}
+  html body.m2on .g-media{position:relative;height:208px;overflow:hidden;background:#232a22}
+  html body.m2on .g-tiles{position:absolute;width:768px;height:512px;filter:saturate(.9) brightness(.92)}
+  html body.m2on .g-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  html body.m2on .g-tiles img{position:absolute;width:256px;height:256px;display:block}
+  html body.m2on .g-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,.35) 0%,rgba(10,10,12,0) 30%,rgba(10,10,12,0) 45%,rgba(10,10,12,.82) 100%)}
+  html body.m2on .g-tag,html body.m2on .g-time{position:absolute;top:14px;height:30px;padding:0 11px 0 9px;border-radius:15px;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#fff;background:rgba(20,20,24,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+  html body.m2on .g-tag{left:14px}html body.m2on .g-time{right:14px}
+  html body.m2on .g-time.soon{color:#FFD58A}
+  html body.m2on .g-tag svg,html body.m2on .g-time svg{width:15px;height:15px}
+  html body.m2on .g-pin{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%)}
+  html body.m2on .g-pin .mlg{width:44px!important;height:44px!important;border-radius:50%!important;background:rgba(20,20,24,.72)!important;color:#fff!important;box-shadow:0 0 0 2px #fff,0 0 0 7px rgba(255,255,255,.18),0 8px 20px rgba(0,0,0,.35)!important}
+  html body.m2on .g-cap{position:absolute;left:18px;right:18px;bottom:16px;display:flex;align-items:flex-end;gap:12px;color:#fff}
+  html body.m2on .g-cap .nm{flex:1;min-width:0}
+  html body.m2on .g-cap .nm b{display:block;font-size:20px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html body.m2on .g-cap .nm span{font-size:13.5px;color:rgba(255,255,255,.72)}
+  html body.m2on .g-cap .pr{text-align:right;flex:none}
+  html body.m2on .g-cap .pr b{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em}
+  html body.m2on .g-cap .pr span{font-size:12px;color:rgba(255,255,255,.7)}
+  html body.m2on .g-cap .pr s{opacity:.75}
+  html body.m2on .g-body{padding:16px 18px 18px}
+  html body.m2on .g-seg{display:flex;gap:5px}
+  html body.m2on .g-seg i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.12)}
+  html body.m2on .g-seg i.f{background:#8B6BF0}html body.m2on .g-seg i.me{background:#fff}
+  html body.m2on .g-stats{display:flex;margin:16px 0 0;padding:14px 0 0;border-top:1px solid rgba(255,255,255,.08)}
+  html body.m2on .g-stats div{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:rgba(255,255,255,.6);white-space:nowrap}
+  html body.m2on .g-stats div+div{border-left:1px solid rgba(255,255,255,.1)}
+  html body.m2on .g-stats div:first-child{justify-content:flex-start}html body.m2on .g-stats div:last-child{justify-content:flex-end}
+  html body.m2on .g-stats svg{width:17px;height:17px;color:rgba(255,255,255,.75)}
+  html body.m2on .g-stats b{color:#F4F3F7;font-weight:600}
+  html body.m2on .g-act{display:flex;align-items:center;gap:10px;margin-top:16px}
+  html body.m2on .g-ghost{height:46px;padding:0 18px;border-radius:23px;font-size:14.5px;font-weight:600;color:#F4F3F7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+  html body.m2on .g-go{margin-left:auto;height:46px;padding:0 6px 0 20px;border-radius:23px;display:flex;align-items:center;gap:12px;font-size:14.5px;font-weight:600;background:#F4F3F7;color:#121215;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  html body.m2on .g-go i{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#121215;color:#fff}
+  html body.m2on .g-go i svg{width:17px;height:17px}
+  html body.m2on .g-card.in .g-go{background:rgba(139,92,246,.22);color:#E4DAFF;box-shadow:none}html body.m2on .g-card.in .g-go i{background:#7551DC}
+  /* light */
+  html body.m2on.m-light .g-card{background:#fff;box-shadow:0 0 0 1px rgba(18,18,21,.05),0 18px 40px rgba(18,18,21,.10)}
+  html body.m2on.m-light .g-seg i{background:#EDEBE7}html body.m2on.m-light .g-seg i.f{background:#7551DC}html body.m2on.m-light .g-seg i.me{background:#121215}
+  html body.m2on.m-light .g-stats{border-color:#F0EEEB}html body.m2on.m-light .g-stats div{color:#6B6B75}html body.m2on.m-light .g-stats div+div{border-color:#E9E7E3}html body.m2on.m-light .g-stats svg{color:#3A3A42}html body.m2on.m-light .g-stats b{color:#121215}
+  html body.m2on.m-light .g-ghost{color:#121215;box-shadow:inset 0 0 0 1px #E4E1DC}
+  html body.m2on.m-light .g-go{background:#121215;color:#fff;box-shadow:0 6px 18px rgba(18,18,21,.18)}html body.m2on.m-light .g-go i{background:#fff;color:#121215}
+  html body.m2on.m-light .g-card.in .g-go{background:#F3EFFE;color:#5B3CC4}html body.m2on.m-light .g-card.in .g-go i{background:#7551DC;color:#fff}
+  /* chips: room for their shadow, no blur inside the scroller (it clipped into a band) */
+  html body.m2on .m-chips{padding:6px 14px 14px!important;margin-top:-6px}
+  html body.m2on.m2on .m-chips .mc{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  html body.m2on.m2on .m-chips .mc:not(.on){background:rgba(24,24,28,.86)!important}
+  html body.m2on.m2on.m-light .m-chips .mc:not(.on){background:rgba(255,255,255,.95)!important}
+  /* banner: solid enough that nothing shows through */
+  html body.m2on.m2on .m-ban{background:rgba(24,24,28,.97)!important}
+  html body.m2on.m2on.m-light .m-ban{background:rgba(255,255,255,.98)!important}
+  /* pins: crisp ring so they read on the dark map */
+  html body.m2on.m2on:not(.m-light) .tp .tpb{background:#1E1E23!important;box-shadow:0 0 0 1.5px rgba(255,255,255,.55),0 8px 18px rgba(0,0,0,.45)!important}
+  html body.m2on.m2on:not(.m-light) .tp.sel .tpb{background:#7551DC!important;box-shadow:0 0 0 2px #fff,0 8px 18px rgba(0,0,0,.45)!important}
+  html body.m2on.m2on.m-light .tp .tpb{box-shadow:0 0 0 1px rgba(18,18,21,.08),0 6px 14px rgba(18,18,21,.18)!important}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -2128,10 +2188,14 @@ function m2Page(t){
     <div class="m-hero"><small>Order with people in your hall</small><div class="big">${ids.length}<em>groups filling now</em></div><p>One rider, one trip, and the delivery fee is split between everyone who joins.</p></div>
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
       const steps=Array.from({length:g.need},(_,i)=>{const c=i<g.n?'f':(me&&i===g.n?'me':'');return(i?`<span class="ln${i<n?' f':''}"></span>`:'')+`<span class="st ${c}">${c?mS('check'):''}</span>`;}).join('');
-      return`<div class="m-card"><div class="m-ch">${mLogo(v)}<div><b>${v.name}</b><span>To ${g.hall}</span></div><span class="pill ${g.closes<=15?'soon':'ac'}" style="margin-left:auto">${mS('clock')}${g.closes} min</span></div>
-      <div class="m-trk">${steps}</div><div class="m-trl"><span><b>${n} of ${g.need}</b> joined</span><span>${g.need-n>0?(g.need-n)+' more to fill':'Full, rider on the way soon'}</span></div>
-      <div class="m-fee"><span>${me?'Your delivery share':'Your share if you join'}</span><b>${naira(share(v,me?n:n+1))}<s>${naira(fee)}</s></b></div>
-      <div class="m-two"><button type="button" data-mshop="${id}">${mS('store')}View shop</button><button type="button" class="${me?'k':'ac'}" data-mjoin="${id}">${me?mS('check')+'You’re in':mS('users')+'Join group'}</button></div></div>`;}).join('')}
+      const left=g.need-n;
+      return`<div class="g-card${me?' in':''}"><div class="g-media">${v.img?`<img class="g-photo" src="${v.img}" alt="">`:satTiles(v.ll)}<span class="g-shade"></span>
+        <span class="g-tag">${mS('users3')}Group order</span><span class="g-time${g.closes<=15?' soon':''}">${mS('clock')}${g.closes} min left</span>
+        ${v.img?'':`<span class="g-pin">${mLogo(v)}</span>`}
+        <div class="g-cap"><div class="nm"><b>${v.name}</b><span>Delivering to ${g.hall}</span></div><div class="pr"><b>${naira(share(v,me?n:n+1))}</b><span>${me?'your share':'your share'} · <s>${naira(fee)}</s></span></div></div></div>
+        <div class="g-body"><div class="g-seg">${Array.from({length:g.need},(_,k)=>`<i class="${k<g.n?'f':(me&&k===g.n?'me':'')}"></i>`).join('')}</div>
+        <div class="g-stats"><div>${mS('users3')}<span>Joined</span><b>${n}/${g.need}</b></div><div>${mS('clock')}<span>Spots</span><b>${left>0?left+' left':'Full'}</b></div><div>${mS('walk')}<span>Shop</span><b>${walk(v)} min</b></div></div>
+        <div class="g-act"><button type="button" class="g-ghost" data-mshop="${id}">View shop</button><button type="button" class="g-go" data-mjoin="${id}">${me?'You’re in':'Join group'}<i>${me?mS('check'):mS('arrow')}</i></button></div></div></div>`;}).join('')}
     <p class="m-note">Group orders close when the timer ends or the group fills. You only pay when the vendor confirms.</p>`;}
   if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-mtalk="${v.id}">${mLogo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}<p class="m-note">Chats with shops, here on Stafly or on WhatsApp. Each shop’s assistant replies in seconds, any time of day.</p>`;
   return'';
@@ -2239,6 +2303,13 @@ function setTheme(t){THEME=t;try{localStorage.setItem('stafly_theme',t);}catch(_
 applyTheme();
 try{matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(!THEME)applyTheme();});}catch(_){}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-mtheme]');if(!b)return;e.stopImmediatePropagation();e.preventDefault();setTheme(b.dataset.mtheme);},true);
+
+
+MI.users3='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"/></g>';MI.arrow='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></g>';
+function satTiles(ll){const z=17,lat=ll[0]*Math.PI/180,n=2**z;const x=(ll[1]+180)/360*n,y=(1-Math.log(Math.tan(lat)+1/Math.cos(lat))/Math.PI)/2*n;
+  const tx=Math.floor(x)-1,ty=Math.floor(y-.5),px=Math.round((x-tx)*256),py=Math.round((y-ty)*256);let h='';
+  for(let r=0;r<2;r++)for(let c=0;c<3;c++)h+=`<img src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${ty+r}/${tx+c}" style="left:${c*256}px;top:${r*256}px" alt="" loading="lazy" decoding="async">`;
+  return`<div class="g-tiles" style="left:calc(50% - ${px}px);top:calc(46% - ${py}px)">${h}</div>`;}
 
 /* ---- buyer chat: in Stafly or on WhatsApp, the seller decides ---- */
 MI.wa='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></g>';MI.send='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M240,127.89a16,16,0,0,1-8.18,14L63.9,237.9A16.15,16.15,0,0,1,56,240a16,16,0,0,1-15-21.33l27-79.95A4,4,0,0,1,71.72,136H144a8,8,0,0,0,8-8.53,8.19,8.19,0,0,0-8.26-7.47h-72a4,4,0,0,1-3.79-2.72l-27-79.94A16,16,0,0,1,63.84,18.07l168,95.89A16,16,0,0,1,240,127.89Z"/></g>';
