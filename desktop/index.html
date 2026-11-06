@@ -1483,10 +1483,9 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   /* banner: solid enough that nothing shows through */
   html body.m2on.m2on .m-ban{background:rgba(24,24,28,.97)!important}
   html body.m2on.m2on.m-light .m-ban{background:rgba(255,255,255,.98)!important}
-  /* pins: crisp ring so they read on the dark map */
-  html body.m2on.m2on:not(.m-light) .tp .tpb{background:#1E1E23!important;box-shadow:0 0 0 1.5px rgba(255,255,255,.55),0 8px 18px rgba(0,0,0,.45)!important}
-  html body.m2on.m2on:not(.m-light) .tp.sel .tpb{background:#7551DC!important;box-shadow:0 0 0 2px #fff,0 8px 18px rgba(0,0,0,.45)!important}
-  html body.m2on.m2on.m-light .tp .tpb{box-shadow:0 0 0 1px rgba(18,18,21,.08),0 6px 14px rgba(18,18,21,.18)!important}
+  /* active chip: icon takes the same colour as its text */
+  html body.m2on.m2on .mc.on svg,html body.m2on.m2on .mc.on svg *{color:inherit!important}
+  html body.m2on.m2on .mc.on svg{opacity:1!important;filter:none!important}
 }
 </style>
 </head>
