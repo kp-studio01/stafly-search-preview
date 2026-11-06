@@ -747,6 +747,34 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   .m-dg{flex:none}
 
   body.m2on .isl{display:none!important}
+
+  body.m2on .mlg{background:#E9E8E4!important;color:var(--ink)!important;border-radius:14px!important}
+  body.m2on .mlg svg{width:46%;height:46%;stroke-width:1.75;fill:none;stroke:currentColor}
+  body.m2on .mlg.off{color:#9A99A0!important;background:#EFEEEA!important}
+  body.m2on .m-who .mlg,body.m2on .m-ban .mlg,body.m2on .m-chat .mlg{border-radius:50%!important}
+  .m-lst{background:var(--wh);border-radius:24px;padding:0 16px;margin-bottom:6px}
+  .m-row2{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 0;border-bottom:1px solid var(--ln)}
+  .m-row2:last-child{border-bottom:0}
+  .m-row2 .logo{width:48px;height:48px}
+  .m-row2 .tx{flex:1;min-width:0}
+  .m-row2 b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-row2 .sb{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--mu);margin-top:3px;white-space:nowrap;overflow:hidden}
+  .m-row2 .sb .r{color:var(--ink);font-weight:600}
+  .m-row2 .sb svg{width:12px;height:12px;fill:var(--ink);stroke:none;margin-left:-3px}
+  .m-row2 .sb i{width:3px;height:3px;border-radius:50%;background:#C4C3BE;flex:none}
+  .m-row2 .ht{display:block;font-size:13.5px;color:var(--ink2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-row2 .ht b{display:inline;font-size:13.5px}
+  .m-row2 .rt{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:none}
+  .m-row2 .rt b{font-size:15px}
+  .m-row2 .rt small{font-size:12.5px;color:var(--mu);display:flex;align-items:center;gap:4px}
+  .m-row2 .rt small.shut{color:var(--mu)}.m-row2 .rt small.soon{color:var(--am)}
+  .m-row2 .rt small.gq{color:var(--ink);font-weight:600}
+  .m-row2 .rt small svg{width:14px;height:14px}
+  .m-row2.closed b,.m-row2.closed .sb .r{color:#8E8D95}
+  .m-fpan{display:none}
+  body.m2on.m-fon .m-fpan{display:flex}
+  .m-field .flt{position:relative}
+  .m-field .flt em{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:var(--ac);color:#fff;font-style:normal;font-size:11px;font-weight:700;display:grid;place-items:center;border:2px solid #fff}
   .m-ban{position:fixed;left:10px;right:10px;top:max(10px,env(safe-area-inset-top));z-index:2200;background:#fff;color:var(--ink);border-radius:24px;box-shadow:0 14px 36px rgba(14,14,16,.18),0 0 0 1px rgba(14,14,16,.05);padding:12px 12px 12px 12px;display:flex;align-items:center;gap:12px;transform:translateY(calc(-100% - 30px));transition:transform .45s cubic-bezier(.2,.9,.2,1);text-align:left;touch-action:pan-x}
   .m-ban.on{transform:none}
   .m-ban .logo{width:44px;height:44px;font-size:13.5px;border-radius:50%}
@@ -1435,39 +1463,41 @@ function m2Refresh(){if(!$('#mChips'))return;$('#mChips').innerHTML=m2Chips();
   const op=results.filter(r=>isOpen(r.v)),nr=op.slice().sort((a,b)=>dist(a.v)-dist(b.v))[0];
   $('#mNear').innerHTML=`<div class="t"><small>${st.cat==='all'?'Open near you now':catL(st.cat)+' open near you'}</small><b>${op.length} ${op.length===1?'place':'places'}</b><small style="margin:2px 0 0">${nr?'Closest is a '+walk(nr.v)+' min walk':'Nothing open right now'}</small></div><button type="button" data-mtab="places">${mS('list')}See all</button>`;
   if(CUR.t==='places')m2PlacesList();m2Tabs();}
+function mLogo(v){return`<span class="logo mlg${isOpen(v)?'':' off'}">${S(ICON[v.cat])}</span>`;}
 function m2Shop(v,extra=''){const s=status(v),g=GROUPS[v.id];
-  return`<button class="m-shop${isOpen(v)?'':' closed'}" type="button" data-mshop="${v.id}">${logo(v)}<span class="tx"><b>${v.name}</b><span class="sb">${v.reviews>=3?`${STAR}<span class="r">${v.rating.toFixed(1)}</span> · `:'<span class="r">New</span> · '}${dtxt(v)} · ${v.deliv?'Delivers':'Pick up'}</span>${extra||(g?`<span class="gp">${mS('users')}Group order to ${g.hall.replace(' Hall','')} · ${g.n+(joined.has(v.id)?1:0)} of ${g.need}</span>`:'')}</span><span class="rt"><span class="pill ${s.k}"><i></i>${s.k==='shut'?'Closed':s.k==='soon'?'Closing':'Open'}</span><small>${walk(v)} min</small></span></button>`;}
+  return`<button class="m-row2${isOpen(v)?'':' closed'}" type="button" data-mshop="${v.id}">${mLogo(v)}<span class="tx"><b>${v.name}</b><span class="sb">${v.reviews>=3?`<span class="r">${v.rating.toFixed(1)}</span>${STAR}`:'<span class="r">New</span>'}<i></i>${catL(v.cat)}<i></i>${v.deliv?'Delivers':'Pick up'}</span>${extra}</span><span class="rt"><b>${walk(v)} min</b>${s.k!=='open'?`<small class="${s.k}">${s.k==='shut'?s.t:'Closes soon'}</small>`:g?`<small class="gq">${S(MI.users)}${g.n+(joined.has(v.id)?1:0)}/${g.need}</small>`:`<small>${dtxt(v)}</small>`}</span></button>`;}
 function m2PlacesList(){const el=$('#mList');if(!el)return;
   const pc=$('#mPChips');if(pc)pc.innerHTML=m2Chips();
   const tg=$('#mTg');if(tg)tg.innerHTML=[['open','Open now','clock'],['delivers','Delivers','bike'],['verified','Verified','shield']].map(([k,l,ic])=>`<button class="${st.f.has(k)?'on':''}" type="button" data-f="${k}">${mS(ic)}${l}</button>`).join('')+`<button class="${st.sort==='near'?'on':''}" type="button" data-near="1">${mS('nav')}Nearest</button>`;
   const op=results.filter(r=>isOpen(r.v)),cl=results.filter(r=>!isOpen(r.v));
-  const hit=r=>r.hit?`<span class="gp" style="color:var(--ink2)">${mS('tag')}${r.hit[0]} · ${naira(r.hit[1])}</span>`:'';
-  el.innerHTML=results.length?(op.length?`<div class="m-sh"><b>Open now</b><span>${op.length} ${op.length===1?'place':'places'}</span></div>`+op.map(r=>m2Shop(r.v,hit(r))).join(''):'')+(cl.length?`<div class="m-sh"><b>Opening later</b><span>${cl.length}</span></div>`+cl.map(r=>m2Shop(r.v,hit(r))).join(''):''):`<div class="m-empty"><span class="ei">${mS('search')}</span><b>No match yet</b>Try a shorter word, or clear a filter.</div>`;}
+  const hit=r=>r.hit?`<span class="ht">${r.hit[0]} · <b>${naira(r.hit[1])}</b></span>`:'';
+  const fb=$('#mFb');if(fb){const n=st.f.size+(st.sort==='near'?1:0);fb.innerHTML=mS('sliders')+(n?`<em>${n}</em>`:'');}
+  el.innerHTML=results.length?(op.length?`<div class="m-sh"><b>Open now</b><span>${op.length} ${op.length===1?'place':'places'}</span></div><div class="m-lst">`+op.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(cl.length?`<div class="m-sh"><b>Opening later</b><span>${cl.length}</span></div><div class="m-lst">`+cl.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':''):`<div class="m-empty"><span class="ei">${mS('search')}</span><b>No match yet</b>Try a shorter word, or clear a filter.</div>`;}
 const back=()=>`<button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button>`;
 function m2Page(t){
   if(t==='places')return`<div class="m-h"><h1>Places</h1><button class="m-circ" type="button" data-mtab="explore" aria-label="Map">${mS('compass')}</button></div>
-    <label class="m-field">${mS('search')}<input id="mQ" type="search" placeholder="Try “jollof under 3k near Moremi”" value="${st.q.replace(/"/g,'&quot;')}" autocomplete="off"><span class="flt">${mS('sliders')}</span></label>
-    <div class="m-row" id="mPChips"></div><div class="m-tg" id="mTg"></div><div id="mList"></div>`;
+    <label class="m-field">${mS('search')}<input id="mQ" type="search" placeholder="Try “jollof under 3k near Moremi”" value="${st.q.replace(/"/g,'&quot;')}" autocomplete="off"><button class="flt" id="mFb" type="button" data-mflt="1" aria-label="Filters">${mS('sliders')}</button></label>
+    <div class="m-row" id="mPChips"></div><div class="m-tg m-fpan" id="mTg"></div><div id="mList"></div>`;
   if(t==='live'){const fresh=DROPS.filter(d=>d.m<=30).length;return`<div class="m-h"><h1>Live</h1><button class="m-circ" type="button" data-msub="alerts" aria-label="Alerts">${mS('bell')}</button></div>
     <div class="m-hero"><small>Posted on campus in the last 30 minutes</small><div class="big">${fresh}<em>live ${fresh===1?'update':'updates'}</em></div><p>Vendors post these from WhatsApp the moment something is ready.</p></div>
-    ${DROPS.map(d=>{const v=vOf(d.id);return`<div class="m-card"><div class="m-ch">${logo(v)}<div><b>${v.name}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><span class="tm">${ago(d.m)}</span></div><p class="m-post">${d.t}</p><div class="m-two"><button type="button" data-msel="${v.id}">${mS('pin')}Show on map</button><button type="button" class="k" data-chat="${v.id}">${mS('chat')}Chat to order</button></div></div>`;}).join('')}`;}
+    ${DROPS.map(d=>{const v=vOf(d.id);return`<div class="m-card"><div class="m-ch">${mLogo(v)}<div><b>${v.name}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><span class="tm">${ago(d.m)}</span></div><p class="m-post">${d.t}</p><div class="m-two"><button type="button" data-msel="${v.id}">${mS('pin')}Show on map</button><button type="button" class="k" data-chat="${v.id}">${mS('chat')}Chat to order</button></div></div>`;}).join('')}`;}
   if(t==='groups'){const ids=Object.keys(GROUPS);return`<div class="m-h"><h1>Group orders</h1></div>
     <div class="m-hero"><small>Order with people in your hall</small><div class="big">${ids.length}<em>groups filling now</em></div><p>One rider, one trip, and the delivery fee is split between everyone who joins.</p></div>
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
       const steps=Array.from({length:g.need},(_,i)=>{const c=i<g.n?'f':(me&&i===g.n?'me':'');return(i?`<span class="ln${i<n?' f':''}"></span>`:'')+`<span class="st ${c}">${c?mS('check'):''}</span>`;}).join('');
-      return`<div class="m-card"><div class="m-ch">${logo(v)}<div><b>${v.name}</b><span>To ${g.hall}</span></div><span class="pill ${g.closes<=15?'soon':'ac'}" style="margin-left:auto">${mS('clock')}${g.closes} min</span></div>
+      return`<div class="m-card"><div class="m-ch">${mLogo(v)}<div><b>${v.name}</b><span>To ${g.hall}</span></div><span class="pill ${g.closes<=15?'soon':'ac'}" style="margin-left:auto">${mS('clock')}${g.closes} min</span></div>
       <div class="m-trk">${steps}</div><div class="m-trl"><span><b>${n} of ${g.need}</b> joined</span><span>${g.need-n>0?(g.need-n)+' more to fill':'Full, rider on the way soon'}</span></div>
       <div class="m-fee"><span>${me?'Your delivery share':'Your share if you join'}</span><b>${naira(share(v,me?n:n+1))}<s>${naira(fee)}</s></b></div>
       <div class="m-two"><button type="button" data-mshop="${id}">${mS('store')}View shop</button><button type="button" class="${me?'k':'ac'}" data-mjoin="${id}">${me?mS('check')+'You’re in':mS('users')+'Join group'}</button></div></div>`;}).join('')}
     <p class="m-note">Group orders close when the timer ends or the group fills. You only pay when the vendor confirms.</p>`;}
-  if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-chat="${v.id}">${logo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}<p class="m-note">Your chats live in WhatsApp. Each shop’s Stafly assistant replies in seconds, any time of day.</p>`;
+  if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-chat="${v.id}">${mLogo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}<p class="m-note">Your chats live in WhatsApp. Each shop’s Stafly assistant replies in seconds, any time of day.</p>`;
   return'';
 }
 function m2Sub(k,id){
   if(k==='shop'){const v=vOf(id),s=status(v),g=GROUPS[id],d=dropOf(id),sv=SAVED.has(id);
     const stz=n=>'<span class="stz">'+[1,2,3,4,5].map(i=>STAR.replace('<svg',`<svg class="${i<=n?'':'off'}"`)).join('')+'</span>';
     return`<div class="m-h c">${back()}<h1>${catL(v.cat)}</h1><button class="m-circ" type="button" data-msave="${id}" aria-label="Save">${S(MI.heart,sv?'i sv':'i')}</button></div>
-    <div class="m-card"><div class="m-who">${logo(v)}<div class="nm"><b>${v.name}</b><span class="m-rate">${rateTxt(v)} · ${tierTxt(v)}</span></div></div>
+    <div class="m-card"><div class="m-who">${mLogo(v)}<div class="nm"><b>${v.name}</b><span class="m-rate">${rateTxt(v)} · ${tierTxt(v)}</span></div></div>
       <div class="m-hr"></div><div class="m-where"><div><b>${v.tag}</b><span>${v.about.join('. ')}.</span></div></div>
       <div class="m-tg"><span class="pill ${s.k}"><i></i>${s.t}</span><span class="pill shut">${mS('walk')}${walk(v)} min · ${dtxt(v)}</span><span class="pill shut">${mS('bike')}${v.deliv?naira(v.deliv.fee)+' delivery':'Pick up only'}</span></div>
       ${d?`<div class="m-live"><b>LIVE</b><span>${d.t} <span style="opacity:.6">· ${ago(d.m)}</span></span></div>`:''}</div>
@@ -1489,7 +1519,7 @@ function m2Sub(k,id){
     ${al('info','#fff','var(--ink)','Welcome to Stafly Search','Tap any pin to see the walk, prices and reviews. Ordering happens in a WhatsApp chat with the shop.','Today','data-mabout="1"')}`;}
   if(k==='cats'){const tint={food:'#F6D77A',fashion:'#FFD7B5',beauty:'#F7C6E6',gadgets:'#D9CCFF',printing:'#BDEBD3',services:'#C9E4FF'};
     return`<div class="m-h c">${back()}<h1>Categories</h1><span style="width:46px"></span></div><div class="m-grid">${CATS.filter(c=>c[0]!=='all').map(([c])=>{const n=V.filter(v=>v.cat===c).length,o=V.filter(v=>v.cat===c&&isOpen(v)).length;return`<button class="m-tile" type="button" data-mcat="${c}"><span class="ci" style="background:${tint[c]}">${S(ICON[c])}</span><span><b>${catL(c)}</b><span>${n} ${n===1?'place':'places'} · ${o} open</span></span></button>`;}).join('')}</div>`;}
-  if(k==='saved'){const L=V.filter(v=>SAVED.has(v.id));return`<div class="m-h c">${back()}<h1>Saved</h1><span style="width:46px"></span></div>${L.length?L.map(v=>m2Shop(v)).join(''):`<div class="m-empty"><span class="ei">${mS('heart')}</span><b>Nothing saved yet</b>Tap the heart on any shop and it will wait for you here.</div>`}`;}
+  if(k==='saved'){const L=V.filter(v=>SAVED.has(v.id));return`<div class="m-h c">${back()}<h1>Saved</h1><span style="width:46px"></span></div>${L.length?'<div class="m-lst">'+L.map(v=>m2Shop(v)).join('')+'</div>':`<div class="m-empty"><span class="ei">${mS('heart')}</span><b>Nothing saved yet</b>Tap the heart on any shop and it will wait for you here.</div>`}`;}
   if(k==='vendor')return`<div class="m-h c">${back()}<h1>Sell on Stafly</h1><span style="width:46px"></span></div>
     <div class="m-hero"><small>For vendors on and around campus</small><div class="big" style="font-size:28px">Get found. Get orders.</div><p>Students and staff find you on the map, and your Stafly assistant answers them on WhatsApp.</p></div>
     <div class="m-card" style="padding:4px 16px"><div class="m-step"><i>1</i><div><b>Chat with Stafly on WhatsApp</b><span>Tell us your shop name, where you are and what you sell.</span></div></div><div class="m-step"><i>2</i><div><b>Your assistant is set up</b><span>It shares your prices, answers questions and takes orders, day and night.</span></div></div><div class="m-step"><i>3</i><div><b>You show up on the map</b><span>Post live drops and group orders, and grow your rating from real buyers.</span></div></div></div>
@@ -1500,7 +1530,7 @@ function m2Sheet(id){const v=vOf(id),s=status(v),d=dropOf(id),g=GROUPS[id],sv=SA
   for(const k in markers){const el=markers[k].getElement();el.classList.toggle('sel',k===id);el.style.zIndex=k===id?5:'';}
   const mn=Math.min(...v.items.map(i=>typeof i[1]==='string'?Number(i[1].replace('from ','')):i[1]));
   $('#mSheet').innerHTML=`<div class="m-grab" data-mclose="1"></div>
-   <div class="m-who">${logo(v)}<div class="nm"><b>${v.name}</b><span class="m-rate">${rateTxt(v)} · ${tierTxt(v)}</span></div><button class="m-cb" type="button" data-msave="${id}" aria-label="Save">${S(MI.heart,sv?'i sv':'i')}</button><button class="m-cb" type="button" data-chat="${id}" aria-label="Chat">${mS('chat')}</button></div>
+   <div class="m-who">${mLogo(v)}<div class="nm"><b>${v.name}</b><span class="m-rate">${rateTxt(v)} · ${tierTxt(v)}</span></div><button class="m-cb" type="button" data-msave="${id}" aria-label="Save">${S(MI.heart,sv?'i sv':'i')}</button><button class="m-cb" type="button" data-chat="${id}" aria-label="Chat">${mS('chat')}</button></div>
    <div class="m-hr"></div>
    <div class="m-where"><div><b>${walk(v)} min walk</b><span>${dtxt(v)} · ${v.place}</span></div><span class="pill ${s.k}"><i></i>${s.t}</span></div>
    <div class="m-walk"><div class="tr"><span class="a"></span><span class="mid">${mS('walk')}${walk(v)} min</span><span class="b">${mS('store')}</span></div><div class="lb"><span>You</span><span>${v.place.split(',')[0]}</span></div></div>
@@ -1529,6 +1559,7 @@ document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=
   const stop=()=>{e.stopPropagation();e.preventDefault();};
   if(a('#mScrim')){stop();return document.body.classList.remove('m-drw');}
   if(a('[data-mdrw]')){stop();return m2Drawer();}
+  if(a('[data-mflt]')){stop();return document.body.classList.toggle('m-fon');}
   if(el=a('[data-mtab]')){stop();const k=el.dataset.mtab;if(k===CUR.t&&!CUR.s){document.body.classList.remove('m-drw');if(k==='explore')unselect();}else m2Nav({t:k});if(el.dataset.mfocus)setTimeout(()=>$('#mQ')&&$('#mQ').focus(),320);return;}
   if(el=a('[data-msub]')){stop();return m2Nav({t:CUR.t,s:el.dataset.msub});}
   if(el=a('[data-mshop]')){stop();return m2Nav({t:CUR.t,s:'shop',id:el.dataset.mshop,sel:CUR.s?null:CUR.sel});}
@@ -1559,7 +1590,7 @@ function m2Notify(o){const n=Object.assign({},o,{at:Date.now()});if(n.group&&!n.
 function m2Busy(){return document.body.classList.contains('m-drw')||$('#scrim').classList.contains('on')||(Date.now()-(window.__typed||0)<4000)||CUR.s==='alerts';}
 function m2BanNext(){if(BNOW||!BQ.length)return;clearTimeout(bWait);if(m2Busy()){bWait=setTimeout(m2BanNext,1500);return;}
   const n=BNOW=BQ.shift(),B=banOf(n),el=$('#mBan');
-  el.innerHTML=`${logo(n.v)}<span class="bt"><span class="bk ${B.cls}"><i></i>${B.k}<span>· now</span></span><b>${B.t}</b><p>${B.b}</p></span>${B.act?`<button class="ba ${B.act[2]}" type="button" ${B.act[1]}>${B.act[0]}</button>`:''}<i class="gr"></i>`;
+  el.innerHTML=`${mLogo(n.v)}<span class="bt"><span class="bk ${B.cls}"><i></i>${B.k}<span>· now</span></span><b>${B.t}</b><p>${B.b}</p></span>${B.act?`<button class="ba ${B.act[2]}" type="button" ${B.act[1]}>${B.act[0]}</button>`:''}<i class="gr"></i>`;
   el.dataset.go=B.go;el.offsetWidth;setTimeout(()=>el.classList.add('on'),30);bHide=setTimeout(()=>m2BanHide(n),6500);}
 function m2BanHide(n){clearTimeout(bHide);const el=$('#mBan');if(!BNOW||(n&&n!==BNOW))return;el.classList.remove('on');el.style.transform='';setTimeout(()=>{BNOW=null;m2BanNext();},500);}
 (function(){const el=document.createElement('div');el.className='m-ban';el.id='mBan';el.setAttribute('role','status');document.body.appendChild(el);
