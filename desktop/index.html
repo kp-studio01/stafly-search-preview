@@ -1173,6 +1173,55 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   html body.m2on .youwrap .youlbl{background:rgba(16,16,20,.6)!important;color:#fff!important}
 }
 </style>
+<style id="chat-glass">
+@media (max-width:820px){
+  /* no white scroll line anywhere */
+  html body.m2on .m-page,html body.m2on .m-drawer,html body.m2on .m-sheet{scrollbar-width:none}
+  html body.m2on .m-page::-webkit-scrollbar,html body.m2on .m-drawer::-webkit-scrollbar,html body.m2on .m-sheet::-webkit-scrollbar{display:none;width:0}
+  html body.m2on .m-drawer{box-shadow:1px 0 0 rgba(255,255,255,.06),20px 0 50px rgba(0,0,0,.35)!important}
+  /* chat page */
+  html body.m2on .m-th{gap:10px;padding:max(12px,env(safe-area-inset-top)) 14px 12px!important;background:rgba(18,18,22,.95)!important;backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%)}
+  html body.m2on .m-th .who{flex:1;min-width:0;display:flex;align-items:center;gap:10px}
+  html body.m2on .m-th .who .mlg{width:40px!important;height:40px!important;border-radius:50%!important;flex:none}
+  html body.m2on .m-th .tt{text-align:left}
+  html body.m2on .m-th .tt b{font-size:16px}
+  html body.m2on .m-th .tt span{font-size:12.5px;color:rgba(255,255,255,.6)}
+  html body.m2on .m-th .m-circ{width:42px;height:42px}
+  html body.m2on .m-ctx{display:flex;align-items:center;gap:8px;margin:12px 0 0;padding:8px 8px 8px 12px;border-radius:18px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);font-size:13px;color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden}
+  html body.m2on .m-ctx .pill{flex:none}
+  html body.m2on .m-ctx .dt{overflow:hidden;text-overflow:ellipsis}
+  html body.m2on .m-ctx button{margin-left:auto;flex:none;height:32px;padding:0 12px;border-radius:16px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);color:#fff;font-size:13px;font-weight:600}
+  html body.m2on .m-thread{gap:6px;padding:8px 0 16px}
+  html body.m2on .m-page:has(.m-comp){padding-bottom:0;display:flex;flex-direction:column}
+  html body.m2on .m-page:has(.m-comp)>*{flex:none}
+  html body.m2on .m-page:has(.m-comp)>.m-thread{flex:1 0 auto}
+  html body.m2on .m-th{top:calc(-1 * max(16px,env(safe-area-inset-top)))!important}
+  html body.m2on .m-hi{display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px 16px 14px}
+  html body.m2on .m-hi .mlg{width:76px!important;height:76px!important;border-radius:50%!important;margin-bottom:12px}
+  html body.m2on .m-hi .mlg svg{width:34px;height:34px}
+  html body.m2on .m-hi b{font-size:19px;font-weight:600;letter-spacing:-.01em}
+  html body.m2on .m-hi span{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px}
+  html body.m2on .m-hi span{display:inline-flex;align-items:center;gap:4px}html body.m2on .m-hi span svg{width:13px;height:13px;fill:#F5B000;stroke:none}
+  html body.m2on .m-hi p{margin:12px 0 0;font-size:14px;line-height:1.5;color:rgba(255,255,255,.7);max-width:290px}
+  html body.m2on .m-day{align-self:center;margin:14px 0 4px;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.02em}
+  html body.m2on .m-sys{display:block;text-align:left;font-size:12.5px;padding:9px 12px;border-radius:14px;max-width:92%;margin:2px 0 8px}
+  html body.m2on .m-sys svg{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;opacity:.75}
+  html body.m2on .m-sys .lnk{display:inline;padding:0;background:none!important;box-shadow:none!important;color:#C9B8FF!important}
+  html body.m2on .tb{font-size:15px;padding:10px 14px 7px;max-width:82%}
+  html body.m2on .tb.them{background:rgba(255,255,255,.1)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)!important;border-radius:20px 20px 20px 6px}
+  html body.m2on .tb.me{background:linear-gradient(180deg,#8A6BE6 0%,#7551DC 60%,#6844CF 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 6px 14px rgba(60,30,150,.25);border-radius:20px 20px 6px 20px}
+  html body.m2on .tb time{display:flex;align-items:center;justify-content:flex-end;gap:3px;font-size:11px;opacity:.65}
+  html body.m2on .tb time svg{width:14px;height:14px}
+  html body.m2on .tb + .tb.me,html body.m2on .tb.me + .tb.me{margin-top:0}
+  html body.m2on .m-comp{position:sticky!important;bottom:0;z-index:3;margin:0 -16px;padding:10px 12px max(12px,env(safe-area-inset-bottom))!important;background:rgba(20,20,24,.96)!important;box-shadow:0 -1px 0 rgba(255,255,255,.08)}
+  html body.m2on .m-qs{padding:0 0 10px}
+  html body.m2on .m-qs button{background:rgba(255,255,255,.08)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)!important;color:#fff!important;font-size:13.5px;height:36px}
+  html body.m2on .m-in{padding:5px 5px 5px 5px!important;background:rgba(255,255,255,.08)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)!important;gap:6px}
+  html body.m2on .m-in .att{width:40px!important;height:40px!important;background:rgba(255,255,255,.08)!important;box-shadow:none!important;color:#fff!important;text-shadow:none}
+  html body.m2on .m-in input{padding-left:4px}
+  html body.m2on .m-in button[type=submit]{width:40px;height:40px}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1947,6 +1996,24 @@ function m2Drawer(){const c=shellCounts(),row=(a,ic,l,n,r)=>`<button class="m-li
 
 MI.satic='<svg class="i" viewBox="0 0 24 24"><g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,16a87.5,87.5,0,0,1,48,14.28V74L153.83,99.74,122.36,104l-.31-.22L102.38,90.92A16,16,0,0,0,79.87,95.1L58.93,126.4a16,16,0,0,0-2.7,8.81L56,171.44l-3.27,2.15A88,88,0,0,1,128,40ZM62.29,186.47l2.52-1.65A16,16,0,0,0,72,171.53l.21-36.23L93.17,104a3.62,3.62,0,0,0,.32.22l19.67,12.87a15.94,15.94,0,0,0,11.35,2.77L156,115.59a16,16,0,0,0,10-5.41l22.17-25.76A16,16,0,0,0,192,74V67.67A87.87,87.87,0,0,1,211.77,155l-16.14-14.76a16,16,0,0,0-16.93-3l-30.46,12.65a16.08,16.08,0,0,0-9.68,12.45l-2.39,16.19a16,16,0,0,0,11.77,17.81L169.4,202l2.36,2.37A87.88,87.88,0,0,1,62.29,186.47ZM185,195l-4.3-4.31a16,16,0,0,0-7.26-4.18L152,180.85l2.39-16.19L184.84,152,205,170.48A88.43,88.43,0,0,1,185,195Z"/></g></svg>';MI.mapic='<svg class="i" viewBox="0 0 24 24"><g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></g></svg>';
 (function(){if(!M2)return;const b=document.createElement('button');b.type='button';b.id='mSatB';b.className='m-satb';b.setAttribute('aria-label','Switch map view');b.innerHTML=(SAT?MI.mapic:MI.satic)+'<span>'+(SAT?'Map':'Satellite')+'</span>';b.onclick=e=>{e.stopPropagation();setSat(!SAT);};document.getElementById('m2').appendChild(b);})();
+
+
+MI.plus='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></g>';MI.lockc='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></g>';MI.ticks='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M149.61,85.71l-89.6,88a8,8,0,0,1-11.22,0L10.39,136a8,8,0,1,1,11.22-11.41L54.4,156.79l84-82.5a8,8,0,1,1,11.22,11.42Zm96.1-11.32a8,8,0,0,0-11.32-.1l-84,82.5-18.83-18.5a8,8,0,0,0-11.21,11.42l24.43,24a8,8,0,0,0,11.22,0l89.6-88A8,8,0,0,0,245.71,74.39Z"/></g>';
+function mThreadAll(id){const v=vOf(id),L=TALK[id]||[];
+  const sys=`<div class="m-sys">${mS('lockc')}<span>Chats here stay on Stafly. ${v.name} never sees your phone number.</span></div>`;
+  return (L.length?'':`<div class="m-hi">${mLogo(v)}<b>${v.name}</b><span>${rateTxt(v)} · ${tierTxt(v)}</span><p>Ask about prices, delivery or opening hours. The shop’s assistant replies in seconds, day or night.</p></div>`)
+    +`<div class="m-day">Today</div>`+sys+mThread(id);}
+mThread=function(id){const L=TALK[id]||[];
+  return L.map(m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}">${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`).join('')+(TYP[id]?'<div class="tb them typ"><i></i><i></i><i></i></div>':'');};
+mTalk=function(id){const v=vOf(id),L=TALK[id]||[],r=reach(v),s=status(v);const loc=(USER&&USER.hall)||'Moremi Hall';
+  const qs=[ask(v).replace(/^Hi, I found you on Stafly\. /,''),v.deliv?`Do you deliver to ${loc.replace(' Hall','')}?`:'Where exactly are you?','Can I see your prices?'];
+  return`<div class="m-th">${back()}<div class="who">${mLogo(v)}<div class="tt"><b>${v.name}</b><span><i></i>Online · replies in seconds</span></div></div>${r==='both'?`<button class="m-circ" type="button" data-chat="${id}" aria-label="Open in WhatsApp">${mS('wa')}</button>`:''}</div>
+  <div class="m-ctx"><span class="pill ${s.k}"><i></i>${s.t}</span><span class="dt">${walk(v)} min · ${v.deliv?naira(v.deliv.fee)+' delivery':'Pick up only'}</span><button type="button" data-mshop="${id}">View shop</button></div>
+  <div class="m-thread" id="mThread">${mThreadAll(id)}</div>
+  <div class="m-comp">${L.length?'':`<div class="m-qs">${qs.map(q=>`<button type="button" data-mq="${q.replace(/"/g,'&quot;')}">${q}</button>`).join('')}</div>`}
+   <form class="m-in" id="mIn" data-id="${id}"><button type="button" class="att" aria-label="Send a photo">${mS('plus')}</button><input id="mMsg" type="text" placeholder="Message…" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send">${mS('send')}</button></form></div>`;};
+mTalkRender=function(id){if(CUR.s!=='talk'||CUR.id!==id)return;const th=$('#mThread');if(!th)return;th.innerHTML=mThreadAll(id);
+  const qs=$('#mSub .m-qs');if(qs&&(TALK[id]||[]).length)qs.remove();requestAnimationFrame(()=>{$('#mSub').scrollTop=1e6;});};
 
 /* ---- buyer chat: in Stafly or on WhatsApp, the seller decides ---- */
 MI.wa='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></g>';MI.send='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M240,127.89a16,16,0,0,1-8.18,14L63.9,237.9A16.15,16.15,0,0,1,56,240a16,16,0,0,1-15-21.33l27-79.95A4,4,0,0,1,71.72,136H144a8,8,0,0,0,8-8.53,8.19,8.19,0,0,0-8.26-7.47h-72a4,4,0,0,1-3.79-2.72l-27-79.94A16,16,0,0,1,63.84,18.07l168,95.89A16,16,0,0,1,240,127.89Z"/></g>';
