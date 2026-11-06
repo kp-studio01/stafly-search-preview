@@ -1539,6 +1539,46 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   html body.m2on.m-light .lv-who b{color:#121215}html body.m2on.m-light .lv-who span,html body.m2on.m-light .lv-who .tm{color:#6B6B75}
 }
 </style>
+<style id="lv-view">
+@media (max-width:820px){
+  .lv-view{position:fixed;inset:0;z-index:2600;background:#0B0B0D;color:#fff;opacity:0;pointer-events:none;transform:scale(.97);transition:opacity .25s,transform .3s cubic-bezier(.2,.9,.2,1);overflow:hidden}
+  body.lv-on .lv-view{opacity:1;pointer-events:auto;transform:none}
+  .lv-bg{position:absolute;inset:0;overflow:hidden}
+  .lv-zoom{position:absolute;inset:0;transform:scale(1.9);transform-origin:50% 46%}
+  .lv-bg .g-tiles{position:absolute;width:768px}.lv-bg .g-tiles img{position:absolute;width:256px;height:256px}
+  .lv-bg .g-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .lv-zoom:has(.g-photo){transform:none}
+  .lv-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 48%,rgba(0,0,0,.88) 100%);pointer-events:none}
+  .lv-bars{position:absolute;left:12px;right:12px;top:calc(max(10px,env(safe-area-inset-top)) + 2px);display:flex;gap:4px;z-index:3}
+  .lv-bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+  .lv-bars i b{display:block;height:100%;width:0;background:#fff}
+  .lv-bars i.done b{width:100%}.lv-bars i.run b{animation:lvFill 5s linear forwards}
+  @keyframes lvFill{to{width:100%}}
+  .lv-hd{position:absolute;left:14px;right:10px;top:calc(max(10px,env(safe-area-inset-top)) + 16px);display:flex;align-items:center;gap:10px;z-index:3}
+  .lv-hd .mlg{width:38px!important;height:38px!important;border-radius:50%!important;background:rgba(255,255,255,.14)!important;color:#fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.6)!important;flex:none}
+  .lv-hd div{flex:1;min-width:0}.lv-hd b{display:block;font-size:15px;font-weight:600}.lv-hd span{font-size:12.5px;color:rgba(255,255,255,.72)}
+  .lv-x{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff}.lv-x svg{width:22px;height:22px}
+  .lv-pin{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:1}
+  .lv-pin .mlg{width:64px!important;height:64px!important;border-radius:50%!important;background:rgba(20,20,24,.72)!important;color:#fff!important;box-shadow:0 0 0 2.5px #fff,0 0 0 10px rgba(255,255,255,.16),0 10px 28px rgba(0,0,0,.4)!important}
+  .lv-pin .mlg svg{width:28px;height:28px}
+  .lv-prev,.lv-next{position:absolute;top:90px;bottom:200px;z-index:2;background:none}.lv-prev{left:0;width:35%}.lv-next{right:0;width:65%}
+  .lv-ft{position:absolute;left:18px;right:18px;bottom:max(18px,env(safe-area-inset-bottom));z-index:3}
+  .lv-cat{font-size:13px;color:rgba(255,255,255,.7)}
+  .lv-ft p{margin:6px 0 18px;font-size:24px;line-height:1.28;font-weight:600;letter-spacing:-.02em}
+  .lv-ft .g-act{display:flex;align-items:center;gap:10px}
+  .lv-ft .g-ghost{height:48px;padding:0 18px;border-radius:24px;font-size:14.5px;font-weight:600;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);background:rgba(255,255,255,.08)}
+  .lv-ft .g-go{margin-left:auto;height:48px;padding:0 6px 0 20px;border-radius:24px;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600;background:#fff;color:#121215}
+  .lv-ft .g-go i{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#121215;color:#fff}.lv-ft .g-go i svg{width:17px;height:17px}
+  /* the post, quoted in the chat */
+  html body.m2on .lv-quote{align-self:flex-end;display:flex;gap:10px;align-items:center;max-width:88%;margin:6px 0 4px;padding:8px 12px 8px 8px;border-radius:18px;background:rgba(139,92,246,.16);box-shadow:inset 0 0 0 1px rgba(139,92,246,.35)}
+  html body.m2on .lv-quote .th{flex:none;width:46px;height:46px;border-radius:12px;overflow:hidden;display:grid;place-items:center;background:rgba(255,255,255,.08)}
+  html body.m2on .lv-quote .th .mlg{width:46px!important;height:46px!important;border-radius:12px!important;box-shadow:none!important}
+  html body.m2on .lv-quote .th img{width:100%;height:100%;object-fit:cover}
+  html body.m2on .lv-quote small{display:flex;align-items:center;gap:5px;font-size:11.5px;color:#C9B8FF;font-weight:600}html body.m2on .lv-quote small svg{width:13px;height:13px}
+  html body.m2on .lv-quote p{margin:3px 0 0;font-size:14px;line-height:1.38;color:#F4F3F7}
+  html body.m2on.m-light .lv-quote{background:#F3EFFE;box-shadow:inset 0 0 0 1px #E2D9FC}html body.m2on.m-light .lv-quote small{color:#6A45D6}html body.m2on.m-light .lv-quote p{color:#121215}html body.m2on.m-light .lv-quote .th{background:#fff}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -2241,7 +2281,7 @@ function m2Page(t){
       ${v.img?'':`<span class="g-pin">${mLogo(v)}</span>`}
       <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
       <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><span class="tm">${ago(d.m)}</span></div>
-      <div class="g-act"><button type="button" class="g-ghost" data-msel="${v.id}">Show on map</button><button type="button" class="g-go" data-mtalk="${v.id}">Chat to order<i>${mS('arrow')}</i></button></div></div></div>`;}).join('')}`;}
+      <div class="g-act"><button type="button" class="g-ghost" data-msel="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div></div>`;}).join('')}`;}
   if(t==='groups'){const ids=Object.keys(GROUPS);return`<div class="m-h"><h1>Group orders</h1></div>
     <div class="m-hero"><small>Order with people in your hall</small><div class="big">${ids.length}<em>groups filling now</em></div><p>One rider, one trip, and the delivery fee is split between everyone who joins.</p></div>
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
@@ -2364,14 +2404,51 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 
 
 MI.users3='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"/></g>';MI.arrow='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></g>';
-function satTiles(ll){const z=17,lat=ll[0]*Math.PI/180,n=2**z;const x=(ll[1]+180)/360*n,y=(1-Math.log(Math.tan(lat)+1/Math.cos(lat))/Math.PI)/2*n;
-  const tx=Math.floor(x)-1,ty=Math.floor(y-.5),px=Math.round((x-tx)*256),py=Math.round((y-ty)*256);let h='';
-  for(let r=0;r<2;r++)for(let c=0;c<3;c++)h+=`<img src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${ty+r}/${tx+c}" style="left:${c*256}px;top:${r*256}px" alt="" loading="lazy" decoding="async">`;
-  return`<div class="g-tiles" style="left:calc(50% - ${px}px);top:calc(46% - ${py}px)">${h}</div>`;}
+function satTiles(ll,rows){rows=rows||2;const z=17,lat=ll[0]*Math.PI/180,n=2**z;const x=(ll[1]+180)/360*n,y=(1-Math.log(Math.tan(lat)+1/Math.cos(lat))/Math.PI)/2*n;
+  const tx=Math.floor(x)-1,ty=rows===2?Math.floor(y-.5):Math.floor(y)-2,px=Math.round((x-tx)*256),py=Math.round((y-ty)*256);let h='';
+  for(let r=0;r<rows;r++)for(let c=0;c<3;c++)h+=`<img src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${ty+r}/${tx+c}" style="left:${c*256}px;top:${r*256}px" alt="" loading="lazy" decoding="async">`;
+  return`<div class="g-tiles" style="height:${rows*256}px;left:calc(50% - ${px}px);top:calc(46% - ${py}px)">${h}</div>`;}
 
 
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-lvgo]');if(!b)return;e.stopImmediatePropagation();e.preventDefault();
-  const c=document.getElementById('lv-'+b.dataset.lvgo),pg=$('#mPage');if(c&&pg)pg.scrollTo({top:c.offsetTop-80,behavior:'smooth'});},true);
+
+
+
+/* ---- Live: full-screen status viewer + chat that knows which post you mean ---- */
+var LVI=0,LVT=null,LVCTX={};
+function lvOpen(i){LVI=Math.max(0,i);let o=$('#lvView');if(!o){o=document.createElement('div');o.id='lvView';o.className='lv-view';document.body.appendChild(o);}lvShow();document.body.classList.add('lv-on');}
+function lvShow(){const d=DROPS[LVI],v=vOf(d.id),o=$('#lvView');if(!o)return;
+  o.innerHTML=`<div class="lv-bg"><div class="lv-zoom">${v.img?`<img class="g-photo" src="${v.img}" alt="">`:satTiles(v.ll,4)}</div></div><span class="lv-shade"></span>
+  <div class="lv-bars">${DROPS.map((x,k)=>`<i class="${k<LVI?'done':k===LVI?'run':''}"><b></b></i>`).join('')}</div>
+  <div class="lv-hd">${mLogo(v)}<div><b>${v.name}</b><span>${ago(d.m)} · ${v.place.split(',')[0]}</span></div><button type="button" class="lv-x" data-lvx aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+  ${v.img?'':`<span class="g-pin lv-pin">${mLogo(v)}</span>`}
+  <button type="button" class="lv-prev" data-lvprev aria-label="Previous post"></button><button type="button" class="lv-next" data-lvnext aria-label="Next post"></button>
+  <div class="lv-ft"><span class="lv-cat">${catL(v.cat)} · ${dtxt(v)}</span><p>${d.t}</p><div class="g-act"><button type="button" class="g-ghost" data-lvmap="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div>`;
+  clearTimeout(LVT);LVT=setTimeout(()=>lvStep(1),5000);}
+function lvStep(k){const n=LVI+k;if(n<0){LVI=0;return lvShow();}if(n>=DROPS.length)return lvClose();LVI=n;lvShow();}
+function lvClose(){clearTimeout(LVT);document.body.classList.remove('lv-on');}
+function lvFire(attr,val){const b=document.createElement('button');b.type='button';b.setAttribute(attr,val);b.style.display='none';document.body.appendChild(b);b.click();b.remove();}
+document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let el;const stop=()=>{e.stopImmediatePropagation();e.preventDefault();};
+  if(el=t.closest('[data-lvgo]')){stop();return lvOpen(DROPS.findIndex(d=>d.id===el.dataset.lvgo));}
+  if(t.closest('[data-lvx]')){stop();return lvClose();}
+  if(t.closest('[data-lvprev]')){stop();return lvStep(-1);}
+  if(t.closest('[data-lvnext]')){stop();return lvStep(1);}
+  if(el=t.closest('[data-lvmap]')){stop();lvClose();return lvFire('data-msel',el.dataset.lvmap);}
+  if(el=t.closest('[data-lvtalk]')){stop();const d=DROPS.find(x=>x.id===el.dataset.lvtalk)||(LATE.id===el.dataset.lvtalk?LATE:null);if(!d)return;
+    LVCTX[d.id]={t:d.t,m:d.m,at:(TALK[d.id]||[]).length};lvClose();return lvFire('data-mtalk',d.id);}
+},true);
+document.addEventListener('keydown',e=>{if(!document.body.classList.contains('lv-on'))return;if(e.key==='Escape')lvClose();if(e.key==='ArrowRight')lvStep(1);if(e.key==='ArrowLeft')lvStep(-1);});
+(function(){const _ts=mTalkSend;mTalkSend=function(id,t){_ts(id,t);document.querySelectorAll('#mSub .m-qs').forEach(x=>x.remove());};})();
+(function(){const _mb=m2Busy;m2Busy=function(){return _mb()||document.body.classList.contains('lv-on');};})();
+mThread=function(id){const L=TALK[id]||[],c=LVCTX[id],v=vOf(id);
+  const q=c?`<div class="lv-quote"><span class="th">${v.img?`<img src="${v.img}" alt="">`:mLogo(v)}</span><div><small>${mS('radio')}You’re asking about their Live post · ${ago(c.m)}</small><p>${c.t}</p></div></div>`:'';
+  const row=m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}">${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`;
+  let h='';L.forEach((m,k)=>{if(c&&k===c.at)h+=q;h+=row(m);});if(c&&c.at>=L.length)h+=q;
+  return h+(TYP[id]?'<div class="tb them typ"><i></i><i></i><i></i></div>':'');};
+(function(){const _mt=mTalk;mTalk=function(id){let h=_mt(id);const c=LVCTX[id],L=TALK[id]||[];
+  if(c&&!L.slice(c.at).some(m=>m.me)){const v=vOf(id),loc=(USER&&USER.hall)||'Moremi Hall';
+    const qs=['Is it still available?','How much is it?',v.deliv?`Can you deliver to ${loc.replace(' Hall','')}?`:'Where can I pick it up?'];
+    h=h.replace(/<div class="m-qs">[\s\S]*?<\/div>(?=\s*<form)/,'').replace('<div class="m-comp">',`<div class="m-comp"><div class="m-qs">${qs.map(q=>`<button type="button" data-mq="${q}">${q}</button>`).join('')}</div>`);}
+  return h;};})();
 
 /* ---- buyer chat: in Stafly or on WhatsApp, the seller decides ---- */
 MI.wa='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></g>';MI.send='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M240,127.89a16,16,0,0,1-8.18,14L63.9,237.9A16.15,16.15,0,0,1,56,240a16,16,0,0,1-15-21.33l27-79.95A4,4,0,0,1,71.72,136H144a8,8,0,0,0,8-8.53,8.19,8.19,0,0,0-8.26-7.47h-72a4,4,0,0,1-3.79-2.72l-27-79.94A16,16,0,0,1,63.84,18.07l168,95.89A16,16,0,0,1,240,127.89Z"/></g>';
