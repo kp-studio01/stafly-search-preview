@@ -261,7 +261,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
 .hall{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:rgba(23,20,31,.72);border:1px solid rgba(255,255,255,.14);padding:4px 8px;border-radius:6px;pointer-events:none;white-space:nowrap;backdrop-filter:blur(4px)}
 /* toast */
 .toast{position:absolute;left:50%;top:20px;z-index:700;transform:translate(-50%,-140%);display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border-radius:16px;background:#fff;color:#17141F;box-shadow:0 14px 40px rgba(0,0,0,.5);transition:transform .45s cubic-bezier(.2,.8,.2,1);cursor:pointer;max-width:calc(100% - 32px)}
-.toast.on{transform:translate(-50%,0)}
+.toast:not(.on){transform:translate(-50%,calc(-100% - 120px));opacity:0;pointer-events:none}.toast.on{transform:translate(-50%,0)}.toast{transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s}
 .toast .logo{width:38px;height:38px;font-size:12px;border:1px solid #eee}
 .toast b{display:block;font-size:13.5px}
 .toast span{font-size:12.5px;color:#55525e}
@@ -508,7 +508,7 @@ const isOpen=v=>status(v).k!=='shut';
 const logo=(v,extra='')=>`<span class="logo ${extra}" style="background:${v.bg}">${v.mono}</span>`;
 let YOU=null;
 function shift(ll,[e,n]){return[ll[0]+n/111320,ll[1]+e/(111320*Math.cos(ll[0]*Math.PI/180))];}
-function placeVendors(){V.forEach(v=>v.ll=shift(LM[v.near].ll,v.off));YOU=shift(LM.moremi.ll,[75,-60]);}
+function placeVendors(){V.forEach(v=>v.ll=shift(LM[v.near].ll,v.near==='sub'?v.off:v.off.map(x=>x*2.2)));YOU=shift(LM.moremi.ll,[75,-60]);}
 function meters(a,b){const R=6371000,toR=Math.PI/180,dLa=(b[0]-a[0])*toR,dLo=(b[1]-a[1])*toR;const x=Math.sin(dLa/2)**2+Math.cos(a[0]*toR)*Math.cos(b[0]*toR)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
 const dist=v=>meters(YOU,v.ll)*1.3; // walking is longer than a straight line
 const dtxt=v=>{const d=dist(v);return d<1000?Math.round(d/10)*10+' m':(d/1000).toFixed(1)+' km';};
