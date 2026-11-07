@@ -2484,10 +2484,12 @@ function m2Page(t){
     <div class="lv-row lv2">${ST.map(d=>{const v=vOf(d.id),sn=LVSEEN.has(d.id);return`<button type="button" class="lv-st${sn?'':' new'}" data-lvgo="${d.id}"><span class="rg">${mLogo(v)}</span>${d.m<=10&&!sn?'<i class="lv-dot">LIVE</i>':''}<em>${v.name.split(' ').slice(0,2).join(' ')}</em></button>`;}).join('')}</div>
     <div class="lv-seg">${[['following','Following'],['popular','Popular'],['near','Near you']].map(([k,l])=>`<button type="button" data-lvtab="${k}" class="${LVTAB===k?'on':''}">${l}</button>`).join('')}</div>
     ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${fmtK(followers(v))} followers</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
-    ${LL.map(d=>{const v=vOf(d.id);return`<article class="lp" id="lv-${d.id}">
-      <div class="lp-h" data-mshop="${v.id}">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><time>${ago(d.m)}</time></div>
-      <div class="lp-m" data-lvgo="${d.id}">${v.img?`<img class="g-photo" src="${v.img}" alt="">`:satTiles(v.ll)}<span class="lp-sh"></span>${d.m<=10?'<span class="lp-live"><i></i>Live</span>':''}<p>${d.t}</p></div>
-      <div class="lp-a"><button type="button" class="lp-go" data-lvtalk="${d.id}">${mS('chat')}Chat to order</button><button type="button" class="lp-map" data-msel="${v.id}" aria-label="Show on map">${mS('pin')}</button></div></article>`;}).join('')}`;}
+    ${LL.map(d=>{const v=vOf(d.id);return`<div class="g-card lv-card" id="lv-${d.id}"><div class="g-media lv-media">${v.img?`<img class="g-photo" src="${v.img}" alt="">`:satTiles(v.ll)}<span class="g-shade"></span>
+      <span class="g-tag${d.m<=10?' hot':''}">${d.m<=10?'<i class="lvd"></i>Live':mS('clock')+ago(d.m)}</span><span class="g-time">${catL(v.cat)}</span>
+      ${v.img?'':`<span class="g-pin">${mLogo(v)}</span>`}
+      <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
+      <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><span class="tm">${ago(d.m)}</span></div>
+      <div class="g-act"><button type="button" class="g-ghost" data-msel="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div></div>`;}).join('')}`;}
   if(t==='groups'){const ids=Object.keys(GROUPS);return`<div class="m-h"><h1>Group orders</h1></div>
     <div class="m-hero"><small>Order with people in your hall</small><div class="big">${ids.length}<em>groups filling now</em></div><p>One rider, one trip, and the delivery fee is split between everyone who joins.</p></div>
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
