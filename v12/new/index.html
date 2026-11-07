@@ -3568,5 +3568,53 @@ if(typeof setSat==='function'){const _s=setSat;setSat=function(){_s.apply(this,a
 (function(){const _oc=openChat;openChat=function(id){const v=V.find(x=>x.id===id);
   if(v&&v.wa){const t=`Hi ${v.name}, I found you on Stafly Search. What do you have today?`;window.open('https://wa.me/'+v.wa+'?text='+encodeURIComponent(t),'_blank','noopener');return;}
   return _oc.apply(this,arguments);};})();
+</script><script>
+/* ---- v70: Foodhunt is real. Its details come from the Stafly dashboard and its chat goes to Amara ---- */
+(function(){const LIVE={base:'https://kp-assistant.onrender.com',sid:'seller1',id:'foodhunt'};
+const v=V.find(x=>x.id===LIVE.id);if(!v)return;let ON=false;
+const now=()=>new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+const esc=t=>String(t==null?'':t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const html=t=>esc(t).replace(/\n/g,'<br>');
+function waDigits(w){let d=String(w||'').replace(/\D/g,'');if(/^0[789]\d{9}$/.test(d))d='234'+d.slice(1);return d;}
+function redraw(){try{drawMarkers();}catch(e){}try{render();}catch(e){}try{m2Apply();}catch(e){}}
+/* only connect when that account really is Foodhunt */
+fetch(LIVE.base+'/api/w/'+LIVE.sid+'/config').then(r=>r.ok?r.json():null).then(c=>{if(!c||!/food\s*hunt/i.test(c.businessName||''))return;ON=true;v.sid=LIVE.sid;
+/* 1) real details: name, photo, tagline, menu, prices */
+return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).then(d=>{if(!d)return;
+  if(d.businessName)v.name=d.businessName;
+  if(d.headline)v.tag=d.headline;
+  v.about=['Message us and our assistant replies right away'];const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>x.trim().replace(/\.$/,'')).filter(Boolean).slice(0,2);if(ab.length)v.about=ab;
+  if(d.avatar)v.img=d.avatar;
+  if(d.location)v.place=d.location;
+  const it=(d.items||[]).filter(i=>!i.soldOut&&i.name).map(i=>[i.name,Number(i.price)||0]);if(it.length)v.items=it.slice(0,30);
+  const w=waDigits(d.whatsapp);if(w)v.wa=w;
+  if(d.defaultFee&&v.deliv)v.deliv.fee=Number(d.defaultFee)||v.deliv.fee;
+  v.live=1;redraw();});}).catch(()=>{});
+const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Thanks for messaging ${vv.name}. What would you like today?`;};
+/* 2) real chat with Amara through Stafly's website-chat line */
+let vid='';try{vid=localStorage.getItem('stafly_vid')||'';}catch(e){}
+if(!/^[a-z0-9]{12,32}$/.test(vid)){vid=(Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)).replace(/[^a-z0-9]/g,'').slice(0,24);try{localStorage.setItem('stafly_vid',vid);}catch(e){}}
+let last=0,busy=false;
+function push(ms){const L=TALK[v.id]=TALK[v.id]||[];let added=false;
+  (ms||[]).forEach(m=>{if(!m||m.role==='visitor')return;last=Math.max(last,m.at||0);
+    const t=m.img?`<img src="${esc(m.img)}" alt="" style="display:block;max-width:220px;border-radius:10px">${m.caption?'<br>'+html(m.caption):''}`:html(m.text);
+    if(t){L.push({t,tm:now()});added=true;}});
+  if(added){const c=CHATS.find(c=>c.id===v.id),lt=L[L.length-1];if(c)c.t=lt.t.replace(/<[^>]+>/g,' ');}
+  return added;}
+const _send=mTalkSend;mTalkSend=function(id,t){if(id!==v.id||!ON)return _send.apply(this,arguments);
+  t=String(t||'').trim();if(!t)return;const L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);
+  L.push({me:1,t:esc(t),tm:now()});if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:now(),n:0});
+  TYP[id]=1;mTalkRender(id,true);busy=true;
+  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vid,text:t,name:(USER&&USER.name)||'',page:'Stafly Search'})})
+   .then(r=>r.json().then(j=>({ok:r.ok,j}))).then(({ok,j})=>{TYP[id]=0;busy=false;
+     if(!ok){L.push({t:esc(j&&j.error||'Something went wrong. Please try again.'),tm:now()});}
+     else if(!push(j.messages)&&j.paused){/* owner is replying personally; their answer arrives by polling */}
+     if(first&&!USER)L.push({sys:1,t:`Want replies from ${v.name} after you leave? <button type="button" class="lnk" data-msign="1">Add your WhatsApp number</button>`});
+     mTalkRender(id);})
+   .catch(()=>{TYP[id]=0;busy=false;L.push({t:`I couldn't reach ${esc(v.name)} just now. Please try again in a moment, or tap the WhatsApp button.`,tm:now()});mTalkRender(id);});};
+/* owner replies (when they take over from the dashboard) show up while the chat is open */
+setInterval(()=>{if(busy||document.hidden||!CUR||CUR.s!=='talk'||CUR.id!==v.id||!last)return;
+  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages?vid='+vid+'&since='+last).then(r=>r.ok?r.json():null).then(j=>{if(j&&push(j.messages))mTalkRender(v.id);}).catch(()=>{});},6000);
+})();
 </script></body>
 </html>
