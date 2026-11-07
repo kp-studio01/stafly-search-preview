@@ -1981,6 +1981,9 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-app{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#25D366;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-app .wal{width:22px;height:22px;display:block}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-pf{margin-left:auto}
+  html body.m2on.m2on.m2on .m-wab,html body.m2on.m2on.m2on.m-light .m-wab,html body.m2on.m2on .m-sheet .m-wab{background:#25D366!important;color:#fff!important;box-shadow:0 6px 16px -8px rgba(37,211,102,.7)!important;border:0!important}
+  html body.m2on .m-wab svg{width:26px!important;height:26px!important}
+  html body.m2on.m2on.m2on .m-cta.wa{background:#25D366!important;color:#fff!important}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-i.ca-r{width:auto!important;height:auto!important;padding:0!important;margin-left:4px;border-radius:12px!important;background:none!important;border:0!important}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-i.ca-r .wa-app{width:36px;height:36px;border-radius:11px}html body.m2on #mSub:has(.wa-h.dsh) .wa-i.ca-r .wal{width:20px;height:20px}
   /* 'get replies on WhatsApp': one calm card, text block then one full-width action */
@@ -3220,6 +3223,9 @@ const _mt=mTalk;mTalk=function(id){let h=_mt(id);
      .replace(/(<\/button>)(<\/div>\s*<div class="m-thread")/,'$1<button type="button" class="wa-i wa-pf" data-mshop="'+id+'" aria-label="Shop profile">'+mS('store')+'</button>$2').replace(/<button type="button" class="att"[^>]*>[\s\S]*?<\/button>/,'')
      .replace(/(<button type="submit" class="wa-send"[^>]*>)[\s\S]*?(<\/button>)/,'$1'+ARROW+'$2');
   return h;};
+/* real WhatsApp glyph everywhere, and a clearer chat icon (Phosphor ChatTeardropDots) */
+MI.wa='<path fill="currentColor" stroke="none" d="'+WAL.split('d="')[1].split('"')[0]+'"/>';
+MI.chat='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M132,24A100.11,100.11,0,0,0,32,124v84a16,16,0,0,0,16,16h84a100,100,0,0,0,0-200Zm0,184H48V124a84,84,0,1,1,84,84Zm12-80a12,12,0,1,1-12-12A12,12,0,0,1,144,128Zm-44,0a12,12,0,1,1-12-12A12,12,0,0,1,100,128Zm88,0a12,12,0,1,1-12-12A12,12,0,0,1,188,128Z"/></g>';
 /* open a chat at its latest message, like the dashboard does */
 const _nav=m2Nav;m2Nav=function(o){const r=_nav.apply(this,arguments);if(o&&o.s==='talk'){const go=()=>{const m=document.getElementById('mSub');if(m)m.scrollTop=m.scrollHeight;};requestAnimationFrame(go);setTimeout(go,60);setTimeout(go,300);}return r;};
 })();
