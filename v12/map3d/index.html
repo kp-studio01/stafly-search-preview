@@ -3983,15 +3983,15 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){if(wid!==n
 (function(){
 if(typeof map==='undefined'||!map.on)return;
 const DEM={type:'raster-dem',tiles:['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],encoding:'terrarium',tileSize:256,maxzoom:14};
-const HS={light:{'hillshade-shadow-color':'rgba(70,72,82,.42)','hillshade-highlight-color':'rgba(255,255,255,.55)','hillshade-accent-color':'rgba(70,72,82,.18)'},
-          dark:{'hillshade-shadow-color':'rgba(0,0,0,.55)','hillshade-highlight-color':'rgba(255,255,255,.07)','hillshade-accent-color':'rgba(0,0,0,.25)'}};
+const HS={light:{'hillshade-shadow-color':'rgba(60,62,74,.7)','hillshade-highlight-color':'rgba(255,255,255,.8)','hillshade-accent-color':'rgba(60,62,74,.3)'},
+          dark:{'hillshade-shadow-color':'rgba(0,0,0,.8)','hillshade-highlight-color':'rgba(255,255,255,.12)','hillshade-accent-color':'rgba(0,0,0,.35)'}};
 function th(){return document.body.classList.contains('m-light')?'light':'dark';}
 function paint(){if(!map.getLayer('hills'))return;const p=HS[th()];for(const k in p)map.setPaintProperty('hills',k,p[k]);
-  map.setLight({anchor:'viewport',position:[1.5,240,45],color:'#ffffff',intensity:th()==='light'?.55:.4});
+  map.setLight({anchor:'viewport',position:[1.5,240,45],color:'#ffffff',intensity:th()==='light'?.75:.55});
   map.setLayoutProperty('hills','visibility',SAT?'none':'visible');}
 function add(){if(map.getSource('dem'))return;
-  map.addSource('dem',Object.assign({},DEM,{maxzoom:11}));
-  map.addLayer({id:'hills',type:'hillshade',source:'dem',paint:Object.assign({'hillshade-exaggeration':.7,'hillshade-illumination-direction':315,'hillshade-illumination-anchor':'map'},HS[th()])},map.getLayer('paths')?'paths':undefined);
+  map.addSource('dem',Object.assign({},DEM,{maxzoom:12}));
+  map.addLayer({id:'hills',type:'hillshade',source:'dem',paint:Object.assign({'hillshade-exaggeration':1,'hillshade-illumination-direction':315,'hillshade-illumination-anchor':'map'},HS[th()])},map.getLayer('paths')?'paths':undefined);
   paint();}
 const tk=setInterval(()=>{try{if(map.isStyleLoaded()&&map.getLayer('bg')){clearInterval(tk);add();}}catch(e){}},300);
 const _a=applyTheme;applyTheme=function(){_a.apply(this,arguments);try{paint();}catch(e){}};
