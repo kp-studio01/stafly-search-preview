@@ -3998,56 +3998,114 @@ const _a=applyTheme;applyTheme=function(){_a.apply(this,arguments);try{paint();}
 const _s=setSat;setSat=function(){_s.apply(this,arguments);try{paint();}catch(e){}};
 })();
 </script><script>
-/* ---- v90 (test): detailed 3D models of OAU landmarks, built from each building's real outline ---- */
+/* ---- v91 (test): OAU landmarks modelled from real photos (Wikimedia Commons) ---- */
 (function(){
 if(typeof map==='undefined'||!map.on)return;
-/* OAU style (Arieh Sharon): open ground floors on columns (pilotis), floors that step OUT as they go up
-   (inverted pyramid, upper floors shade lower ones), long bands of windows between concrete bands */
-const band=(a,b,n,sc)=>{const o=[],h=(b-a)/n;for(let i=0;i<n;i++){const s=sc(i);o.push([a+i*h,a+i*h+h*.55,s*.985,'glass']);o.push([a+i*h+h*.55,a+(i+1)*h,s,'slab']);}return o;};
-const MODELS={
-  library:{n:'Library',w:70,d:56,parts:[[0,4.2,.5,'glass'],['cols',0,4.2,.8]].concat(band(4.2,22.2,5,i=>.82+i*.055),[[22.2,23.4,1.04,'wall'],[23.4,23.5,.97,'roof'],[23.5,26,.18,'wall']])},
-  senate:{n:'Senate',w:30,d:26,parts:[[0,5,.5,'glass'],['cols',0,5,.78]].concat(band(5,49,12,i=>.8+i*.012),[[49,51.5,.9,'wall'],[51.5,51.6,.86,'roof'],[51.6,54,.4,'wall']])},
-  oduduwa:{n:'Oduduwa Hall',w:84,d:62,parts:[[0,4,.62,'glass'],['cols',0,4,.86]].concat(band(4,12,2,i=>.9+i*.08),[[12,13,1.04,'wall'],[13,13.1,.98,'roof'],[13.1,23,.4,'wall'],[23,24,.44,'slab'],[24,24.1,.41,'roof']])}
-};
-function cols(ring,c,sc,a,b,out){const r=scale(ring,c,sc);const lat=c[1]*Math.PI/180,mx=K*Math.cos(lat),my=K,sz=.55;
-  for(let i=1;i<r.length;i++){const[x1,y1]=r[i-1],[x2,y2]=r[i];const L=Math.hypot((x2-x1)*mx,(y2-y1)*my),n=Math.max(1,Math.round(L/7.5));
-    for(let j=0;j<n;j++){const t=j/n,x=x1+(x2-x1)*t,y=y1+(y2-y1)*t,dx=sz/mx,dy=sz/my;
-      out.push({type:'Feature',properties:{a,b,t:'slab'},geometry:{type:'Polygon',coordinates:[[[x-dx,y-dy],[x+dx,y-dy],[x+dx,y+dy],[x-dx,y+dy],[x-dx,y-dy]]]}});}}}
-const COL={light:{wall:'#F7F7F8',glass:'#AEB3BF',slab:'#FFFFFF',roof:'#E4E4E8',text:'#121215',halo:'#FFFFFF'},dark:{wall:'#3E3E46',glass:'#15161B',slab:'#4C4C55',roof:'#36363E',text:'rgba(255,255,255,.85)',halo:'rgba(0,0,0,.75)'}};
-const th=()=>document.body.classList.contains('m-light')?'light':'dark';
+const C={dk:'#4a443f',dk2:'#5a524b',wh:'#e9e7e1',st:'#1c1c1c',pv:'#b89a7e',am:'#6b4a2e',sky:'#62a9c7',rib:'#5c5a57',
+  teal:'#4f8a90',cream:'#e3ddd2',win:'#2b2b2b',shaft:'#5a4e44',fin:'#ecebe6',glass:'#1f2328',trim:'#b0623a',gate:'#7a2e2a',sal:'#d9826a',cop:'#e6dccf',ob:'#cfcac0'};
+/* local frame: metres, x along the front (left to right), y = depth behind the front (front is y=0) */
+let P=[];const B=(x0,y0,x1,y1,z0,z1,c)=>P.push({r:[[x0,y0],[x1,y0],[x1,y1],[x0,y1]],z0,z1,c});
+const G=(pts,z0,z1,c)=>P.push({r:pts,z0,z1,c});
+const arc=(cx,cy,r1,r2,a0,a1,n)=>{const o=[];for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n;o.push([cx+Math.cos(a)*r2,cy+Math.sin(a)*r2]);}for(let i=n;i>=0;i--){const a=a0+(a1-a0)*i/n;o.push([cx+Math.cos(a)*r1,cy+Math.sin(a)*r1]);}return o;};
+const disc=(cx,cy,r,n)=>{const o=[];for(let i=0;i<n;i++){const a=i/n*2*Math.PI;o.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);}return o;};
+/* thin slab lying on a wall face from a to b, pushed out by off */
+const onFace=(a,b,t0,t1,off,th,z0,z1,c)=>{const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),nx=dy/L,ny=-dx/L;
+  const p0=[a[0]+dx*t0,a[1]+dy*t0],p1=[a[0]+dx*t1,a[1]+dy*t1];G([[p0[0]+nx*off,p0[1]+ny*off],[p1[0]+nx*off,p1[1]+ny*off],[p1[0]+nx*(off+th),p1[1]+ny*(off+th)],[p0[0]+nx*(off+th),p0[1]+ny*(off+th)]],z0,z1,c);};
+
+function oduduwa(){P=[];const W=30,D=55,ch=11;const oct=(y0,ins)=>[[-W+ch+ins,y0],[W-ch-ins,y0],[W-ins,y0+ch],[W-ins,D-ch-ins],[W-ch-ins,D-ins],[-W+ch+ins,D-ins],[-W+ins,D-ch-ins],[-W+ins,y0+ch]];
+  G([[-W-3,-4],[W+3,-4],[W+3,D+2],[-W-3,D+2]],0,.6,C.pv);                 // platform and steps
+  G(oct(4,1.5),.6,5,C.st);                                                   // open undercroft (dark, set back)
+  G(oct(4,0),5,14,C.dk);                                                     // hall body
+  G(oct(0,0),14,19.5,C.dk);                                                  // heavy parapet, oversails the centre bay
+  B(-13,-2,13,1,13.5,14,C.wh);                                               // white soffit overhang
+  B(-13,2,13,4,12.4,13.9,C.am);B(-13,2.2,13,4,11,12.4,C.wh);B(-13,3,13,4,7,11,C.rib);B(-13,2,13,4,5,7,C.wh); // centre bay bands
+  B(-6,1.8,6,2,5.3,6.7,C.sky);                                               // "ODUDUWA HALL" sign
+  B(-19,0,-13,4,.6,19.5,C.dk);B(13,0,19,4,.6,19.5,C.dk);                     // the two pylons
+  B(-7,-3,7,1,4.4,4.9,C.wh);B(-5.6,-2.6,-4.4,-1.4,.6,4.4,C.dk);B(4.4,-2.6,5.6,-1.4,.6,4.4,C.dk); // entrance canopy
+  for(const s of [1,-1]){const a=[s*(W-ch),0],b=[s*W,ch];const[aa,bb]=s>0?[a,b]:[b,a];
+    onFace(aa,bb,.12,.88,0,.5,7,16,C.wh);onFace(aa,bb,.2,.8,.5,.3,7.8,15.2,C.dk2);   // white-framed stair opening
+    for(const t of [.2,.5,.8])onFace(aa,bb,t-.08,t+.08,0,.7,.6,5,C.wh);}              // porthole-and-arch piers
+  onFace([W,D-ch],[W,ch],.25,.7,0,.25,4,15,C.wh);                                   // side mural
+  B(-1.3,-19.3,1.3,-16.7,.6,3,C.wh);B(-.4,-18.4,.4,-17.6,3,5.8,'#6a5a3a');          // Awolowo statue
+  return{P,ax:0,ay:D/2,n:'Oduduwa Hall'};}
+
+function senate(){P=[];
+  B(-60,1.5,60,25,0,6.5,C.win);B(-60,0,60,25,6.5,8,C.fin);                  // podium + white fascia
+  for(let x=-59.5;x<59.5;x+=2.1){if(x>-26&&x<1)continue;B(x,.2,x+.6,.8,0,5.6,C.fin);} // fin screen
+  for(let i=0;i<10;i++){const z=8+i*3;B(-16,6,-1,24,z,z+2.2,C.cream);B(-15.6,6.4,-1.4,23.6,z+2.2,z+3,C.win);} // striped main block
+  B(-16,6,-1,24,38,38.6,C.cream);
+  B(-25,2,-16,5,6,40,C.teal);B(-25,1.6,-16,2,0,6,C.wh);B(-21.5,1.5,-19.5,1.6,0,4.2,C.win);  // banner slab + arched portal
+  B(-24,1.9,-17,2,35.5,38,'#ffffff');B(-22,1.9,-19,2,22,25.5,'#ffffff');B(-21.3,1.9,-19.7,2,9,10.6,'#ffffff'); // GREAT IFE text, crest, QR
+  B(-25.8,2,-25,5,6,40,C.cream);                                             // thin tray column on the left edge
+  for(let i=0;i<9;i++){const z=9.5+i*3.4;B(-16,3.5,-8,6,z,z+.7,C.cream);}    // stack of balcony trays
+  B(-1,8,5,14,8,42,C.shaft);B(5,9,5.3,13,26,40,C.teal);                      // tall right shaft with small banner
+  B(-28,10,-22,16,8,32,C.shaft);                                             // left shaft
+  B(-9.2,15,-8.8,15.4,38.6,45,C.st);B(-4.2,18,-3.8,18.4,38.6,43,C.st);       // antennas
+  for(let i=0;i<5;i++)G(arc(-20.5,-1,8+i*4.4,10.6+i*4.4,Math.PI,2*Math.PI,24),0,.12+(4-i)*.1,i%2?'#c9ad92':C.pv); // amphitheatre steps
+  return{P,ax:-12,ay:15,n:'Senate'};}
+
+function library(){P=[];
+  const wing=(x0,x1,y0,y1,lv,gx)=>{B(x0+gx[0]*3,y0+gx[1]*3,x1-gx[2]*3,y1-gx[3]*3,0,4,C.win);
+    for(let i=0;i<lv;i++){const o=i*1,z=4+i*3.4;const r=[x0-gx[0]*o,y0-gx[1]*o,x1+gx[2]*o,y1+gx[3]*o];
+      B(r[0]+gx[0]*.35,r[1]+gx[1]*.35,r[2]-gx[2]*.35,r[3]-gx[3]*.35,z,z+1.3,C.win);B(r[0],r[1],r[2],r[3],z+1.3,z+3.4,C.wh);}
+    const o=(lv-1),z=4+lv*3.4;B(x0-gx[0]*o,y0-gx[1]*o,x1+gx[2]*o,y1+gx[3]*o,z,z+.5,C.wh);};
+  wing(-50,-20,0,18,3,[1,1,0,0]);wing(5,50,0,18,3,[0,1,1,0]);                 // front wings, floors step outwards
+  wing(-50,-36,18,50,4,[1,0,0,0]);wing(36,50,18,50,4,[0,0,1,0]);wing(-36,36,46,58,4,[0,0,0,1]); // side and rear wings
+  B(-20,2,5,32,0,17.5,C.dk);                                                 // dark ribbed centre block
+  for(let z=7.9;z<14.6;z+=.45){const h=Math.sqrt(Math.max(0,3.3*3.3-(z+.2-11.2)**2));if(h<.3)continue;B(-7.5-h,1.75,-7.5+h,2,z,z+.45,z>10.6?C.glass:C.dk2);} // big round window
+  B(-19,1.8,-13,2,7,7.35,C.trim);B(-2,1.8,4,2,7,7.35,C.trim);B(-19,1.9,-13,2,4,7,C.glass);B(-2,1.9,4,2,4,7,C.glass); // side balconies
+  B(-12,.8,-3,2,3.9,4.5,C.wh);B(-12,1.6,-11.2,2,0,4,C.wh);B(-3.8,1.6,-3,2,0,4,C.wh);B(-10.5,1.7,-4.5,1.8,0,3.4,C.gate); // portal, sign, gates
+  B(-50,52,-44,60,0,18,C.dk);B(44,52,50,60,0,18,C.dk);                       // stair towers
+  B(30,52,30.5,52.5,18,33,C.st);                                             // mast
+  B(-10.5,-50,-4.5,1,3.4,3.9,C.pv);B(-10.5,-50,-10.2,1,3.9,4.9,C.sal);B(-4.8,-50,-4.5,1,3.9,4.9,C.sal); // raised ramp
+  for(let y=-46;y<0;y+=8)B(-8,y,-7,y+1,0,3.4,C.dk2);
+  G(disc(-17,-28,3,20),0,.6,C.dk2);B(-18.5,-27.5,-15.5,-26.5,.6,14,C.dk);B(-18.5,-27.5,-17.5,-26.5,14,18,C.dk);B(-16.5,-27.5,-15.5,-26.5,14,18,C.dk); // notched monument
+  B(-17.3,-30.3,-16.7,-29.7,.6,9.5,C.ob);                                    // obelisk
+  return{P,ax:-7.5,ay:28,n:'Library'};}
+
+const MODELS={oduduwa,senate,library};
 const K=111320;
-function box(ll,w,d){const[la,lo]=ll,dx=w/2/(K*Math.cos(la*Math.PI/180)),dy=d/2/K;return[[lo-dx,la-dy],[lo+dx,la-dy],[lo+dx,la+dy],[lo-dx,la+dy],[lo-dx,la-dy]];}
-function scale(ring,c,s){return ring.map(([x,y])=>[c[0]+(x-c[0])*s,c[1]+(y-c[1])*s]);}
-function cen(ring){let x=0,y=0;const r=ring.slice(0,-1);r.forEach(p=>{x+=p[0];y+=p[1];});return[x/r.length,y/r.length];}
 function inside(pt,ring){let c=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const[xi,yi]=ring[i],[xj,yj]=ring[j];if(((yi>pt[1])!==(yj>pt[1]))&&pt[0]<(xj-xi)*(pt[1]-yi)/(yj-yi)+xi)c=!c;}return c;}
-const FP={},HIDE=new Set();
-function findReal(k){try{const p=[LM[k].ll[1],LM[k].ll[0]];const fs=map.querySourceFeatures('ofm',{sourceLayer:'building'});let best=null;
-  for(const f of fs){const g=f.geometry;const polys=g.type==='Polygon'?[g.coordinates]:g.type==='MultiPolygon'?g.coordinates:[];
-    for(const pg of polys){const r=pg[0];if(r&&inside(p,r)){const c=cen(r);const a=Math.abs(r.reduce((s,q,i)=>i?s+(r[i-1][0]*q[1]-q[0]*r[i-1][1]):0,0));if(!best||a>best.a)best={r,a,id:f.id};}}}
-  return best;}catch(e){return null;}}
+const AX={},HIDE=new Set();
+/* the front faces the central plaza; snap to the real building's walls when the map knows its outline */
+function plaza(){const ks=Object.keys(MODELS).filter(k=>LM[k]);let a=0,b=0;ks.forEach(k=>{a+=LM[k].ll[0];b+=LM[k].ll[1];});return[a/ks.length,b/ks.length];}
+function frame(k){const ll=LM[k].ll,cl=Math.cos(ll[0]*Math.PI/180),pz=plaza();let fx=(pz[1]-ll[1])*cl,fy=(pz[0]-ll[0]);const L=Math.hypot(fx,fy)||1;fx/=L;fy/=L;
+  if(AX[k]!=null){const a=AX[k];let best=null;for(let q=0;q<4;q++){const ang=a+q*Math.PI/2,vx=Math.cos(ang),vy=Math.sin(ang),d=vx*fx+vy*fy;if(!best||d>best.d)best={d,vx,vy};}fx=best.vx;fy=best.vy;}
+  return{ll,cl,f:[fx,fy],r:[fy,-fx]};}   // r = right-hand side when looking at the front
+function toLL(fr,m,x,y){const lx=x-m.ax,ly=y-m.ay;const ex=lx*fr.r[0]-ly*fr.f[0],ny=lx*fr.r[1]-ly*fr.f[1];return[fr.ll[1]+ex/(K*fr.cl),fr.ll[0]+ny/K];}
 function build(){const feats=[],labels=[];
-  for(const k in MODELS){if(!LM[k])continue;const m=MODELS[k];const fp=FP[k]||box(LM[k].ll,m.w,m.d);const c=cen(fp);
-    m.parts.forEach(p=>{if(p[0]==='cols')return cols(fp,c,p[3],p[1],p[2],feats);const[a,b,sc,t]=p;feats.push({type:'Feature',properties:{a,b,t},geometry:{type:'Polygon',coordinates:[scale(fp,c,sc)]}});});
-    labels.push({type:'Feature',properties:{n:m.n},geometry:{type:'Point',coordinates:c}});}
+  for(const k in MODELS){if(!LM[k])continue;const m=MODELS[k](),fr=frame(k);
+    m.P.forEach(p=>{const ring=p.r.map(([x,y])=>toLL(fr,m,x,y));ring.push(ring[0]);feats.push({type:'Feature',properties:{a:p.z0,b:p.z1,c:p.c},geometry:{type:'Polygon',coordinates:[ring]}});});
+    labels.push({type:'Feature',properties:{n:m.n},geometry:{type:'Point',coordinates:[fr.ll[1],fr.ll[0]]}});}
   return{m:{type:'FeatureCollection',features:feats},l:{type:'FeatureCollection',features:labels}};}
-function colour(){const C2=COL[th()];return['match',['get','t'],'glass',C2.glass,'slab',C2.slab,'roof',C2.roof,C2.wall];}
-function paint(){if(!map.getLayer('lmk'))return;const C2=COL[th()];map.setPaintProperty('lmk','fill-extrusion-color',colour());
-  map.setPaintProperty('lmkl','text-color',C2.text);map.setPaintProperty('lmkl','text-halo-color',C2.halo);
+function hullBoxes(){const o={};for(const k in MODELS){if(!LM[k])continue;const m=MODELS[k](),fr=frame(k);let xs=[],ys=[];m.P.forEach(p=>p.r.forEach(([x,y])=>{xs.push(x);ys.push(y);}));
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.max(0,Math.min(...ys)),y1=Math.max(...ys);o[k]=[[x0,y0],[x1,y0],[x1,y1],[x0,y1]].map(([x,y])=>toLL(fr,m,x,y));}return o;}
+function scan(){let ch=false;let fs;try{fs=map.querySourceFeatures('ofm',{sourceLayer:'building'});}catch(e){return false;}if(!fs.length)return false;
+  for(const k in MODELS){if(!LM[k]||AX[k]!=null)continue;const p=[LM[k].ll[1],LM[k].ll[0]],cl=Math.cos(LM[k].ll[0]*Math.PI/180);
+    for(const f of fs){const g=f.geometry,polys=g.type==='Polygon'?[g.coordinates]:g.type==='MultiPolygon'?g.coordinates:[];
+      for(const pg of polys){const r=pg[0];if(!r||!inside(p,r))continue;let L=0,a=0;for(let i=1;i<r.length;i++){const dx=(r[i][0]-r[i-1][0])*cl,dy=r[i][1]-r[i-1][1],l=Math.hypot(dx,dy);if(l>L){L=l;a=Math.atan2(dy,dx);}}AX[k]=a;ch=true;}}}
+  const hb=hullBoxes();
+  for(const f of fs){if(f.id==null||HIDE.has(f.id))continue;const g=f.geometry,r=g.type==='Polygon'?g.coordinates[0]:g.type==='MultiPolygon'?g.coordinates[0][0]:null;if(!r)continue;
+    let x=0,y=0;r.forEach(q=>{x+=q[0];y+=q[1];});const c=[x/r.length,y/r.length];for(const k in hb){const h=hb[k].concat([hb[k][0]]);if(inside(c,h)){HIDE.add(f.id);ch=true;break;}}}
+  return ch;}
+const DIM={light:1,dark:.62};
+function th(){return document.body.classList.contains('m-light')?'light':'dark';}
+function paint(){if(!map.getLayer('lmk'))return;const d=th()==='dark';
+  map.setPaintProperty('lmkl','text-color',d?'rgba(255,255,255,.88)':'#121215');map.setPaintProperty('lmkl','text-halo-color',d?'rgba(0,0,0,.75)':'#FFFFFF');
+  map.setPaintProperty('lmk','fill-extrusion-opacity',1);
   const v=SAT?'none':'visible';map.setLayoutProperty('lmk','visibility',v);map.setLayoutProperty('lmkl','visibility',v);}
 function hide(){if(!map.getLayer('bld'))return;const ids=[...HIDE];map.setFilter('bld',ids.length?['!',['in',['id'],['literal',ids]]]:null);}
 function add(){if(map.getSource('lmk'))return;const d=build();
   map.addSource('lmk',{type:'geojson',data:d.m});map.addSource('lmkl',{type:'geojson',data:d.l});
-  map.addLayer({id:'lmk',type:'fill-extrusion',source:'lmk',minzoom:14,paint:{'fill-extrusion-color':colour(),'fill-extrusion-base':['get','a'],'fill-extrusion-height':['interpolate',['linear'],['zoom'],14,0,15,['get','b']],'fill-extrusion-opacity':1,'fill-extrusion-vertical-gradient':true}},map.getLayer('roadname')?'roadname':undefined);
-  map.addLayer({id:'lmkl',type:'symbol',source:'lmkl',minzoom:15.3,layout:{'text-field':['get','n'],'text-font':['Noto Sans Regular'],'text-size':12,'text-letter-spacing':.02,'text-offset':[0,1.4],'text-anchor':'top'},paint:{'text-color':COL[th()].text,'text-halo-color':COL[th()].halo,'text-halo-width':1.6}});
+  map.addLayer({id:'lmk',type:'fill-extrusion',source:'lmk',minzoom:14,paint:{'fill-extrusion-color':['get','c'],'fill-extrusion-base':['get','a'],'fill-extrusion-height':['interpolate',['linear'],['zoom'],14,0,15,['get','b']],'fill-extrusion-opacity':1,'fill-extrusion-vertical-gradient':true}},map.getLayer('roadname')?'roadname':undefined);
+  map.addLayer({id:'lmkl',type:'symbol',source:'lmkl',minzoom:15.3,layout:{'text-field':['get','n'],'text-font':['Noto Sans Regular'],'text-size':12,'text-offset':[0,1.6],'text-anchor':'top'},paint:{'text-color':'#121215','text-halo-color':'#FFFFFF','text-halo-width':1.6}});
   paint();}
-let tries=0;function real(){let ch=false;for(const k in MODELS){if(FP[k]||!LM[k])continue;const b=findReal(k);if(b){FP[k]=b.r;if(b.id!=null)HIDE.add(b.id);ch=true;}}
-  if(ch){const d=build();try{map.getSource('lmk').setData(d.m);map.getSource('lmkl').setData(d.l);hide();}catch(e){}}
-  return Object.keys(MODELS).every(k=>FP[k]);}
+let tries=0;
 const tk=setInterval(()=>{try{if(map.isStyleLoaded()&&map.getLayer('bg')){clearInterval(tk);add();}}catch(e){}},300);
-map.on('idle',()=>{if(tries<40&&map.getSource('lmk')){tries++;if(real())tries=99;}});
+map.on('idle',()=>{if(tries<30&&map.getSource('lmk')){tries++;if(scan()){const d=build();try{map.getSource('lmk').setData(d.m);map.getSource('lmkl').setData(d.l);hide();}catch(e){}}}});
 const _a=applyTheme;applyTheme=function(){_a.apply(this,arguments);try{paint();}catch(e){}};
 const _s=setSat;setSat=function(){_s.apply(this,arguments);try{paint();}catch(e){}};
-window.LMK={MODELS,FP,build};
+window.LMK={MODELS,AX,build};
 })();
 </script></body>
 </html>
