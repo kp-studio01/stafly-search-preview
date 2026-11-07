@@ -2406,6 +2406,10 @@ const PINI='<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C
 
 /* Sample vendors. "near" ties each shop to a landmark; off = metres east/north of it. */
 const V=[
+ {id:'foodhunt',name:'Foodhunt',mono:'FH',sub:'kitchen',bg:'#FFD7B5',cat:'food',tier:'verified',rating:0,reviews:0,orders:0,near:'moremi',off:[30,-20],place:'Test shop · details coming',hours:[420,1320],deliv:{fee:300,eta:'25 to 35 min',to:'all halls'},wa:'15551669218',
+  tag:'Test shop on Stafly',about:['Message us and Amara, our assistant, replies right away','Menu and prices below are samples until the real ones are added'],
+  items:[['Jollof rice and chicken',2500],['Fried rice and turkey',3000],['Spaghetti and egg',1800],['Chapman',800]],
+  rev:[]},
  {id:'mamatee',name:"Mama Tee's Kitchen",mono:'MT',sub:'kitchen',bg:'#F6D77A',cat:'food',tier:'trusted',rating:4.8,reviews:126,orders:412,near:'moremi',off:[-35,25],place:'Behind Moremi Hall, Block C',hours:[480,1260],deliv:{fee:300,eta:'20 to 30 min',to:'all halls'},
   tag:'Party jollof, every afternoon',about:['Jollof, fried rice and ofada cooked fresh twice a day','Big portions, packed so nothing spills'],
   items:[['Jollof rice and chicken',2500],['Fried rice and turkey',3000],['Ofada rice and ayamase',2800],['Moi moi',500],['Plantain (dodo)',400]],
@@ -3554,5 +3558,10 @@ ind();
 })();
 </script><script>(function(){const re=()=>setTimeout(()=>window.__glSnap&&window.__glSnap(),700);
 const _t=setTheme;setTheme=function(){_t.apply(this,arguments);re();};
-if(typeof setSat==='function'){const _s=setSat;setSat=function(){_s.apply(this,arguments);try{map.once('idle',re);}catch(e){re();}};}})();</script></body>
+if(typeof setSat==='function'){const _s=setSat;setSat=function(){_s.apply(this,arguments);try{map.once('idle',re);}catch(e){re();}};}})();</script><script>
+/* ---- v68: Foodhunt test shop. Its WhatsApp button opens the real Foodhunt number, so Amara answers for real ---- */
+(function(){const _oc=openChat;openChat=function(id){const v=V.find(x=>x.id===id);
+  if(v&&v.wa){const t=`Hi ${v.name}, I found you on Stafly Search. What do you have today?`;window.open('https://wa.me/'+v.wa+'?text='+encodeURIComponent(t),'_blank','noopener');return;}
+  return _oc.apply(this,arguments);};})();
+</script></body>
 </html>
