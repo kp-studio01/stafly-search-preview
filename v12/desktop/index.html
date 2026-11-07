@@ -1980,6 +1980,7 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   /* real WhatsApp mark: green app tile, white glyph */
   html body.m2on #mSub:has(.wa-h.dsh) .wa-app{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#25D366;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-app .wal{width:22px;height:22px;display:block}
+  html body.m2on #mSub:has(.wa-h.dsh) .wa-pf{margin-left:auto}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-i.ca-r{width:auto!important;height:auto!important;padding:0!important;margin-left:4px;border-radius:12px!important;background:none!important;border:0!important}
   html body.m2on #mSub:has(.wa-h.dsh) .wa-i.ca-r .wa-app{width:36px;height:36px;border-radius:11px}html body.m2on #mSub:has(.wa-h.dsh) .wa-i.ca-r .wal{width:20px;height:20px}
   /* 'get replies on WhatsApp': one calm card, text block then one full-width action */
@@ -3215,7 +3216,8 @@ mThreadAll=function(id){const box=document.createElement('div');box.innerHTML=mT
     el.className='m-sys wn';el.innerHTML=`<div class="wn-r"><span class="wa-app">${WAL}</span><div class="wn-t"><b>Get replies on WhatsApp</b><span>We’ll send ${v.name}’s replies to your WhatsApp.</span></div></div><button type="button" class="wn-b" data-msign="1">Add your WhatsApp number</button>`;});
   return `<section class="dgrp"><div class="day">Today</div>${box.innerHTML}</section>`;};
 const _mt=mTalk;mTalk=function(id){let h=_mt(id);
-  h=h.replace('<div class="wa-h">','<div class="wa-h dsh">').replace(' · Tap for shop info</small>','</small>').replace(/(<button type="button" class="wa-i ca-r"[^>]*>)([\s\S]*?)(<\/button>)/,'$1<span class="wa-app">'+WAL+'</span>$3').replace(/<button type="button" class="att"[^>]*>[\s\S]*?<\/button>/,'')
+  h=h.replace('<div class="wa-h">','<div class="wa-h dsh">').replace(' · Tap for shop info</small>','</small>').replace(/<button type="button" class="wa-i ca-r"[^>]*>[\s\S]*?<\/button>/,'')
+     .replace(/(<\/button>)(<\/div>\s*<div class="m-thread")/,'$1<button type="button" class="wa-i wa-pf" data-mshop="'+id+'" aria-label="Shop profile">'+mS('store')+'</button>$2').replace(/<button type="button" class="att"[^>]*>[\s\S]*?<\/button>/,'')
      .replace(/(<button type="submit" class="wa-send"[^>]*>)[\s\S]*?(<\/button>)/,'$1'+ARROW+'$2');
   return h;};
 /* open a chat at its latest message, like the dashboard does */
