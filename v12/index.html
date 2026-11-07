@@ -1939,6 +1939,13 @@ input[type=search]::-webkit-search-cancel-button{display:none}
   html body.m2on #mSub:has(.wa-h) .wa-bar input::placeholder{color:rgba(255,255,255,.4)}
   html body.m2on #mSub:has(.wa-h) .wa-bar .att{flex:none;width:40px!important;height:40px!important;display:grid;place-items:center;background:none!important;box-shadow:none!important;color:rgba(255,255,255,.55)!important}html body.m2on #mSub:has(.wa-h) .wa-bar .att svg{width:20px;height:20px}
   html body.m2on #mSub:has(.wa-h) .wa-send{flex:none;width:44px!important;height:44px!important;border-radius:50%!important;display:grid!important;place-items:center;background:#2A2340!important;color:#C9B8FF!important;box-shadow:none!important}html body.m2on #mSub:has(.wa-h) .wa-send svg{width:18px;height:18px}
+  /* v41: calm top bar, messages sit at the bottom */
+  html body.m2on #mSub:has(.wa-h) .wa-h{gap:6px!important;padding:max(10px,env(safe-area-inset-top)) 10px 10px!important;background:#121214!important;border-bottom:1px solid rgba(255,255,255,.06)}
+  html body.m2on #mSub:has(.wa-h) .wa-i{background:none!important;box-shadow:none!important;width:40px!important;height:40px!important}html body.m2on #mSub:has(.wa-h) .wa-i svg{width:22px!important;height:22px!important}
+  html body.m2on #mSub:has(.wa-h) .wa-who b{font-size:16.5px!important}html body.m2on #mSub:has(.wa-h) .wa-who .mlg{width:40px!important;height:40px!important}
+  html body.m2on #mSub:has(.wa-h) .m-thread{flex:1 0 auto!important;justify-content:flex-end!important;padding:16px 0 10px!important}
+  html body.m2on #mSub:has(.wa-h) .ca-top{margin:0 0 16px!important}
+  html body.m2on.m-light #mSub:has(.wa-h) .wa-h{background:#F7F6FA!important;border-bottom:1px solid #ECEAF2}
   /* light */
   html body.m2on.m-light #mSub:has(.wa-h){background:radial-gradient(120% 55% at 50% 0%,rgba(117,81,220,.10),rgba(117,81,220,0) 70%),#F7F6FA!important}
   html body.m2on.m-light #mSub:has(.wa-h) .wa-h{background:linear-gradient(180deg,rgba(247,246,250,.96) 70%,rgba(247,246,250,0))}
@@ -3109,7 +3116,7 @@ mThreadAll=function(id){const v=vOf(id);
   return `<div class="ca-top">Today · Your number stays private</div>`+box.innerHTML;};
 const base=function(id){const v=vOf(id),L=TALK[id]||[],r=reach(v),s=status(v);const loc=(USER&&USER.hall)||'Moremi Hall';
   const qs=[ask(v).replace(/^Hi, I found you on Stafly\. /,''),v.deliv?`Do you deliver to ${loc.replace(' Hall','')}?`:'Where exactly are you?','Can I see your prices?'];
-  return`<div class="wa-h"><button type="button" class="wa-i" data-mback="1" aria-label="Back">${mS('back')}</button><button type="button" class="wa-who" data-mshop="${id}">${mLogo(v)}<span><b>${v.name}${vt(v)}</b><small>${s.t}</small></span></button><button type="button" class="ca-pill" data-mshop="${id}">View shop</button>${r==='both'?`<button type="button" class="wa-i ca-r" data-chat="${id}" aria-label="Open in WhatsApp">${mS('wa')}</button>`:''}</div>
+  return`<div class="wa-h"><button type="button" class="wa-i" data-mback="1" aria-label="Back">${mS('back')}</button><button type="button" class="wa-who" data-mshop="${id}">${mLogo(v)}<span><b>${v.name}${vt(v)}</b><small>${s.t} · Tap for shop info</small></span></button>${r==='both'?`<button type="button" class="wa-i ca-r" data-chat="${id}" aria-label="Open in WhatsApp">${mS('wa')}</button>`:''}</div>
   <div class="m-thread" id="mThread">${mThreadAll(id)}</div>
   <div class="m-comp">${L.length?'':`<div class="m-qs">${qs.map(q=>`<button type="button" data-mq="${q.replace(/"/g,'&quot;')}">${q}</button>`).join('')}</div>`}
    <form class="m-in" id="mIn" data-id="${id}"><label class="wa-bar"><button type="button" class="att" aria-label="Send a photo">${mS('plus')}</button><input id="mMsg" type="text" placeholder="Message ${v.name}" autocomplete="off" enterkeyhint="send"><button type="submit" class="wa-send" aria-label="Send">${mS('send')}</button></label></form></div>`;};
