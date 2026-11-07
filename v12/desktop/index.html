@@ -2257,7 +2257,84 @@ html body.m2on .m-sheet .m-grab[data-mmin]{position:relative;cursor:grab}
 html body.m2on .m-sheet .m-grab[data-mmin]::before{content:"";position:absolute;left:-40px;right:-40px;top:-14px;bottom:-12px}
 html body.m2on.m-sheeton.m-sheetmin .m-sheet{transform:translateY(calc(100% - var(--peek,112px)));overflow:hidden}
 html body.m2on.m-sheetmin .m-sheet .m-who{cursor:pointer}
-</style></head>
+</style><style id="v77">
+/* buyer photo */
+.pf-av img,.av img,.cv.me img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+html body.m2on #mSub .pf-av[data-pfpic]{position:relative;cursor:pointer;overflow:visible}
+html body.m2on #mSub .pf-av[data-pfpic] img{border-radius:50%}
+.pf-cam{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#121215;box-shadow:0 0 0 3px #17171B}
+.pf-cam svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m-light .pf-cam{background:#121215;color:#fff;box-shadow:0 0 0 3px #fff}
+/* trusted buyer */
+.tb-card{margin:14px 0 22px;padding:16px;border-radius:20px;background:#1B1B20;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.tb-top{display:flex;align-items:center;gap:12px}
+.tb-top svg{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tb-top b{display:block;font-size:15px;font-weight:600}
+.tb-top span{display:block;font-size:13px;color:rgba(255,255,255,.55);margin-top:2px;line-height:1.4}
+.tb-bar{display:flex;gap:6px;margin-top:14px}
+.tb-bar i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.1)}
+.tb-bar i.on{background:#fff}
+.tb-card.got .tb-top svg{color:#7FD3A6}
+html body.m2on.m-light .tb-card{background:#fff;box-shadow:inset 0 0 0 1px #E6E6EA}
+html body.m2on.m-light .tb-top span{color:#6B6B75}
+html body.m2on.m-light .tb-bar i{background:#EEEEF1}
+html body.m2on.m-light .tb-bar i.on{background:#121215}
+html body.m2on.m-light .tb-card.got .tb-top svg{color:#2E8A5B}
+/* filter count on the filter buttons */
+body.fs-act .flt{position:relative}
+body.fs-act .flt::after{content:var(--fn);position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#fff;color:#121215;font:600 10.5px/17px "DM Sans",system-ui,sans-serif;text-align:center;box-shadow:0 0 0 2px #121215}
+body.fs-act.m-light .flt::after{background:#121215;color:#fff;box-shadow:0 0 0 2px #fff}
+/* filter sheet */
+#mFs{position:fixed;inset:0;z-index:4000;display:none}
+#mFs.on{display:block}
+#mFs .fs-bg{position:absolute;inset:0;background:rgba(8,8,10,.5);opacity:0;transition:opacity .25s}
+#mFs.in .fs-bg{opacity:1}
+#mFs .fs-p{position:absolute;left:0;right:0;bottom:0;max-height:90dvh;display:flex;flex-direction:column;border-radius:28px 28px 0 0;background:#17171B;color:#F4F4F6;transform:translateY(100%);transition:transform .38s cubic-bezier(.2,.9,.2,1);font-family:"DM Sans",system-ui,sans-serif}
+#mFs.in .fs-p{transform:none}
+#mFs .fs-h{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.07)}
+#mFs .fs-h b{font-size:17px;font-weight:600;letter-spacing:-.01em}
+#mFs .fs-x{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:transparent;border:0;color:inherit;cursor:pointer}
+#mFs .fs-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+#mFs .fs-b{overflow-y:auto;padding:4px 20px 8px;scrollbar-width:none;overscroll-behavior:contain}
+#mFs .fs-b::-webkit-scrollbar{display:none}
+#mFs .fs-s{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+#mFs .fs-s:last-child{border-bottom:0}
+#mFs .fs-t{font-size:15px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
+#mFs .fs-t small{font-size:12.5px;font-weight:400;color:rgba(255,255,255,.5)}
+#mFs .fs-o{display:flex;flex-wrap:wrap;gap:8px}
+#mFs .fs-o button{height:38px;padding:0 15px;border-radius:19px;border:0;background:transparent;color:inherit;font:500 14px "DM Sans",system-ui,sans-serif;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);cursor:pointer;transition:background .15s,color .15s}
+#mFs .fs-o button.on{background:#F4F4F6;color:#121215;box-shadow:none}
+#mFs .fs-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);overflow:hidden}
+#mFs .fs-seg button{height:44px;border:0;background:transparent;color:inherit;font:500 13.5px "DM Sans",system-ui,sans-serif;cursor:pointer}
+#mFs .fs-seg button+button{box-shadow:inset 1px 0 0 rgba(255,255,255,.14)}
+#mFs .fs-seg button.on{background:#F4F4F6;color:#121215;box-shadow:none}
+#mFs .fs-r{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 0;border:0;background:transparent;color:inherit;font:400 15px "DM Sans",system-ui,sans-serif;text-align:left;cursor:pointer}
+#mFs .fs-r small{display:block;font-size:12.5px;color:rgba(255,255,255,.5);margin-top:2px}
+#mFs .fs-r i{flex:none;width:44px;height:26px;border-radius:13px;background:rgba(255,255,255,.16);position:relative;transition:background .2s}
+#mFs .fs-r i::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+#mFs .fs-r.on i{background:#F4F4F6}
+#mFs .fs-r.on i::after{transform:translateX(18px);background:#121215}
+#mFs .fs-f{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px max(14px,env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.07)}
+#mFs .fs-clr{border:0;background:transparent;color:inherit;font:600 15px "DM Sans",system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;padding:10px 4px;cursor:pointer}
+#mFs .fs-clr:disabled{opacity:.35;cursor:default}
+#mFs .fs-go{height:50px;padding:0 24px;border-radius:14px;border:0;background:#F4F4F6;color:#121215;font:600 15px "DM Sans",system-ui,sans-serif;cursor:pointer}
+body.m-light #mFs .fs-p{background:#fff;color:#121215}
+body.m-light #mFs .fs-h,body.m-light #mFs .fs-s,body.m-light #mFs .fs-f{border-color:#EEEEF1}
+body.m-light #mFs .fs-t small,body.m-light #mFs .fs-r small{color:#6B6B75}
+body.m-light #mFs .fs-o button,body.m-light #mFs .fs-seg{box-shadow:inset 0 0 0 1px #E6E6EA}
+body.m-light #mFs .fs-seg button+button{box-shadow:inset 1px 0 0 #E6E6EA}
+body.m-light #mFs .fs-o button.on,body.m-light #mFs .fs-seg button.on{background:#121215;color:#fff;box-shadow:none}
+body.m-light #mFs .fs-r i{background:#E6E6EA}
+body.m-light #mFs .fs-r.on i{background:#121215}
+body.m-light #mFs .fs-r.on i::after{background:#fff}
+body.m-light #mFs .fs-go{background:#121215;color:#fff}
+@media (min-width:1024px){
+  #mFs .fs-p{left:50%;right:auto;top:50%;bottom:auto;width:520px;max-height:min(760px,88vh);border-radius:24px;transform:translate(-50%,-46%);opacity:0;transition:transform .3s cubic-bezier(.2,.9,.2,1),opacity .2s}
+  #mFs.in .fs-p{transform:translate(-50%,-50%);opacity:1}
+}
+</style><script>const CAM='<svg viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>';
+function uAv(){if(USER&&USER.photo&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(USER.photo))return `<img src="${USER.photo}" alt="">`;return USER&&USER.name?USER.name[0].toUpperCase():'';}
+</script></head>
 <body><div id="boot" aria-hidden="true"><div class="bx"><span class="bt"><svg class="mk" viewBox="5562 5561 17451 17451" aria-hidden="true"><path fill="#5B2FD4" d="M10492 5562l7590 0c2711,0 4930,2218 4930,4930l0 7590c0,2711 -2218,4930 -4930,4930l-4806 0c3680,-2 6691,-3013 6691,-6694l0 -1017c0,-3682 -3012,-6694 -6694,-6694l-1017 0c-3682,0 -6694,3012 -6694,6694l0 -4810c0,-2711 2218,-4930 4930,-4930z"/><path fill="#5B2FD4" d="M11610 9996l921 0c3326,0 6048,2722 6048,6048l0 921c0,3326 -2722,6048 -6048,6048l-921 0c-155,0 -309,-6 -462,-18 538,-46 1051,-181 1525,-390l4 -2c32,-14 65,-29 97,-44l5 -2c31,-15 63,-30 94,-45l8 -4c31,-15 62,-31 92,-47l5 -3c31,-16 62,-33 92,-50l6 -3c30,-17 60,-34 90,-52l7 -4c30,-18 60,-36 89,-54l2 -1c279,-172 539,-373 776,-596l7 -7c25,-23 49,-47 74,-71l5 -5c22,-22 43,-43 64,-65l17 -17c18,-19 37,-39 55,-58l23 -25c17,-19 34,-38 52,-57l23 -25c17,-20 34,-39 51,-59l23 -27c16,-19 32,-39 48,-58l24 -29c15,-19 30,-38 45,-57l26 -34c14,-19 28,-37 42,-56l24 -32c14,-20 29,-40 43,-60l22 -31c14,-20 28,-40 42,-61l23 -34c13,-20 26,-40 39,-60l23 -38c12,-19 24,-38 35,-57l24 -41c11,-19 23,-38 34,-57 8,-13 15,-26 22,-40 11,-20 22,-39 33,-59 7,-13 14,-27 21,-41 11,-20 21,-40 32,-60l0 0c17,-33 33,-66 49,-99 11,-23 22,-47 33,-70 5,-10 10,-21 15,-31 8,-19 17,-37 25,-56 7,-17 15,-33 22,-50 8,-18 15,-36 23,-54 7,-17 14,-34 21,-51 7,-18 14,-36 21,-54 7,-18 14,-36 21,-54 6,-17 12,-34 19,-52 7,-19 14,-38 20,-57 6,-17 12,-35 17,-52 6,-20 13,-39 19,-59 5,-17 11,-35 16,-52 6,-19 12,-38 17,-57 5,-18 10,-36 15,-54l16 -60 14 -52c5,-20 10,-39 14,-59 4,-18 9,-37 13,-56 4,-19 9,-38 13,-58l12 -57c4,-19 8,-39 11,-58l10 -56c4,-21 7,-42 10,-63l8 -52c3,-22 6,-43 9,-65 2,-18 5,-36 7,-54 3,-22 5,-44 8,-65 2,-17 4,-33 6,-50 2,-24 4,-48 6,-73 1,-16 3,-31 4,-47 2,-24 3,-49 5,-74 1,-15 2,-30 3,-46 1,-29 2,-58 3,-86 0,-11 1,-22 1,-34 1,-40 2,-81 2,-121l0 -355c0,-2652 -2170,-4823 -4823,-4823l-355 0c-41,0 -81,0 -121,2l-34 1c-29,1 -58,2 -86,3 -15,1 -30,2 -46,3 -25,1 -49,3 -74,5 -16,1 -32,3 -47,4 -24,2 -48,4 -73,6 -17,2 -34,4 -50,6 -22,2 -44,5 -65,8l-54 7c-22,3 -43,6 -65,9 -17,3 -35,5 -52,8 -21,3 -42,7 -63,10l-56 10 -58 11c-19,4 -38,8 -57,12l-58 13c-19,4 -37,9 -56,13 -20,5 -39,9 -59,14l-52 14c-20,5 -40,11 -60,16 -18,5 -36,10 -54,15 -19,6 -38,11 -57,17 -17,5 -35,11 -52,16 -20,6 -39,13 -59,19 -17,6 -35,11 -52,17 -19,7 -38,13 -57,20 -17,6 -34,12 -52,19 -18,7 -36,14 -54,21 -18,7 -36,14 -54,21 -17,7 -34,14 -51,21 -18,7 -36,15 -54,23 -17,7 -33,15 -50,22 -19,8 -37,16 -56,25l-31 15c-24,11 -47,22 -70,33 -33,16 -66,33 -99,49l0 0c-20,10 -40,21 -60,32 -14,7 -27,14 -41,21 -20,11 -39,22 -59,33 -13,7 -27,15 -40,22 -19,11 -38,22 -57,34 -14,8 -27,16 -41,24 -19,12 -38,24 -57,35 -13,8 -25,16 -38,23 -20,13 -40,26 -60,39l-34 23c-20,14 -41,28 -61,42l-31 22c-20,14 -40,28 -60,43l-32 24c-19,14 -38,28 -56,42l-34 26c-19,15 -38,30 -57,45l-29 24c-19,16 -39,32 -58,48l-27 23c-20,17 -40,34 -59,51l-25 23c-19,17 -38,34 -57,52l-25 23c-19,18 -39,36 -58,55l-17 17c-22,21 -44,43 -65,64l-5 5c-24,24 -48,49 -71,74l-7 7c-224,237 -424,497 -596,776l-1 2c-18,30 -36,59 -54,89l-4 7c-18,30 -35,60 -52,90l-3 6c-17,31 -34,61 -50,92l-3 5c-16,31 -32,61 -47,92l-4 8c-15,31 -31,62 -45,94l-2 5c-15,32 -30,64 -44,97l-2 4c-209,474 -344,987 -390,1525 -12,-152 -18,-306 -18,-462l0 -921c0,-3326 2722,-6048 6048,-6048zm3474 10282c11,-23 22,-47 33,-70l-33 70zm-6716 -6820c-24,11 -47,22 -70,33l70 -33z"/><rect x="5796" y="14502" width="8277" height="8277" rx="3837" fill="#8B5CF6"/></svg></span><div class="bw">Stafly <span>Search</span></div><div class="bs">OAU, Ile-Ife</div><div class="bp"><i></i></div></div></div>
 <div class="app">
   <aside class="rail" id="rail">
@@ -3038,7 +3115,7 @@ function m2Sheet(id){const v=vOf(id),s=status(v),d=dropOf(id),g=GROUPS[id],sv=SA
 function m2Join(id,go){const v=vOf(id),g=GROUPS[id];if(BNOW&&BNOW.v.id===id)m2BanHide();if(joined.has(id)){joined.delete(id);}else{joined.add(id);if(0)notify({v,kind:'group',me:true,title:"You're in. Delivery is split "+(g.n+1)+" ways",short:"You joined the group",body:'Your share of delivery to '+g.hall.replace(' Hall','')+' is now '+naira(share(v,g.n+1))+'. We’ll message you on WhatsApp when the rider leaves.',group:{n:g.n+1,need:g.need,closes:g.closes},acts:[['View on map','data-nview="'+id+'"',''],['Chat to order','data-chat="'+id+'"','pri']]});}
   drawMarkers();if(go&&!joined.has(id))return;if(go)return m2Nav({t:'groups'});m2Apply();}
 function m2Drawer(){const c=shellCounts(),row=(a,ic,l,n,r)=>`<button class="m-li" type="button" ${a}>${mS(ic)}<span>${l}</span>${n?`<em class="${r?'r':''}">${n}</em>`:''}${mS('chev')}</button>`;
-  $('#mDrawer').innerHTML=(USER?`<div class="m-dh"><span class="av">${USER.name[0].toUpperCase()}</span><div><b>Hi, ${USER.name}</b><span>${USER.hall} · OAU</span></div></div>`:`<div class="m-sign"><b>Sign in</b><span>Save shops and join group orders.</span><button type="button" data-msign="1">${mS('chat')}Continue with WhatsApp</button></div>`)+`
+  $('#mDrawer').innerHTML=(USER?`<div class="m-dh"><span class="av">${uAv()}</span><div><b>Hi, ${USER.name}</b><span>${USER.hall} · OAU</span></div></div>`:`<div class="m-sign"><b>Sign in</b><span>Save shops and join group orders.</span><button type="button" data-msign="1">${mS('chat')}Continue with WhatsApp</button></div>`)+`
   <div class="m-dg">${row('data-mtab="explore"','compass','Explore the map')}${row('data-mtab="places"','list','Places',c.op)}${row('data-mtab="live"','radio','Live on campus',c.live,1)}${row('data-mtab="groups"','users','Group orders',c.groups)}${row('data-mtab="chats"','chat','Chats',c.chats)}</div>
   <div class="m-dl">You</div><div class="m-dg">${row('data-msub="cats"','grid','Categories')}${row('data-msub="saved"','heart','Saved',SAVED.size)}${row('data-msub="alerts"','bell','Alerts')}</div>
   <div class="m-dl">Appearance</div><div class="m-thm"><button type="button" data-mtheme="dark" class="${curTheme()==='dark'?'on':''}">${mS('moon')}Dark</button><button type="button" data-mtheme="light" class="${curTheme()==='light'?'on':''}">${mS('sun')}Light</button></div>
@@ -3408,7 +3485,7 @@ document.documentElement.style.setProperty('--wpd','url("data:image/svg+xml;utf8
 document.documentElement.style.setProperty('--wpl','url("data:image/svg+xml;utf8,'+encodeURIComponent(wp.replace(/#fff/g,'#121215'))+'")');
 mThreadAll=function(id){const v=vOf(id);
   const box=document.createElement('div');box.innerHTML=mThread(id);
-  const av=me=>me?`<span class="cv me">${USER&&USER.name?USER.name[0].toUpperCase():mS('user')}</span>`:`<span class="cv">${mLogo(v)}</span>`;
+  const av=me=>me?`<span class="cv me">${USER&&USER.name?uAv():mS('user')}</span>`:`<span class="cv">${mLogo(v)}</span>`;
   const kids=[...box.children];kids.forEach((el,i)=>{if(!el.classList.contains('tb'))return;const me=el.classList.contains('me');const nx=kids[i+1];
     const last=!(nx&&nx.classList.contains('tb')&&nx.classList.contains('me')===me);const t=el.querySelector('time');if(t)t.remove();
     const row=document.createElement('div');row.className='cr'+(me?' me':'')+(last?' last':'');el.replaceWith(row);row.appendChild(el);row.insertAdjacentHTML(me?'beforeend':'afterbegin',last?av(me):'<span class="cv sp"></span>');});
@@ -3470,7 +3547,7 @@ function profile(){
   const head=`<div class="m-h c">${'<button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button>'}<h1>Profile</h1><span style="width:46px"></span></div>`;
   if(!USER)return head+`<div class="pf-card pf-out"><span class="pf-av">${mS('user')}</span><b>Your Stafly profile</b><p>Sign in with WhatsApp to save shops, follow them and join group orders. No password needed.</p><button type="button" class="pf-cta" data-msign="1">${mS('wa')}Continue with WhatsApp</button></div>`;
   const fol=V.filter(v=>FOLLOW.has(v.id)).length,sv=SAVED.size,ord=CHATS.length,grp=joined.size;
-  return head+`<div class="pf-card"><div class="pf-top"><span class="pf-av">${USER.name[0].toUpperCase()}</span><div><b>${USER.name}</b><span>${USER.hall} · OAU</span><small>On Stafly since ${since()}</small></div></div>
+  return head+`<div class="pf-card"><div class="pf-top"><span class="pf-av" data-pfpic="1" role="button" aria-label="Change your photo">${uAv()}<i class="pf-cam">${CAM}</i></span><div><b>${USER.name}</b><span>${USER.hall} · OAU</span><small>On Stafly since ${since()}</small></div></div>
     <div class="pf-st"><div><b>${ord}</b><span>Chats</span></div><div><b>${sv}</b><span>Saved</span></div><div><b>${fol}</b><span>Following</span></div></div></div>
     <div class="m-dl">Your activity</div><div class="m-dg">${R('data-mtab="chats"','chat','Chats and orders',ord)}${R('data-mtab="groups"','users','Group orders',grp?grp+' joined':'None yet')}${R('data-msub="saved"','heart','Saved shops',sv||'')}${R('data-msub="following"','store','Shops you follow',fol||'')}</div>
     <div class="m-dl">Account</div><div class="m-dg">${R('data-msub="hall"','pin','Your hall',hallShort(USER.hall))}<div class="m-li pf-ro">${mS('wa')}<span>WhatsApp number</span><small>Private</small></div>${R('data-msub="alerts"','bell','Alerts')}</div>
@@ -3646,6 +3723,78 @@ sh.addEventListener('touchend',e=>{if(y0==null)return;const dy=e.changedTouches[
   if(!min&&dy>60&&t0<=0)setMin(true);else if(min&&dy<-30)setMin(false);},{passive:true});
 /* moving the map tucks the card away so you can look around */
 const hook=()=>{if(typeof map==='undefined'||!map||!map.on)return setTimeout(hook,500);map.on('dragstart',()=>{if(B.classList.contains('m-sheeton')&&!B.classList.contains('dk'))setMin(true);});};hook();
+})();
+</script><script>
+/* ---- v77: buyer photo, trusted buyer progress, and the full filter sheet ---- */
+(function(){
+const XI='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+const SH='<svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>';
+const save=()=>{try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(e){}};
+const reSub=()=>{try{const m=document.getElementById('mSub');if(m&&CUR&&CUR.s==='me')m.innerHTML=m2Sub('me');}catch(e){}try{m2Apply();}catch(e){}};
+
+/* 1) buyer photo: pick one, we shrink it on the phone and keep it on this phone */
+const fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.style.display='none';document.body.appendChild(fi);
+fi.addEventListener('change',()=>{const f=fi.files&&fi.files[0];fi.value='';if(!f||!USER||!/^image\//.test(f.type))return;
+  const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const n=256,c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');
+    const m=Math.min(im.width,im.height);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);URL.revokeObjectURL(u);
+    USER.photo=c.toDataURL('image/jpeg',.82);save();reSub();};im.onerror=()=>URL.revokeObjectURL(u);im.src=u;});
+document.addEventListener('click',e=>{if(e.target.closest('[data-pfpic]')&&USER){e.preventDefault();fi.click();}});
+
+/* 2) trusted buyer: earned after 5 paid orders with no cancellations; sellers see it */
+const NEED=5;
+const _ms=m2Sub;m2Sub=function(k){const h=_ms.apply(this,arguments);if(k!=='me'||!USER||typeof h!=='string')return h;
+  const n=Math.min(NEED,Number(USER.paid)||0),got=n>=NEED;
+  const card=`<div class="tb-card${got?' got':''}"><div class="tb-top">${SH}<div><b>${got?'You’re a trusted buyer':'Trusted buyer'}</b><span>${got?'Shops see this badge, so they can offer you pay on delivery and hold group spots for you.':`${NEED-n} more paid ${NEED-n===1?'order':'orders'} to get the badge. Shops see it and trust you more.`}</span></div></div>${got?'':`<div class="tb-bar">${Array.from({length:NEED},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</div>`}</div>`;
+  return h.replace('<div class="m-dl">Your activity</div>',card+'<div class="m-dl">Your activity</div>');};
+
+/* 3) filters */
+const F={area:'',walk:0,price:0,group:false,trusted:false,live:false,top:false,cheap:false};
+const AREAS=[['','Anywhere'],['moremi','Moremi'],['awo','Awo'],['fajuyi','Fajuyi'],['angola','Angola'],['mozambique','Mozambique'],['etf','ETF'],['alumni','Alumni'],['pg','PG Hall'],['sub','SUB'],['buka','New Buka'],['health','Health Centre'],['library','Library'],['senate','Senate']];
+const minP=v=>{const p=v.items.map(i=>typeof i[1]==='string'?Number(i[1].replace('from ','')):i[1]).filter(x=>x>0);return p.length?Math.min(...p):0;};
+function pass(v){
+  if(F.area&&!(v.near===F.area||meters(LM[F.area].ll,v.ll)<=450))return false;
+  if(F.walk&&walk(v)>F.walk)return false;
+  if(F.price){const m=minP(v);if(!m||m>F.price)return false;}
+  if(F.group&&!GROUPS[v.id])return false;
+  if(F.trusted&&v.tier!=='trusted')return false;
+  if(F.live&&!dropOf(v.id))return false;
+  if(F.top&&!(v.reviews>=3&&v.rating>=4.5))return false;
+  return true;}
+const _search=search;search=function(){let o=_search.apply(this,arguments).filter(r=>pass(r.v));if(F.cheap)o.sort((a,b)=>(minP(a.v)||1e9)-(minP(b.v)||1e9));return o;};
+const active=()=>(F.area?1:0)+(F.walk?1:0)+(F.price?1:0)+(F.group?1:0)+(F.trusted?1:0)+(F.live?1:0)+(F.top?1:0)+(F.cheap||st.sort!=='best'?1:0)+st.f.size;
+function badge(){const n=active();document.body.classList.toggle('fs-act',n>0);document.body.style.setProperty('--fn','"'+n+'"');}
+const sortK=()=>F.cheap?'cheap':st.sort;
+const el=document.createElement('div');el.id='mFs';document.body.appendChild(el);
+function body(){
+  const o=(k,v,l,on)=>`<button type="button" class="${on?'on':''}" data-fs="${k}" data-v="${v}">${l}</button>`;
+  const tg=(k,l,sub,on)=>`<button type="button" class="fs-r${on?' on':''}" data-fs="${k}" data-v="t"><span>${l}${sub?`<small>${sub}</small>`:''}</span><i></i></button>`;
+  return `<div class="fs-s"><div class="fs-t">Sort by</div><div class="fs-o">${[['best','Best match'],['near','Nearest'],['rating','Top rated'],['cheap','Lowest price']].map(([k,l])=>o('sort',k,l,sortK()===k)).join('')}</div></div>
+  <div class="fs-s"><div class="fs-t">Area on campus<small>${F.area?LM[F.area].n:'All of OAU'}</small></div><div class="fs-o">${AREAS.map(([k,l])=>o('area',k,l,F.area===k)).join('')}</div></div>
+  <div class="fs-s"><div class="fs-t">Walking time<small>from ${(USER&&USER.hall)||'Moremi Hall'}</small></div><div class="fs-seg">${[[0,'Any'],[5,'5 min'],[10,'10 min'],[15,'15 min']].map(([k,l])=>o('walk',k,l,F.walk===k)).join('')}</div></div>
+  <div class="fs-s"><div class="fs-t">Price<small>cheapest item</small></div><div class="fs-seg">${[[0,'Any'],[1000,'Under ₦1k'],[2500,'Under ₦2.5k'],[5000,'Under ₦5k']].map(([k,l])=>o('price',k,l,F.price===k)).join('')}</div></div>
+  <div class="fs-s"><div class="fs-t">Getting it</div>${tg('delivers','Delivers to me','Shops that bring it to your hall',st.f.has('delivers'))}${tg('group','Group order going','Split the delivery fee with others',F.group)}</div>
+  <div class="fs-s"><div class="fs-t">Shop</div>${tg('open','Open now','',st.f.has('open'))}${tg('verified','Verified shops','Checked by Stafly',st.f.has('verified'))}${tg('trusted','Trusted shops','Lots of paid orders, great reviews',F.trusted)}${tg('top','Rated 4.5 and up','',F.top)}${tg('live','Posting live now','',F.live)}</div>`;}
+function foot(){const n=search().length;return `<button type="button" class="fs-clr" data-fs="clear" ${active()?'':'disabled'}>Clear all</button><button type="button" class="fs-go" data-fs="go">${n?`Show ${n} ${n===1?'place':'places'}`:'No places match'}</button>`;}
+function draw(keep){const b=el.querySelector('.fs-b'),t=b?b.scrollTop:0;
+  el.innerHTML=`<div class="fs-bg" data-fs="close"></div><div class="fs-p" role="dialog" aria-modal="true" aria-label="Filters"><div class="fs-h"><b>Filters</b><button type="button" class="fs-x" data-fs="close" aria-label="Close">${XI}</button></div><div class="fs-b">${body()}</div><div class="fs-f">${foot()}</div></div>`;
+  if(keep)el.querySelector('.fs-b').scrollTop=t;if(el.classList.contains('in'))el.classList.add('in');}
+function open(){draw();el.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));}
+function close(){el.classList.remove('in');setTimeout(()=>el.classList.remove('on'),320);}
+function apply(){try{render();}catch(e){}try{m2Apply();}catch(e){}badge();}
+el.addEventListener('click',e=>{const b=e.target.closest('[data-fs]');if(!b)return;const k=b.dataset.fs,v=b.dataset.v;
+  if(k==='close')return close();
+  if(k==='go'){close();if(!(CUR&&CUR.t==='places'&&!CUR.s)&&!document.body.classList.contains('dk'))m2Nav({t:'places'});return;}
+  if(k==='clear'){Object.assign(F,{area:'',walk:0,price:0,group:false,trusted:false,live:false,top:false,cheap:false});st.f.clear();st.sort='best';}
+  else if(k==='sort'){F.cheap=v==='cheap';st.sort=F.cheap?'best':v;}
+  else if(k==='area')F.area=v;
+  else if(k==='walk'||k==='price')F[k]=Number(v);
+  else if(['open','delivers','verified'].includes(k)){st.f.has(k)?st.f.delete(k):st.f.add(k);}
+  else F[k]=!F[k];
+  apply();draw(true);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&el.classList.contains('on'))close();});
+/* the filter buttons (Places search and the Explore search bar) open the sheet */
+window.addEventListener('click',e=>{const b=e.target.closest('[data-mflt], .m-search .flt, .m-field .flt');if(!b)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();open();},true);
+window.m2Filters=open;badge();
 })();
 </script></body>
 </html>
