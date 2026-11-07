@@ -2224,6 +2224,8 @@ html body.m2on.m-light #lvView .g-ghost{color:#fff!important;border-color:rgba(2
   html body.m2on.m2on.m2on.dk #mPage .m-row2.dk-on,html body.m2on.m2on.m2on.dk #mPage .m-row2:has(+ .m-row2.dk-on),html body.m2on.m2on.m2on.dk #mPage .m-row2:hover,html body.m2on.m2on.m2on.dk #mPage .m-row2:has(+ .m-row2:hover){border-bottom-color:transparent!important}
   html body.m2on.m2on.m2on.dk.m-light #mPage .m-row2:hover,html body.m2on.m2on.m2on.dk.m-light #mPage .m-row2.dk-hov{background:#F7F6F3!important}
   html body.m2on.m2on.m2on.dk.m-light #mPage .m-row2.dk-on{background:#F2F1EE!important}
+  /* both panels share one backdrop, so cards read the same in each */
+  html body.m2on.m2on.m2on.dk:not(.m-light) #mPage,html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:not(:has(.wa-h.dsh)){background:linear-gradient(rgba(16,16,19,.84),rgba(16,16,19,.84)),var(--gl-snap,none) center/cover no-repeat fixed,#121215!important}
 }
 </style>
 </head>
