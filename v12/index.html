@@ -2737,7 +2737,7 @@ const LATE={id:'kemi',t:'Friday drop is live: 40 fresh vintage pieces',m:0};
 const GROUPS={mamatee:{hall:'Moremi Hall',n:3,need:5,closes:12,faces:['#F7C6E6','#BDEBD3','#D9CCFF']},shawarma:{hall:'Fajuyi Hall',n:4,need:6,closes:20,faces:['#F6D77A','#FFD7B5','#BDEBD3','#F7C6E6']},laundry:{hall:'Awolowo Hall',n:2,need:4,closes:45,faces:['#D9CCFF','#FFFFFF']}};
 const joined=new Set();
 const dropOf=id=>DROPS.find(d=>d.id===id);
-const ago=m=>m<1?'just now':m+' min ago';
+const ago=m=>m<1?'just now':m<60?m+' min ago':Math.floor(m/60)+'h ago';
 
 /* Just ask: read a plain-English request into filters */
 const ASKCAT=[[/hungry|eat|food|lunch|dinner|breakfast|rice|jollof|amala|swallow|shawarma|suya|snack|drink|smoothie|parfait|cake/,'food'],[/print|bind|binding|project|photocopy|scan/,'printing'],[/screen|phone|charger|laptop|battery|earbud|power ?bank|repair|fix/,'gadgets'],[/lash|nail|hair|braid|wig|makeup|pedicure|beauty/,'beauty'],[/thrift|clothes|shirt|jeans|tailor|sew|senator|ankara|fashion|bag|sneaker/,'fashion'],[/laundry|wash|haircut|barb|cut|clean/,'services']];
@@ -3189,9 +3189,9 @@ function m2Page(t){
     <div class="lv-row lv2">${ST.map(d=>{const v=vOf(d.id),sn=LVSEEN.has(d.id);return`<button type="button" class="lv-st${sn?'':' new'}" data-lvgo="${d.id}"><span class="rg">${mLogo(v)}</span>${d.m<=10&&!sn?'<i class="lv-dot">LIVE</i>':''}<em>${v.name.split(' ').slice(0,2).join(' ')}</em></button>`;}).join('')}</div>
     <div class="lv-tabs">${[['following','Following'],['popular','Popular'],['near','Near you']].map(([k,l])=>`<button type="button" data-lvtab="${k}" class="${LVTAB===k?'on':''}">${l}</button>`).join('')}</div>
     ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${fmtK(followers(v))} followers</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
-    ${LL.map(d=>{const v=vOf(d.id);return`<div class="g-card lv-card" id="lv-${d.id}"><div class="g-media lv-media">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:satTiles(v.ll)}<span class="g-shade"></span>
+    ${LL.map(d=>{const v=vOf(d.id);return`<div class="g-card lv-card" id="lv-${d.id}"><div class="g-media lv-media">${(d.img||CV(v))?`<img class="g-photo" src="${d.img||CV(v)}" alt="">`:satTiles(v.ll)}<span class="g-shade"></span>
       <span class="g-tag${d.m<=10?' hot':''}">${d.m<=10?'<i class="lvd"></i>Live':mS('clock')+ago(d.m)}</span><span class="g-time">${catL(v.cat)}</span>
-      ${CV(v)?'':`<span class="g-pin">${mLogo(v)}</span>`}
+      ${(d.img||CV(v))?'':`<span class="g-pin">${mLogo(v)}</span>`}
       <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
       <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><span class="tm">${ago(d.m)}</span></div>
       <div class="g-act"><button type="button" class="g-ghost" data-msel="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div></div>`;}).join('')}`;}
@@ -3451,10 +3451,10 @@ document.addEventListener('click',e=>{const t=e.target,a=q=>t.closest(q);let el;
 var LVI=0,LVT=null,LVCTX={};
 function lvOpen(i){LVI=Math.max(0,i);let o=$('#lvView');if(!o){o=document.createElement('div');o.id='lvView';o.className='lv-view';document.body.appendChild(o);}lvShow();document.body.classList.add('lv-on');}
 function lvShow(){const LL=LVLIST||DROPS,d=LL[LVI],v=vOf(d.id),o=$('#lvView');if(!o)return;
-  o.innerHTML=`<div class="lv-bg"><div class="lv-zoom">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:satTiles(v.ll,4)}</div></div><span class="lv-shade"></span>
+  o.innerHTML=`<div class="lv-bg"><div class="lv-zoom">${(d.img||CV(v))?`<img class="g-photo" src="${d.img||CV(v)}" alt="">`:satTiles(v.ll,4)}</div></div><span class="lv-shade"></span>
   <div class="lv-bars">${LL.map((x,k)=>`<i class="${k<LVI?'done':k===LVI?'run':''}"><b></b></i>`).join('')}</div>
   <div class="lv-hd">${mLogo(v)}<div><b>${v.name}</b><span>${ago(d.m)} · ${v.place.split(',')[0]}</span></div><button type="button" class="lv-x" data-lvx aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-  ${CV(v)?'':`<span class="g-pin lv-pin">${mLogo(v)}</span>`}
+  ${(d.img||CV(v))?'':`<span class="g-pin lv-pin">${mLogo(v)}</span>`}
   <button type="button" class="lv-prev" data-lvprev aria-label="Previous post"></button><button type="button" class="lv-next" data-lvnext aria-label="Next post"></button>
   <div class="lv-ft"><span class="lv-cat">${catL(v.cat)} · ${dtxt(v)}</span><p>${d.t}</p><div class="g-act"><button type="button" class="g-ghost" data-lvmap="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div>`;
   clearTimeout(LVT);LVT=setTimeout(()=>lvStep(1),5000);}
@@ -3835,6 +3835,9 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
     v.reviews=Number(rv.count)||L.length;v.rating=Math.min(5,Math.max(1,Number(rv.avg)||0));
     v.rev=L.map(r=>[clean(r.name)||'A customer',Math.round(r.rating),long(r.text),ago(r.at)]);
     const c=[5,4,3,2,1].map(n=>L.filter(r=>Math.round(r.rating)===n).length),mx=Math.max(1,...c);v.dist=c.map(x=>Math.round(x/L.length*100));}
+  {const P=(Array.isArray(d.live)?d.live:[]).map(p=>({t:String(p&&p.text||'').replace(/[<>"'`&\\]/g,'').replace(/\s+/g,' ').trim().slice(0,280),at:Date.parse(p&&p.at),img:safeUrl(p&&p.img)})).filter(p=>p.img&&p.at>Date.now()-864e5).sort((a,b)=>b.at-a.at);
+   if(P.length){const k=DROPS.findIndex(x=>x.id===v.id);if(k>=0)DROPS.splice(k,1);DROPS.unshift({id:v.id,t:P[0].t||'New from '+v.name,m:Math.max(0,Math.round((Date.now()-P[0].at)/6e4)),img:P[0].img,real:1});
+     try{if(CUR.t==='live'&&!CUR.s){LVLIST=null;$('#mPage').innerHTML=m2Page('live');}}catch(_){}}}
   v.live=1;redraw();});}).catch(()=>{});
 const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Thanks for messaging ${vv.name}. What would you like today?`;};
 /* 2) real chat with Amara through Stafly's website-chat line */
