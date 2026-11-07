@@ -2225,7 +2225,24 @@ html body.m2on.m-light #lvView .g-ghost{color:#fff!important;border-color:rgba(2
   html body.m2on.m2on.m2on.dk.m-light #mPage .m-row2:hover,html body.m2on.m2on.m2on.dk.m-light #mPage .m-row2.dk-hov{background:#F7F6F3!important}
   html body.m2on.m2on.m2on.dk.m-light #mPage .m-row2.dk-on{background:#F2F1EE!important}
   /* both panels share one backdrop, so cards read the same in each */
-  html body.m2on.m2on.m2on.dk:not(.m-light) #mPage,html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:not(:has(.wa-h.dsh)){background:linear-gradient(rgba(16,16,19,.84),rgba(16,16,19,.84)),var(--gl-snap,none) center/cover no-repeat fixed,#121215!important}
+  html body.m2on.m2on.m2on.dk:not(.m-light) #mPage,html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:not(:has(.wa-h.dsh)){background:#151518!important}
+}
+</style>
+<style id="desk-v67">
+@media (min-width:1024px){
+  /* speed: nothing that floats over the moving map uses live blur on desktop */
+  html body.m2on.m2on.m2on.dk .m-top .m-circ,html body.m2on.m2on.m2on.dk .m-top .m-field,html body.m2on.m2on.m2on.dk #mSatB,html body.m2on.m2on.m2on.dk .m-ban,html body.m2on.m2on.m2on.dk #mTabs,html body.m2on.m2on.m2on.dk .m-page{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  html body.m2on.m2on.m2on.dk:not(.m-light) .m-top .m-circ,html body.m2on.m2on.m2on.dk:not(.m-light) #mSatB{background:#1B1B20!important}
+  html body.m2on.m2on.m2on.dk:not(.m-light) .m-top .m-field{background:#1B1B20!important}
+  html body.m2on.m2on.m2on.dk:not(.m-light) #mTabs{background:#151518!important}
+  /* chat panel: same surface as the other panels, header and message bar sit on it with a hairline */
+  html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:has(.wa-h.dsh){background-color:#151518!important;background-image:radial-gradient(rgba(243,243,246,.035) 1px,transparent 1px)!important}
+  html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:has(.wa-h.dsh) .wa-h,html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:has(.wa-h.dsh) .m-comp{background:#151518!important;border-color:rgba(255,255,255,.07)!important}
+  html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:has(.wa-h.dsh) .wa-bar input{background:#1B1B20!important;border-color:rgba(255,255,255,.08)!important}
+  html body.m2on.m2on.m2on.dk:not(.m-light) #mSub:has(.wa-h.dsh) .msg.in{background:#202026!important}
+  html body.m2on.m2on.m2on.dk.m-light #mSub:has(.wa-h.dsh){background-color:#F8F8F7!important}
+  html body.m2on.m2on.m2on.dk.m-light #mSub:has(.wa-h.dsh) .wa-h,html body.m2on.m2on.m2on.dk.m-light #mSub:has(.wa-h.dsh) .m-comp{background:#F8F8F7!important;border-color:#E9E7E3!important}
+  html body.m2on.m2on.m2on.dk #mSub:has(.wa-h.dsh) .wa-h{border-radius:24px 24px 0 0}
 }
 </style>
 </head>
@@ -3471,7 +3488,7 @@ function snap(){if(!want||busy)return;busy=true;want=false;
     try{y.filter='blur(6px)';}catch(_){}y.drawImage(a,-8,-8,b.width+16,b.height+16);
     const u=b.toDataURL('image/jpeg',.8);if(u.length>800)document.documentElement.style.setProperty('--gl-snap',`url(${u})`);}catch(e){}
   busy=false;}
-map.on('idle',()=>{want=true;map.triggerRepaint();});
+window.__glSnap=()=>{want=true;try{map.triggerRepaint();}catch(e){}};map.once('idle',()=>window.__glSnap());
 map.on('render',()=>{if(want)snap();});
 })();
 </script><script>(function(){const _st=setTheme;setTheme=function(t){_st(t);document.querySelectorAll('[data-mtheme]').forEach(b=>b.classList.toggle('on',b.dataset.mtheme===curTheme()));};})();</script><script>
@@ -3535,5 +3552,7 @@ if(DK()){let i=0;const ids=Object.keys(markers).sort((a,b)=>markers[a].getLngLat
   document.body.classList.add('dk-intro','dk-wait');const go=()=>{const bt=document.getElementById('boot');if(bt&&!bt.classList.contains('go'))return setTimeout(go,80);document.body.classList.remove('dk-wait');setTimeout(()=>document.body.classList.remove('dk-intro'),2600);};go();}
 ind();
 })();
-</script></body>
+</script><script>(function(){const re=()=>setTimeout(()=>window.__glSnap&&window.__glSnap(),700);
+const _t=setTheme;setTheme=function(){_t.apply(this,arguments);re();};
+if(typeof setSat==='function'){const _s=setSat;setSat=function(){_s.apply(this,arguments);try{map.once('idle',re);}catch(e){re();}};}})();</script></body>
 </html>
