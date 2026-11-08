@@ -3423,7 +3423,7 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
       <div class="sp-bar">${back()}<button class="m-circ" type="button" data-mshare="${id}" aria-label="Share">${mS('share')}</button><button class="m-circ" type="button" data-msave="${id}" aria-label="Save">${S(sv?MIF.heart:MI.heart,sv?'i sv':'i')}</button></div></div>
     <div class="sp-head"><span class="sp-logo${d?' live':''}"${d?` data-lvgo="${id}"`:''}>${mLogo(v)}${d?'<em class="sp-lt">Live</em>':''}</span><button type="button" class="sp-follow${fo?' on':''}" data-mfollow="${id}">${fo?mS('check')+'Following':'Follow'}</button></div>
     <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)} · ${fmtK(followers(v)+(fo?1:0))} followers</div><p><b>${v.tag}.</b> ${v.about[0]}.</p></div>
-    <div class="sp-info"><div><b class="${s.k}"><i></i>${s.k==='open'?'Open':s.k==='soon'?'Soon':'Closed'}</b><span>${s.t.replace(/^Open\s*/,'').replace(/^’til/,'till').replace(/^'til/,'till')||'today'}</span></div><div><b>${walk(v)} min</b><span>${dtxt(v)} walk</span></div><div><b>${v.deliv?naira(v.deliv.fee):'Pick up'}</b><span>${v.deliv?'delivery':'only'}</span></div></div>
+    <div class="sp-info"><div><b class="${s.k}"><i></i>${s.k==='open'?'Open':s.k==='soon'?'Soon':'Closed'}</b><span>${s.t.replace(/^Open(?!s)\s*/,'').replace(/^’til/,'till').replace(/^'til/,'till')||'today'}</span></div><div><b>${walk(v)} min</b><span>${dtxt(v)} walk</span></div><div><b>${v.deliv?naira(v.deliv.fee):'Pick up'}</b><span>${v.deliv?'delivery':'only'}</span></div></div>
     
     <div class="m-qa"><button type="button" data-mtalk="${id}">${mS('chat')}Chat</button><button type="button" data-mdir="${id}">${mS('nav')}Directions</button></div>
     ${v.deliv?`<div class="m-sh"><b>How you want it</b>${g?`<span>Pick one</span>`:''}</div><div class="m-card od">
@@ -4829,5 +4829,60 @@ document.addEventListener('touchend',()=>{if(!D)return;const d=D;D=null;if(!d.on
 <style id="v128">
 /* narrow computer screens: the shop / checkout panel opens over the list instead of beside it, so it never runs off the edge */
 @media (min-width:821px) and (max-width:1099px){html body.m2on.m2on.m2on.dk #mSub{left:calc(var(--rail) + var(--gap))!important;width:var(--pw)!important;z-index:985!important}}
-</style></body>
+</style><script>
+/* ---- v129: shop preview inside the Stafly dashboard ---- */
+(function(){
+if(!/[?&]embed=dash(&|$)/.test(location.search))return;
+const OK=['https://kp-assistant.onrender.com','https://stafly.onrender.com','http://localhost:3100'];
+const B=document.body;B.classList.add('pv');
+const css=document.createElement('style');css.textContent=`
+html body.m2on.pv #map,html body.m2on.pv .m-top,html body.m2on.pv .m-tabs,html body.m2on.pv #mPage,html body.m2on.pv #mSheet,html body.m2on.pv .m-banner,html body.m2on.pv .dk-rail{display:none!important}
+html body.m2on.pv #mSub [data-mback]{visibility:hidden}
+html body.m2on.pv #mSub{left:0!important;right:-24px!important;top:0!important;bottom:0!important;width:auto!important;border-radius:0!important;transform:none!important}
+html body.m2on.pv #mChips{display:none!important}
+html body.m2on.pv .pv-wait{position:fixed;inset:0;display:grid;place-items:center;color:#8a8a93;font:500 14px/1.4 inherit;text-align:center;padding:24px}
+html body.m2on.pv .pv-note{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:3000;background:#121215;color:#fff;font:500 13px/1.3 inherit;padding:10px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25);white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
+html body.m2on.pv .pv-note.on{opacity:1}`;document.head.appendChild(css);
+const wait=document.createElement('div');wait.className='pv-wait';wait.textContent='Loading your shop…';B.appendChild(wait);
+const note=document.createElement('div');note.className='pv-note';note.textContent='Preview only. Buyers can do this on the real page.';B.appendChild(note);
+let nT=0;const say=()=>{note.classList.add('on');clearTimeout(nT);nT=setTimeout(()=>note.classList.remove('on'),1800);};
+/* nothing in the preview sends a real order, message or link */
+document.addEventListener('click',e=>{const t=e.target.closest('[data-mpay],[data-chat],[data-mtalk],[data-mshare],[data-mfollow],[data-msave],[data-mdir],a[href^="http"],a[href^="https"]');
+  if(!t)return;e.preventDefault();e.stopPropagation();say();},true);
+const clean=t=>String(t==null?'':t).replace(/[<>"'`&\\]/g,'').replace(/\s+/g,' ').trim().slice(0,160);
+const safeUrl=u=>{u=String(u||'');return /^(https:\/\/|http:\/\/localhost:3100\/|blob:|data:image\/)[^\s"'<>`()\\]+$/.test(u)?u:'';};
+const waDigits=w=>{let d=String(w||'').replace(/\D/g,'').slice(0,15);if(/^0[789]\d{9}$/.test(d))d='234'+d.slice(1);return d;};
+const base=V.find(x=>x.id==='foodhunt')||V[0];
+let v=V.find(x=>x.id==='pvshop');
+if(!v){v=Object.assign({},base,{id:'pvshop',off:base.off,near:base.near});V.push(v);}
+function apply(d,theme){
+  if(theme==='dark'||theme==='light'){try{localStorage.setItem('stafly_theme',theme);}catch(_){}
+    B.classList.toggle('m-light',theme==='light');}
+  v.name=clean(d.businessName)||'Your shop';v.mono=v.name.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+  v.tag=clean(d.headline)||'';
+  const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>clean(x).replace(/\.$/,'')).filter(Boolean).slice(0,2);v.about=ab.length?ab:['Message us and our assistant replies right away'];
+  v.img=safeUrl(d.avatar)||'';v.cover=safeUrl(d.cover)||'';
+  v.place=clean(d.location)||'Add where you are';
+  v.items=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||''),clean(i.cat||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3)]).slice(0,200);
+  v.wa=waDigits(d.whatsapp)||'';
+  try{REACH.pvshop=d.reach==='stafly'||d.reach==='whatsapp'?d.reach:'both';if(!v.wa&&REACH.pvshop!=='stafly')REACH.pvshop='stafly';}catch(_){}
+  v.deliv=Object.assign({},base.deliv||{},{fee:Math.max(0,Number(d.defaultFee)||0)});
+  const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
+  else{v.hours=[0,1439];v.days=null;v.closedToday=false;}
+  const rv=d.reviews||{};const L=(rv.latest||[]).filter(r=>r&&r.rating>=1&&r.rating<=5);
+  if(rv.count>0&&L.length){v.reviews=Number(rv.count)||L.length;v.rating=Math.min(5,Math.max(1,Number(rv.avg)||0));
+    v.rev=L.map(r=>[clean(r.name)||'A customer',Math.round(r.rating),String(r.text||'').replace(/[<>"'`&\\]/g,'').slice(0,400),'']);
+    const c=[5,4,3,2,1].map(n=>L.filter(r=>Math.round(r.rating)===n).length);v.dist=c.map(x=>Math.round(x/L.length*100));}
+  else{v.reviews=0;v.rating=0;v.rev=[];v.dist=[0,0,0,0,0];}
+  v.tier='verified';v.orders=0;
+  wait.remove();
+  const sub=document.getElementById('mSub'),top=sub?sub.scrollTop:0;
+  try{m2Nav({t:'explore',s:'shop',id:'pvshop'});}catch(e){}
+  requestAnimationFrame(()=>{const s2=document.getElementById('mSub');if(s2)s2.scrollTop=top;});
+}
+addEventListener('message',e=>{if(OK.indexOf(e.origin)<0)return;const m=e.data;if(!m||m.type!=='stafly-shop'||!m.feed)return;try{apply(m.feed,m.theme);}catch(err){console.error(err);}});
+try{parent.postMessage({type:'stafly-preview-ready'},'*');}catch(_){}
+})();
+</script>
+</body>
 </html>
