@@ -2916,7 +2916,7 @@ const V=[
 const $=s=>document.querySelector(s);
 const naira=v=>typeof v==='string'?'from ₦'+Number(v.replace('from ','')).toLocaleString('en-NG'):'₦'+v.toLocaleString('en-NG');
 const tfmt=m=>{const h=Math.floor(m/60)%24,mm=m%60,ap=h>=12?'pm':'am';return (((h+11)%12)+1)+(mm?':'+String(mm).padStart(2,'0'):'')+ap;};
-function status(v){const[o,c]=v.hours,n=NOW.min;if(n>=o&&n<c)return c-n<=60?{k:'soon',t:'Closes '+tfmt(c)}:{k:'open',t:'Open \u2019til '+tfmt(c)};return{k:'shut',t:n<o?'Opens '+tfmt(o):'Opens '+tfmt(o)+' tomorrow'};}
+function status(v){const[o,c]=v.hours,n=NOW.min;const wd=new Date(Date.now()+3600000).getUTCDay();if(v.closedToday||(v.days&&!v.days.includes(wd))){const nx=v.days&&v.days.length?v.days.map(x=>(x-wd+7)%7||7).sort((a,b)=>a-b)[0]:1;return{k:'shut',t:'Opens '+(nx===1?'tomorrow':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][(wd+nx)%7])+' '+tfmt(o)};}if(n>=o&&n<c)return c-n<=60?{k:'soon',t:'Closes '+tfmt(c)}:{k:'open',t:'Open \u2019til '+tfmt(c)};return{k:'shut',t:n<o?'Opens '+tfmt(o):'Opens '+tfmt(o)+' tomorrow'};}
 const isOpen=v=>status(v).k!=='shut';
 const logo=(v,extra='')=>`<span class="logo ${extra}" style="background:${v.bg}">${v.mono}</span>`;
 let YOU=null;
@@ -4053,6 +4053,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0)]);if(it.length)v.items=it.slice(0,30);
   const w=waDigits(d.whatsapp);if(w)v.wa=w;
   if(d.defaultFee&&v.deliv)v.deliv.fee=Math.max(0,Number(d.defaultFee)||0)||v.deliv.fee;
+  const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
   const rv=d.reviews||{};const L=(rv.latest||[]).filter(r=>r&&r.rating>=1&&r.rating<=5);
   if(rv.count>0&&L.length){const ago=t=>{const s=(Date.now()-Date.parse(t))/1000;if(!(s>=0))return '';const d=Math.floor(s/86400);return d<1?'Today':d<2?'Yesterday':d<7?d+' days ago':d<14?'1 week ago':d<60?Math.floor(d/7)+' weeks ago':Math.floor(d/30)+' months ago';};
     const long=t=>String(t==null?'':t).replace(/[<>"'`&\\]/g,'').replace(/\s+/g,' ').trim().slice(0,400);
@@ -4314,12 +4315,14 @@ window.shareOpen=function(id){let v;try{v=vOf(id);}catch(_){v=null;}if(!v)return
       if(b.dataset.sh==='wa'){window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank','noopener');close();}
       else if(b.dataset.sh==='copy'){const done=()=>{const em=b.querySelector('em');if(em)em.textContent='Copied';setTimeout(close,700);};
         try{navigator.clipboard.writeText(url).then(done,()=>{prompt('Copy this link',url);close();});}catch(_){prompt('Copy this link',url);close();}}
+      else if(b.dataset.sh==='pic'){shopCard(v,url).then(f=>{try{if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:v.name,text:v.name+' on Stafly Search '+url}).catch(()=>{});}else{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();}}catch(_){}}).catch(()=>{});close();}
       else if(b.dataset.sh==='more'){try{navigator.share({title:v.name,text:v.name+' on Stafly Search',url}).catch(()=>{});}catch(_){}close();}});
     addEventListener('keydown',e=>{if(e.key==='Escape')close();});}
   let lg='';try{lg=typeof mLogo==='function'?mLogo(v):'';}catch(_){}
   sheet.innerHTML=`<div class="gr"></div><div class="hd"><span class="lg">${lg}</span><div><b>Share ${v.name}</b><span>Friends open the link straight to this shop</span></div></div>
     <button type="button" class="row wa" data-sh="wa"><i>${ic.wa}</i>Send on WhatsApp</button>
     <button type="button" class="row" data-sh="copy"><i>${ic.link}</i>Copy link<em></em></button>
+    <button type="button" class="row" data-sh="pic"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 9"/></svg></i>Picture for your Status</button>
     ${navigator.share?`<button type="button" class="row" data-sh="more"><i>${ic.more}</i>More apps</button>`:''}`;
   requestAnimationFrame(()=>{scrim.classList.add('on');sheet.classList.add('on');});};
 /* a shared link (?shop=id) opens that shop */
@@ -4565,5 +4568,50 @@ const _pg=m2Page;m2Page=function(t){let h=_pg.apply(this,arguments);if(t==='chat
 try{const q=new URLSearchParams(location.search),tr=q.get('track');if(tr&&/^SW-[A-Z0-9-]+\.[a-f0-9]{32}$/.test(tr)){const ref=tr.split('.')[0];if(!MINE.find(x=>x.ref===ref)){const o=JSON.parse(sessionStorage.getItem('stafly_lastorder')||'null');MINE.unshift({shop:(o&&o.shop)||'foodhunt',ref,track:tr,total:(o&&o.total)||0,at:Date.now()});sv('stafly_orders',MINE.slice(0,20));}
   history.replaceState(null,'',location.pathname);setTimeout(()=>{try{m2Nav({t:'chats',s:'track',id:ref});}catch(_){}},900);}}catch(_){}
 })();
-</script></body>
+</script><script>
+/* ---- v118: shop picture for WhatsApp Status (1080x1920, drawn on the phone, nothing uploaded) ---- */
+async function shopCard(v,url,noImg){
+  try{await document.fonts.ready;}catch(_){}
+  const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  const F=(w,s)=>`${w} ${s}px "DM Sans", system-ui, sans-serif`;
+  const ink='#121215',mut='#6B6B75',line='#E6E6EA';
+  x.fillStyle='#F5F5F6';x.fillRect(0,0,W,H);
+  const rr=(X,Y,w,h,r)=>{x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();};
+  // top: cover photo if the shop has one, else a calm grey band
+  const img=src=>new Promise(r=>{if(!src||noImg)return r(null);const i=new Image();i.crossOrigin='anonymous';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src;setTimeout(()=>r(null),2500);});
+  const cov=await img(v.cover!==undefined?v.cover:v.img);
+  x.save();rr(60,60,W-120,620,56);x.clip();
+  if(cov){const k=Math.max((W-120)/cov.width,620/cov.height);x.drawImage(cov,60+((W-120)-cov.width*k)/2,60+(620-cov.height*k)/2,cov.width*k,cov.height*k);}else{x.fillStyle='#E9E9EC';x.fillRect(60,60,W-120,620);}
+  x.restore();
+  // card
+  x.fillStyle='#FFFFFF';rr(60,600,W-120,1080,56);x.fill();
+  // logo circle
+  const lg=await img(v.img||'');
+  x.save();x.beginPath();x.arc(200,600,110,0,7);x.fillStyle='#FFFFFF';x.fill();x.beginPath();x.arc(200,600,96,0,7);x.clip();
+  if(lg){x.drawImage(lg,104,504,192,192);}else{x.fillStyle=v.bg||'#F1F1F3';x.fillRect(104,504,192,192);x.fillStyle=ink;x.font=F(700,72);x.textAlign='center';x.textBaseline='middle';x.fillText((v.mono||v.name.slice(0,2)).toUpperCase(),200,604);}
+  x.restore();x.textAlign='left';x.textBaseline='alphabetic';
+  // name and line
+  const fit=(t,w,s)=>{let z=s;x.font=F(700,z);while(x.measureText(t).width>w&&z>40){z-=4;x.font=F(700,z);}return z;};
+  x.fillStyle=ink;fit(v.name,W-240,92);x.fillText(v.name,120,820);
+  x.fillStyle=mut;x.font=F(500,40);
+  let st='';try{st=status(v).t;}catch(_){}
+  const sub=[v.place||'',st].filter(Boolean).join('  ·  ');x.fillText(sub.length>46?sub.slice(0,45)+'…':sub,120,884);
+  // a few menu lines
+  x.strokeStyle=line;x.lineWidth=2;let y=980;
+  const items=(v.items||[]).slice(0,4);
+  const money=p=>typeof p==='string'?'from ₦'+Number(p.replace('from ','')).toLocaleString('en-NG'):'₦'+Number(p||0).toLocaleString('en-NG');
+  for(const it of items){x.beginPath();x.moveTo(120,y-62);x.lineTo(W-120,y-62);x.stroke();
+    x.fillStyle=ink;x.font=F(500,46);let n=String(it[0]);while(x.measureText(n).width>W-520&&n.length>3)n=n.slice(0,-2);if(n!==String(it[0]))n+='…';x.fillText(n,120,y);
+    x.textAlign='right';x.font=F(700,46);x.fillText(money(it[1]),W-120,y);x.textAlign='left';y+=124;}
+  // footer: where to find it
+  x.fillStyle=ink;rr(120,1500,W-240,120,60);x.fill();
+  x.fillStyle='#FFFFFF';x.font=F(700,44);x.textAlign='center';x.fillText('Order on Stafly Search',W/2,1576);
+  x.fillStyle=mut;x.font=F(500,38);x.fillText(String(url).replace(/^https?:\/\//,'').replace(/\?.*$/,'').slice(0,48),W/2,1780);
+  x.fillStyle=ink;x.font=F(700,40);x.fillText('stafly',W/2,1850);x.textAlign='left';
+  let blob=null;try{blob=await new Promise((r,j)=>{try{c.toBlob(r,'image/png');}catch(e){j(e);}});}catch(e){blob=null;}
+  if(!blob){if(!noImg)return shopCard(v,url,true);throw new Error('no picture');} // a photo without CORS taints the canvas: draw it plain instead
+  return new File([blob],(v.name||'shop').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'-stafly.png',{type:'image/png'});
+}
+</script>
+</body>
 </html>
