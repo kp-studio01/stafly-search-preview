@@ -3419,7 +3419,7 @@ function m2Page(t){
 function m2Sub(k,id){if(k==='talk')return mTalk(id);
   if(k==='shop'){const v=vOf(id),s=status(v),g=GROUPS[id],d=dropOf(id),sv=SAVED.has(id),fo=FOLLOW.has(id);
     const stz=n=>'<span class="stz">'+[1,2,3,4,5].map(i=>STAR.replace('<svg',`<svg class="${i<=n?'':'off'}"`)).join('')+'</span>';
-    return`<div class="sp-cover">${(v.cover!==undefined?v.cover:v.img)?`<img class="g-photo" src="${v.cover!==undefined?v.cover:v.img}" alt="">`:satTiles(v.ll)}<span class="g-shade"></span>
+    return`<div class="sp-cover">${(v.cover!==undefined?v.cover:v.img)?`<img class="g-photo" src="${v.cover!==undefined?v.cover:v.img}" alt="">`:spNoCover(v)}<span class="g-shade"></span>
       <div class="sp-bar">${back()}<button class="m-circ" type="button" data-mshare="${id}" aria-label="Share">${mS('share')}</button><button class="m-circ" type="button" data-msave="${id}" aria-label="Save">${S(sv?MIF.heart:MI.heart,sv?'i sv':'i')}</button></div></div>
     <div class="sp-head"><span class="sp-logo${d?' live':''}"${d?` data-lvgo="${id}"`:''}>${mLogo(v)}${d?'<em class="sp-lt">Live</em>':''}</span><button type="button" class="sp-follow${fo?' on':''}" data-mfollow="${id}">${fo?mS('check')+'Following':'Follow'}</button></div>
     <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)} · ${fmtK(followers(v)+(fo?1:0))} followers</div><p><b>${v.tag}.</b> ${v.about[0]}.</p></div>
@@ -4884,5 +4884,12 @@ addEventListener('message',e=>{if(OK.indexOf(e.origin)<0)return;const m=e.data;i
 try{parent.postMessage({type:'stafly-preview-ready'},'*');}catch(_){}
 })();
 </script>
+<script>
+/* ---- v130: cover for a shop with no cover photo = the Live card look ---- */
+function spNoCover(v){try{if(window.lvPh)return window.lvPh(v);}catch(_){}return'<div class="lv-ph"></div>';}
+</script>
+<style id="v130">
+html body.m2on .sp-cover .lv-ph i{width:230px;height:230px;right:-14px;bottom:-30px}
+</style>
 </body>
 </html>
