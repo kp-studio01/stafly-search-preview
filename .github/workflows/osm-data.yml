@@ -11,9 +11,12 @@ jobs:
       - name: Ask OpenStreetMap
         run: |
           mkdir -p v12/data
-          Q='[out:json][timeout:60];(nwr["amenity"~"restaurant|fast_food|cafe|food_court|canteen|bar|ice_cream|marketplace|pharmacy|bank|atm|clinic|hospital|library|place_of_worship|fuel|post_office"](7.500,4.500,7.540,4.550);nwr["leisure"~"fitness_centre|sports_centre|stadium|swimming_pool|pitch|track|park|sports_hall"](7.500,4.500,7.540,4.550);nwr["shop"](7.500,4.500,7.540,4.550);nwr["tourism"](7.500,4.500,7.540,4.550););out center tags geom;'
-          for host in https://overpass-api.de https://overpass.kumi.systems https://overpass.private.coffee; do
-            if curl -sf -m 120 -X POST "$host/api/interpreter" --data-urlencode "data=$Q" -o v12/data/oau-osm.json; then echo "got it from $host"; break; fi
+          Q='[out:json][timeout:60];(nwr["amenity"~"restaurant|fast_food|cafe|food_court|canteen|bar|ice_cream|marketplace|pharmacy|bank|atm|clinic|hospital|library|place_of_worship|fuel|post_office"](7.500,4.500,7.540,4.550);nwr["leisure"~"fitness_centre|sports_centre|stadium|swimming_pool|pitch|track|park|sports_hall"](7.500,4.500,7.540,4.550);nwr["shop"](7.500,4.500,7.540,4.550);nwr["tourism"](7.500,4.500,7.540,4.550););out center tags;'
+          for host in https://overpass-api.de https://overpass.private.coffee https://maps.mail.ru/osm/tools/overpass https://overpass.kumi.systems; do
+            code=$(curl -s -m 170 -o v12/data/oau-osm.json -w '%{http_code}' -X POST "$host/api/interpreter" --data-urlencode "data=$Q" || echo fail)
+            echo "$host -> $code"; head -c 300 v12/data/oau-osm.json; echo
+            if [ "$code" = "200" ] && python3 -c "import json;json.load(open('v12/data/oau-osm.json'))"; then break; fi
+            rm -f v12/data/oau-osm.json
           done
           ls -la v12/data
           python3 -c "import json;d=json.load(open('v12/data/oau-osm.json'));print(len(d['elements']),'places')"
