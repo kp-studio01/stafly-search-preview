@@ -1,0 +1,26 @@
+name: Fetch OAU map data
+# Downloads campus places (food, canteens, gyms, shops) from OpenStreetMap into v12/data/.
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ask OpenStreetMap
+        run: |
+          mkdir -p v12/data
+          Q='[out:json][timeout:60];(nwr["amenity"~"restaurant|fast_food|cafe|food_court|canteen|bar|ice_cream|marketplace|pharmacy|bank|atm|clinic|hospital|library|place_of_worship|fuel|post_office"](7.500,4.500,7.540,4.550);nwr["leisure"~"fitness_centre|sports_centre|stadium|swimming_pool|pitch|track|park|sports_hall"](7.500,4.500,7.540,4.550);nwr["shop"](7.500,4.500,7.540,4.550);nwr["tourism"](7.500,4.500,7.540,4.550););out center tags geom;'
+          for host in https://overpass-api.de https://overpass.kumi.systems https://overpass.private.coffee; do
+            if curl -sf -m 120 -X POST "$host/api/interpreter" --data-urlencode "data=$Q" -o v12/data/oau-osm.json; then echo "got it from $host"; break; fi
+          done
+          ls -la v12/data
+          python3 -c "import json;d=json.load(open('v12/data/oau-osm.json'));print(len(d['elements']),'places')"
+      - name: Save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v12/data/oau-osm.json
+          git commit -m "OAU map data from OpenStreetMap" || echo "no change"
+          git push
