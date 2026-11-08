@@ -4050,7 +4050,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   v.about=['Message us and our assistant replies right away'];const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>clean(x).replace(/\.$/,'')).filter(Boolean).slice(0,2);if(ab.length)v.about=ab;
   if(safeUrl(d.avatar))v.img=safeUrl(d.avatar);v.cover=safeUrl(d.cover);
   if(clean(d.location))v.place=clean(d.location);
-  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||'')]);if(it.length)v.items=it.slice(0,30);
+  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||''),clean(i.cat||i.category||'')]);if(it.length)v.items=it.slice(0,30);
   const w=waDigits(d.whatsapp);if(w)v.wa=w;
   if(d.defaultFee&&v.deliv)v.deliv.fee=Math.max(0,Number(d.defaultFee)||0)||v.deliv.fee;
   const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
@@ -4468,7 +4468,18 @@ function delivery(v){if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(C
 function rer(){const p=$('#mSub');if(!p)return;const y=p.scrollTop,a=document.activeElement,aid=a&&a.dataset&&a.dataset.ck,pos=a&&a.selectionStart;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;if(aid){const i=p.querySelector('[data-ck="'+aid+'"]');if(i){i.focus();try{i.setSelectionRange(pos,pos);}catch(_){}}}}
 /* ---- shop page: + buttons on the menu, basket bar in place of the footer ---- */
 function miThumb(v,it){return it[2]?`<span class="mi-th" style="background-image:url(${it[2]})"></span>`:`<span class="mi-th ic">${S(ICON[v.cat])}</span>`;}
-function menuHtml(v){const q=cartOf(v.id);return`<div class="m-card mi-list" style="padding:4px 16px">${v.items.map((it,k)=>{const n=q[k]||0;
+function menuHtml(v){const q=cartOf(v.id);
+  const cp=it=>{const p=String(it[4]||'').split(/\s*(?:·|\/|>|-)\s*/).filter(Boolean);return[p[0]||'',p.slice(1).join(' · ')];};
+  const tops=[...new Set(v.items.map(it=>cp(it)[0]).filter(Boolean))];
+  if(tops.length&&v.items.some(it=>cp(it)[1]||tops.length>1)){
+    const sel=(window.MCAT||{})[v.id]||'';const keys=[];v.items.forEach((it,k)=>{const[t,sb]=cp(it);const g=(t||'Other')+'|'+sb;if(!keys.includes(g))keys.push(g);});
+    keys.sort((a,b)=>{const ta=a.split('|')[0],tb=b.split('|')[0];return(ta==='Other')-(tb==='Other')||tops.indexOf(ta)-tops.indexOf(tb);});
+    const row=(it,k)=>{const n=q[k]||0;return`<div class="m-price mi-row" data-mitem="${k}">${miThumb(v,it)}<span class="pp">${it[0]}${it[3]?`<i class="mi-d">${it[3]}</i>`:''}<small>${naira(it[1])}</small></span><span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></div>`;};
+    const chips=tops.length>1?`<div class="mi-cats">${['',...tops].map(t=>`<button type="button" data-micat="${t}" class="${sel===t?'on':''}">${t||'All'}</button>`).join('')}</div>`:'';
+    return chips+keys.filter(g=>!sel||g.split('|')[0]===sel).map(g=>{const[t,sb]=g.split('|');const its=v.items.map((it,k)=>[it,k]).filter(([it])=>((cp(it)[0]||'Other')+'|'+cp(it)[1])===g);
+      const head=(sel||tops.length<2)?(sb||t):(sb?t+' · '+sb:t);
+      return`<div class="mi-gh">${head}</div><div class="m-card mi-list" style="padding:4px 16px">${its.map(([it,k])=>row(it,k)).join('')}</div>`;}).join('');}
+  return`<div class="m-card mi-list" style="padding:4px 16px">${v.items.map((it,k)=>{const n=q[k]||0;
   return`<div class="m-price mi-row" data-mitem="${k}">${miThumb(v,it)}<span class="pp">${it[0]}${it[3]?`<i class="mi-d">${it[3]}</i>`:''}<small>${naira(it[1])}</small></span><span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></div>`;}).join('')}</div>`;}
 function baskHtml(v){const n=count(v);return`<button type="button" class="m-bask" data-mbask="${v.id}"><span>View basket · ${n} item${n===1?'':'s'}</span><em><i>${naira(sub(v))}</i></em></button>`;}
 /* ---- checkout ---- */
@@ -4631,7 +4642,7 @@ html body.m2on .mi-sh .sc{position:absolute;inset:0;background:rgba(0,0,0,.45)}
 html body.m2on .mi-sh .bx{position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:#17171B;color:#fff;border-radius:28px 28px 0 0;padding:0 0 calc(18px + env(safe-area-inset-bottom));scrollbar-width:none}
 html body.m2on .mi-sh .bx::-webkit-scrollbar{display:none}
 html body.m2on.m-light .mi-sh .bx{background:#fff;color:#121215}
-html body.m2on .mi-sh .ph{height:230px;background:#26262B center/cover no-repeat;display:grid;place-items:center;border-radius:28px 28px 0 0}
+html body.m2on .mi-sh .ph{height:min(58vh,460px);transition:transform .22s ease,opacity .22s ease;background:#26262B center/cover no-repeat;display:grid;place-items:center;border-radius:28px 28px 0 0}
 html body.m2on.m-light .mi-sh .ph{background-color:#F1F1F3}
 html body.m2on .mi-sh .ph.ic{height:120px}
 html body.m2on .mi-sh .ph.ic svg{width:34px;height:34px;opacity:.6}
@@ -4649,14 +4660,41 @@ html body.m2on .mi-sh .mi-qn{min-width:20px;text-align:center;font:600 17px 'DM 
 html body.m2on .mi-sh .ad{flex:1;height:54px;border:0;border-radius:27px;background:#fff;color:#121215;font:700 15.5px 'DM Sans',sans-serif}
 html body.m2on.m-light .mi-sh .ad{background:#121215;color:#fff}
 html body.m2on .ch-tabs{margin:2px 0 18px}
+html body.m2on .mi-sh .bx{touch-action:pan-y}
+html body.m2on .mi-sh .ct{position:absolute;top:14px;left:14px;height:32px;padding:0 12px;border-radius:16px;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;font:600 13px 'DM Sans',sans-serif}
+html body.m2on .mi-sh .dt{display:flex;justify-content:center;gap:6px;padding:12px 0 0}
+html body.m2on .mi-sh .dt i{width:6px;height:6px;border-radius:3px;background:currentColor;opacity:.22;transition:width .2s,opacity .2s}
+html body.m2on .mi-sh .dt i.on{width:18px;opacity:.8}
+html body.m2on .mi-sh .in.sw{animation:miIn .22s ease}
+@keyframes miIn{from{opacity:.3}to{opacity:1}}
+html body.m2on .mi-cats{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding:0 1px}
+html body.m2on .mi-cats::-webkit-scrollbar{display:none}
+html body.m2on .mi-cats button{flex:none;height:36px;padding:0 16px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:transparent;color:inherit;font:600 14px 'DM Sans',sans-serif}
+html body.m2on .mi-cats button.on{background:#fff;color:#121215;border-color:#fff}
+html body.m2on.m-light .mi-cats button{border-color:rgba(0,0,0,.14)}
+html body.m2on.m-light .mi-cats button.on{background:#121215;color:#fff;border-color:#121215}
+html body.m2on .mi-gh{font:700 15px 'DM Sans',sans-serif;margin:18px 2px 8px;opacity:.9}
+html body.m2on .mi-cats+.mi-gh{margin-top:4px}
 `;document.head.appendChild(css);
 const sh=document.createElement('div');sh.className='mi-sh';sh.id='miSh';document.body.appendChild(sh);
 let IT=null;
+/* the items in the order the menu shows them (respects the chosen category) */
+const ORD=()=>{const ks=[...document.querySelectorAll('#mSub [data-mitem]')].map(r=>Number(r.dataset.mitem));return ks.length?ks:(IT?[IT.k]:[]);};
+function go(d){if(!IT)return;const o=ORD(),i=o.indexOf(IT.k),j=i+d;if(i<0||j<0||j>=o.length){const ph=sh.querySelector('.ph');if(ph){ph.style.transform='translateX('+(-d*18)+'px)';setTimeout(()=>{ph.style.transform='';},160);}return;}
+  IT.k=o[j];IT.q=1;IT.sw=1;draw();IT.sw=0;const ph=sh.querySelector('.ph');if(ph){ph.style.transition='none';ph.style.transform='translateX('+(d*40)+'%)';ph.style.opacity='.4';requestAnimationFrame(()=>requestAnimationFrame(()=>{ph.style.transition='';ph.style.transform='';ph.style.opacity='';}));}}
+let TX=null,TY=0;
+sh.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;TX=e.touches[0].clientX;TY=e.touches[0].clientY;},{passive:true});
+sh.addEventListener('touchmove',e=>{if(TX===null)return;const dx=e.touches[0].clientX-TX,dy=e.touches[0].clientY-TY;const ph=sh.querySelector('.ph');if(ph&&Math.abs(dx)>Math.abs(dy)){ph.style.transition='none';ph.style.transform='translateX('+dx*.5+'px)';}},{passive:true});
+sh.addEventListener('touchend',e=>{if(TX===null)return;const dx=e.changedTouches[0].clientX-TX,dy=e.changedTouches[0].clientY-TY;TX=null;const ph=sh.querySelector('.ph');if(ph){ph.style.transition='';ph.style.transform='';}
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3)go(dx<0?1:-1);},{passive:true});
+addEventListener('keydown',e=>{if(!IT)return;if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
 const close=()=>{sh.classList.remove('on');IT=null;};
 function draw(){if(!IT)return;const v=vOf(IT.id),it=v.items[IT.k];if(!it)return close();
   sh.innerHTML=`<div class="sc" data-mix="1"></div><div class="bx" role="dialog" aria-label="${it[0]}">
     ${it[2]?`<div class="ph" style="background-image:url(${it[2]})"></div>`:`<div class="ph ic">${S(ICON[v.cat])}</div>`}<button type="button" class="x" data-mix="1" aria-label="Close">×</button>
-    <div class="in"><h3>${it[0]}</h3><div class="pr">${naira(it[1])}</div>${it[3]?`<p>${it[3]}</p>`:`<p>Ask ${v.name} in chat if you'd like to know more about this.</p>`}</div>
+    ${ORD().length>1?`<span class="ct">${ORD().indexOf(IT.k)+1} of ${ORD().length}</span>`:''}
+    ${ORD().length>1&&ORD().length<=12?`<div class="dt">${ORD().map(k=>`<i class="${k===IT.k?'on':''}"></i>`).join('')}</div>`:''}
+    <div class="in${IT.sw?' sw':''}"><h3>${it[0]}</h3><div class="pr">${naira(it[1])}</div>${it[3]?`<p>${it[3]}</p>`:`<p>Ask ${v.name} in chat if you'd like to know more about this.</p>`}</div>
     <div class="mi-ft"><span class="mi-qa"><button type="button" class="mi-qb" data-miq="-1" aria-label="One less">−</button><span class="mi-qn">${IT.q}</span><button type="button" class="mi-qb" data-miq="1" aria-label="One more">+</button></span>
     <button type="button" class="ad" data-miadd="1">Add ${IT.q>1?IT.q+' ':''}· ${naira((typeof it[1]==='string'?Number(String(it[1]).replace('from ','')):Number(it[1]))*IT.q)}</button></div></div>`;}
 document.addEventListener('click',e=>{
@@ -4668,6 +4706,7 @@ document.addEventListener('click',e=>{
     return;}
   const r=t.closest('#mSub [data-mitem]');
   if(r&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();IT={id:CUR.id,k:Number(r.dataset.mitem),q:1};draw();requestAnimationFrame(()=>sh.classList.add('on'));return;}
+  const mc=t.closest('#mSub [data-micat]');if(mc){e.preventDefault();e.stopImmediatePropagation();window.MCAT=window.MCAT||{};MCAT[CUR.id]=mc.dataset.micat;const p=$('#mSub');if(p){const y=p.scrollTop;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;}return;}
   const ct=t.closest('[data-chtab]');if(ct){e.preventDefault();e.stopImmediatePropagation();CHTAB=ct.dataset.chtab;try{$('#mPage').innerHTML=m2Page('chats');}catch(_){}return;}
 },true);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&IT)close();});
