@@ -4050,7 +4050,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   v.about=['Message us and our assistant replies right away'];const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>clean(x).replace(/\.$/,'')).filter(Boolean).slice(0,2);if(ab.length)v.about=ab;
   if(safeUrl(d.avatar))v.img=safeUrl(d.avatar);v.cover=safeUrl(d.cover);
   if(clean(d.location))v.place=clean(d.location);
-  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0)]);if(it.length)v.items=it.slice(0,30);
+  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||'')]);if(it.length)v.items=it.slice(0,30);
   const w=waDigits(d.whatsapp);if(w)v.wa=w;
   if(d.defaultFee&&v.deliv)v.deliv.fee=Math.max(0,Number(d.defaultFee)||0)||v.deliv.fee;
   const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
@@ -4464,28 +4464,29 @@ const isReal=v=>!!v.sid;
 const fee=v=>v.deliv?Number(v.deliv.fee)||0:0;
 let GR={};/* open groups per shop from the server */
 function groupsFor(v){if(isReal(v))return GR[v.id]||[];const g=GROUPS[v.id];return g?[{id:'demo',hall:g.hall,size:g.need,joined:g.n,share:share(v,g.n+1),demo:1}]:[];}
-function delivery(v){if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(CK.mode==='new')return Math.ceil(fee(v)/4/10)*10;const g=groupsFor(v).find(x=>x.id===CK.mode);return g?g.share:fee(v);}
+function delivery(v){if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(CK.mode==='new')return Math.ceil(fee(v)/4);const g=groupsFor(v).find(x=>x.id===CK.mode);return g?g.share:fee(v);}
 function rer(){const p=$('#mSub');if(!p)return;const y=p.scrollTop,a=document.activeElement,aid=a&&a.dataset&&a.dataset.ck,pos=a&&a.selectionStart;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;if(aid){const i=p.querySelector('[data-ck="'+aid+'"]');if(i){i.focus();try{i.setSelectionRange(pos,pos);}catch(_){}}}}
 /* ---- shop page: + buttons on the menu, basket bar in place of the footer ---- */
-function menuHtml(v){const q=cartOf(v.id);return`<div class="m-card" style="padding:4px 16px">${v.items.map((it,k)=>{const n=q[k]||0;
-  return`<div class="m-price"><span class="pp">${it[0]}<small>${naira(it[1])}</small></span><span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></div>`;}).join('')}</div>`;}
+function miThumb(v,it){return it[2]?`<span class="mi-th" style="background-image:url(${it[2]})"></span>`:`<span class="mi-th ic">${S(ICON[v.cat])}</span>`;}
+function menuHtml(v){const q=cartOf(v.id);return`<div class="m-card mi-list" style="padding:4px 16px">${v.items.map((it,k)=>{const n=q[k]||0;
+  return`<div class="m-price mi-row" data-mitem="${k}">${miThumb(v,it)}<span class="pp">${it[0]}${it[3]?`<i class="mi-d">${it[3]}</i>`:''}<small>${naira(it[1])}</small></span><span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></div>`;}).join('')}</div>`;}
 function baskHtml(v){const n=count(v);return`<button type="button" class="m-bask" data-mbask="${v.id}"><span>View basket · ${n} item${n===1?'':'s'}</span><em><i>${naira(sub(v))}</i></em></button>`;}
 /* ---- checkout ---- */
 function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   if(!L.length)return`<div class="m-h c">${back()}<h1>Basket</h1><span style="width:46px"></span></div><div class="m-empty"><span class="ei">${mS('bag')||''}</span><b>Your basket is empty</b>Add something from ${v.name}'s menu.</div>`;
   const opt=(id,b,sp,em,was)=>`<button type="button" class="ck-o${CK.mode===id?' on':''}" data-ckmode="${id}"><span class="rd"></span><div><b>${b}</b><span>${sp}</span></div><em>${em}${was?`<s>${was}</s>`:''}</em></button>`;
-  const hallKeys=HALLS.map(h=>h[0]==='off'?'Off campus':h[1]+(h[0]==='pg'?'':' Hall'));
+  const hallKeys=HALLS.filter(h=>h[0]!=='off').map(h=>h[1]+(h[0]==='pg'?'':' Hall')).concat(PLACES_EXTRA);
   return`<div class="m-h c">${back()}<h1>Checkout</h1><span style="width:46px"></span></div>
   <div class="m-sh" style="margin-top:0"><b>${v.name}</b><span>${L.reduce((a,l)=>a+l.qty,0)} item${L.length===1&&L[0].qty===1?'':'s'}</span></div>
   <div class="m-card" style="padding:2px 16px">${L.map(l=>`<div class="ck-l"><div><b>${l.name}</b><span>${naira(l.price)} each</span></div><span class="qa"><button type="button" class="qb" data-mdec="${l.i}" aria-label="One less">${MINUS}</button><span class="qn">${l.qty}</span><button type="button" class="qb" data-madd="${l.i}" aria-label="One more">${PLUS}</button></span></div>`).join('')}</div>
   ${v.deliv?`<div class="m-sh"><b>Delivery</b><span>Pick one</span></div><div class="m-card" style="padding:2px 16px">
     ${opt('solo','Just me','To your door, '+v.deliv.eta,naira(fee(v)))}
-    ${G.map(g=>opt(g.id,'Join the group to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),naira(fee(v)))).join('')}
-    ${opt('new','Start a group for your hall','Up to 4 people. Your share drops the fee',naira(Math.ceil(fee(v)/4/10)*10),naira(fee(v)))}
+    ${G.map(g=>opt(g.id,'Join the group going to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),naira(fee(v)))).join('')}
+    ${opt('new','Start a group for '+(CK.hall?String(CK.hall).split(',')[0].slice(0,28):'where you are'),'Up to 4 people nearby. One rider, everyone pays less',naira(Math.ceil(fee(v)/4)),naira(fee(v)))}
   </div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
-    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="Hall and room, like Moremi Hall, Block 3" value="${(CK.hall||'').replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl">${hallKeys.map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
+    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="Hall, room or area, like Moremi Hall, Block 3" value="${(CK.hall||'').replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.hall==='My location'?'on':''}">Use my location</button>${hallKeys.map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
     <label class="ck-f"><span>WhatsApp number</span><input data-ck="phone" type="tel" inputmode="tel" placeholder="0803 123 4567" value="${(CK.phone||'').replace(/"/g,'&quot;')}" autocomplete="tel"></label>
     <label class="ck-f"><span>Your name</span><input data-ck="name" type="text" placeholder="First name" value="${(CK.name||'').replace(/"/g,'&quot;')}" autocomplete="given-name"></label>
     <label class="ck-f"><span>Note for the shop</span><input data-ck="note" type="text" placeholder="Optional, like extra pepper" value="${(CK.note||'').replace(/"/g,'&quot;')}"></label>
@@ -4612,6 +4613,96 @@ async function shopCard(v,url,noImg){
   if(!blob){if(!noImg)return shopCard(v,url,true);throw new Error('no picture');} // a photo without CORS taints the canvas: draw it plain instead
   return new File([blob],(v.name||'shop').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'-stafly.png',{type:'image/png'});
 }
+</script>
+<script>
+/* ---- v119: menu photos and descriptions, item sheet, place-based groups, Chats tabs, branded share picture ---- */
+const PLACES_EXTRA=['SUB','Faculty of Tech','Library','Sports Complex','Asherifa','Mayfair','Fasina','Lagere','Parakin','Damico'];
+(function(){
+const css=document.createElement('style');css.id='v119';css.textContent=`
+html body.m2on .mi-row{display:flex;align-items:center;gap:12px;cursor:pointer}
+html body.m2on .mi-row .pp{flex:1;min-width:0}
+html body.m2on .mi-th{flex:none;width:56px;height:56px;border-radius:14px;background:#26262B center/cover no-repeat;display:grid;place-items:center}
+html body.m2on .mi-th.ic svg{width:22px;height:22px;opacity:.75}
+html body.m2on.m-light .mi-th{background-color:#F1F1F3}
+html body.m2on .mi-d{display:block;font-style:normal;font-size:12.5px;line-height:1.35;opacity:.62;margin:2px 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on .mi-sh{position:fixed;inset:0;z-index:5000;display:none}
+html body.m2on .mi-sh.on{display:block}
+html body.m2on .mi-sh .sc{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+html body.m2on .mi-sh .bx{position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:#17171B;color:#fff;border-radius:28px 28px 0 0;padding:0 0 calc(18px + env(safe-area-inset-bottom));scrollbar-width:none}
+html body.m2on .mi-sh .bx::-webkit-scrollbar{display:none}
+html body.m2on.m-light .mi-sh .bx{background:#fff;color:#121215}
+html body.m2on .mi-sh .ph{height:230px;background:#26262B center/cover no-repeat;display:grid;place-items:center;border-radius:28px 28px 0 0}
+html body.m2on.m-light .mi-sh .ph{background-color:#F1F1F3}
+html body.m2on .mi-sh .ph.ic{height:120px}
+html body.m2on .mi-sh .ph.ic svg{width:34px;height:34px;opacity:.6}
+html body.m2on .mi-sh .x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;display:grid;place-items:center;font:600 20px/1 'DM Sans',sans-serif}
+html body.m2on .mi-sh .in{padding:20px 22px 0}
+html body.m2on .mi-sh h3{margin:0;font:700 22px/1.2 'DM Sans',sans-serif;letter-spacing:-.01em}
+html body.m2on .mi-sh .pr{margin:6px 0 0;font:600 16px 'DM Sans',sans-serif;opacity:.85}
+html body.m2on .mi-sh p{margin:12px 0 0;font:400 14.5px/1.5 'DM Sans',sans-serif;opacity:.72}
+html body.m2on .mi-sh .mi-ft{display:flex;align-items:center;gap:12px;padding:18px 22px 18px;position:sticky;bottom:0;background:inherit}
+html body.m2on .mi-sh .bx{padding-bottom:calc(14px + env(safe-area-inset-bottom))!important}
+html body.m2on .mi-sh .mi-qa{display:flex;align-items:center;gap:10px}
+html body.m2on .mi-sh .mi-qb{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:500 22px/1 'DM Sans',sans-serif;display:grid;place-items:center;padding:0}
+html body.m2on.m-light .mi-sh .mi-qb{border-color:rgba(0,0,0,.14)}
+html body.m2on .mi-sh .mi-qn{min-width:20px;text-align:center;font:600 17px 'DM Sans',sans-serif}
+html body.m2on .mi-sh .ad{flex:1;height:54px;border:0;border-radius:27px;background:#fff;color:#121215;font:700 15.5px 'DM Sans',sans-serif}
+html body.m2on.m-light .mi-sh .ad{background:#121215;color:#fff}
+html body.m2on .ch-tabs{margin:2px 0 18px}
+`;document.head.appendChild(css);
+const sh=document.createElement('div');sh.className='mi-sh';sh.id='miSh';document.body.appendChild(sh);
+let IT=null;
+const close=()=>{sh.classList.remove('on');IT=null;};
+function draw(){if(!IT)return;const v=vOf(IT.id),it=v.items[IT.k];if(!it)return close();
+  sh.innerHTML=`<div class="sc" data-mix="1"></div><div class="bx" role="dialog" aria-label="${it[0]}">
+    ${it[2]?`<div class="ph" style="background-image:url(${it[2]})"></div>`:`<div class="ph ic">${S(ICON[v.cat])}</div>`}<button type="button" class="x" data-mix="1" aria-label="Close">×</button>
+    <div class="in"><h3>${it[0]}</h3><div class="pr">${naira(it[1])}</div>${it[3]?`<p>${it[3]}</p>`:`<p>Ask ${v.name} in chat if you'd like to know more about this.</p>`}</div>
+    <div class="mi-ft"><span class="mi-qa"><button type="button" class="mi-qb" data-miq="-1" aria-label="One less">−</button><span class="mi-qn">${IT.q}</span><button type="button" class="mi-qb" data-miq="1" aria-label="One more">+</button></span>
+    <button type="button" class="ad" data-miadd="1">Add ${IT.q>1?IT.q+' ':''}· ${naira((typeof it[1]==='string'?Number(String(it[1]).replace('from ','')):Number(it[1]))*IT.q)}</button></div></div>`;}
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(sh.contains(t)){e.preventDefault();e.stopImmediatePropagation();
+    if(t.closest('[data-mix]'))return close();
+    const q=t.closest('[data-miq]');if(q){IT.q=Math.max(1,Math.min(20,IT.q+Number(q.dataset.miq)));return draw();}
+    if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;close();const b=document.querySelector('#mSub [data-madd="'+k+'"]');if(b){for(let i=0;i<n;i++){const bb=document.querySelector('#mSub [data-madd="'+k+'"]');bb&&bb.click();}}return;}
+    return;}
+  const r=t.closest('#mSub [data-mitem]');
+  if(r&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();IT={id:CUR.id,k:Number(r.dataset.mitem),q:1};draw();requestAnimationFrame(()=>sh.classList.add('on'));return;}
+  const ct=t.closest('[data-chtab]');if(ct){e.preventDefault();e.stopImmediatePropagation();CHTAB=ct.dataset.chtab;try{$('#mPage').innerHTML=m2Page('chats');}catch(_){}return;}
+},true);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&IT)close();});
+})();
+/* Chats: two tabs, Messages and Orders */
+let CHTAB='messages';
+(function(){const _pg=window.m2Page;window.m2Page=function(t){let h=_pg.apply(this,arguments);
+  if(t!=='chats'||typeof h!=='string')return h;
+  let mine=[];try{mine=JSON.parse(localStorage.getItem('stafly_orders')||'[]');}catch(_){}
+  // take out the "Your orders" block an earlier version put on top
+  h=h.replace(/<div class="m-sh" style="margin-top:0"><b>Your orders<\/b>[\s\S]*?<div class="m-sh"><b>Messages<\/b><\/div>/,'');
+  const head=h.match(/^[\s\S]*?<div class="m-h"><h1>Chats<\/h1><\/div>/);if(!head)return h;
+  const tabs=`<div class="lv-tabs ch-tabs">${[['messages','Messages'],['orders','Orders'+(mine.length?' ('+mine.length+')':'')]].map(([k,l])=>`<button type="button" data-chtab="${k}" class="${CHTAB===k?'on':''}">${l}</button>`).join('')}</div>`;
+  if(CHTAB!=='orders')return head[0]+tabs+h.slice(head[0].length);
+  let list='';try{const sub=m2Sub('mine');list=sub.replace(/^[\s\S]*?<\/div>/,'');}catch(_){list='';}
+  return head[0]+tabs+(list||'<div class="m-empty"><b>No orders yet</b>When you order from a shop, you can follow it here.</div>');};})();
+/* Checkout: "Use my location" adds a map pin to the note so the rider finds you anywhere */
+(function(){document.addEventListener('click',e=>{const b=e.target.closest('[data-ckloc]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();
+  if(!navigator.geolocation)return;b.textContent='Finding you…';
+  navigator.geolocation.getCurrentPosition(p=>{const la=p.coords.latitude.toFixed(5),lo=p.coords.longitude.toFixed(5);
+    try{CK.hall='My location';CK.pin=la+','+lo;const pin='Pin: https://maps.google.com/?q='+la+','+lo;if((CK.note||'').indexOf('Pin: ')<0)CK.note=((CK.note||'')+' '+pin).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}catch(_){}
+    const s2=document.querySelector('#mSub');if(s2){const y=s2.scrollTop;s2.innerHTML=m2Sub(CUR.s,CUR.id);s2.scrollTop=y;}},
+    ()=>{b.textContent='Location is off';},{enableHighAccuracy:true,timeout:9000});},true);})();
+/* share picture: Stafly header so it always carries the brand */
+const SFMARK='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="5562 5561 17451 17451" aria-hidden="true"><path fill="#5B2FD4" d="M10492 5562l7590 0c2711,0 4930,2218 4930,4930l0 7590c0,2711 -2218,4930 -4930,4930l-4806 0c3680,-2 6691,-3013 6691,-6694l0 -1017c0,-3682 -3012,-6694 -6694,-6694l-1017 0c-3682,0 -6694,3012 -6694,6694l0 -4810c0,-2711 2218,-4930 4930,-4930z"/><path fill="#5B2FD4" d="M11610 9996l921 0c3326,0 6048,2722 6048,6048l0 921c0,3326 -2722,6048 -6048,6048l-921 0c-155,0 -309,-6 -462,-18 538,-46 1051,-181 1525,-390l4 -2c32,-14 65,-29 97,-44l5 -2c31,-15 63,-30 94,-45l8 -4c31,-15 62,-31 92,-47l5 -3c31,-16 62,-33 92,-50l6 -3c30,-17 60,-34 90,-52l7 -4c30,-18 60,-36 89,-54l2 -1c279,-172 539,-373 776,-596l7 -7c25,-23 49,-47 74,-71l5 -5c22,-22 43,-43 64,-65l17 -17c18,-19 37,-39 55,-58l23 -25c17,-19 34,-38 52,-57l23 -25c17,-20 34,-39 51,-59l23 -27c16,-19 32,-39 48,-58l24 -29c15,-19 30,-38 45,-57l26 -34c14,-19 28,-37 42,-56l24 -32c14,-20 29,-40 43,-60l22 -31c14,-20 28,-40 42,-61l23 -34c13,-20 26,-40 39,-60l23 -38c12,-19 24,-38 35,-57l24 -41c11,-19 23,-38 34,-57 8,-13 15,-26 22,-40 11,-20 22,-39 33,-59 7,-13 14,-27 21,-41 11,-20 21,-40 32,-60l0 0c17,-33 33,-66 49,-99 11,-23 22,-47 33,-70 5,-10 10,-21 15,-31 8,-19 17,-37 25,-56 7,-17 15,-33 22,-50 8,-18 15,-36 23,-54 7,-17 14,-34 21,-51 7,-18 14,-36 21,-54 7,-18 14,-36 21,-54 6,-17 12,-34 19,-52 7,-19 14,-38 20,-57 6,-17 12,-35 17,-52 6,-20 13,-39 19,-59 5,-17 11,-35 16,-52 6,-19 12,-38 17,-57 5,-18 10,-36 15,-54l16 -60 14 -52c5,-20 10,-39 14,-59 4,-18 9,-37 13,-56 4,-19 9,-38 13,-58l12 -57c4,-19 8,-39 11,-58l10 -56c4,-21 7,-42 10,-63l8 -52c3,-22 6,-43 9,-65 2,-18 5,-36 7,-54 3,-22 5,-44 8,-65 2,-17 4,-33 6,-50 2,-24 4,-48 6,-73 1,-16 3,-31 4,-47 2,-24 3,-49 5,-74 1,-15 2,-30 3,-46 1,-29 2,-58 3,-86 0,-11 1,-22 1,-34 1,-40 2,-81 2,-121l0 -355c0,-2652 -2170,-4823 -4823,-4823l-355 0c-41,0 -81,0 -121,2l-34 1c-29,1 -58,2 -86,3 -15,1 -30,2 -46,3 -25,1 -49,3 -74,5 -16,1 -32,3 -47,4 -24,2 -48,4 -73,6 -17,2 -34,4 -50,6 -22,2 -44,5 -65,8l-54 7c-22,3 -43,6 -65,9 -17,3 -35,5 -52,8 -21,3 -42,7 -63,10l-56 10 -58 11c-19,4 -38,8 -57,12l-58 13c-19,4 -37,9 -56,13 -20,5 -39,9 -59,14l-52 14c-20,5 -40,11 -60,16 -18,5 -36,10 -54,15 -19,6 -38,11 -57,17 -17,5 -35,11 -52,16 -20,6 -39,13 -59,19 -17,6 -35,11 -52,17 -19,7 -38,13 -57,20 -17,6 -34,12 -52,19 -18,7 -36,14 -54,21 -18,7 -36,14 -54,21 -17,7 -34,14 -51,21 -18,7 -36,15 -54,23 -17,7 -33,15 -50,22 -19,8 -37,16 -56,25l-31 15c-24,11 -47,22 -70,33 -33,16 -66,33 -99,49l0 0c-20,10 -40,21 -60,32 -14,7 -27,14 -41,21 -20,11 -39,22 -59,33 -13,7 -27,15 -40,22 -19,11 -38,22 -57,34 -14,8 -27,16 -41,24 -19,12 -38,24 -57,35 -13,8 -25,16 -38,23 -20,13 -40,26 -60,39l-34 23c-20,14 -41,28 -61,42l-31 22c-20,14 -40,28 -60,43l-32 24c-19,14 -38,28 -56,42l-34 26c-19,15 -38,30 -57,45l-29 24c-19,16 -39,32 -58,48l-27 23c-20,17 -40,34 -59,51l-25 23c-19,17 -38,34 -57,52l-25 23c-19,18 -39,36 -58,55l-17 17c-22,21 -44,43 -65,64l-5 5c-24,24 -48,49 -71,74l-7 7c-224,237 -424,497 -596,776l-1 2c-18,30 -36,59 -54,89l-4 7c-18,30 -35,60 -52,90l-3 6c-17,31 -34,61 -50,92l-3 5c-16,31 -32,61 -47,92l-4 8c-15,31 -31,62 -45,94l-2 5c-15,32 -30,64 -44,97l-2 4c-209,474 -344,987 -390,1525 -12,-152 -18,-306 -18,-462l0 -921c0,-3326 2722,-6048 6048,-6048zm3474 10282c11,-23 22,-47 33,-70l-33 70zm-6716 -6820c-24,11 -47,22 -70,33l70 -33z"/><rect x="5796" y="14502" width="8277" height="8277" rx="3837" fill="#8B5CF6"/></svg>`);
+(function(){if(typeof shopCard!=='function')return;const _sc=shopCard;window.shopCard=shopCard=async function(v,url,noImg){
+  const f=await _sc(v,url,noImg);try{
+    const bmp=await createImageBitmap(f),c=document.createElement('canvas');c.width=bmp.width;c.height=bmp.height+150;const x=c.getContext('2d');
+    x.fillStyle='#F5F5F6';x.fillRect(0,0,c.width,c.height);x.drawImage(bmp,0,150);
+    const m=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=SFMARK;});
+    if(m)x.drawImage(m,60,62,76,76);
+    x.fillStyle='#121215';x.font='700 44px "DM Sans", system-ui, sans-serif';x.textBaseline='middle';x.fillText('Stafly Search',156,102);
+    x.fillStyle='#6B6B75';x.font='500 34px "DM Sans", system-ui, sans-serif';x.textAlign='right';x.fillText('OAU',c.width-60,102);
+    const b2=await new Promise(r=>c.toBlob(r,'image/png'));if(b2)return new File([b2],f.name,{type:'image/png'});}catch(_){}
+  return f;};})();
 </script>
 </body>
 </html>
