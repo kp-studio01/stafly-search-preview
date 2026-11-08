@@ -3603,7 +3603,7 @@ var SELL={step:0,ph:'',sent:false,name:'',cat:null,tag:'',area:null,spot:'',open
 const SL_HRS=[];for(let m=300;m<=1380;m+=60)SL_HRS.push(m);
 const slOk=()=>{const S_=SELL;return S_.step===1?S_.sent&&false:S_.step===2?S_.name.trim().length>1&&S_.cat:S_.step===3?S_.area&&S_.deliv!==null:S_.step===4?true:true;};
 function sellPage(){const S_=SELL,st=S_.step,hall=(HALLS.find(h=>h[0]===S_.area)||[0,''])[1];
-  const ok=st===2?S_.name.trim().length>1&&S_.cat:st===3?!!S_.area&&S_.deliv!==null:true;
+  const ok=st===2?S_.name.trim().length>1&&S_.cat&&(!(TYPES[S_.cat]||[]).length||!!S_.type):st===3?!!S_.area&&S_.deliv!==null:true;
   const foot=st===0?`<div class="sl-foot one"><button class="sl-next" type="button" data-slgo="${USER?2:1}">Get started</button></div>`
    :st===5?`<div class="sl-foot one"><a class="sl-next" href="https://kp-assistant.onrender.com/dashboard" target="_blank" rel="noopener">Go to your dashboard</a></div>`
    :`<div class="sl-foot"><div class="sl-prog"><i style="width:${st*25}%"></i></div><div class="sl-fr"><button type="button" class="sl-bk" data-slback="1">Back</button>${st===1?(S_.sent?`<button class="sl-next" type="button" disabled>Next</button>`:`<button class="sl-next" type="button" data-slsend="1" ${S_.ph.replace(/\D/g,'').replace(/^0/,'').length>=10?'':'disabled'}>Send code</button>`):`<button class="sl-next" type="button" data-slgo="${st+1}" ${ok?'':'disabled'}>${st===4?(S_.logo||S_.cover?'Finish':'Skip for now'):'Next'}</button>`}</div></div>`;
@@ -3621,6 +3621,7 @@ function sellPage(){const S_=SELL,st=S_.step,hall=(HALLS.find(h=>h[0]===S_.area)
     <input class="sl-box" id="slNm" type="text" placeholder="Shop name" value="${S_.name}">
     <h2 class="sl-h2">What do you sell?</h2>
     <div class="sl-grid">${CATS.filter(c=>c[0]!=='all').map(([k,l])=>`<button type="button" class="${S_.cat===k?'on':''}" data-slcat="${k}">${S(ICON[k])}<span>${l}</span></button>`).join('')}</div>
+    ${S_.cat&&(TYPES[S_.cat]||[]).length?`<h2 class="sl-h2">Which one is closest?</h2><div class="sl-tags">${TYPES[S_.cat].map(([k,l])=>`<button type="button" class="${S_.type===k?'on':''}" data-sltype="${k}">${l}</button>`).join('')}</div>`:''}
     <h2 class="sl-h2">Describe it in one line <em>Optional</em></h2>
     <input class="sl-box" id="slTg" type="text" maxlength="60" placeholder="Party jollof, every afternoon" value="${S_.tag}">`;
   if(st===3)b=`<h1 class="sl-h">Where and when can buyers find you?</h1>
@@ -3656,7 +3657,8 @@ document.addEventListener('click',e=>{const t=e.target,a=q=>t.closest(q);let el;
   if(el=a('[data-slgo]')){if(el.disabled)return;halt();return sellGo(+el.dataset.slgo);}
   if(el=a('[data-slsend]')){halt();if(el.disabled)return;SELL.sent=true;return sellGo();}
   if(a('[data-slre]')){halt();SELL.sent=false;return sellGo();}
-  if(el=a('[data-slcat]')){halt();SELL.cat=el.dataset.slcat;return sellGo();}
+  if(el=a('[data-slcat]')){halt();if(SELL.cat!==el.dataset.slcat)SELL.type=null;SELL.cat=el.dataset.slcat;return sellGo();}
+  if(el=a('[data-sltype]')){halt();SELL.type=el.dataset.sltype;return sellGo();}
   if(el=a('[data-slarea]')){halt();SELL.area=el.dataset.slarea;return sellGo();}
   if(el=a('[data-sldel]')){halt();SELL.deliv=el.dataset.sldel==='1';return sellGo();}
   if(el=a('[data-slfee]')){halt();SELL.fee=+el.dataset.slfee;return sellGo();}},true);
