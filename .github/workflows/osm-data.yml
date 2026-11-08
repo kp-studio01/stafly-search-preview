@@ -11,7 +11,7 @@ jobs:
       - name: Ask OpenStreetMap
         run: |
           mkdir -p v12/data
-          Q='[out:json][timeout:60];(nwr["amenity"~"restaurant|fast_food|cafe|food_court|canteen|bar|ice_cream|marketplace|pharmacy|bank|atm|clinic|hospital|library|place_of_worship|fuel|post_office"](7.500,4.500,7.540,4.550);nwr["leisure"~"fitness_centre|sports_centre|stadium|swimming_pool|pitch|track|park|sports_hall"](7.500,4.500,7.540,4.550);nwr["shop"](7.500,4.500,7.540,4.550);nwr["tourism"](7.500,4.500,7.540,4.550););out center tags;'
+          Q='[out:json][timeout:60];(nwr["amenity"~"restaurant|fast_food|cafe|food_court|canteen|bar|ice_cream|marketplace|pharmacy|bank|atm|clinic|hospital|library|place_of_worship|fuel|post_office"](7.500,4.500,7.540,4.550);nwr["leisure"~"fitness_centre|sports_centre|stadium|swimming_pool|pitch|track|park|sports_hall"](7.500,4.500,7.540,4.550);nwr["shop"](7.500,4.500,7.540,4.550);nwr["tourism"](7.500,4.500,7.540,4.550););out tags geom;'
           for host in https://overpass-api.de https://overpass.private.coffee https://maps.mail.ru/osm/tools/overpass https://overpass.kumi.systems; do
             code=$(curl -s -m 170 -A "StaflySearchMap/1.0 (+https://github.com/kp-studio01/stafly-search-preview)" -H "Accept: application/json" -o v12/data/oau-osm.json -w '%{http_code}' -X POST "$host/api/interpreter" --data-urlencode "data=$Q" || echo fail)
             echo "$host -> $code"; head -c 300 v12/data/oau-osm.json; echo
