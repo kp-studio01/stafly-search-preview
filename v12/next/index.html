@@ -4675,7 +4675,8 @@ html body.m2on .mi-sh.big .bx>.ph{flex:1;height:auto;border-radius:0;background-
 html body.m2on.m-light .mi-sh.big .bx>.ph{background-color:#fff}
 html body.m2on .mi-sh.big .bx>.in{flex:none;max-height:120px}
 html body.m2on .mi-sh .ph:not(.ic)::after{content:'';position:absolute;right:14px;top:226px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.45) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7'/%3E%3C/svg%3E") center/16px no-repeat}
-html body.m2on .mi-sh.big .ph::after{display:none}
+html body.m2on .mi-sh.big .ph:not(.ic)::after{display:block;width:40px;height:40px;right:16px;bottom:16px;background-size:18px;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7'/%3E%3C/svg%3E")}
+html body.m2on .mi-sh.big .ph:has(.pk)::after{bottom:auto;top:62px}
 html body.m2on .mi-sh .bx>.in{position:relative;flex:none;height:150px;max-height:none;overflow:hidden}
 html body.m2on .mi-sh .bx>.ph{flex:1 1 auto;height:auto;min-height:0}
 html body.m2on .mi-sh:not(.big) .bx>.ph:not(.ic){flex:1 1 260px}
@@ -4729,7 +4730,16 @@ sh.addEventListener('touchmove',e=>{if(TX===null)return;const dx=e.touches[0].cl
 sh.addEventListener('touchend',e=>{if(TX===null)return;const dx=e.changedTouches[0].clientX-TX,dy=e.changedTouches[0].clientY-TY;TX=null;const ph=sh.querySelector('.ph');if(ph){ph.style.transition='';ph.style.transform='';}
   if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3)go(dx<0?1:-1);},{passive:true});
 addEventListener('keydown',e=>{if(!IT)return;if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
-const close=()=>{sh.classList.remove('on','big','open');IT=null;};
+let MIPUSH=false,MISKIP=false;
+const closeRaw=()=>{sh.classList.remove('on','big','open');IT=null;};
+const close=()=>{closeRaw();if(MIPUSH){MIPUSH=false;MISKIP=true;history.back();}};
+const miPush=()=>{if(MIPUSH)return;try{history.pushState(Object.assign({},history.state||{},{mi:1}),'');MIPUSH=true;}catch(_){}};
+addEventListener('popstate',e=>{
+  if(MISKIP){MISKIP=false;e.stopImmediatePropagation();return;}
+  if(!MIPUSH||!IT)return;
+  e.stopImmediatePropagation();MIPUSH=false;
+  if(sh.classList.contains('big')){sh.classList.remove('big');miPush();return;}
+  closeRaw();},true);;
 function draw(){if(!IT)return;const v=vOf(IT.id),it=v.items[IT.k];if(!it)return close();
   sh.innerHTML=`<div class="sc" data-mix="1"></div><div class="bx" role="dialog" aria-label="${it[0]}">
     ${it[2]?(()=>{const P=[it[2],...(it[5]||[])].filter((x,i,a)=>x&&a.indexOf(x)===i).slice(0,4);const pi=Math.min(IT.p||0,P.length-1);
@@ -4751,7 +4761,7 @@ document.addEventListener('click',e=>{
     if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;try{const v0=vOf(IT.id),it0=v0.items[k];if(IT.p>0&&it0&&(it0[5]||[]).length){const tag=it0[0]+': photo '+(IT.p+1);if((CK.note||'').indexOf(tag)<0){CK.note=((CK.note||'')+(CK.note?', ':'')+tag).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}}}catch(_){}close();const b=document.querySelector('#mSub [data-madd="'+k+'"]');if(b){for(let i=0;i<n;i++){const bb=document.querySelector('#mSub [data-madd="'+k+'"]');bb&&bb.click();}}return;}
     return;}
   const r=t.closest('#mSub [data-mitem]');
-  if(r&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();IT={id:CUR.id,k:Number(r.dataset.mitem),q:1};draw();requestAnimationFrame(()=>sh.classList.add('on'));return;}
+  if(r&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();IT={id:CUR.id,k:Number(r.dataset.mitem),q:1};draw();requestAnimationFrame(()=>sh.classList.add('on'));miPush();return;}
   const mc=t.closest('#mSub [data-micat]');if(mc){e.preventDefault();e.stopImmediatePropagation();window.MCAT=window.MCAT||{};MCAT[CUR.id]=mc.dataset.micat;const p=$('#mSub');if(p){const y=p.scrollTop;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;}return;}
   const ct=t.closest('[data-chtab]');if(ct){e.preventDefault();e.stopImmediatePropagation();CHTAB=ct.dataset.chtab;try{$('#mPage').innerHTML=m2Page('chats');}catch(_){}return;}
 },true);
