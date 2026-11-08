@@ -2469,12 +2469,10 @@ html body.m2on .gx-hero{position:relative;overflow:hidden;border-radius:28px;pad
   -webkit-mask:radial-gradient(circle 5px at left center,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 5px at right center,#0000 96%,#000) right/51% 100% no-repeat;
           mask:radial-gradient(circle 5px at left center,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 5px at right center,#0000 96%,#000) right/51% 100% no-repeat}
 .tk-y{background:#F5B000;color:#121215;font-size:13px;margin:6px auto 0 12px;align-self:center}
-html body.m2on .m-empty .ei{background:#F5B000!important;transform:rotate(-8deg);box-shadow:none!important}
-html body.m2on .m-empty .ei svg{color:#121215!important}
-html body.m2on .m-empty b{display:table;margin-left:auto!important;margin-right:auto!important;background:#7551DC;color:#fff!important;padding:6px 16px 7px;font-size:18px;transform:rotate(-2deg);margin-bottom:12px;
+html body.m2on .m-empty b.__off{display:table;margin-left:auto!important;margin-right:auto!important;background:#7551DC;color:#fff!important;padding:6px 16px 7px;font-size:18px;transform:rotate(-2deg);margin-bottom:12px;
   -webkit-mask:radial-gradient(circle 6px at left center,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 6px at right center,#0000 96%,#000) right/51% 100% no-repeat;
           mask:radial-gradient(circle 6px at left center,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 6px at right center,#0000 96%,#000) right/51% 100% no-repeat}
-html body.m2on .lv-empty>b{display:inline-block;background:#F5B000;color:#121215;padding:5px 14px 6px;transform:rotate(-2deg);margin-bottom:6px;
+html body.m2on .lv-empty>b.__off{display:inline-block;background:#F5B000;color:#121215;padding:5px 14px 6px;transform:rotate(-2deg);margin-bottom:6px;
   -webkit-mask:radial-gradient(circle 5px at left center,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 5px at right center,#0000 96%,#000) right/51% 100% no-repeat;
           mask:radial-gradient(circle 5px at left center,#0000 96%,#000) left/51% 100% no-repeat,radial-gradient(circle 5px at right center,#0000 96%,#000) right/51% 100% no-repeat}
 /* fun moments */
@@ -4416,7 +4414,7 @@ const _pg=window.m2Page;window.m2Page=function(t){let h=_pg.apply(this,arguments
     const bar=`<label class="m-field lv-q">${mS('search')}<input id="lvQ" type="search" placeholder="Search Live: laundry, jollof, hair" value="${LVQ.replace(/"/g,'&quot;')}" autocomplete="off" enterkeyhint="search"><button class="flt lvf${act?' on':''}" type="button" data-lvcat="more" aria-label="Filter by category">${mS('sliders')}</button></label>`+
       (act?`<div class="lv-act">${LVSEL.map(k=>`<button type="button" data-lvrm="${k}">${S(ICON[k.slice(0,2)==='g:'?k.slice(2):TYPE_GROUP[k.slice(2)]])}${selL(k)}<b aria-label="Remove">×</b></button>`).join('')}${LVSEL.length>1?'<button type="button" class="ca" data-lvcat="all">Clear all</button>':''}</div>`:'');
     h=h.replace('<div class="lv-tabs">',bar+'<div class="lv-tabs">');
-    if((LVSEL.length||LVQ.trim())&&lvList(LVTAB).length===0)h=h.replace(/(<div class="lv-tabs">[\s\S]*?<\/div>)/,`$1<div class="m-empty"><span class="ei">${S(ICON.services)}</span><b>${LVQ.trim()?'Nothing live for “'+LVQ.trim().replace(/[<>&"]/g,'')+'” yet':lab+': nothing live yet'}</b>${LVQ.trim()?'Try another word, or clear the filter.':'When one of these shops posts, it shows up here.'}</div>`);
+    if((LVSEL.length||LVQ.trim())&&lvList(LVTAB).length===0&&h.indexOf('class="lv-empty"')<0)h=h.replace(/(<div class="lv-tabs">[\s\S]*?<\/div>)/,`$1<div class="m-empty"><span class="ei">${S(ICON.services)}</span><b>${LVQ.trim()?'Nothing live for “'+LVQ.trim().replace(/[<>&"]/g,'')+'” yet':lab+': nothing live yet'}</b>${LVQ.trim()?'Try another word, or clear the filter.':'When one of these shops posts, it shows up here.'}</div>`);
   }return h;};
 })();
 </script><script>
@@ -4494,12 +4492,12 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   <div class="m-card" style="padding:2px 16px">${L.map(l=>`<div class="ck-l"><div><b>${l.name}</b><span>${naira(l.price)} each</span></div><span class="qa"><button type="button" class="qb" data-mdec="${l.i}" aria-label="One less">${MINUS}</button><span class="qn">${l.qty}</span><button type="button" class="qb" data-madd="${l.i}" aria-label="One more">${PLUS}</button></span></div>`).join('')}</div>
   ${v.deliv?`<div class="m-sh"><b>Delivery</b><span>Pick one</span></div><div class="m-card" style="padding:2px 16px">
     ${opt('solo','Just me','To your door, '+v.deliv.eta,naira(fee(v)))}
-    ${G.map(g=>opt(g.id,'Join the group going to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),naira(fee(v)))).join('')}
+    ${G.map(g=>opt(g.id,'Join the group going to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),g.share<fee(v)?naira(fee(v)):'')).join('')}
     ${opt('new','Start a group for '+(CK.hall?String(CK.hall).split(',')[0].slice(0,28):'where you are'),'Pay normal delivery now. It gets cheaper as people join, and we send you the difference',naira(fee(v)),'')}
   </div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
-    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="Hall, room or area, like Moremi Hall, Block 3" value="${(CK.hall||'').replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.hall==='My location'?'on':''}">Use my location</button>${hallKeys.map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
+    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="Hall, room or area, like Moremi Hall, Block 3" value="${(CK.hall||'').replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.pin?'on':''}">${CK.pin?'Pin added ✓':'Use my location'}</button>${hallKeys.map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
     <label class="ck-f"><span>WhatsApp number</span><input data-ck="phone" type="tel" inputmode="tel" placeholder="0803 123 4567" value="${(CK.phone||'').replace(/"/g,'&quot;')}" autocomplete="tel"></label>
     <label class="ck-f"><span>Your name</span><input data-ck="name" type="text" placeholder="First name" value="${(CK.name||'').replace(/"/g,'&quot;')}" autocomplete="given-name"></label>
     <label class="ck-f"><span>Note for the shop</span><input data-ck="note" type="text" placeholder="Optional, like extra pepper" value="${(CK.note||'').replace(/"/g,'&quot;')}"></label>
@@ -4781,7 +4779,7 @@ let CHTAB='messages';
 (function(){document.addEventListener('click',e=>{const b=e.target.closest('[data-ckloc]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();
   if(!navigator.geolocation)return;b.textContent='Finding you…';
   navigator.geolocation.getCurrentPosition(p=>{const la=p.coords.latitude.toFixed(5),lo=p.coords.longitude.toFixed(5);
-    try{CK.hall='My location';CK.pin=la+','+lo;const pin='Pin: https://maps.google.com/?q='+la+','+lo;if((CK.note||'').indexOf('Pin: ')<0)CK.note=((CK.note||'')+' '+pin).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}catch(_){}
+    try{if(CK.hall==='My location')CK.hall='';CK.pin=la+','+lo;const pin='Pin: https://maps.google.com/?q='+la+','+lo;if((CK.note||'').indexOf('Pin: ')<0)CK.note=((CK.note||'')+' '+pin).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}catch(_){}
     const s2=document.querySelector('#mSub');if(s2){const y=s2.scrollTop;s2.innerHTML=m2Sub(CUR.s,CUR.id);s2.scrollTop=y;}},
     ()=>{b.textContent='Location is off';},{enableHighAccuracy:true,timeout:9000});},true);})();
 /* share picture: Stafly header so it always carries the brand */
@@ -4796,6 +4794,37 @@ const SFMARK='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns=
     x.fillStyle='#6B6B75';x.font='500 34px "DM Sans", system-ui, sans-serif';x.textAlign='right';x.fillText('OAU',c.width-60,102);
     const b2=await new Promise(r=>c.toBlob(r,'image/png'));if(b2)return new File([b2],f.name,{type:'image/png'});}catch(_){}
   return f;};})();
+</script>
+<script>
+/* ---- v127: drag a panel down to close it; the page itself never pull-to-refreshes ---- */
+(function(){
+const css=document.createElement('style');css.textContent=`html,body{overscroll-behavior-y:none}
+#catSheet,#shSheet,#mFs .fs-b,#miSh .bx,#miSh .in{overscroll-behavior:contain}
+html body.m2on .m-empty .ei{background:rgba(255,255,255,.06)}
+html body.m2on.m-light .m-empty .ei{background:#fff;box-shadow:0 0 0 1px rgba(18,18,21,.06)}
+html body.m2on .lv-empty>b{font-size:16px;font-weight:600;margin-bottom:2px}
+@media (min-width:760px){html body.m2on .mi-sh .bx{left:0;right:0;margin:0 auto;width:460px;bottom:24px;border-radius:28px}
+html body.m2on .mi-sh .bx>.ph{border-radius:28px 28px 0 0}
+html body.m2on .mi-sh.big .bx{width:min(920px,94vw);height:94vh;height:94dvh;bottom:3vh;border-radius:28px}
+html body.m2on .mi-sh.big .bx>.ph{border-radius:28px 28px 0 0}}`;document.head.appendChild(css);
+// [panel, backdrop that closes it]
+const P=[['#catSheet.on','#catScrim'],['#shSheet.on','#shScrim'],['#mFs.on .fs-p','#mFs .fs-bg'],['#miSh.on .bx','#miSh .sc']];
+let D=null;
+const scrolledUp=(t,panel)=>{for(let n=t;n&&n!==panel.parentNode;n=n.parentNode){if(n.scrollTop>0&&n.scrollHeight>n.clientHeight+1)return true;if(n===panel)break;}return false;};
+document.addEventListener('touchstart',e=>{D=null;if(e.touches.length!==1)return;const t=e.target;
+  for(const [ps,bs] of P){const p=document.querySelector(ps);if(!p||!p.contains(t))continue;
+    if(t.closest('input,textarea,.mi-cats,.pk,.tps'))return;
+    if(scrolledUp(t,p))return;
+    D={p,bs,y:e.touches[0].clientY,x:e.touches[0].clientX,dy:0,on:false};return;}},{passive:true,capture:true});
+document.addEventListener('touchmove',e=>{if(!D)return;const dy=e.touches[0].clientY-D.y,dx=e.touches[0].clientX-D.x;
+  if(!D.on){if(Math.abs(dy)<8)return;if(dy<0||Math.abs(dx)>Math.abs(dy)){D=null;return;}D.on=true;D.p.style.transition='none';}
+  D.dy=Math.max(0,dy);D.p.style.transform='translateY('+D.dy+'px)';},{passive:true,capture:true});
+document.addEventListener('touchend',()=>{if(!D)return;const d=D;D=null;if(!d.on)return;
+  d.p.style.transition='transform .22s ease';
+  if(d.dy>Math.min(110,d.p.offsetHeight*.25)){d.p.style.transform='translateY(100%)';
+    setTimeout(()=>{const b=document.querySelector(d.bs);if(b)b.click();setTimeout(()=>{d.p.style.transform='';d.p.style.transition='';},260);},180);}
+  else{d.p.style.transform='';setTimeout(()=>{d.p.style.transition='';},240);}},{capture:true});
+})();
 </script>
 </body>
 </html>
