@@ -1,0 +1,664 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-08T03:31:04Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 6154104338,
+  "lat": 7.5169102,
+  "lon": 4.5139105,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "New Buka"
+  }
+},
+{
+  "type": "node",
+  "id": 12093086827,
+  "lat": 7.5052070,
+  "lon": 4.5216309,
+  "tags": {
+    "addr:city": "Ile-Ife",
+    "addr:postcode": "220282",
+    "addr:street": "Off Road 1, OAU Campus",
+    "amenity": "hospital",
+    "healthcare": "hospital",
+    "name": "Akingbade Health Bay"
+  }
+},
+{
+  "type": "node",
+  "id": 14002366873,
+  "lat": 7.5172536,
+  "lon": 4.5274430,
+  "tags": {
+    "addr:housename": "Faculty Of Pharmacy",
+    "addr:street": "Along Road 2",
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "bar": "no",
+    "check_date": "2026-07-10",
+    "cuisine": "pizza;burger;sandwich;chicken",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "internet_access": "no",
+    "internet_access:fee": "no",
+    "name": "Spectra",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "09069483275",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002380290,
+  "lat": 7.5165315,
+  "lon": 4.5259378,
+  "tags": {
+    "addr:housename": "HSLT C",
+    "addr:place": "College of Health Sciences",
+    "amenity": "restaurant",
+    "check_date": "2026-07-10",
+    "name": "Spectra",
+    "payment:account_cards": "yes",
+    "payment:app": "yes",
+    "payment:cards": "yes",
+    "toilets:wheelchair": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002398474,
+  "lat": 7.5162100,
+  "lon": 4.5259150,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2026-07-10",
+    "cuisine": "burger",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002398478,
+  "lat": 7.5160924,
+  "lon": 4.5268934,
+  "tags": {
+    "addr:housename": "HSLT C",
+    "addr:place": "College of Health Sciences",
+    "amenity": "restaurant",
+    "check_date": "2026-07-10",
+    "cuisine": "local",
+    "diet:local": "yes",
+    "internet_access": "no",
+    "name": "White Hands",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+234 703 123 0763",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 14002401606,
+  "lat": 7.5161665,
+  "lon": 4.5258917,
+  "tags": {
+    "addr:housename": "HSLT C",
+    "addr:place": "College of Health Sciences",
+    "amenity": "restaurant",
+    "check_date": "2026-07-10",
+    "cuisine": "fish;regional",
+    "name": "Spectra",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 599038677,
+  "center": {
+    "lat": 7.5165687,
+    "lon": 4.5285709
+  },
+  "tags": {
+    "building": "yes",
+    "fee": "yes",
+    "name": "Museum of Natural History",
+    "opening_hours": "Mo-Sa 08:00-16:00",
+    "tourism": "museum"
+  }
+},
+{
+  "type": "way",
+  "id": 615629075,
+  "center": {
+    "lat": 7.5241221,
+    "lon": 4.5344134
+  },
+  "tags": {
+    "leisure": "pitch",
+    "sport": "soccer",
+    "surface": "grass"
+  }
+},
+{
+  "type": "way",
+  "id": 615629090,
+  "center": {
+    "lat": 7.5230363,
+    "lon": 4.5368023
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Daily Needs",
+    "payment:cash": "yes",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "way",
+  "id": 615629108,
+  "center": {
+    "lat": 7.5219852,
+    "lon": 4.5360506
+  },
+  "tags": {
+    "leisure": "pitch",
+    "sport": "soccer",
+    "surface": "grass"
+  }
+},
+{
+  "type": "way",
+  "id": 616403548,
+  "center": {
+    "lat": 7.5146623,
+    "lon": 4.5203120
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "yes",
+    "sport": "basketball",
+    "surface": "clay"
+  }
+},
+{
+  "type": "way",
+  "id": 616403550,
+  "center": {
+    "lat": 7.5154073,
+    "lon": 4.5204292
+  },
+  "tags": {
+    "building": "yes",
+    "leisure": "sports_centre",
+    "name": "Squash Court",
+    "sport": "squash"
+  }
+},
+{
+  "type": "way",
+  "id": 616403561,
+  "center": {
+    "lat": 7.5135021,
+    "lon": 4.5207160
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "no",
+    "sport": "soccer",
+    "surface": "grass"
+  }
+},
+{
+  "type": "way",
+  "id": 617712369,
+  "center": {
+    "lat": 7.5198423,
+    "lon": 4.5230479
+  },
+  "tags": {
+    "amenity": "library",
+    "building": "yes",
+    "name": "Hezekiah Oluwasanmi Library"
+  }
+},
+{
+  "type": "way",
+  "id": 617970603,
+  "center": {
+    "lat": 7.5224028,
+    "lon": 4.5120342
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "yes",
+    "sport": "soccer",
+    "surface": "ground"
+  }
+},
+{
+  "type": "way",
+  "id": 617970604,
+  "center": {
+    "lat": 7.5221614,
+    "lon": 4.5130789
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "no",
+    "sport": "basketball",
+    "surface": "clay"
+  }
+},
+{
+  "type": "way",
+  "id": 617970610,
+  "center": {
+    "lat": 7.5218001,
+    "lon": 4.5124735
+  },
+  "tags": {
+    "check_date": "2024-03-24",
+    "name": "Angola Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 617970630,
+  "center": {
+    "lat": 7.5228618,
+    "lon": 4.5141326
+  },
+  "tags": {
+    "check_date": "2024-03-24",
+    "name": "Mozambique Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 618049261,
+  "center": {
+    "lat": 7.5259875,
+    "lon": 4.5319187
+  },
+  "tags": {
+    "leisure": "swimming_pool"
+  }
+},
+{
+  "type": "way",
+  "id": 618217505,
+  "center": {
+    "lat": 7.5211065,
+    "lon": 4.5154072
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "no",
+    "sport": "basketball",
+    "surface": "clay"
+  }
+},
+{
+  "type": "way",
+  "id": 618217519,
+  "center": {
+    "lat": 7.5205762,
+    "lon": 4.5147168
+  },
+  "tags": {
+    "check_date": "2024-03-06",
+    "name": "Awolowo Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 618664727,
+  "center": {
+    "lat": 7.5183147,
+    "lon": 4.5186488
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "no",
+    "sport": "basketball",
+    "surface": "clay"
+  }
+},
+{
+  "type": "way",
+  "id": 618765170,
+  "center": {
+    "lat": 7.5148265,
+    "lon": 4.5233639
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Polaris Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765171,
+  "center": {
+    "lat": 7.5146200,
+    "lon": 4.5233497
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "OAU Microfinance Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765172,
+  "center": {
+    "lat": 7.5143881,
+    "lon": 4.5232997
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "UBA",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765173,
+  "center": {
+    "lat": 7.5141912,
+    "lon": 4.5232573
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Guarantee Trust Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765174,
+  "center": {
+    "lat": 7.5140300,
+    "lon": 4.5232424
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Zenith Bank",
+    "opening_hours": "Mo-Sa 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765175,
+  "center": {
+    "lat": 7.5152827,
+    "lon": 4.5234309
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "First Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765176,
+  "center": {
+    "lat": 7.5135598,
+    "lon": 4.5232880
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Access Bank",
+    "opening_hours": "Mo-Sa 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 619270909,
+  "center": {
+    "lat": 7.5162037,
+    "lon": 4.5217488
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "yes",
+    "name": "Main bowl",
+    "sport": "soccer",
+    "surface": "grass"
+  }
+},
+{
+  "type": "way",
+  "id": 619270910,
+  "center": {
+    "lat": 7.5147076,
+    "lon": 4.5215489
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "no",
+    "sport": "baseball",
+    "surface": "grass"
+  }
+},
+{
+  "type": "way",
+  "id": 619270924,
+  "center": {
+    "lat": 7.5196478,
+    "lon": 4.5185962
+  },
+  "tags": {
+    "check_date": "2024-03-07",
+    "name": "Moremi Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 619368836,
+  "center": {
+    "lat": 7.5173486,
+    "lon": 4.5177439
+  },
+  "tags": {
+    "check_date": "2024-03-06",
+    "name": "Adekunle Fajuyi Hall of Residence",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 619368837,
+  "center": {
+    "lat": 7.5182825,
+    "lon": 4.5146602
+  },
+  "tags": {
+    "check_date": "2024-06-03",
+    "name": "ETF Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 619971213,
+  "center": {
+    "lat": 7.5202674,
+    "lon": 4.5163629
+  },
+  "tags": {
+    "amenity": "hospital",
+    "check_date": "2024-03-20",
+    "healthcare": "hospital",
+    "healthcare:speciality": "general",
+    "name": "OAU Health Centre"
+  }
+},
+{
+  "type": "way",
+  "id": 619971220,
+  "center": {
+    "lat": 7.5178304,
+    "lon": 4.5145030
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "no",
+    "sport": "basketball",
+    "surface": "clay"
+  }
+},
+{
+  "type": "way",
+  "id": 619971221,
+  "center": {
+    "lat": 7.5180727,
+    "lon": 4.5145293
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "no",
+    "sport": "soccer",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 620253753,
+  "center": {
+    "lat": 7.5216133,
+    "lon": 4.5171767
+  },
+  "tags": {
+    "check_date": "2024-03-20",
+    "name": "Alumni Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 620256439,
+  "center": {
+    "lat": 7.5227072,
+    "lon": 4.5164715
+  },
+  "tags": {
+    "check_date": "2024-03-20",
+    "name": "Postgraduate Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 625664968,
+  "center": {
+    "lat": 7.5152493,
+    "lon": 4.5209525
+  },
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "OAU Sports Centre",
+    "sport": "soccer;tennis;swimming;squash;basketball;cricket;table_tennis"
+  }
+},
+{
+  "type": "way",
+  "id": 652831408,
+  "center": {
+    "lat": 7.5166029,
+    "lon": 4.5138011
+  },
+  "tags": {
+    "amenity": "bar",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 652831410,
+  "center": {
+    "lat": 7.5164795,
+    "lon": 4.5138837
+  },
+  "tags": {
+    "building": "yes",
+    "shop": "beauty"
+  }
+},
+{
+  "type": "way",
+  "id": 652831412,
+  "center": {
+    "lat": 7.5169829,
+    "lon": 4.5135991
+  },
+  "tags": {
+    "amenity": "restaurant",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 652831413,
+  "center": {
+    "lat": 7.5171702,
+    "lon": 4.5139612
+  },
+  "tags": {
+    "amenity": "restaurant",
+    "building": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1282370284,
+  "center": {
+    "lat": 7.5172494,
+    "lon": 4.5210645
+  },
+  "tags": {
+    "leisure": "swimming_pool"
+  }
+}
+
+  ]
+}
