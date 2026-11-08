@@ -4050,7 +4050,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   v.about=['Message us and our assistant replies right away'];const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>clean(x).replace(/\.$/,'')).filter(Boolean).slice(0,2);if(ab.length)v.about=ab;
   if(safeUrl(d.avatar))v.img=safeUrl(d.avatar);v.cover=safeUrl(d.cover);
   if(clean(d.location))v.place=clean(d.location);
-  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||''),clean(i.cat||i.category||'')]);if(it.length)v.items=it.slice(0,30);
+  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||''),clean(i.cat||i.category||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3)]);if(it.length)v.items=it.slice(0,30);
   const w=waDigits(d.whatsapp);if(w)v.wa=w;
   if(d.defaultFee&&v.deliv)v.deliv.fee=Math.max(0,Number(d.defaultFee)||0)||v.deliv.fee;
   const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
@@ -4453,7 +4453,7 @@ const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catc
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}};
 let CART=ld('stafly_cart',{shop:null,q:{}});
 let MINE=ld('stafly_orders',[]);
-let CK=ld('stafly_ck',{phone:'',name:'',hall:'',note:'',mode:'solo'});
+let CK=ld('stafly_ck',{phone:'',name:'',hall:'',note:'',mode:'solo'});Object.defineProperty(window,'CK',{get:()=>CK,configurable:true});/* v124: later add-ons (my location, photo pick) use the same checkout details */
 let ERR='',BUSY=false;
 const price=i=>typeof i[1]==='string'?Number(i[1].replace('from ','')):Number(i[1])||0;
 const cartOf=id=>CART.shop===id?CART.q:{};
@@ -4692,6 +4692,14 @@ html body.m2on .mi-sh.big .bx>.in{height:150px;max-height:none}
 html body.m2on .mi-sh.big.open .bx>.in{height:auto;max-height:55vh}
 html body.m2on .mi-sh .ph.ic::before{content:'No photo yet';order:2;font:500 13px 'DM Sans',sans-serif;opacity:.5}
 html body.m2on .mi-sh.big .bx>.ph.ic{background-color:inherit}
+html body.m2on .mi-sh.big .bx>.ph{background-size:cover}
+html body.m2on .mi-sh .ph{position:relative}
+html body.m2on .mi-sh .pk{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;padding:6px;border-radius:40px;background:rgba(0,0,0,.35)}
+html body.m2on .mi-sh .pk button{width:44px;height:44px;border-radius:50%;border:2px solid transparent;padding:0;background:#333 center/cover no-repeat;opacity:.75}
+html body.m2on .mi-sh .pk button.on{border-color:#fff;opacity:1}
+html body.m2on .mi-sh.big .pk{bottom:20px}
+html body.m2on .mi-sh .ph:not(.ic)::after{top:auto;bottom:14px}
+html body.m2on .mi-sh .ph:has(.pk)::after{bottom:auto;top:62px}
 html body.m2on .mi-gl{font:600 12.5px 'DM Sans',sans-serif;letter-spacing:.02em;opacity:.55;padding:14px 0 2px}
 html body.m2on .mi-gl+.mi-row{border-top:0}
 html body.m2on .mi-sh .ct{position:absolute;top:14px;left:14px;height:32px;padding:0 12px;border-radius:16px;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;font:600 13px 'DM Sans',sans-serif}
@@ -4714,7 +4722,7 @@ let IT=null;
 /* the items in the order the menu shows them (respects the chosen category) */
 const ORD=()=>{const ks=[...document.querySelectorAll('#mSub [data-mitem]')].map(r=>Number(r.dataset.mitem));return ks.length?ks:(IT?[IT.k]:[]);};
 function go(d){if(!IT)return;const o=ORD(),i=o.indexOf(IT.k),j=i+d;if(i<0||j<0||j>=o.length){const ph=sh.querySelector('.ph');if(ph){ph.style.transform='translateX('+(-d*18)+'px)';setTimeout(()=>{ph.style.transform='';},160);}return;}
-  sh.classList.remove('open');IT.k=o[j];IT.q=1;IT.sw=1;draw();IT.sw=0;const ph=sh.querySelector('.ph');if(ph){ph.style.transition='none';ph.style.transform='translateX('+(d*40)+'%)';ph.style.opacity='.4';requestAnimationFrame(()=>requestAnimationFrame(()=>{ph.style.transition='';ph.style.transform='';ph.style.opacity='';}));}}
+  sh.classList.remove('open');IT.k=o[j];IT.q=1;IT.p=0;IT.sw=1;draw();IT.sw=0;const ph=sh.querySelector('.ph');if(ph){ph.style.transition='none';ph.style.transform='translateX('+(d*40)+'%)';ph.style.opacity='.4';requestAnimationFrame(()=>requestAnimationFrame(()=>{ph.style.transition='';ph.style.transform='';ph.style.opacity='';}));}}
 let TX=null,TY=0;
 sh.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;TX=e.touches[0].clientX;TY=e.touches[0].clientY;},{passive:true});
 sh.addEventListener('touchmove',e=>{if(TX===null)return;const dx=e.touches[0].clientX-TX,dy=e.touches[0].clientY-TY;const ph=sh.querySelector('.ph');if(ph&&Math.abs(dx)>Math.abs(dy)){ph.style.transition='none';ph.style.transform='translateX('+dx*.5+'px)';}},{passive:true});
@@ -4724,7 +4732,8 @@ addEventListener('keydown',e=>{if(!IT)return;if(e.key==='ArrowRight')go(1);if(e.
 const close=()=>{sh.classList.remove('on','big','open');IT=null;};
 function draw(){if(!IT)return;const v=vOf(IT.id),it=v.items[IT.k];if(!it)return close();
   sh.innerHTML=`<div class="sc" data-mix="1"></div><div class="bx" role="dialog" aria-label="${it[0]}">
-    ${it[2]?`<div class="ph" style="background-image:url(${it[2]})"></div>`:`<div class="ph ic">${S(ICON[v.cat])}</div>`}<button type="button" class="x" data-mix="1" aria-label="Close">×</button>
+    ${it[2]?(()=>{const P=[it[2],...(it[5]||[])].filter((x,i,a)=>x&&a.indexOf(x)===i).slice(0,4);const pi=Math.min(IT.p||0,P.length-1);
+      return`<div class="ph" style="background-image:url(${P[pi]})">${P.length>1?`<div class="pk">${P.map((u,i)=>`<button type="button" data-mipic="${i}" class="${i===pi?'on':''}" style="background-image:url(${u})" aria-label="Photo ${i+1}"></button>`).join('')}</div>`:''}</div>`;})():`<div class="ph ic">${S(ICON[v.cat])}</div>`}<button type="button" class="x" data-mix="1" aria-label="Close">×</button>
     ${ORD().length>1?`<span class="ct">${ORD().indexOf(IT.k)+1} of ${ORD().length}</span>`:''}
     ${ORD().length>1&&ORD().length<=12?`<div class="dt">${ORD().map(k=>`<i class="${k===IT.k?'on':''}"></i>`).join('')}</div>`:''}
     <div class="in${IT.sw?' sw':''}"><button type="button" class="mo" data-mimore="1" hidden>More</button><h3>${it[0]}</h3><div class="pr">${naira(it[1])}</div>${it[3]?`<p>${it[3]}</p>`:`<p>Ask ${v.name} in chat if you'd like to know more about this.</p>`}</div>
@@ -4735,10 +4744,11 @@ document.addEventListener('click',e=>{
   const t=e.target;
   if(sh.contains(t)){e.preventDefault();e.stopImmediatePropagation();
     if(t.closest('[data-mix]'))return close();
+    const pk=t.closest('[data-mipic]');if(pk){IT.p=Number(pk.dataset.mipic);return draw();}
     if(t.closest('[data-mimore]')){sh.classList.toggle('open');return draw();}
     if(t.closest('.ph')&&!t.closest('.ph.ic')){sh.classList.toggle('big');return;}
     const q=t.closest('[data-miq]');if(q){IT.q=Math.max(1,Math.min(20,IT.q+Number(q.dataset.miq)));return draw();}
-    if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;close();const b=document.querySelector('#mSub [data-madd="'+k+'"]');if(b){for(let i=0;i<n;i++){const bb=document.querySelector('#mSub [data-madd="'+k+'"]');bb&&bb.click();}}return;}
+    if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;try{const v0=vOf(IT.id),it0=v0.items[k];if(IT.p>0&&it0&&(it0[5]||[]).length){const tag=it0[0]+': photo '+(IT.p+1);if((CK.note||'').indexOf(tag)<0){CK.note=((CK.note||'')+(CK.note?', ':'')+tag).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}}}catch(_){}close();const b=document.querySelector('#mSub [data-madd="'+k+'"]');if(b){for(let i=0;i<n;i++){const bb=document.querySelector('#mSub [data-madd="'+k+'"]');bb&&bb.click();}}return;}
     return;}
   const r=t.closest('#mSub [data-mitem]');
   if(r&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();IT={id:CUR.id,k:Number(r.dataset.mitem),q:1};draw();requestAnimationFrame(()=>sh.classList.add('on'));return;}
