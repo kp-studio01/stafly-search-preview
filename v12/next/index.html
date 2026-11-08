@@ -4734,12 +4734,10 @@ let MIPUSH=false,MISKIP=false;
 const closeRaw=()=>{sh.classList.remove('on','big','open');IT=null;};
 const close=()=>{closeRaw();if(MIPUSH){MIPUSH=false;MISKIP=true;history.back();}};
 const miPush=()=>{if(MIPUSH)return;try{history.pushState(Object.assign({},history.state||{},{mi:1}),'');MIPUSH=true;}catch(_){}};
-addEventListener('popstate',e=>{
-  if(MISKIP){MISKIP=false;e.stopImmediatePropagation();return;}
-  if(!MIPUSH||!IT)return;
-  e.stopImmediatePropagation();MIPUSH=false;
-  if(sh.classList.contains('big')){sh.classList.remove('big');miPush();return;}
-  closeRaw();},true);;
+(function(){const _ap=window.m2Apply;window.m2Apply=function(){
+  if(MISKIP){MISKIP=false;return;}
+  if(MIPUSH&&IT){MIPUSH=false;if(sh.classList.contains('big')){sh.classList.remove('big');miPush();return;}closeRaw();return;}
+  return _ap.apply(this,arguments);};})();;
 function draw(){if(!IT)return;const v=vOf(IT.id),it=v.items[IT.k];if(!it)return close();
   sh.innerHTML=`<div class="sc" data-mix="1"></div><div class="bx" role="dialog" aria-label="${it[0]}">
     ${it[2]?(()=>{const P=[it[2],...(it[5]||[])].filter((x,i,a)=>x&&a.indexOf(x)===i).slice(0,4);const pi=Math.min(IT.p||0,P.length-1);
