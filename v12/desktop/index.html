@@ -3224,11 +3224,11 @@ function m2Page(t){
   if(t==='live'){if(!LVTAB||LVTAB==='popular')LVTAB='foryou';
     const ST=DROPS.slice().sort((a,b)=>(LVSEEN.has(a.id)-LVSEEN.has(b.id))||(FOLLOW.has(b.id)-FOLLOW.has(a.id))||(a.m-b.m));LVLIST=ST;const LL=lvList(LVTAB);
     return`<div class="m-h"><h1>Live</h1><button class="m-circ" type="button" data-msub="alerts" aria-label="Alerts">${mS('bell')}</button></div>
-    <div class="lv-row lv2">${ST.map(d=>{const v=vOf(d.id),sn=LVSEEN.has(d.id);return`<button type="button" class="lv-st${sn?'':' new'}" data-lvgo="${d.id}"><span class="rg">${mLogo(v)}</span>${d.m<=10&&!sn?'<i class="lv-dot">LIVE</i>':''}<em>${v.name.split(' ').slice(0,2).join(' ')}</em></button>`;}).join('')}</div>
+    <div class="lv-row lv2">${ST.map(d=>{const v=vOf(d.id),sn=LVSEEN.has(d.id);return`<button type="button" class="lv-st${sn?'':' new'}" data-lvgo="${d.id}"><span class="rg">${mLogo(v)}</span>${d.m<=60&&!sn?'<i class="lv-dot">NEW</i>':''}<em>${v.name.split(' ').slice(0,2).join(' ')}</em></button>`;}).join('')}</div>
     <div class="lv-tabs">${[['foryou','For you'],['following','Following'],['near','Near you']].map(([k,l])=>`<button type="button" data-lvtab="${k}" class="${LVTAB===k?'on':''}">${l}</button>`).join('')}</div>
     ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${fmtK(followers(v))} followers</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
     ${LL.map(d=>{const v=vOf(d.id);return`<div class="g-card lv-card" id="lv-${d.id}"><div class="g-media lv-media">${(d.img||CV(v))?`<img class="g-photo" src="${d.img||CV(v)}" alt="">`:lvPh(v)}<span class="g-shade"></span>
-      ${d.slides&&d.slides.length>1?`<span class="lv-cnt"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="13" height="13" rx="3"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>${d.slides.length}</span>`:''}<span class="g-tag${d.m<=10?' hot':''}">${d.m<=10?'<i class="lvd"></i>Live':mS('clock')+ago(d.m)}</span><span class="g-time">${catL(v.cat)}</span>
+      ${d.slides&&d.slides.length>1?`<span class="lv-cnt"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="13" height="13" rx="3"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>${d.slides.length}</span>`:''}<span class="g-tag${d.m<=60?' hot':''}">${d.m<=60?'<i class="lvd"></i>New':mS('clock')+ago(d.m)}</span><span class="g-time">${catL(v.cat)}</span>
       ${(d.img||CV(v))?'':`<span class="g-pin">${mLogo(v)}</span>`}
       <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
       <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><span class="tm">${ago(d.m)}</span></div>
@@ -3381,7 +3381,21 @@ var LVTAB=null,LVLIST=null;
 const lvPop=()=>[...DROPS].sort((a,b)=>(vOf(b.id).orders/(b.m+8))-(vOf(a.id).orders/(a.m+8)));
 const lvNear=()=>[...DROPS].sort((a,b)=>walk(vOf(a.id))-walk(vOf(b.id)));
 function lvList(t){return t==='following'?DROPS.filter(d=>FOLLOW.has(d.id)):t==='near'?lvNear():lvForYou();}
-function lvForYou(){const sc=d=>{const v=vOf(d.id);return (FOLLOW.has(d.id)?3:0)+(d.real?2:0)+(LVSEEN.has(d.id)?-2:0)+Math.max(0,2-d.m/30)+Math.max(0,1.5-walk(v)/8)+Math.min(1,(v.orders||0)/400);};return [...DROPS].sort((a,b)=>sc(b)-sc(a));}
+/* When a shop last moved up. A post moves a shop up at most once every 2 hours;
+   posts in between only add photos to its card. (m = minutes ago) */
+function lvRank(d){const ms=(d.slides&&d.slides.length?d.slides.map(x=>x.m):[d.m]).filter(x=>x>=0);const asc=[...new Set(ms)].sort((a,b)=>b-a);let bump=null;asc.forEach(m=>{if(bump===null||bump-m>=120)bump=m;});return bump===null?d.m:bump;}
+function lvForYou(){
+  const seen=d=>LVSEEN.has(d.id),fol=d=>FOLLOW.has(d.id);
+  const sc=d=>{const v=vOf(d.id),r=lvRank(d);return Math.max(0,3-r/40)+Math.max(0,1-walk(v)/12);};
+  const byScore=(a,b)=>sc(b)-sc(a);
+  // 1. shops you follow that you haven't seen yet
+  const top=DROPS.filter(d=>fol(d)&&!seen(d)).sort(byScore);
+  // 2. everyone else, fresh first, but never two of the same kind in a row when another kind is waiting
+  const rest=DROPS.filter(d=>!top.includes(d)&&!seen(d)).sort(byScore),out=[];let last='';
+  while(rest.length){let k=rest.findIndex(d=>vOf(d.id).cat!==last);if(k<0)k=0;const d=rest.splice(k,1)[0];last=vOf(d.id).cat;out.push(d);}
+  // 3. what you've already seen goes to the bottom, so others get a turn
+  return top.concat(out,DROPS.filter(seen).sort(byScore));
+}
 document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('[data-lvtab]');if(!el)return;e.stopImmediatePropagation();e.preventDefault();
   LVTAB=el.dataset.lvtab;$('#mPage').innerHTML=m2Page('live');$('#mPage').scrollTop=0;},true);
 
