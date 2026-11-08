@@ -3238,7 +3238,7 @@ function m2Page(t){
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
       const steps=Array.from({length:g.need},(_,i)=>{const c=i<g.n?'f':(me&&i===g.n?'me':'');return(i?`<span class="ln${i<n?' f':''}"></span>`:'')+`<span class="st ${c}">${c?mS('check'):''}</span>`;}).join('');
       const left=g.need-n;
-      return`<div class="g-card${me?' in':''}"><div class="g-media">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:satTiles(v.ll)}<span class="g-shade"></span>
+      return`<div class="g-card${me?' in':''}"><div class="g-media">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:lvPh(v)}<span class="g-shade"></span>
         <span class="g-tag">${mS('users3')}Group order</span><span class="g-time${g.closes<=15?' soon':''}">${mS('clock')}${g.closes} min left</span>
         ${CV(v)?'':`<span class="g-pin">${mLogo(v)}</span>`}
         <div class="g-cap"><div class="nm"><b>${v.name}</b><span>Delivering to ${g.hall}</span></div><div class="pr"><b>${naira(share(v,me?n:n+1))}</b><span>${me?'your share':'your share'} · <s>${naira(fee)}</s></span></div></div></div>
