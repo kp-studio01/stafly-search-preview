@@ -4464,7 +4464,7 @@ const isReal=v=>!!v.sid;
 const fee=v=>v.deliv?Number(v.deliv.fee)||0:0;
 let GR={};/* open groups per shop from the server */
 function groupsFor(v){if(isReal(v))return GR[v.id]||[];const g=GROUPS[v.id];return g?[{id:'demo',hall:g.hall,size:g.need,joined:g.n,share:share(v,g.n+1),demo:1}]:[];}
-function delivery(v){if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(CK.mode==='new')return Math.ceil(fee(v)/4);const g=groupsFor(v).find(x=>x.id===CK.mode);return g?g.share:fee(v);}
+function delivery(v){if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(CK.mode==='new')return fee(v);const g=groupsFor(v).find(x=>x.id===CK.mode);return g?g.share:fee(v);}
 function rer(){const p=$('#mSub');if(!p)return;const y=p.scrollTop,a=document.activeElement,aid=a&&a.dataset&&a.dataset.ck,pos=a&&a.selectionStart;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;if(aid){const i=p.querySelector('[data-ck="'+aid+'"]');if(i){i.focus();try{i.setSelectionRange(pos,pos);}catch(_){}}}}
 /* ---- shop page: + buttons on the menu, basket bar in place of the footer ---- */
 function miThumb(v,it){return it[2]?`<span class="mi-th" style="background-image:url(${it[2]})"></span>`:`<span class="mi-th ic">${S(ICON[v.cat])}</span>`;}
@@ -4482,7 +4482,7 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   ${v.deliv?`<div class="m-sh"><b>Delivery</b><span>Pick one</span></div><div class="m-card" style="padding:2px 16px">
     ${opt('solo','Just me','To your door, '+v.deliv.eta,naira(fee(v)))}
     ${G.map(g=>opt(g.id,'Join the group going to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),naira(fee(v)))).join('')}
-    ${opt('new','Start a group for '+(CK.hall?String(CK.hall).split(',')[0].slice(0,28):'where you are'),'Up to 4 people nearby. One rider, everyone pays less',naira(Math.ceil(fee(v)/4)),naira(fee(v)))}
+    ${opt('new','Start a group for '+(CK.hall?String(CK.hall).split(',')[0].slice(0,28):'where you are'),'Pay normal delivery now. It gets cheaper as people join, and we send you the difference',naira(fee(v)),'')}
   </div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
