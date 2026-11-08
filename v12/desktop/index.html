@@ -2490,6 +2490,29 @@ body.dk #mLocT{top:auto!important}
 </style><style>/* v99 */
 .lv-cnt{position:absolute;right:12px;top:52px;z-index:2;display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;background:rgba(18,18,21,.62);color:#fff;font:600 12px/1 "DM Sans",system-ui,sans-serif}
 .lv-cnt svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+</style><style>/* v100 share a shop */
+#shScrim{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s}
+#shScrim.on{opacity:1;pointer-events:auto}
+#shSheet{position:fixed;left:0;right:0;bottom:0;z-index:9001;margin:0 auto;max-width:520px;background:#1B1B20;color:#F4F3F7;border-radius:24px 24px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);font-family:"DM Sans",system-ui,sans-serif}
+#shSheet.on{transform:none}
+#shSheet .gr{width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:0 auto 14px}
+#shSheet .hd{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+#shSheet .hd .lg{width:44px;height:44px;border-radius:12px;overflow:hidden;flex:none;display:grid;place-items:center;background:rgba(255,255,255,.06)}
+#shSheet .hd .lg img{width:100%;height:100%;object-fit:cover}
+#shSheet .hd b{display:block;font-size:16px;font-weight:600}
+#shSheet .hd span{display:block;font-size:13px;opacity:.6;margin-top:2px}
+html body #shSheet .row{box-shadow:none!important;background:transparent!important;display:flex;align-items:center;gap:12px;width:100%;padding:13px 12px;border:0;border-radius:14px;background:transparent;color:inherit;font:500 15px/1.2 "DM Sans",system-ui,sans-serif;text-align:left;cursor:pointer}
+html body #shSheet .row:active{background:rgba(255,255,255,.06)!important}
+#shSheet .row i{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.08)}
+#shSheet .row i svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#shSheet .row.wa i{background:#25D366;color:#fff}
+#shSheet .row.wa i svg{fill:#fff;stroke:none}
+#shSheet .row em{margin-left:auto;font-style:normal;font-size:13px;opacity:.55}
+body.m-light #shSheet{background:#fff;color:#121215;box-shadow:0 -8px 30px rgba(18,18,21,.12)}
+body.m-light #shSheet .gr{background:#E6E6EA}
+body.m-light #shSheet .hd .lg,body.m-light #shSheet .row i{background:#F3F3F5}
+html body.m-light #shSheet .row:active{background:#F5F5F6!important}
+body.m-light #shSheet .row.wa i{background:#25D366}
 </style></head>
 <body><div id="boot" aria-hidden="true"><div class="bx"><span class="bt"><svg class="mk" viewBox="5562 5561 17451 17451" aria-hidden="true"><path fill="#5B2FD4" d="M10492 5562l7590 0c2711,0 4930,2218 4930,4930l0 7590c0,2711 -2218,4930 -4930,4930l-4806 0c3680,-2 6691,-3013 6691,-6694l0 -1017c0,-3682 -3012,-6694 -6694,-6694l-1017 0c-3682,0 -6694,3012 -6694,6694l0 -4810c0,-2711 2218,-4930 4930,-4930z"/><path fill="#5B2FD4" d="M11610 9996l921 0c3326,0 6048,2722 6048,6048l0 921c0,3326 -2722,6048 -6048,6048l-921 0c-155,0 -309,-6 -462,-18 538,-46 1051,-181 1525,-390l4 -2c32,-14 65,-29 97,-44l5 -2c31,-15 63,-30 94,-45l8 -4c31,-15 62,-31 92,-47l5 -3c31,-16 62,-33 92,-50l6 -3c30,-17 60,-34 90,-52l7 -4c30,-18 60,-36 89,-54l2 -1c279,-172 539,-373 776,-596l7 -7c25,-23 49,-47 74,-71l5 -5c22,-22 43,-43 64,-65l17 -17c18,-19 37,-39 55,-58l23 -25c17,-19 34,-38 52,-57l23 -25c17,-20 34,-39 51,-59l23 -27c16,-19 32,-39 48,-58l24 -29c15,-19 30,-38 45,-57l26 -34c14,-19 28,-37 42,-56l24 -32c14,-20 29,-40 43,-60l22 -31c14,-20 28,-40 42,-61l23 -34c13,-20 26,-40 39,-60l23 -38c12,-19 24,-38 35,-57l24 -41c11,-19 23,-38 34,-57 8,-13 15,-26 22,-40 11,-20 22,-39 33,-59 7,-13 14,-27 21,-41 11,-20 21,-40 32,-60l0 0c17,-33 33,-66 49,-99 11,-23 22,-47 33,-70 5,-10 10,-21 15,-31 8,-19 17,-37 25,-56 7,-17 15,-33 22,-50 8,-18 15,-36 23,-54 7,-17 14,-34 21,-51 7,-18 14,-36 21,-54 7,-18 14,-36 21,-54 6,-17 12,-34 19,-52 7,-19 14,-38 20,-57 6,-17 12,-35 17,-52 6,-20 13,-39 19,-59 5,-17 11,-35 16,-52 6,-19 12,-38 17,-57 5,-18 10,-36 15,-54l16 -60 14 -52c5,-20 10,-39 14,-59 4,-18 9,-37 13,-56 4,-19 9,-38 13,-58l12 -57c4,-19 8,-39 11,-58l10 -56c4,-21 7,-42 10,-63l8 -52c3,-22 6,-43 9,-65 2,-18 5,-36 7,-54 3,-22 5,-44 8,-65 2,-17 4,-33 6,-50 2,-24 4,-48 6,-73 1,-16 3,-31 4,-47 2,-24 3,-49 5,-74 1,-15 2,-30 3,-46 1,-29 2,-58 3,-86 0,-11 1,-22 1,-34 1,-40 2,-81 2,-121l0 -355c0,-2652 -2170,-4823 -4823,-4823l-355 0c-41,0 -81,0 -121,2l-34 1c-29,1 -58,2 -86,3 -15,1 -30,2 -46,3 -25,1 -49,3 -74,5 -16,1 -32,3 -47,4 -24,2 -48,4 -73,6 -17,2 -34,4 -50,6 -22,2 -44,5 -65,8l-54 7c-22,3 -43,6 -65,9 -17,3 -35,5 -52,8 -21,3 -42,7 -63,10l-56 10 -58 11c-19,4 -38,8 -57,12l-58 13c-19,4 -37,9 -56,13 -20,5 -39,9 -59,14l-52 14c-20,5 -40,11 -60,16 -18,5 -36,10 -54,15 -19,6 -38,11 -57,17 -17,5 -35,11 -52,16 -20,6 -39,13 -59,19 -17,6 -35,11 -52,17 -19,7 -38,13 -57,20 -17,6 -34,12 -52,19 -18,7 -36,14 -54,21 -18,7 -36,14 -54,21 -17,7 -34,14 -51,21 -18,7 -36,15 -54,23 -17,7 -33,15 -50,22 -19,8 -37,16 -56,25l-31 15c-24,11 -47,22 -70,33 -33,16 -66,33 -99,49l0 0c-20,10 -40,21 -60,32 -14,7 -27,14 -41,21 -20,11 -39,22 -59,33 -13,7 -27,15 -40,22 -19,11 -38,22 -57,34 -14,8 -27,16 -41,24 -19,12 -38,24 -57,35 -13,8 -25,16 -38,23 -20,13 -40,26 -60,39l-34 23c-20,14 -41,28 -61,42l-31 22c-20,14 -40,28 -60,43l-32 24c-19,14 -38,28 -56,42l-34 26c-19,15 -38,30 -57,45l-29 24c-19,16 -39,32 -58,48l-27 23c-20,17 -40,34 -59,51l-25 23c-19,17 -38,34 -57,52l-25 23c-19,18 -39,36 -58,55l-17 17c-22,21 -44,43 -65,64l-5 5c-24,24 -48,49 -71,74l-7 7c-224,237 -424,497 -596,776l-1 2c-18,30 -36,59 -54,89l-4 7c-18,30 -35,60 -52,90l-3 6c-17,31 -34,61 -50,92l-3 5c-16,31 -32,61 -47,92l-4 8c-15,31 -31,62 -45,94l-2 5c-15,32 -30,64 -44,97l-2 4c-209,474 -344,987 -390,1525 -12,-152 -18,-306 -18,-462l0 -921c0,-3326 2722,-6048 6048,-6048zm3474 10282c11,-23 22,-47 33,-70l-33 70zm-6716 -6820c-24,11 -47,22 -70,33l70 -33z"/><rect x="5796" y="14502" width="8277" height="8277" rx="3837" fill="#8B5CF6"/></svg></span><div class="bw">Stafly <span>Search</span></div><div class="bs">OAU, Ile-Ife</div><div class="bp"><i></i></div></div></div>
 <div class="app">
@@ -3583,7 +3606,7 @@ document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=
   if(el=a('[data-mcat]')){stop();st.cat=el.dataset.mcat;menus();render();return m2Nav({t:'places'});}
   if(el=a('[data-mjoin]')){stop();const id=el.dataset.mjoin;m2Join(id,false);return;}
   if(el=a('[data-msave]')){stop();const id=el.dataset.msave;SAVED.has(id)?SAVED.delete(id):SAVED.add(id);if(CUR.s==='shop')$('#mSub').innerHTML=m2Sub('shop',id);if(CUR.sel)m2SheetSave(id);return;}
-  if(el=a('[data-mshare]')){stop();const v=vOf(el.dataset.mshare);try{navigator.share&&navigator.share({title:v.name,text:v.name+' on Stafly Search: '+v.tag,url:location.href.split('#')[0]});}catch(_){}return;}
+  if(el=a('[data-mshare]')){stop();return shareOpen(el.dataset.mshare);}
   if(a('[data-mabout]')){stop();document.body.classList.remove('m-drw');return alertBox();}
 },true);
 function m2SheetSave(id){const b=$('#mSheet [data-msave]');if(b)b.innerHTML=S(SAVED.has(id)?MIF.heart:MI.heart,SAVED.has(id)?'i sv':'i');}
@@ -4075,6 +4098,37 @@ function wrapJ(name){const _j=window[name];if(typeof _j!=='function')return;wind
   if(lastTap){x=lastTap[0];y=lastTap[1];}else if(b){const q=b.getBoundingClientRect();x=q.left+q.width/2;y=q.top+q.height/2;}confetti(x,y);
   setTimeout(()=>{const bb=document.querySelector(`#mPage [data-mjoin="${id}"]`)||document.querySelector(`#mPage [data-gjoin="${id}"]`);const card=bb&&bb.closest('.g-card');if(card){card.classList.remove('gpop');void card.offsetWidth;card.classList.add('gpop');}},60);return r;};}
 wrapJ('joinGroup');wrapJ('m2Join');
+})();
+</script><script>
+/* ---- v100: share a shop. The link opens straight to that shop ---- */
+(function(){
+const ic={wa:'<svg viewBox="0 0 24 24"><path d="M12 2.2A9.7 9.7 0 0 0 3.6 16.8L2.3 21.7l5-1.3A9.7 9.7 0 1 0 12 2.2zm5.6 13.7c-.2.7-1.4 1.3-1.9 1.3-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4-.1.6.4l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>',
+ link:'<svg viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>',
+ more:'<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>'};
+const base=()=>location.origin+location.pathname;
+const linkOf=id=>base()+'?shop='+encodeURIComponent(id);
+let scrim,sheet,cur=null;
+function close(){if(!sheet)return;sheet.classList.remove('on');scrim.classList.remove('on');cur=null;}
+window.shareOpen=function(id){let v;try{v=vOf(id);}catch(_){v=null;}if(!v)return;cur=v;
+  if(!sheet){scrim=document.createElement('div');scrim.id='shScrim';sheet=document.createElement('div');sheet.id='shSheet';sheet.setAttribute('role','dialog');sheet.setAttribute('aria-label','Share');document.body.append(scrim,sheet);
+    scrim.addEventListener('click',close);
+    sheet.addEventListener('click',e=>{const b=e.target.closest('[data-sh]');if(!b||!cur)return;const v=cur,url=linkOf(v.id),txt=v.name+' on Stafly Search 👇\n'+(v.tag?v.tag+'\n':'')+url;
+      if(b.dataset.sh==='wa'){window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank','noopener');close();}
+      else if(b.dataset.sh==='copy'){const done=()=>{const em=b.querySelector('em');if(em)em.textContent='Copied';setTimeout(close,700);};
+        try{navigator.clipboard.writeText(url).then(done,()=>{prompt('Copy this link',url);close();});}catch(_){prompt('Copy this link',url);close();}}
+      else if(b.dataset.sh==='more'){try{navigator.share({title:v.name,text:v.name+' on Stafly Search',url}).catch(()=>{});}catch(_){}close();}});
+    addEventListener('keydown',e=>{if(e.key==='Escape')close();});}
+  let lg='';try{lg=typeof mLogo==='function'?mLogo(v):'';}catch(_){}
+  sheet.innerHTML=`<div class="gr"></div><div class="hd"><span class="lg">${lg}</span><div><b>Share ${v.name}</b><span>Friends open the link straight to this shop</span></div></div>
+    <button type="button" class="row wa" data-sh="wa"><i>${ic.wa}</i>Send on WhatsApp</button>
+    <button type="button" class="row" data-sh="copy"><i>${ic.link}</i>Copy link<em></em></button>
+    ${navigator.share?`<button type="button" class="row" data-sh="more"><i>${ic.more}</i>More apps</button>`:''}`;
+  requestAnimationFrame(()=>{scrim.classList.add('on');sheet.classList.add('on');});};
+/* a shared link (?shop=id) opens that shop */
+const want=new URLSearchParams(location.search).get('shop');
+if(want){let n=0;const go=()=>{let v=null;try{v=vOf(want);}catch(_){}
+  if(v&&typeof m2Nav==='function'&&document.body.classList.contains('m2on')){try{history.replaceState(null,'',base()+location.hash);}catch(_){}m2Nav({t:'explore',s:'shop',id:want});return;}
+  if(++n<40)setTimeout(go,150);};setTimeout(go,300);}
 })();
 </script></body>
 </html>
