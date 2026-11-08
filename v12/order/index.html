@@ -4471,14 +4471,16 @@ function miThumb(v,it){return it[2]?`<span class="mi-th" style="background-image
 function menuHtml(v){const q=cartOf(v.id);
   const cp=it=>{const p=String(it[4]||'').split(/\s*(?:·|\/|>|-)\s*/).filter(Boolean);return[p[0]||'',p.slice(1).join(' · ')];};
   const tops=[...new Set(v.items.map(it=>cp(it)[0]).filter(Boolean))];
-  if(tops.length&&v.items.some(it=>cp(it)[1]||tops.length>1)){
+  const cnt={};v.items.forEach(it=>{const t=cp(it)[0];if(t)cnt[t]=(cnt[t]||0)+1;});
+  const cap=x=>String(x||'').replace(/^./,m=>m.toUpperCase());
+  if(v.items.length>=6&&Object.values(cnt).filter(n=>n>=2).length>=2){
     const sel=(window.MCAT||{})[v.id]||'';const keys=[];v.items.forEach((it,k)=>{const[t,sb]=cp(it);const g=(t||'Other')+'|'+sb;if(!keys.includes(g))keys.push(g);});
     keys.sort((a,b)=>{const ta=a.split('|')[0],tb=b.split('|')[0];return(ta==='Other')-(tb==='Other')||tops.indexOf(ta)-tops.indexOf(tb);});
     const row=(it,k)=>{const n=q[k]||0;return`<div class="m-price mi-row" data-mitem="${k}">${miThumb(v,it)}<span class="pp">${it[0]}${it[3]?`<i class="mi-d">${it[3]}</i>`:''}<small>${naira(it[1])}</small></span><span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></div>`;};
-    const chips=tops.length>1?`<div class="mi-cats">${['',...tops].map(t=>`<button type="button" data-micat="${t}" class="${sel===t?'on':''}">${t||'All'}</button>`).join('')}</div>`:'';
+    const chips=tops.length>1?`<div class="mi-cats">${['',...tops].map(t=>`<button type="button" data-micat="${t}" class="${sel===t?'on':''}">${cap(t)||'All'}</button>`).join('')}</div>`:'';
     return chips+keys.filter(g=>!sel||g.split('|')[0]===sel).map(g=>{const[t,sb]=g.split('|');const its=v.items.map((it,k)=>[it,k]).filter(([it])=>((cp(it)[0]||'Other')+'|'+cp(it)[1])===g);
       const head=(sel||tops.length<2)?(sb||t):(sb?t+' · '+sb:t);
-      return`<div class="mi-gh">${head}</div><div class="m-card mi-list" style="padding:4px 16px">${its.map(([it,k])=>row(it,k)).join('')}</div>`;}).join('');}
+      return`<div class="mi-gl">${cap(head)}</div>${its.map(([it,k])=>row(it,k)).join('')}`;}).join('').replace(/^/,'<div class="m-card mi-list" style="padding:4px 16px">')+'</div>';}
   return`<div class="m-card mi-list" style="padding:4px 16px">${v.items.map((it,k)=>{const n=q[k]||0;
   return`<div class="m-price mi-row" data-mitem="${k}">${miThumb(v,it)}<span class="pp">${it[0]}${it[3]?`<i class="mi-d">${it[3]}</i>`:''}<small>${naira(it[1])}</small></span><span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></div>`;}).join('')}</div>`;}
 function baskHtml(v){const n=count(v);return`<button type="button" class="m-bask" data-mbask="${v.id}"><span>View basket · ${n} item${n===1?'':'s'}</span><em><i>${naira(sub(v))}</i></em></button>`;}
@@ -4661,6 +4663,21 @@ html body.m2on .mi-sh .ad{flex:1;height:54px;border:0;border-radius:27px;backgro
 html body.m2on.m-light .mi-sh .ad{background:#121215;color:#fff}
 html body.m2on .ch-tabs{margin:2px 0 18px}
 html body.m2on .mi-sh .bx{touch-action:pan-y}
+html body.m2on .mi-sh .bx{height:min(600px,86vh);display:flex;flex-direction:column;overflow:hidden;transition:height .25s ease,border-radius .25s ease}
+html body.m2on .mi-sh .bx>.ph{flex:none;height:260px;cursor:zoom-in;transition:height .25s ease,transform .22s ease,opacity .22s ease}
+html body.m2on .mi-sh .bx>.ph.ic{height:150px;cursor:default}
+html body.m2on .mi-sh .bx>.in{flex:1;min-height:0;overflow:auto;scrollbar-width:none}
+html body.m2on .mi-sh .bx>.in::-webkit-scrollbar{display:none}
+html body.m2on .mi-sh .bx>.dt{flex:none}
+html body.m2on .mi-sh .bx>.mi-ft{flex:none;position:static}
+html body.m2on .mi-sh.big .bx{height:100vh;height:100dvh;max-height:none;border-radius:0}
+html body.m2on .mi-sh.big .bx>.ph{flex:1;height:auto;border-radius:0;background-size:contain;background-color:#000;cursor:zoom-out}
+html body.m2on.m-light .mi-sh.big .bx>.ph{background-color:#fff}
+html body.m2on .mi-sh.big .bx>.in{flex:none;max-height:120px}
+html body.m2on .mi-sh .ph:not(.ic)::after{content:'';position:absolute;right:14px;top:226px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.45) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7'/%3E%3C/svg%3E") center/16px no-repeat}
+html body.m2on .mi-sh.big .ph::after{display:none}
+html body.m2on .mi-gl{font:600 12.5px 'DM Sans',sans-serif;letter-spacing:.02em;opacity:.55;padding:14px 0 2px}
+html body.m2on .mi-gl+.mi-row{border-top:0}
 html body.m2on .mi-sh .ct{position:absolute;top:14px;left:14px;height:32px;padding:0 12px;border-radius:16px;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;font:600 13px 'DM Sans',sans-serif}
 html body.m2on .mi-sh .dt{display:flex;justify-content:center;gap:6px;padding:12px 0 0}
 html body.m2on .mi-sh .dt i{width:6px;height:6px;border-radius:3px;background:currentColor;opacity:.22;transition:width .2s,opacity .2s}
@@ -4688,7 +4705,7 @@ sh.addEventListener('touchmove',e=>{if(TX===null)return;const dx=e.touches[0].cl
 sh.addEventListener('touchend',e=>{if(TX===null)return;const dx=e.changedTouches[0].clientX-TX,dy=e.changedTouches[0].clientY-TY;TX=null;const ph=sh.querySelector('.ph');if(ph){ph.style.transition='';ph.style.transform='';}
   if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3)go(dx<0?1:-1);},{passive:true});
 addEventListener('keydown',e=>{if(!IT)return;if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);});
-const close=()=>{sh.classList.remove('on');IT=null;};
+const close=()=>{sh.classList.remove('on','big');IT=null;};
 function draw(){if(!IT)return;const v=vOf(IT.id),it=v.items[IT.k];if(!it)return close();
   sh.innerHTML=`<div class="sc" data-mix="1"></div><div class="bx" role="dialog" aria-label="${it[0]}">
     ${it[2]?`<div class="ph" style="background-image:url(${it[2]})"></div>`:`<div class="ph ic">${S(ICON[v.cat])}</div>`}<button type="button" class="x" data-mix="1" aria-label="Close">×</button>
@@ -4701,6 +4718,7 @@ document.addEventListener('click',e=>{
   const t=e.target;
   if(sh.contains(t)){e.preventDefault();e.stopImmediatePropagation();
     if(t.closest('[data-mix]'))return close();
+    if(t.closest('.ph')&&!t.closest('.ph.ic')){sh.classList.toggle('big');return;}
     const q=t.closest('[data-miq]');if(q){IT.q=Math.max(1,Math.min(20,IT.q+Number(q.dataset.miq)));return draw();}
     if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;close();const b=document.querySelector('#mSub [data-madd="'+k+'"]');if(b){for(let i=0;i<n;i++){const bb=document.querySelector('#mSub [data-madd="'+k+'"]');bb&&bb.click();}}return;}
     return;}
