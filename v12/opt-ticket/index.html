@@ -8101,6 +8101,19 @@ html body.m2on #mSub .sp-cover .g-art i.c{transform:translateX(-130px) rotate(-1
 html body.m2on #mSub .sp-cover:has(.g-art) .g-shade{background:linear-gradient(180deg,rgba(14,14,17,.35),rgba(14,14,17,.05) 40%,rgba(14,14,17,.55) 80%,rgba(14,14,17,.85))!important}
 html body.m2on.m-light #mSub .sp-cover:has(.g-art) .g-shade{background:linear-gradient(180deg,rgba(14,14,17,.35),rgba(14,14,17,.05) 40%,rgba(14,14,17,.25) 80%,rgba(245,245,246,.9))!important}
 </style>
+<style>
+/* v159: light-mode version of the profile poster cover (soft category tint, coloured icon, fades into the page) */
+html body.m2on.m-light #mSub .sp-cover:has(.g-art){background:#F5F5F6}
+html body.m2on.m-light #mSub .sp-cover .g-art{background:radial-gradient(110% 90% at 100% 20%,color-mix(in srgb,var(--tt) 34%,#F5F5F6),transparent 62%),color-mix(in srgb,var(--tt) 12%,#F5F5F6)}
+html body.m2on.m-light #mSub .sp-cover .g-art i{color:color-mix(in srgb,var(--tt) 78%,#121215)}
+html body.m2on.m-light #mSub .sp-cover .g-art i.a{opacity:.55}
+html body.m2on.m-light #mSub .sp-cover .g-art i.b{opacity:.3}
+html body.m2on.m-light #mSub .sp-cover .g-art i.c{opacity:.15}
+html body.m2on.m-light #mSub .sp-cover .g-art .gsl{background:repeating-linear-gradient(180deg,transparent 0 13px,color-mix(in srgb,var(--tt) 30%,transparent) 13px 14px);opacity:.6}
+html body.m2on.m-light #mSub .sp-cover .g-art .gn{mix-blend-mode:multiply;opacity:.07}
+html body.m2on.m-light #mSub .sp-cover:has(.g-art) .g-shade{background:linear-gradient(180deg,rgba(245,245,246,.35),rgba(245,245,246,0) 35%,rgba(245,245,246,0) 70%,rgba(245,245,246,.85))!important}
+html body.m2on.m-light #mSub .sp-cover:has(.g-art) .sp-bar button{background:#fff!important;color:#121215!important;border-color:transparent!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+</style>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
 v.items=[['Jollof rice and chicken',2500,'','','Rice'],['Fried rice and turkey',3000,'','','Rice'],['Ofada rice and ayamase',2800,'','','Rice'],['White rice and stew',1800,'','','Rice'],['Coconut rice and fish',2600,'','','Rice'],['Party jollof (big pack)',4500,'','','Rice'],
