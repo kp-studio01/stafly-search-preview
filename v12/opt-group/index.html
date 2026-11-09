@@ -8003,8 +8003,8 @@ var _m=m2Sub;m2Sub=function(k,id){if(k==='grp')return page(id);return _m.apply(t
 window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   var go=t.closest('[data-gpgo]');if(go){e.preventDefault();e.stopImmediatePropagation();var id=go.dataset.gpgo,v=vOf(id);
     try{var G=groupsFor(v);if(G[0]){CK.mode=G[0].id;if(!CK.hall)CK.hall=G[0].hall;localStorage.setItem('stafly_ck',JSON.stringify(CK));}}catch(_){}
-    var my=mine(id,v);if(my.length&&!joined.has(id)&&!go.dataset.fx){go.dataset.fx=1;return joinFx(id,v,function(){m2Nav({t:CUR.t,s:'cart',id:id});});}m2Nav({t:CUR.t,s:my.length?'cart':'shop',id:id});
-    if(!my.length)setTimeout(function(){var mm=document.querySelector('#mSub .mi-list,#mSub [data-mitem]');if(mm)mm.scrollIntoView({block:'start',behavior:'smooth'});},350);return;}
+    var my=mine(id,v);if(my.length&&!joined.has(id)&&!go.dataset.fx){go.dataset.fx=1;return joinFx(id,v,function(){m2Nav({t:CUR.t,s:'cart',id:id});});}if(my.length){window.GPFOR='';m2Nav({t:CUR.t,s:'cart',id:id});return;}
+    window.ALLQ='';window.MCAT=window.MCAT||{};MCAT[id]='';window.GPFOR=id;m2Nav({t:CUR.t,s:'all',id:id});return;}
   var sh=t.closest('[data-gpshare]');if(sh){e.preventDefault();e.stopImmediatePropagation();var v2=vOf(sh.dataset.gpshare),g=GROUPS[sh.dataset.gpshare];
     var url=location.origin+location.pathname+'#grp/'+sh.dataset.gpshare,txt='Join my group order from '+v2.name+' to '+g.hall+'. We split the delivery fee.';
     if(navigator.share)navigator.share({title:'Group order',text:txt,url:url}).catch(function(){});else{try{navigator.clipboard.writeText(txt+' '+url);sh.classList.add('ok');setTimeout(function(){sh.classList.remove('ok');},1300);}catch(_){}}return;}
@@ -8128,5 +8128,30 @@ v.items=[['Jollof rice and chicken',2500,'','','Rice'],['Fried rice and turkey',
 ['Chapman',800,'','','Drinks'],['Zobo',500,'','','Drinks'],['Fresh orange juice',900,'','','Drinks'],['Bottled water',200,'','','Drinks'],['Coke (50cl)',400,'','','Drinks'],['Malt',500,'','','Drinks'],['Tiger nut drink',700,'','','Drinks']];
 }catch(_){setTimeout(go,200);}}go();})();
 </script>
+<style id="m168">
+html body.m2on #mSub .gp-chip{display:flex;align-items:center;justify-content:center;gap:7px;width:max-content;max-width:100%;margin:-4px auto 14px;padding:7px 13px;border-radius:999px;font-size:13px;color:rgba(255,255,255,.72);background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+html body.m2on #mSub .gp-chip svg{width:15px;height:15px;flex:none;color:#A994F2}
+html body.m2on #mSub .gp-chip b{color:#fff;font-weight:600}
+html body.m2on.m-light #mSub .gp-chip{color:#6B6B75;background:#fff;box-shadow:0 0 0 1px #ECECEF}
+html body.m2on.m-light #mSub .gp-chip b{color:#121215}
+html body.m2on.m-light #mSub .gp-chip svg{color:#7551DC}
+html body.m2on #mSub .gp-af{display:flex;gap:10px;align-items:stretch}
+html body.m2on #mSub .gp-af .m-bask{flex:1;min-width:0}
+html body.m2on #mSub .gp-af .gp-back{flex:none;display:flex;align-items:center;gap:6px;padding:0 18px;border:0;border-radius:999px;font:600 15px "DM Sans",sans-serif;cursor:pointer;color:#fff;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+html body.m2on #mSub .gp-af .gp-back svg{width:16px;height:16px}
+html body.m2on.m-light #mSub .gp-af .gp-back{color:#121215;background:#fff;box-shadow:0 0 0 1px #E6E6EA,0 2px 6px rgba(18,18,21,.06)}
+</style>
+<script>(function(){
+var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='all'||typeof h!=='string')return h;var v=vOf(id),g=(typeof GROUPS!=='undefined')&&GROUPS[id];
+  if(!v||window.GPFOR!==id||!g)return h;
+  h=h.replace(/(<div class="al-sub">[^<]*<\/div>)/,'$1<div class="gp-chip">'+mS('users3')+'<span>Group order to <b>'+String(g.hall).replace(/</g,'&lt;')+'</b></span></div>');
+  var bk='<button type="button" class="gp-back" data-gpback="1">'+mS('back')+'Group</button>';
+  if(h.indexOf('<div class="m-foot">')>=0)h=h.replace(/<div class="m-foot">([\s\S]*)<\/div>\s*$/,'<div class="m-foot gp-af">'+bk+'$1</div>').replace(/<span>View basket · (\d+) items?<\/span>/,'<span>Check out · $1</span>');
+  else h+='<div class="m-foot gp-af">'+bk.replace('>'+mS('back')+'Group<','>'+mS('back')+'Back to group<').replace('class="gp-back"','class="gp-back" style="flex:1;justify-content:center;height:52px"')+'</div>';
+  return h;};
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+  if(t.closest('#mSub [data-mall]'))window.GPFOR='';
+  var b=t.closest('#mSub [data-gpback]');if(b){e.preventDefault();e.stopImmediatePropagation();var x=document.querySelector('#mSub [data-mback]');if(x)x.click();}},true);
+})();</script>
 </body>
 </html>
