@@ -4476,7 +4476,7 @@ function setQty(v,k,d){if(CART.shop!==v.id)CART={shop:v.id,q:{}};const n=Math.ma
 const isReal=v=>!!v.sid;
 const fee=v=>v.deliv?Number(v.deliv.fee)||0:0;
 let GR={};/* open groups per shop from the server */
-function groupsFor(v){if(isReal(v))return GR[v.id]||[];const g=GROUPS[v.id];return g?[{id:'demo',hall:g.hall,size:g.need,joined:g.n,share:share(v,g.n+1),demo:1}]:[];}
+window.groupsFor=groupsFor;function groupsFor(v){if(isReal(v))return GR[v.id]||[];const g=GROUPS[v.id];return g?[{id:'demo',hall:g.hall,size:g.need,joined:g.n,share:share(v,g.n+1),demo:1}]:[];}
 function delivery(v){if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(CK.mode==='new')return fee(v);const g=groupsFor(v).find(x=>x.id===CK.mode);return g?g.share:fee(v);}
 function rer(){const p=$('#mSub');if(!p)return;const y=p.scrollTop,a=document.activeElement,aid=a&&a.dataset&&a.dataset.ck,pos=a&&a.selectionStart;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;if(aid){const i=p.querySelector('[data-ck="'+aid+'"]');if(i){i.focus();try{i.setSelectionRange(pos,pos);}catch(_){}}}}
 /* ---- shop page: + buttons on the menu, basket bar in place of the footer ---- */
@@ -7958,6 +7958,94 @@ html body .mi-sh .ad.ok{animation:miOk .6s ease}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .od-mine .mlg:not(:has(img)){display:grid!important;place-items:center!important;background:rgba(255,255,255,.06)!important;border:0!important;box-shadow:none!important;padding:0!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .od-mine .mlg:not(:has(img)) svg{width:46%!important;height:46%!important;margin:0!important;position:static!important;opacity:.85}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .od-mine .mlg:not(:has(img)){background:#F1F1F3!important}
+</style>
+<script>
+(function(){
+var NM=['Ada','Tunde','Bisi','Kemi','Seyi','Femi','Ife','Dayo'];
+function members(id,v,g){var out=[],its=v.items||[],h=0;for(var i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))>>>0;
+  for(var k=0;k<g.n;k++){var a=its[(h+k*3)%Math.max(1,its.length)]||['Order',0],b=its[(h+k*5+1)%Math.max(1,its.length)];var q=1+((h>>k)&1);
+    var pick=[[a[0],q]];if(b&&b[0]!==a[0]&&k%2===0)pick.push([b[0],1]);
+    out.push({nm:NM[(h+k)%NM.length],c:(g.faces||[])[k]||'#D9CCFF',items:pick,lead:k===0});}return out;}
+function E(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function mine(id,v){try{var c=JSON.parse(localStorage.getItem('stafly_cart')||'{}');if(!c||c.shop!==id)return[];var L=[];for(var k in c.q){var it=v.items[k],q=+c.q[k];if(it&&q)L.push([it[0],q,it[1]]);}return L;}catch(_){return[];}}
+function pr(x){return typeof x==='string'?Number(x.replace('from ','')):Number(x)||0;}
+function page(id){var v=vOf(id),g=GROUPS[id];if(!v||!g)return'<div class="m-h c">'+back()+'<h1>Group</h1><span style="width:46px"></span></div><div class="m-empty"><b>This group has closed</b></div>';
+  var me=joined.has(id),n=g.n+(me?1:0),left=g.need-n,fee=v.deliv?v.deliv.fee:0,M=members(id,v,g),my=mine(id,v),cv=(typeof CV==='function')&&CV(v);
+  var faces=M.map(function(m){return'<i style="background:'+m.c+'">'+m.nm[0]+'</i>';}).join('')+(me?'<i class="you">You</i>':'');
+  var rows=M.map(function(m){return'<div class="gp-m"><span class="gp-av" style="background:'+m.c+'">'+m.nm[0]+'</span><div><b>'+m.nm+(m.lead?'<em>Started it</em>':'')+'</b><span>'+m.items.map(function(x){return E(x[0])+(x[1]>1?' ×'+x[1]:'');}).join(', ')+'</span></div></div>';}).join('');
+  var open='';for(var k=0;k<Math.max(0,left-(me?0:1));k++)open+='<div class="gp-m gp-open"><span class="gp-av"></span><div><b>Open spot</b><span>Anyone can join</span></div></div>';
+  var youRow=me||my.length?'<div class="gp-m gp-you"><span class="gp-av">You</span><div><b>You'+(me?'':'<em>Not in yet</em>')+'</b><span>'+(my.length?my.map(function(x){return E(x[0])+(x[1]>1?' ×'+x[1]:'');}).join(', '):'Nothing picked yet')+'</span></div></div>':'<div class="gp-m gp-open gp-mine"><span class="gp-av">+</span><div><b>Your spot</b><span>Pick what you want from the menu</span></div></div>';
+  var sub=my.reduce(function(a,x){return a+pr(x[2])*x[1];},0),shr=share(v,me?n:n+1);
+  return'<div class="m-h c">'+back()+'<h1>Group order</h1><button type="button" class="m-circ gp-sh" data-gpshare="'+id+'" aria-label="Invite friends">'+mS('share')+'</button></div>'+
+  '<div class="g-card gp-card"><div class="g-media">'+(cv?'<img class="g-photo" src="'+cv+'" alt="">':lvPh(v))+'<span class="g-shade"></span>'+
+   '<span class="g-tag">'+mS('users3')+'Group order</span><span class="g-time'+(g.closes<=15?' soon':'')+'">'+mS('clock')+g.closes+' min left</span>'+(cv?'':'<span class="g-pin">'+mLogo(v)+'</span>')+
+   '<div class="g-cap"><div class="nm"><b>'+E(v.name)+'</b><span>Delivering to '+E(g.hall)+'</span></div><div class="pr"><b>'+naira(shr)+'</b><span>your share · <s>'+naira(fee)+'</s></span></div></div></div>'+
+   '<div class="g-body"><div class="g-seg">'+Array.from({length:g.need},function(_,k){return'<i class="'+(k<g.n?'f':(me&&k===g.n?'me':''))+'"></i>';}).join('')+'</div>'+
+   '<div class="gp-faces"><span>'+faces+'</span><b>'+n+' of '+g.need+' in</b><em>'+(left>0?left+(left===1?' spot':' spots')+' left':'Full')+'</em></div></div></div>'+
+  '<div class="m-sh"><b>Who\'s in</b><span>Everyone picks their own</span></div><div class="m-card gp-list">'+rows+youRow+open+'</div>'+
+  '<div class="m-sh"><b>Details</b></div><div class="m-card gp-det">'+
+   '<div><span>Delivering to</span><b>'+E(g.hall)+'</b></div>'+
+   '<div><span>Leaves</span><b>When full, or in '+g.closes+' min</b></div>'+
+   '<div><span>Delivery</span><b>'+naira(fee)+' shared · you pay '+naira(shr)+'</b></div>'+
+   '<div><span>If more join</span><b>Your share drops, we send back the difference</b></div></div>'+
+  '<div class="m-foot gp-foot"><button type="button" class="m-pay gp-go" data-gpgo="'+id+'">'+(my.length?(me?'See your order':'Join with your items')+' · '+naira(sub+shr):'Pick your items')+'</button></div>';}
+var _m=m2Sub;m2Sub=function(k,id){if(k==='grp')return page(id);return _m.apply(this,arguments);};
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+  var go=t.closest('[data-gpgo]');if(go){e.preventDefault();e.stopImmediatePropagation();var id=go.dataset.gpgo,v=vOf(id);
+    try{var G=groupsFor(v);if(G[0]){CK.mode=G[0].id;if(!CK.hall)CK.hall=G[0].hall;localStorage.setItem('stafly_ck',JSON.stringify(CK));}}catch(_){}
+    var my=mine(id,v);m2Nav({t:CUR.t,s:my.length?'cart':'shop',id:id});
+    if(!my.length)setTimeout(function(){var mm=document.querySelector('#mSub .mi-list,#mSub [data-mitem]');if(mm)mm.scrollIntoView({block:'start',behavior:'smooth'});},350);return;}
+  var sh=t.closest('[data-gpshare]');if(sh){e.preventDefault();e.stopImmediatePropagation();var v2=vOf(sh.dataset.gpshare),g=GROUPS[sh.dataset.gpshare];
+    var url=location.origin+location.pathname+'#grp/'+sh.dataset.gpshare,txt='Join my group order from '+v2.name+' to '+g.hall+'. We split the delivery fee.';
+    if(navigator.share)navigator.share({title:'Group order',text:txt,url:url}).catch(function(){});else{try{navigator.clipboard.writeText(txt+' '+url);sh.classList.add('ok');setTimeout(function(){sh.classList.remove('ok');},1300);}catch(_){}}return;}
+  /* the group card and its Join button open the group page */
+  var card=t.closest('#mPage .g-card');if(card&&!t.closest('[data-mshop]')){var j=card.querySelector('[data-mjoin]');if(j){e.preventDefault();e.stopImmediatePropagation();m2Nav({t:CUR.t,s:'grp',id:j.dataset.mjoin});}return;}
+},true);
+})();
+</script>
+<style>
+html body.m2on #mSub .gp-card{margin:4px 0 8px}
+html body.m2on #mSub .gp-faces{display:flex;align-items:center;gap:10px;margin-top:14px}
+html body.m2on #mSub .gp-faces>span{display:flex}
+html body.m2on #mSub .gp-faces>span i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;color:#121215;margin-left:-8px;box-shadow:0 0 0 2px #1d1d22}
+html body.m2on #mSub .gp-faces>span i:first-child{margin-left:0}
+html body.m2on #mSub .gp-faces>span i.you{background:#fff;font-size:9.5px}
+html body.m2on #mSub .gp-faces b{font-size:14px;font-weight:600}
+html body.m2on #mSub .gp-faces em{margin-left:auto;font-style:normal;font-size:13px;opacity:.6}
+html body.m2on.m-light #mSub .gp-faces>span i{box-shadow:0 0 0 2px #fff}
+html body.m2on.m-light #mSub .gp-faces>span i.you{background:#121215;color:#fff}
+html body.m2on #mSub .gp-list{padding:4px 16px!important}
+html body.m2on #mSub .gp-m{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);text-align:left}
+html body.m2on #mSub .gp-m:last-child{border-bottom:0}
+html body.m2on.m-light #mSub .gp-m{border-bottom-color:rgba(18,18,21,.06)}
+html body.m2on #mSub .gp-av{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:700;color:#121215}
+html body.m2on #mSub .gp-m>div{flex:1;min-width:0}
+html body.m2on #mSub .gp-m b{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
+html body.m2on #mSub .gp-m b em{font-style:normal;font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px;background:rgba(127,127,127,.14);opacity:.85}
+html body.m2on #mSub .gp-m>div>span{display:block;margin-top:2px;font-size:13px;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on #mSub .gp-you .gp-av{background:#fff;font-size:11px}
+html body.m2on.m-light #mSub .gp-you .gp-av{background:#121215;color:#fff}
+html body.m2on #mSub .gp-open .gp-av{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(127,127,127,.35);color:inherit;opacity:.7}
+html body.m2on #mSub .gp-open b{opacity:.55}
+html body.m2on #mSub .gp-mine .gp-av{font-size:20px;font-weight:400;opacity:1}
+html body.m2on #mSub .gp-mine b{opacity:1}
+html body.m2on #mSub .gp-det{padding:4px 16px!important}
+html body.m2on #mSub .gp-det>div{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px}
+html body.m2on.m-light #mSub .gp-det>div{border-bottom-color:rgba(18,18,21,.06)}
+html body.m2on #mSub .gp-det>div:last-child{border-bottom:0}
+html body.m2on #mSub .gp-det span{opacity:.6;flex:none}
+html body.m2on #mSub .gp-det b{font-weight:500;text-align:right}
+html body.m2on #mSub .gp-sh svg{width:19px;height:19px}
+html body.m2on #mSub .gp-sh.ok{background:rgba(31,157,85,.25)!important}
+html body.m2on #mPage .g-card{cursor:pointer}
+</style>
+<style>
+html body.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage{transition:transform .44s cubic-bezier(.32,.72,0,1)!important}
+html body.m2on.m2on.m2on.m2on.m2on:not(.dk).m-pgon.m-subon #mPage{transform:translateX(-22%)!important}
+html body.m2on.m2on.m2on.m2on.m2on:not(.dk).m-subon #mSub{transition:transform .44s cubic-bezier(.32,.72,0,1)!important;box-shadow:-18px 0 40px -10px rgba(0,0,0,.45)}
+html body.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-subon) #mSub{transition:transform .44s cubic-bezier(.32,.72,0,1)!important;box-shadow:-18px 0 40px -10px rgba(0,0,0,0)}
+html body.m2on.m2on.m2on.m2on.m2on.m-light:not(.dk).m-subon #mSub{box-shadow:-18px 0 40px -10px rgba(18,18,40,.18)}
+@media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage,html body.m2on.m2on.m2on.m2on.m2on:not(.dk) #mSub{transition:none!important}}
 </style>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
