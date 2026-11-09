@@ -8172,5 +8172,74 @@ var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='cart'
   return h.replace(/<label class="ck-f"><span>Where to bring it<\/span>[\s\S]*?<\/div><\/label>/,
     '<div class="ck-f ck-lock"><span>Where to bring it</span><div class="lk-v">'+mS('users3')+hall+'</div><small>The group\'s drop-off. Add your room or spot below.</small></div>');};
 })();</script>
+<style id="m170">
+html body.m2on #mSub .dv-c{padding:4px 16px!important}
+html body.m2on #mSub .dv-row{display:flex;align-items:center;gap:12px;padding:14px 0}
+html body.m2on #mSub .dv-ic{width:38px;height:38px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);color:#fff}
+html body.m2on #mSub .dv-ic svg{width:18px;height:18px}
+html body.m2on #mSub .dv-t{flex:1;min-width:0}
+html body.m2on #mSub .dv-t b{display:block;font-size:16px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on #mSub .dv-t small{display:block;margin-top:2px;font-size:13px;color:rgba(255,255,255,.5)}
+html body.m2on #mSub .dv-ch{flex:none;height:34px;padding:0 14px;border:0;border-radius:999px;font:600 13px "DM Sans",sans-serif;color:#fff;background:rgba(255,255,255,.08);cursor:pointer}
+html body.m2on #mSub .dv-c .ck-f{border-top:1px solid rgba(255,255,255,.07)}
+html body.m2on #mSub .dv-pk{display:none;border-top:1px solid rgba(255,255,255,.07);padding:10px 0 6px}
+html body.m2on #mSub .dv-c.open .dv-pk{display:block}
+html body.m2on #mSub .dv-c.open .dv-ch{background:#fff;color:#121215}
+html body.m2on #mSub .dv-q{display:block;width:100%;height:42px;padding:0 14px;border:0;border-radius:12px;font:400 15px "DM Sans",sans-serif;color:#fff;background:rgba(255,255,255,.06);outline:none;box-sizing:border-box}
+html body.m2on #mSub .dv-q::placeholder{color:rgba(255,255,255,.4)}
+html body.m2on #mSub .dv-l{max-height:260px;overflow-y:auto;margin-top:8px;overscroll-behavior:contain}
+html body.m2on #mSub .dv-l button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 4px;border:0;border-bottom:1px solid rgba(255,255,255,.06);background:none;font:500 15px "DM Sans",sans-serif;color:rgba(255,255,255,.88);text-align:left;cursor:pointer;border-radius:0}
+html body.m2on #mSub .dv-l button:last-child{border-bottom:0}
+html body.m2on #mSub .dv-l button svg{width:17px;height:17px;flex:none;opacity:.7}
+html body.m2on #mSub .dv-l button.on{color:#fff;font-weight:600}
+html body.m2on #mSub .dv-l button.on::after{content:"";margin-left:auto;width:8px;height:8px;border-radius:50%;background:#8B70F0}
+html body.m2on #mSub .dv-l .dv-gl{padding:12px 4px 4px;font-size:12px;font-weight:600;letter-spacing:.02em;color:rgba(255,255,255,.4)}
+html body.m2on.m-light #mSub .dv-ic{background:#F3F3F5;color:#121215}
+html body.m2on.m-light #mSub .dv-t b{color:#121215}html body.m2on.m-light #mSub .dv-t small{color:#6B6B75}
+html body.m2on.m-light #mSub .dv-ch{color:#121215;background:#F1F1F3}
+html body.m2on.m-light #mSub .dv-c.open .dv-ch{background:#121215;color:#fff}
+html body.m2on.m-light #mSub .dv-c .ck-f,html body.m2on.m-light #mSub .dv-pk{border-top-color:#EFEFF2}
+html body.m2on.m-light #mSub .dv-q{color:#121215;background:#F5F5F6}html body.m2on.m-light #mSub .dv-q::placeholder{color:#9A9AA3}
+html body.m2on.m-light #mSub .dv-l button{color:#2A2A30;border-bottom-color:#F0F0F2}html body.m2on.m-light #mSub .dv-l button.on{color:#121215}
+html body.m2on.m-light #mSub .dv-l button.on::after{background:#7551DC}
+html body.m2on.m-light #mSub .dv-l .dv-gl{color:#9A9AA3}
+</style>
+<script>(function(){
+function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+var PIN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>';
+var NAV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>';
+var DROP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/></svg>';
+var STAR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>';
+var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='cart'||typeof h!=='string')return h;
+  var a=h.indexOf('<div class="m-sh"><b>Your details</b>');if(a<0)return h;
+  var c=h.indexOf('<div class="m-card"',a);var w=h.indexOf('<label class="ck-f"><span>WhatsApp number</span>',c);if(c<0||w<0)return h;
+  var cardOpen=h.slice(c,h.indexOf('>',c)+1),loc=h.slice(h.indexOf('>',c)+1,w),rest=h.slice(w);
+  var lock=(loc.match(/<div class="ck-f ck-lock">[\s\S]*?<\/small><\/div>/)||[''])[0];
+  var spotLbl=(loc.match(/<label class="ck-f"><span>Exact spot<\/span>[\s\S]*?<\/label>/)||[''])[0];
+  var hallIn=(loc.match(/<input data-ck="hall"[^>]*>/)||[''])[0];
+  var halls=[],m,re=/data-ckhall="([^"]*)"/g;while((m=re.exec(loc)))halls.push(m[1]);
+  var spots=[];re=/data-ckspot="(\d+)"[^>]*>([^<]*)</g;while((m=re.exec(loc)))spots.push([m[1],m[2]]);
+  var place=CK.hall||'',sub=CK.pin?'Pin dropped on the map':(CK.spot?esc(CK.spot):'Add your room or spot below');
+  var top;
+  if(lock){var gh=(lock.match(/<\/svg>([^<]*)<\/div>/)||['',''])[1];top='<div class="dv-row"><span class="dv-ic">'+mS('users3')+'</span><div class="dv-t"><b>'+gh+'</b><small>The group\'s drop-off. Add your room below.</small></div></div>';}
+  else{
+    var list='<button type="button" data-ckloc="1">'+NAV+'Use my location</button><button type="button" data-ckpin="1">'+DROP+'Drop a pin on the map</button>';
+    if(spots.length)list+='<div class="dv-gl">Your spots</div>'+spots.map(function(s){return'<button type="button" data-ckspot="'+s[0]+'">'+STAR+s[1]+'</button>';}).join('');
+    list+='<div class="dv-gl">Halls and places</div>'+halls.map(function(x){return'<button type="button" data-ckhall="'+esc(x)+'" class="'+(x===place?'on':'')+'">'+PIN+esc(x)+'</button>';}).join('');
+    top='<div class="dv-row"><span class="dv-ic">'+PIN+'</span><div class="dv-t"><b>'+(place?esc(place):'Choose where to bring it')+'</b><small>'+sub+'</small></div><button type="button" class="dv-ch" data-dvopen="1">'+(place?'Change':'Choose')+'</button></div>'+
+      '<div class="dv-pk">'+'<input class="dv-q" type="text" placeholder="Search or type a place" autocomplete="off">'+'<div class="dv-l">'+list+'</div></div>';
+  }
+  var dv='<div class="m-sh"><b>Deliver to</b></div><div class="m-card dv-c'+(place||lock?'':' open')+'">'+top+spotLbl+'</div>';
+  var det='<div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>'+cardOpen+rest;
+  return h.slice(0,a)+dv+det;};
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;var b=t.closest('#mSub [data-dvopen]');if(!b)return;
+  e.preventDefault();e.stopImmediatePropagation();var c=b.closest('.dv-c');if(c){c.classList.toggle('open');var q=c.querySelector('.dv-q');if(c.classList.contains('open')&&q&&window.innerWidth>820)q.focus();}},true);
+/* typing in the place box filters the list */
+window.addEventListener('input',function(e){var i=e.target;if(!i.classList||!i.classList.contains('dv-q'))return;var s=i.value.toLowerCase();
+  var any=false;[].forEach.call(document.querySelectorAll('#mSub .dv-l [data-ckhall]:not(.dv-use)'),function(x){var hit=!s||x.textContent.toLowerCase().indexOf(s)>=0;x.style.display=hit?'':'none';if(hit&&s)any=true;});
+  var l=document.querySelector('#mSub .dv-l'),u=l&&l.querySelector('.dv-use'),v=i.value.trim();if(!l)return;
+  if(!v){if(u)u.remove();return;}if(!u){u=document.createElement('button');u.type='button';u.className='dv-use';l.insertBefore(u,l.firstChild);}
+  u.dataset.ckhall=v.slice(0,60);u.innerHTML=PIN+'Use “'+esc(v.slice(0,60))+'”';},true);
+})();</script>
 </body>
 </html>
