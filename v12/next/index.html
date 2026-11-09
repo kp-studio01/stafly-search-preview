@@ -4930,5 +4930,26 @@ html body.m2on.m2on.m2on.m2on.m2on:not(.m-light) .m-row2:is(:hover,.dk-on) .mlg:
 html body.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) :is(:is(#mPage,#mSub) :is(.m-chat,.m-card,.m-lst,.m-al,.m-dg,.m-list,.m-tile,.m-fee,.m-field,.m-thm,.pf-card,.pf-so,.m-shop),.sp-info,.sp-cover~.m-qa button){box-shadow:inset 0 0 0 1px rgba(255,255,255,.03)!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(:is(#mPage,#mSub) :is(.m-chat,.m-card,.m-lst,.m-al,.m-dg,.m-list,.m-tile,.m-fee,.m-field,.m-thm,.pf-card,.pf-so,.m-shop),.sp-info,.sp-cover~.m-qa button){box-shadow:0 0 0 1px rgba(18,18,21,.03),0 6px 18px rgba(18,18,21,.035)!important}
 </style>
+<style id="v134">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst{border-radius:28px!important;padding:8px 16px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2{margin:0 -8px!important;width:calc(100% + 16px)!important;padding:8px!important;border-radius:20px!important;gap:12px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2 .mlg{width:44px!important;height:44px!important;flex:0 0 44px!important;border-radius:12px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2 .mlg svg.i{width:20px!important;height:20px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2 .tx{padding-left:0}
+/* layers: box, then highlight, then icon: each one step lighter, nothing fights */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk:not(.m-light) #mPage .m-lst .m-row2:hover{background:rgba(255,255,255,.035)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk:not(.m-light) #mPage .m-lst .m-row2.dk-on{background:rgba(255,255,255,.06)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk:not(.m-light) #mPage .m-lst .m-row2 .mlg:not(:has(img)){background:rgba(255,255,255,.07)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk:not(.m-light) #mPage .m-lst .m-row2:is(:hover,.dk-on) .mlg:not(:has(img)){background:rgba(255,255,255,.08)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light #mPage .m-lst .m-row2:hover{background:#F7F7F8!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light #mPage .m-lst .m-row2.dk-on{background:#F3F3F5!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light #mPage .m-lst .m-row2:is(:hover,.dk-on) .mlg:not(:has(img)){background:#fff!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on .od-ic{border-radius:12px!important}
+/* row dividers as straight lines (a border would bend with the rounded corners) */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2{border-bottom:0!important;position:relative}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2:after{content:"";position:absolute;left:8px;right:8px;bottom:0;height:1px;background:rgba(255,255,255,.07);pointer-events:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light #mPage .m-lst .m-row2:after{background:rgba(18,18,21,.06)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2:is(:hover,.dk-on,:last-child):after,html body.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2:has(+ .m-row2:is(:hover,.dk-on)):after{opacity:0}
+</style>
 </body>
 </html>
