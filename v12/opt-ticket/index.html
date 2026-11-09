@@ -3925,10 +3925,25 @@ function profile(){
   return head+`<div class="pf-card"><div class="pf-top"><span class="pf-av" data-pfpic="1" role="button" aria-label="Change your photo">${uAv()}<i class="pf-cam">${CAM}</i></span><div><b>${USER.name}</b><span>${USER.hall} · OAU</span><small>On Stafly since ${since()}</small></div></div>
     <div class="pf-st"><div><b>${ord}</b><span>Chats</span></div><div><b>${sv}</b><span>Saved</span></div><div><b>${fol}</b><span>Following</span></div></div></div>
     <div class="m-dl">Your activity</div><div class="m-dg">${R('data-mtab="chats"','chat','Chats and orders',ord)}${R('data-mtab="groups"','users','Group orders',grp?grp+' joined':'None yet')}${R('data-msub="saved"','heart','Saved shops',sv||'')}${R('data-msub="following"','store','Shops you follow',fol||'')}</div>
-    <div class="m-dl">Account</div><div class="m-dg">${R('data-msub="hall"','pin','Your hall',hallShort(USER.hall))}<div class="m-li pf-ro">${mS('wa')}<span>WhatsApp number</span><small>Private</small></div>${R('data-msub="alerts"','bell','Alerts')}</div>
+    <div class="m-dl">Account</div><div class="m-dg">${R('data-msub="hall"','pin','Your hall',hallShort(USER.hall))}${R('data-msub="spots"','pin','Your spots',window.spotsN&&spotsN()?spotsN():'')}<div class="m-li pf-ro">${mS('wa')}<span>WhatsApp number</span><small>Private</small></div>${R('data-msub="alerts"','bell','Alerts')}</div>
     <div class="m-dl">Appearance</div><div class="m-thm"><button type="button" data-mtheme="dark" class="${curTheme()==='dark'?'on':''}">${mS('moon')}Dark</button><button type="button" data-mtheme="light" class="${curTheme()==='light'?'on':''}">${mS('sun')}Light</button></div>
     <button type="button" class="pf-so" data-pfout="1">Sign out</button>
     <p class="pf-note">Your number is only used to sign you in. Shops never see it.</p>`;}
+
+/* v150: saved spots */
+function spotsGet(){try{const a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');return Array.isArray(a)?a.slice(0,6):[];}catch(_){return[];}}
+function spotsSet(a){try{localStorage.setItem('stafly_spots',JSON.stringify(a.slice(0,6)));}catch(_){}}
+window.spotsN=()=>spotsGet().length;
+const spEsc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+window.spotsHtml=function(){const L=spotsGet();
+  return`<label class="ck-f"><span>Exact spot</span><input data-ck="spot" type="text" placeholder="Block, room or landmark, like Block C, Room 12" value="${spEsc(CK.spot)}" autocomplete="off"></label>
+  ${L.length?`<div class="ck-sv"><span>Your spots</span><div class="ck-hl">${L.map((p,i)=>`<button type="button" data-ckspot="${i}" class="${CK.hall===p.hall&&(CK.spot||'')===(p.spot||'')?'on':''}">${spEsc(p.hall)}${p.spot?' · '+spEsc(p.spot):''}</button>`).join('')}</div></div>`:''}
+  <button type="button" class="ck-save${CK.saveSpot===false?'':' on'}" data-cksave="1"><i></i>Save this spot for next time</button>`;};
+function spotsPage(){const L=spotsGet();
+  return`<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button><h1>Your spots</h1><span style="width:46px"></span></div>
+  <p class="pf-sub">Places you get things delivered to. Pick one at checkout in one tap.</p>
+  ${L.length?`<div class="m-dg">${L.map((p,i)=>`<div class="m-li sp-row"><span class="sp-pin">${mS('pin')}</span><div><b>${spEsc(p.hall)}</b><small>${spEsc(p.spot||'No exact spot yet')}</small></div><button type="button" class="sp-del" data-spdel="${i}" aria-label="Remove">${mS('x')||'×'}</button></div>`).join('')}</div>`:`<div class="m-empty"><span class="ei">${mS('pin')}</span><b>No saved spots yet</b>When you order, tick "Save this spot" and it shows here.</div>`}`;}
+const _sSp=m2Sub;m2Sub=function(k,id){if(k==='spots')return spotsPage();return _sSp.apply(this,arguments);};
 function following(){const L=V.filter(v=>FOLLOW.has(v.id));
   return`<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button><h1>Following</h1><span style="width:46px"></span></div>${L.length?'<div class="m-lst">'+L.map(v=>m2Shop(v)).join('')+'</div>':`<div class="m-empty"><span class="ei">${mS('store')}</span><b>Not following anyone yet</b>Tap Follow on a shop to see its posts first on Live.</div>`}`;}
 function hallPick(){const cur=USER&&USER.hk;
@@ -4497,7 +4512,7 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   </div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
-    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.pin?'on':''}">${CK.pin?'Pin added ✓':'Use my location'}</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
+    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckpin="1" class="${CK.pin?'on':''}">${CK.pin?'Pin dropped ✓':'Drop a pin'}</button><button type="button" data-ckloc="1">Use my location</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>${window.spotsHtml?spotsHtml():''}
     <label class="ck-f"><span>WhatsApp number</span><input data-ck="phone" type="tel" inputmode="tel" placeholder="0803 123 4567" value="${(CK.phone||'').replace(/"/g,'&quot;')}" autocomplete="tel"></label>
     <label class="ck-f"><span>Your name</span><input data-ck="name" type="text" placeholder="First name" value="${(CK.name||'').replace(/"/g,'&quot;')}" autocomplete="given-name"></label>
     <label class="ck-f"><span>Note for the shop</span><input data-ck="note" type="text" placeholder="Optional, like extra pepper" value="${(CK.note||'').replace(/"/g,'&quot;')}"></label>
@@ -7705,6 +7720,79 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-c
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-code b{color:#121215}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-share{background:#121215;color:#fff}
 @media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx *{animation:none!important}}
+</style>
+<script>
+(function(){
+function sub(){var p=document.querySelector('#mSub');if(p){var y=p.scrollTop;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;}}
+function save(){try{localStorage.setItem('stafly_ck',JSON.stringify(CK));}catch(_){}}
+function spots(){try{return JSON.parse(localStorage.getItem('stafly_spots')||'[]')||[];}catch(_){return[];}}
+var pk=null,back=null;
+function openPick(){if(typeof map==='undefined')return;back={c:map.getCenter(),z:map.getZoom(),p:map.getPitch()};
+  document.body.classList.add('pinpick');
+  pk=document.createElement('div');pk.id='pinPick';pk.innerHTML='<div class="pp-top"><b>Drop a pin</b><span>Move the map so the pin sits on your exact spot</span></div><div class="pp-pin"><span class="pp-head"></span><span class="pp-shadow"></span></div><div class="pp-bar"><button type="button" class="pp-no" data-ppno="1">Cancel</button><button type="button" class="pp-ok" data-ppok="1">Use this spot</button></div>';
+  document.body.appendChild(pk);
+  try{map.resize();var c=CK.pin?CK.pin.split(',').map(Number):null;map.easeTo({center:c?[c[1],c[0]]:(typeof YOU!=='undefined'&&YOU?[YOU[1],YOU[0]]:map.getCenter()),zoom:18,pitch:0,duration:700});}catch(_){}
+  map.on('movestart',lift);map.on('moveend',drop);}
+function lift(){pk&&pk.classList.add('up');}
+function drop(){pk&&pk.classList.remove('up');}
+function closePick(ok){if(!pk)return;try{map.off('movestart',lift);map.off('moveend',drop);}catch(_){}
+  if(ok){var c=map.getCenter(),la=c.lat.toFixed(5),lo=c.lng.toFixed(5);CK.pin=la+','+lo;CK.note=String(CK.note||'').replace(/\s*Pin: \S+/,'').trim();save();}
+  pk.classList.add('out');var el=pk;pk=null;setTimeout(function(){el.remove();},220);document.body.classList.remove('pinpick');
+  try{if(back)map.easeTo({center:back.c,zoom:back.z,pitch:back.p,duration:500});}catch(_){}sub();}
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+  if(t.closest('[data-ckpin]')){e.preventDefault();e.stopImmediatePropagation();openPick();return;}
+  if(t.closest('[data-ppok]')){e.preventDefault();e.stopImmediatePropagation();closePick(true);return;}
+  if(t.closest('[data-ppno]')){e.preventDefault();e.stopImmediatePropagation();closePick(false);return;}
+  var sp=t.closest('[data-ckspot]');if(sp){e.preventDefault();e.stopImmediatePropagation();var p=spots()[+sp.dataset.ckspot];if(p){CK.hall=p.hall;CK.spot=p.spot||'';if(p.pin)CK.pin=p.pin;save();sub();}return;}
+  if(t.closest('[data-cksave]')){e.preventDefault();e.stopImmediatePropagation();CK.saveSpot=CK.saveSpot===false?true:false;save();sub();return;}
+  var dl=t.closest('[data-spdel]');if(dl){e.preventDefault();e.stopImmediatePropagation();var a=spots();a.splice(+dl.dataset.spdel,1);try{localStorage.setItem('stafly_spots',JSON.stringify(a));}catch(_){}sub();return;}
+  /* paying: put the exact spot in the note for the shop, and remember it */
+  if(t.closest('[data-mpay]')){var h=String(CK.hall||'').trim(),sp2=String(CK.spot||'').trim();
+    var mine=String(CK.note||'').replace(/\s*Spot: [^|]*\|/,'').replace(/\s*Pin: \S+/g,'').trim();
+    var parts=[];if(sp2)parts.push('Spot: '+sp2);if(CK.pin)parts.push('Pin: https://maps.google.com/?q='+CK.pin);if(mine)parts.push(mine);
+    CK.note=parts.join(' | ');
+    if(h&&CK.saveSpot!==false){var a=spots().filter(function(p){return !(p.hall===h&&(p.spot||'')===sp2);});a.unshift({hall:h,spot:sp2,pin:CK.pin||''});try{localStorage.setItem('stafly_spots',JSON.stringify(a.slice(0,6)));}catch(_){}}
+    save();setTimeout(function(){CK.note=mine;save();if(CUR.s==='cart')sub();},0);}
+},true);
+addEventListener('keydown',function(e){if(pk&&e.key==='Escape')closePick(false);});
+})();
+</script>
+<style id="v150">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .ck-sv{padding:12px 0 2px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .ck-sv>span{display:block;font-size:13px;color:rgba(255,255,255,.55);margin-bottom:8px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .ck-save{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;padding:12px 0 4px;font-size:14px;color:rgba(255,255,255,.75);cursor:pointer}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .ck-save i{width:20px;height:20px;border-radius:6px;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.3);display:grid;place-items:center;transition:background .2s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .ck-save.on i{background:#fff;box-shadow:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .ck-save.on i:after{content:"";width:9px;height:5px;border:solid #121215;border-width:0 0 2px 2px;transform:rotate(-45deg) translate(1px,-1px)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .ck-sv>span{color:#6B6B75}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .ck-save{color:#3A3A42}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .ck-save i{box-shadow:inset 0 0 0 1.5px rgba(18,18,21,.25)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .ck-save.on i{background:#121215}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .ck-save.on i:after{border-color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-row{display:flex!important;align-items:center;justify-content:flex-start!important;gap:12px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-row>div{flex:1;min-width:0;text-align:left}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-row b{display:block;font-size:15px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-row small{display:block;font-size:13px;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-pin svg{width:20px;height:20px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-del{all:unset;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;cursor:pointer;opacity:.6}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-del:hover{opacity:1;background:rgba(255,255,255,.06)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sp-del svg{width:16px;height:16px}
+/* drop a pin */
+body.pinpick #m2>:not(.mapwrap):not(#map),body.pinpick #mPage,body.pinpick #mSub,body.pinpick #mTabs,body.pinpick .m-top,body.pinpick #mSatB,body.pinpick #mLoc,body.pinpick .youwrap{visibility:hidden!important;pointer-events:none!important}
+body.pinpick .mapwrap,body.pinpick #map{visibility:visible!important}
+#pinPick{position:fixed;inset:0;z-index:2000;pointer-events:none;animation:ppIn .25s ease both}
+#pinPick.out{animation:ppOut .2s ease both}
+@keyframes ppIn{from{opacity:0}to{opacity:1}}@keyframes ppOut{to{opacity:0}}
+#pinPick .pp-top{position:absolute;left:16px;right:16px;top:max(16px,env(safe-area-inset-top));max-width:440px;margin:0 auto;padding:14px 18px;border-radius:20px;background:rgba(18,18,21,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;text-align:center;font-family:inherit}
+#pinPick .pp-top b{display:block;font-size:16px}#pinPick .pp-top span{display:block;font-size:13.5px;opacity:.7;margin-top:2px}
+#pinPick .pp-pin{position:absolute;left:50%;top:50%;width:0;height:0}
+#pinPick .pp-head{position:absolute;left:-17px;top:-48px;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#7551DC;box-shadow:0 0 0 3px #fff,0 8px 18px rgba(0,0,0,.4);transition:top .2s cubic-bezier(.34,1.56,.64,1)}
+#pinPick .pp-head:after{content:"";position:absolute;left:11px;top:11px;width:12px;height:12px;border-radius:50%;background:#fff}
+#pinPick .pp-shadow{position:absolute;left:-7px;top:-3px;width:14px;height:6px;border-radius:50%;background:rgba(0,0,0,.45);transition:transform .2s ease,opacity .2s}
+#pinPick.up .pp-head{top:-62px}
+#pinPick.up .pp-shadow{transform:scale(1.6);opacity:.3}
+#pinPick .pp-bar{position:absolute;left:16px;right:16px;bottom:max(20px,env(safe-area-inset-bottom));max-width:440px;margin:0 auto;display:flex;gap:10px;pointer-events:auto}
+#pinPick .pp-bar button{all:unset;box-sizing:border-box;height:56px;border-radius:28px;display:grid;place-items:center;font-family:inherit;font-weight:600;font-size:16px;cursor:pointer}
+#pinPick .pp-bar .pp-no{flex:0 0 112px;background:rgba(18,18,21,.82);color:#fff;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+#pinPick .pp-bar .pp-ok{flex:1;background:#7551DC;color:#fff;box-shadow:0 10px 24px rgba(117,81,220,.35)}
 </style>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
