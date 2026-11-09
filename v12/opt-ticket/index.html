@@ -4848,9 +4848,10 @@ document.addEventListener('click',e=>{
     if(t.closest('[data-mimore]')){sh.classList.toggle('open');return draw();}
     if(t.closest('.ph')&&!t.closest('.ph.ic')){sh.classList.toggle('big');return;}
     const q=t.closest('[data-miq]');if(q){IT.q=Math.max(miIn(IT.id,IT.k)?0:1,Math.min(20,IT.q+Number(q.dataset.miq)));return draw();}
-    if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;try{const v0=vOf(IT.id),it0=v0.items[k];if(IT.p>0&&it0&&(it0[5]||[]).length){const tag=it0[0]+': photo '+(IT.p+1);if((CK.note||'').indexOf(tag)<0){CK.note=((CK.note||'')+(CK.note?', ':'')+tag).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}}}catch(_){}const had=miIn(IT.id,k);close();let df=n-had;
+    if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;try{const v0=vOf(IT.id),it0=v0.items[k];if(IT.p>0&&it0&&(it0[5]||[]).length){const tag=it0[0]+': photo '+(IT.p+1);if((CK.note||'').indexOf(tag)<0){CK.note=((CK.note||'')+(CK.note?', ':'')+tag).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}}}catch(_){}const had=miIn(IT.id,k);let df=n-had;
       if(df>0){for(let i=0;i<df;i++){const bb=document.querySelector('#mSub [data-madd="'+k+'"]');bb&&bb.click();}}
-      else if(df<0){for(let i=0;i<-df;i++){const bb=document.querySelector('#mSub [data-mdec="'+k+'"]');bb&&bb.click();}}return;}
+      else if(df<0){for(let i=0;i<-df;i++){const bb=document.querySelector('#mSub [data-mdec="'+k+'"]');bb&&bb.click();}}
+      if(!miIn(IT.id,k))IT.q=1;draw();const ad=sh.querySelector('[data-miadd]');if(ad&&df){ad.classList.add('ok');setTimeout(()=>ad.classList.remove('ok'),700);}return;}
     return;}
   const r=t.closest('#mSub [data-mitem]');
   if(r&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();IT={id:CUR.id,k:Number(r.dataset.mitem),q:Math.max(1,miIn(CUR.id,Number(r.dataset.mitem)))};draw();requestAnimationFrame(()=>sh.classList.add('on'));miPush();return;}
@@ -7896,10 +7897,7 @@ function miIn(id,k){try{const c=JSON.parse(localStorage.getItem('stafly_cart')||
 function miBk(id){try{const c=JSON.parse(localStorage.getItem('stafly_cart')||'{}');const v=vOf(id);if(!c||c.shop!==id||!v)return'';let n=0,t=0;
   for(const k in c.q){const it=v.items[k],q=Number(c.q[k])||0;if(!it||!q)continue;n+=q;t+=q*(typeof it[1]==='string'?Number(String(it[1]).replace('from ','')):Number(it[1])||0);}
   if(!n)return'';const pop=window.__miBkN!==undefined&&window.__miBkN!==n;window.__miBkN=n;
-  return`<button type="button" class="mi-bk${pop?' pop':''}" data-mibk="${id}" aria-label="Go to basket"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 11.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 19.5z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>${n}</span><b>${naira(t)}</b><i>Checkout</i></button>`;}catch(_){return'';}}
-window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;var b=t.closest('#miSh [data-mibk]');if(!b)return;
-  e.preventDefault();e.stopImmediatePropagation();var id=b.dataset.mibk;var x=document.querySelector('#miSh .x[data-mix]');if(x)x.click();
-  setTimeout(function(){var bb=document.querySelector('#mSub [data-mbask]');if(bb)bb.click();else m2Nav({t:CUR.t,s:'cart',id:id});},320);},true);
+  return`<button type="button" class="mi-bk${pop?' bump':''}" data-mibk="${id}" aria-label="Go to basket"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 11.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 19.5z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>${n}</span><b>${naira(t)}</b><i>Checkout</i></button>`;}catch(_){return'';}}
 </script>
 <style>
 html body .mi-sh .mi-bk{all:unset;box-sizing:border-box;position:absolute;z-index:5;top:16px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 6px 0 14px;border-radius:20px;background:rgba(18,18,21,.82);color:#fff;font:600 14px 'DM Sans',sans-serif;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 20px rgba(0,0,0,.28);white-space:nowrap;animation:miBkIn .4s cubic-bezier(.32,.72,0,1) both}
@@ -7907,11 +7905,44 @@ html body .mi-sh .mi-bk svg{width:18px;height:18px;fill:none;stroke:currentColor
 html body .mi-sh .mi-bk span{margin-left:-2px;opacity:.75}
 html body .mi-sh .mi-bk b{font-weight:600}
 html body .mi-sh .mi-bk i{font-style:normal;height:28px;display:grid;place-items:center;padding:0 12px;border-radius:14px;background:#fff;color:#121215;font-size:13px}
-html body .mi-sh .mi-bk.pop{animation:miBkIn .4s cubic-bezier(.32,.72,0,1) both,miBkPop .45s .1s ease}
+html body .mi-sh .mi-bk.bump{animation:miBkIn .4s cubic-bezier(.32,.72,0,1) both,miBkPop .45s .1s ease}
 html body .mi-sh .mi-bk:active{transform:translateX(-50%) scale(.96)}
 @keyframes miBkIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translateX(-50%)}}
 @keyframes miBkPop{40%{transform:translateX(-50%) scale(1.08)}}
 html body .mi-sh .ad.rm{background:transparent!important;color:#E5484D!important;box-shadow:inset 0 0 0 1.5px rgba(229,72,77,.5)!important}
+</style>
+<script>
+/* v153: bubble grows into the checkout */
+(function(){
+function goCk(b){var id=b.dataset.mibk,r=b.getBoundingClientRect(),p=document.querySelector('#mSub'),pr=p?p.getBoundingClientRect():{left:0,top:0,width:innerWidth,height:innerHeight};
+  var lt=document.body.classList.contains('m-light');
+  var m=document.createElement('div');m.className='mi-morph';m.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;background:'+(lt?'#F5F5F6':'#141417');
+  m.innerHTML='<span>'+b.innerHTML+'</span>';document.body.appendChild(m);b.style.visibility='hidden';
+  var sh=document.getElementById('miSh');if(sh)sh.classList.add('mi-going');
+  requestAnimationFrame(function(){requestAnimationFrame(function(){m.classList.add('grow');m.style.left=pr.left+'px';m.style.top=pr.top+'px';m.style.width=pr.width+'px';m.style.height=pr.height+'px';});});
+  var x=document.querySelector('#miSh .x[data-mix]');
+  setTimeout(function(){if(x)x.click();},60);
+  setTimeout(function(){try{m2Nav({t:CUR.t,s:'cart',id:id});}catch(_){}var q=document.querySelector('#mSub');if(q){q.classList.remove('ck-rise');void q.offsetWidth;q.classList.add('ck-rise');setTimeout(function(){q.classList.remove('ck-rise');},900);}
+    if(sh)sh.classList.remove('mi-going');m.classList.add('out');setTimeout(function(){m.remove();},380);},470);}
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;var b=t.closest('#miSh [data-mibk]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();goCk(b);},true);
+})();
+</script>
+<style>
+.mi-morph{position:fixed;z-index:4000;border-radius:20px;overflow:hidden;display:grid;place-items:center;pointer-events:none;box-shadow:0 20px 60px rgba(0,0,0,.35);
+  transition:left .46s cubic-bezier(.32,.72,0,1),top .46s cubic-bezier(.32,.72,0,1),width .46s cubic-bezier(.32,.72,0,1),height .46s cubic-bezier(.32,.72,0,1),border-radius .46s cubic-bezier(.32,.72,0,1),opacity .34s ease}
+.mi-morph>span{display:inline-flex;align-items:center;gap:8px;color:#fff;font:600 14px 'DM Sans',sans-serif;white-space:nowrap;transition:opacity .2s ease,transform .46s cubic-bezier(.32,.72,0,1)}
+body.m-light .mi-morph>span{color:#121215}
+.mi-morph>span svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}
+.mi-morph>span i{font-style:normal;padding:4px 12px;border-radius:14px;background:#fff;color:#121215;font-size:13px}
+.mi-morph.grow{border-radius:28px}.mi-morph.grow>span{opacity:0;transform:scale(1.15)}
+.mi-morph.out{opacity:0}
+html body .mi-sh.mi-going{transition:transform .4s cubic-bezier(.32,.72,0,1),opacity .3s ease!important}
+html body #mSub.ck-rise>*{animation:ckRise .5s cubic-bezier(.32,.72,0,1) both}
+html body #mSub.ck-rise>*:nth-child(2){animation-delay:.04s}html body #mSub.ck-rise>*:nth-child(3){animation-delay:.08s}html body #mSub.ck-rise>*:nth-child(4){animation-delay:.12s}html body #mSub.ck-rise>*:nth-child(5){animation-delay:.16s}html body #mSub.ck-rise>*:nth-child(n+6){animation-delay:.2s}
+@keyframes ckRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+html body .mi-sh .ad.ok{animation:miOk .6s ease}
+@keyframes miOk{30%{transform:scale(.96)}60%{transform:scale(1.02)}}
+@media (prefers-reduced-motion:reduce){.mi-morph{transition:none}html body #mSub.ck-rise>*{animation:none}}
 </style>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
