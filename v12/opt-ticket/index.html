@@ -4497,6 +4497,15 @@ function menuHtml(v){const q=cartOf(v.id);
   return`<div class="m-card mi-list" style="padding:4px 16px">${v.items.map((it,k)=>{const n=q[k]||0;
   return`<div class="m-price mi-row" data-mitem="${k}">${miThumb(v,it)}<span class="pp">${it[0]}${it[3]?`<i class="mi-d">${it[3]}</i>`:''}<small>${naira(it[1])}</small></span><span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></div>`;}).join('')}</div>`;}
 function baskHtml(v){const n=count(v);return`<button type="button" class="m-bask" data-mbask="${v.id}"><span>View basket · ${n} item${n===1?'':'s'}</span><em><i>${naira(sub(v))}</i></em></button>`;}
+/* ---- v151: calm delivery picker ---- */
+function dlvHtml(v,G){const f=fee(v),m=CK.mode||'solo',gs=G.find(g=>g.id===m),low=G.length?G.reduce((a,g)=>g.share<a.share?g:a,G[0]):null;
+  const isG=!!gs,hs=CK.hall&&!/^\s*off[ -]?campus\s*$/i.test(CK.hall)?String(CK.hall).split(',')[0].trim().slice(0,24):'';
+  const tile=(id,on,b,p,tag)=>`<button type="button" class="dl-t${on?' on':''}" data-ckmode="${id}"><b>${b}</b><em>${p}</em>${tag?`<i>${tag}</i>`:''}</button>`;
+  let det='';
+  if(m==='solo')det=`<p class="dl-d">Straight to your door, ${v.deliv.eta}.</p>`;
+  else if(isG)det=`<p class="dl-d">${gs.joined} of ${gs.size} joined, going to ${gs.hall}. One rider, you pay a share.</p>${G.length>1?`<div class="dl-gs">${G.map(g=>`<button type="button" class="${g.id===m?'on':''}" data-ckmode="${g.id}">${g.hall}<small>${naira(g.share)}</small></button>`).join('')}</div>`:''}`;
+  else if(m==='new')det=`<p class="dl-d">${hs?'You start a group to '+hs+'. ':''}Others can join, and it gets cheaper as they do.</p>`;
+  return`<div class="m-sh"><b>Delivery</b></div><div class="m-card dl-c"><div class="dl-row${G.length?'':' two'}">${tile('solo',m==='solo','Just me',naira(f))}${low?tile(isG?gs.id:low.id,isG,'Join group',(isG?naira(gs.share):'from '+naira(low.share)),'Cheaper'):''}${tile('new',m==='new','New group',naira(f))}</div>${det}</div>`;}
 /* ---- checkout ---- */
 function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   if(!L.length)return`<div class="m-h c">${back()}<h1>Basket</h1><span style="width:46px"></span></div><div class="m-empty"><span class="ei">${mS('bag')||''}</span><b>Your basket is empty</b>Add something from ${v.name}'s menu.</div>`;
@@ -4505,11 +4514,7 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   return`<div class="m-h c">${back()}<h1>Checkout</h1><span style="width:46px"></span></div>
   <div class="m-sh" style="margin-top:0"><b>${v.name}</b><span>${L.reduce((a,l)=>a+l.qty,0)} item${L.length===1&&L[0].qty===1?'':'s'}</span></div>
   <div class="m-card" style="padding:2px 16px">${L.map(l=>`<div class="ck-l"><div><b>${l.name}</b><span>${naira(l.price)} each</span></div><span class="qa"><button type="button" class="qb" data-mdec="${l.i}" aria-label="One less">${MINUS}</button><span class="qn">${l.qty}</span><button type="button" class="qb" data-madd="${l.i}" aria-label="One more">${PLUS}</button></span></div>`).join('')}</div>
-  ${v.deliv?`<div class="m-sh"><b>Delivery</b><span>Pick one</span></div><div class="m-card" style="padding:2px 16px">
-    ${opt('solo','Just me','To your door, '+v.deliv.eta,naira(fee(v)))}
-    ${G.map(g=>opt(g.id,'Join the group going to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),g.share<fee(v)?naira(fee(v)):'')).join('')}
-    ${opt('new','Start a group'+(CK.hall&&!/^\s*off[ -]?campus\s*$/i.test(CK.hall)?' for '+String(CK.hall).split(',')[0].trim().slice(0,24):''),'Gets cheaper as people join',naira(fee(v)),'')}
-  </div>`:''}
+  ${v.deliv?dlvHtml(v,G):''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
     <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckpin="1" class="${CK.pin?'on':''}">${CK.pin?'Pin dropped ✓':'Drop a pin'}</button><button type="button" data-ckloc="1">Use my location</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>${window.spotsHtml?spotsHtml():''}
@@ -4565,47 +4570,48 @@ function tkPage(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);
 /* v149: premium ticket */
 const TKSEEN={};
 function tkCode(ref){return 'SF-'+String(ref||'').replace(/[^A-Za-z0-9]/g,'').slice(-6).toUpperCase();}
+function tkLink(ref){return location.origin+location.pathname+'#track/'+encodeURIComponent(ref);}
 function tkQR(txt){try{if(typeof qrcode!=='function')return '';const q=qrcode(0,'M');q.addData(txt);q.make();const n=q.getModuleCount();let d='';
   for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))d+='M'+c+' '+r+'h1v1h-1z';
-  return`<svg class="tq-svg" viewBox="-2 -2 ${n+4} ${n+4}" shape-rendering="crispEdges"><rect x="-2" y="-2" width="${n+4}" height="${n+4}" rx="2" fill="#fff"/><path d="${d}" fill="#121215"/></svg>`;}catch(_){return'';}}
+  return`<svg class="tq-svg" viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges"><path d="${d}" fill="#121215"/></svg>`;}catch(_){return'';}}
+const TKLINE={paid:'The shop has your order',accepted:'Your order is being made',on_the_way:'A rider is on the way to you',delivered:'Enjoy your order'};
 const _tkOld=tkPage;
 tkPage=function(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);if(!o||!d)return _tkOld(ref);
   const v=vOf(o.shop);
-  const at=s=>{const t=(d.timeline||[]).find(x=>x.s===s);return t?new Date(t.at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'';};
   const pending=d.status!=='paid',declined=d.stage==='declined',k=pending||declined?-1:STEPS.findIndex(x=>x[0]===d.stage),done=d.stage==='delivered';
-  const head=pending?'Waiting for payment':declined?'The shop couldn’t take it':done?'Delivered':STEPS[k][1]==='Paid'?'Order received':STEPS[k][1];
-  const sub=pending?'Finish paying to send it to the shop.':declined?'You will get your money back.':done?'Enjoy your order!':STEPS[k][2]+(at(d.stage)?' · since '+at(d.stage):'');
+  const head=pending?'Waiting for payment':declined?'Not accepted':done?'Delivered':STEPS[k][1]==='Paid'?'Order received':STEPS[k][1];
+  const sub=pending?'Finish paying to send it to the shop':declined?'You will get your money back':TKLINE[d.stage]||'';
   const prev=TKSEEN[ref],key=d.stage+'|'+d.status,fresh=prev===undefined,moved=!fresh&&prev!==key;TKSEEN[ref]=key;
-  const p0=fresh?0:Math.max(0,STEPS.findIndex(x=>x[0]===String(prev).split('|')[0])),p1=Math.max(0,k);
-  const pct=i=>Math.round(i/(STEPS.length-1)*100);
   const code=tkCode(ref),cat=(v&&v.cat)||'food';let wm='';try{const t=document.createElement('div');t.innerHTML=lvPh(v||{cat});const q=t.querySelector('i svg');wm=q?q.outerHTML:'';}catch(_){}
-  const link=location.origin+location.pathname+'#track/'+encodeURIComponent(ref);
+  const seg=pending||declined?'':`<div class="tkx-seg">${STEPS.map((s,i)=>`<i class="${i<k||done?'on':i===k?'on cur':''}"><b></b></i>`).join('')}</div>`;
   return`<div class="m-h c">${back()}<h1>Your order</h1><span style="width:46px"></span></div>
-  <div class="tkx ${cat}${fresh?' in':''}${moved?' moved':''}${done?' done':''}" style="--from:${pct(p0)}%;--to:${pct(p1)}%">
+  <div class="tkx ${cat}${fresh?' in':''}${moved?' moved':''}${done?' done':''}">
    <div class="tkx-top"><i class="tkx-wm">${wm}</i>
-    <div class="tkx-shop">${mLogo(v)}<div><small>${d.shop||v.name}${d.demo?' · Preview':''}</small><b>${head}</b></div></div>
-    <p class="tkx-sub">${sub}</p>
-    ${pending||declined?'':`<div class="tkx-bar"><span class="tkx-fill"></span>${STEPS.map((s,i)=>`<em class="tkx-n${i<=k?' on':''}${i===k&&!done?' cur':''}" style="left:${pct(i)}%"><svg viewBox="0 0 24 24"><path d="M6.5 12.5l3.5 3.5 7.5-8"/></svg></em>`).join('')}</div>
-    <div class="tkx-lb">${STEPS.map((s,i)=>`<span class="${i<=k?'on':''}"><b>${s[1]}</b><small>${at(s[0])||'·'}</small></span>`).join('')}</div>`}
-    ${done?'<div class="tkx-stamp">Delivered</div>':''}
+    <div class="tkx-row">${mLogo(v)}<span>${d.shop||v.name}</span><button type="button" class="tkx-sh" data-tkshare="${ref}" aria-label="Send to a friend"><svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 8.5 12 4l4.5 4.5M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14"/></svg></button></div>
+    <h2 class="tkx-h">${head}</h2><p class="tkx-sub">${sub}</p>${seg}
    </div>
    <div class="tkx-cut"></div>
-   <div class="tkx-stub">
-    <div class="tkx-qr">${tkQR(link)}</div>
-    <div class="tkx-code"><small>Order code</small><b>${code}</b><span>${done?'Keep this for your records.':'Show this to the rider or shop when you collect.'}</span>
-     <button type="button" class="tkx-share" data-tkshare="${ref}"><svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 8.5 12 4l4.5 4.5M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14"/></svg>Send to a friend</button></div>
-   </div>
+   <div class="tkx-stub"><div><small>Order code</small><b>${code}</b></div>
+    <button type="button" class="tkx-qrb" data-tkqr="${ref}" aria-label="Show QR code"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z"/></svg><span>Show QR</span></button></div>
   </div>
   <div class="m-sh"><b>What you ordered</b><span>${d.hall||''}</span></div>
   <div class="m-card ck-sum" style="padding:10px 18px">${(d.items||[]).map(i=>`<div><span>${i.qty>1?i.qty+' × ':''}${i.name}</span><b>${naira(i.price*i.qty)}</b></div>`).join('')}<div><span>Delivery</span><b>${naira(d.deliveryFee||0)}</b></div><div class="tot"><span>Total paid</span><b>${naira(d.total||0)}</b></div></div>
   ${!d.demo&&d.whatsapp&&d.stage!=='delivered'?`<a class="m-pay" style="display:grid;place-items:center;text-decoration:none;background:#121215;margin:0 0 10px" href="https://wa.me/${String(d.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent('Hi! I just ordered on Stafly Search ('+ref+'). Please keep me posted here.')}" target="_blank" rel="noopener">Get updates on WhatsApp</a>`:''}
   <p class="ck-note">${d.demo?'This is a preview of how tracking works. It moves on by itself.':'Tap above once so the shop can message you on WhatsApp at each step.'}</p>
   <div class="m-foot">${mFoot(v)}</div>`;};
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-tkshare]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();
-  const ref=b.dataset.tkshare,o=MINE.find(x=>x.ref===ref),v=o&&vOf(o.shop),url=location.origin+location.pathname+'#track/'+encodeURIComponent(ref);
-  const txt='My Stafly order from '+(v?v.name:'the shop')+'. Order code '+tkCode(ref)+'. You can collect it for me with this code.';
+function tkQrOpen(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return;const v=vOf(o.shop);
+  const w=document.createElement('div');w.className='tkq';w.innerHTML=`<div class="tkq-sc" data-tkqx="1"></div><div class="tkq-c" role="dialog" aria-label="Order QR code"><small>${v?v.name:''}</small><div class="tkq-q">${tkQR(tkLink(ref))}</div><b>${tkCode(ref)}</b><span>Show this to the rider or the shop</span><button type="button" data-tkqx="1">Done</button></div>`;
+  document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('on'));}
+function tkQrClose(){const w=document.querySelector('.tkq');if(!w)return;w.classList.remove('on');setTimeout(()=>w.remove(),260);}
+document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
+  const q=t.closest('[data-tkqr]');if(q){e.preventDefault();e.stopImmediatePropagation();tkQrOpen(q.dataset.tkqr);return;}
+  if(t.closest('[data-tkqx]')){e.preventDefault();e.stopImmediatePropagation();tkQrClose();return;}
+  const b=t.closest('[data-tkshare]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();
+  const ref=b.dataset.tkshare,o=MINE.find(x=>x.ref===ref),v=o&&vOf(o.shop),url=tkLink(ref);
+  const txt='My Stafly order from '+(v?v.name:'the shop')+'. Order code '+tkCode(ref)+'.';
   if(navigator.share){navigator.share({title:'Stafly order '+tkCode(ref),text:txt,url}).catch(()=>{});}
-  else{try{navigator.clipboard.writeText(txt+' '+url);b.classList.add('ok');b.lastChild.textContent='Copied';setTimeout(()=>{b.classList.remove('ok');b.lastChild.textContent='Send to a friend';},1600);}catch(_){}}},true);
+  else{try{navigator.clipboard.writeText(txt+' '+url);b.classList.add('ok');setTimeout(()=>b.classList.remove('ok'),1400);}catch(_){}}},true);
+addEventListener('keydown',e=>{if(e.key==='Escape')tkQrClose();});
 /* ---- your orders, in the menu drawer and on the Chats page ---- */
 function minePage(){return`<div class="m-h c">${back()}<h1>Your orders</h1><span style="width:46px"></span></div>${MINE.length?'<div class="m-card" style="padding:2px 16px">'+MINE.map(o=>{const v=vOf(o.shop),d=tkData(o.ref),st=d?(d.stage==='delivered'?'Delivered':d.status!=='paid'?'Not paid':(STEPS.find(x=>x[0]===d.stage)||[0,'On it'])[1]):'Open';
   return`<button type="button" class="od-mine" data-mtrack="${o.ref}">${mLogo(v)}<div><b>${v.name}</b><span>${naira(o.total)} · ${new Date(o.at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div><em>${st}</em></button>`;}).join('')+'</div>':`<div class="m-empty"><b>No orders yet</b>When you order from a shop, you can follow it here.</div>`}`;}
@@ -7638,87 +7644,85 @@ var qrcode = function() {
 
 </script>
 <style id="v149">
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx{--ph:#2A2A31;position:relative;margin:4px 0 22px;border-radius:24px;filter:drop-shadow(0 18px 30px rgba(0,0,0,.35))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx{--ph:#2A2A31;position:relative;margin:2px 0 26px}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.food{--ph:#3A2B22}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.fashion{--ph:#2C2A38}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.beauty{--ph:#3A2A31}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.printing{--ph:#24303B}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.gadgets{--ph:#22313A}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.services{--ph:#2F3227}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-top{position:relative;overflow:hidden;isolation:isolate;padding:20px 20px 22px;border-radius:24px 24px 0 0;background:var(--ph)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-top:before{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.07) 1.2px,transparent 1.6px);background-size:16px 16px}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-top:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 50%)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-wm{position:absolute;z-index:-1;right:-30px;top:-26px;width:150px;height:150px;color:rgba(255,255,255,.05);transform:rotate(-12deg);pointer-events:none}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-wm svg{width:100%!important;height:100%!important;stroke:currentColor!important;stroke-width:1.5}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-shop{display:flex;align-items:center;gap:12px}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-shop .mlg{width:44px!important;height:44px!important;flex:0 0 44px!important;border-radius:14px!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-shop small{display:block;font-size:13px;color:rgba(255,255,255,.62)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-shop b{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1.15}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-sub{margin:10px 0 0;font-size:14.5px;color:rgba(255,255,255,.72)}
-/* progress line */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-bar{position:relative;height:28px;margin:22px 13px 0}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-bar:before{content:"";position:absolute;left:0;right:0;top:12px;height:4px;border-radius:4px;background:rgba(255,255,255,.12)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-fill{position:absolute;left:0;top:12px;height:4px;border-radius:4px;width:var(--to);background:linear-gradient(90deg,#9B82EA,#7551DC)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-fill{animation:tkFill 1.1s .25s cubic-bezier(.32,.72,0,1) both}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved .tkx-fill{animation:tkMove .9s cubic-bezier(.32,.72,0,1) both}
-@keyframes tkFill{from{width:0}to{width:var(--to)}}
-@keyframes tkMove{from{width:var(--from)}to{width:var(--to)}}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-n{position:absolute;top:1px;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:#3a3a42;box-shadow:0 0 0 4px var(--ph);display:grid;place-items:center}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-n svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:20;stroke-dashoffset:20}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-n.on{background:#7551DC}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-n.on svg{stroke-dashoffset:0}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n.on{animation:tkPop .45s cubic-bezier(.34,1.56,.64,1) both}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n.on svg{animation:tkTick .35s ease both}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n:nth-of-type(2){animation-delay:.3s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n:nth-of-type(2) svg{animation-delay:.45s}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n:nth-of-type(3){animation-delay:.6s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n:nth-of-type(3) svg{animation-delay:.75s}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n:nth-of-type(4){animation-delay:.9s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-n:nth-of-type(4) svg{animation-delay:1.05s}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved .tkx-n.cur,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved.done .tkx-n:last-of-type{animation:tkPop .45s .6s cubic-bezier(.34,1.56,.64,1) both}
-@keyframes tkPop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
-@keyframes tkTick{from{stroke-dashoffset:20}to{stroke-dashoffset:0}}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-n.cur:after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(155,130,234,.7);animation:tkRing 1.8s ease-out infinite}
-@keyframes tkRing{from{transform:scale(.8);opacity:1}to{transform:scale(1.5);opacity:0}}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-lb{display:grid;grid-template-columns:repeat(4,1fr);margin:10px -6px 0;text-align:center}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-lb span:first-child{text-align:left}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-lb span:last-child{text-align:right}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-lb b{display:block;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.5)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-lb small{display:block;font-size:11.5px;color:rgba(255,255,255,.4);margin-top:1px}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-lb .on b{color:#fff}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-lb .on small{color:rgba(255,255,255,.6)}
-/* delivered stamp */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-stamp{position:absolute;right:18px;top:62px;padding:5px 12px;border:2.5px solid #7BEDB5;border-radius:10px;color:#7BEDB5;font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase;transform:rotate(-8deg)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-stamp,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved .tkx-stamp{animation:tkStamp .55s 1.2s cubic-bezier(.2,1.4,.4,1) both}
-@keyframes tkStamp{0%{opacity:0;transform:rotate(-8deg) scale(2.2)}60%{opacity:1;transform:rotate(-8deg) scale(.92)}100%{opacity:1;transform:rotate(-8deg) scale(1)}}
-/* the cut: notches and dashes */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-cut{position:relative;height:22px;background:linear-gradient(var(--ph),var(--ph)) top/100% 50% no-repeat,linear-gradient(rgba(255,255,255,.06),rgba(255,255,255,.06)) bottom/100% 50% no-repeat;
- -webkit-mask:radial-gradient(circle 11px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
- mask:radial-gradient(circle 11px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-cut:after{content:"";position:absolute;left:20px;right:20px;top:50%;border-top:2px dashed rgba(255,255,255,.18)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-stub{display:flex;gap:16px;align-items:center;padding:16px 18px 18px;border-radius:0 0 24px 24px;background:rgba(255,255,255,.06)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-qr{flex:0 0 104px;width:104px;height:104px;border-radius:14px;overflow:hidden}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-qr svg{width:100%;height:100%;display:block}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-code{flex:1;min-width:0}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-code small{display:block;font-size:12.5px;color:rgba(255,255,255,.55)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-code b{display:block;font-size:24px;font-weight:700;letter-spacing:.06em;color:#fff;font-variant-numeric:tabular-nums;margin:1px 0 3px}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-code span{display:block;font-size:13px;line-height:1.35;color:rgba(255,255,255,.6)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-share{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;margin-top:10px;border-radius:18px;background:#fff;color:#121215;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform .15s ease}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-share:active{transform:scale(.96)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-share svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-top{position:relative;overflow:hidden;isolation:isolate;padding:22px 22px 26px;border-radius:28px 28px 0 0;background:var(--ph)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-top:before{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.06) 1.2px,transparent 1.6px);background-size:16px 16px;-webkit-mask:linear-gradient(180deg,#000,transparent 85%);mask:linear-gradient(180deg,#000,transparent 85%)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-wm{position:absolute;z-index:-1;right:-36px;bottom:-40px;width:170px;height:170px;color:rgba(255,255,255,.045);transform:rotate(-12deg);pointer-events:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-wm svg{width:100%!important;height:100%!important;stroke:currentColor!important;stroke-width:1.4}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-row{display:flex;align-items:center;gap:10px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-row .mlg{width:32px!important;height:32px!important;flex:0 0 32px!important;border-radius:10px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-row>span{flex:1;min-width:0;font-size:14px;font-weight:500;color:rgba(255,255,255,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-sh{all:unset;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:rgba(255,255,255,.08);color:#fff;transition:background .2s,transform .15s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-sh:active{transform:scale(.92)}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-sh.ok{background:rgba(123,237,181,.25)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-sh svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-h{margin:26px 0 0;font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1.05;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-sub{margin:8px 0 0;font-size:15px;color:rgba(255,255,255,.62)}
+/* four smooth segments */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:24px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-seg i{position:relative;height:5px;border-radius:5px;background:rgba(255,255,255,.12);overflow:hidden}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-seg i b{position:absolute;inset:0;border-radius:5px;background:#fff;transform:scaleX(0);transform-origin:left}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-seg i.on b{transform:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-seg i.cur b{background:linear-gradient(90deg,rgba(255,255,255,.55),#fff 45%,rgba(255,255,255,.55));background-size:200% 100%;animation:tkShim 1.8s linear infinite}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.done .tkx-seg i b{background:#7BEDB5}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i.on b{animation:tkSeg .5s cubic-bezier(.32,.72,0,1) both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i:nth-child(2).on b{animation-delay:.22s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i:nth-child(3).on b{animation-delay:.44s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i:nth-child(4).on b{animation-delay:.66s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i.cur b{animation:tkSeg .5s cubic-bezier(.32,.72,0,1) both,tkShim 1.8s 1s linear infinite}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i:nth-child(2).cur b{animation-delay:.22s,1.2s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i:nth-child(3).cur b{animation-delay:.44s,1.4s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-seg i:nth-child(4).cur b{animation-delay:.66s,1.6s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved .tkx-seg i.cur b,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved.done .tkx-seg i:last-child b{animation:tkSeg .6s cubic-bezier(.32,.72,0,1) both}
+@keyframes tkSeg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes tkShim{from{background-position:200% 0}to{background-position:-200% 0}}
+/* status text eases in when it changes */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-h,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved .tkx-h{animation:tkUp .5s .1s cubic-bezier(.32,.72,0,1) both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in .tkx-sub,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.moved .tkx-sub{animation:tkUp .5s .18s cubic-bezier(.32,.72,0,1) both}
+@keyframes tkUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* the cut */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-cut{position:relative;height:24px;background:linear-gradient(var(--ph),var(--ph)) top/100% 50% no-repeat,linear-gradient(#202024,#202024) bottom/100% 50% no-repeat;
+ -webkit-mask:radial-gradient(circle 12px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 12px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
+ mask:radial-gradient(circle 12px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 12px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-cut:after{content:"";position:absolute;left:22px;right:22px;top:50%;height:0;border-top:1.5px dashed rgba(255,255,255,.14)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-stub{display:flex;align-items:center;gap:14px;padding:14px 22px 22px;border-radius:0 0 28px 28px;background:#202024}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-stub>div{flex:1;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-stub small{display:block;font-size:12.5px;color:rgba(255,255,255,.5)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-stub b{display:block;margin-top:3px;font-size:22px;font-weight:700;letter-spacing:.08em;color:#fff;font-variant-numeric:tabular-nums}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-qrb{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:22px;background:#fff;color:#121215;font-size:14px;font-weight:600;cursor:pointer;transition:transform .15s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-qrb:active{transform:scale(.96)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx-qrb svg{width:18px;height:18px;fill:currentColor}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.in{animation:tkIn .6s cubic-bezier(.32,.72,0,1) both}
-@keyframes tkIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
-/* light mode */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx{--ph:#ECEAE6;filter:drop-shadow(0 14px 26px rgba(18,18,40,.10))}
+@keyframes tkIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* delivered: a soft green glow behind the status */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.done .tkx-h{color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx.done .tkx-top:after{content:"";position:absolute;left:-40px;top:-60px;width:220px;height:220px;z-index:-1;border-radius:50%;background:radial-gradient(circle,rgba(123,237,181,.18),transparent 70%);animation:tkGlow 1.2s .4s ease both}
+@keyframes tkGlow{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+/* light */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx{--ph:#ECEAE6}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.food{--ph:#EADBCB}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.fashion{--ph:#E2DFEC}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.beauty{--ph:#EEDDE3}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.printing{--ph:#DCE5EC}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.gadgets{--ph:#D9E4E9}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.services{--ph:#E2E6D6}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-top:before{background-image:radial-gradient(rgba(18,18,21,.08) 1.2px,transparent 1.6px)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-top:after{background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 50%)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-top:before{background-image:radial-gradient(rgba(18,18,21,.07) 1.2px,transparent 1.6px)}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-wm{color:rgba(18,18,21,.05)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-shop small,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-sub{color:rgba(18,18,21,.62)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-shop b{color:#121215}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-bar:before{background:rgba(18,18,21,.1)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-n{background:#CFCDD6}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-n.on{background:#7551DC}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-lb b{color:rgba(18,18,21,.45)}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-lb small{color:rgba(18,18,21,.4)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-lb .on b{color:#121215}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-lb .on small{color:rgba(18,18,21,.6)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-stamp{border-color:#018145;color:#018145}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-row>span{color:rgba(18,18,21,.65)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-sh{background:rgba(255,255,255,.6);color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-h{color:#121215}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.done .tkx-h{color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-sub{color:rgba(18,18,21,.6)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-seg i{background:rgba(18,18,21,.1)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-seg i b{background:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-seg i.cur b{background:linear-gradient(90deg,rgba(18,18,21,.45),#121215 45%,rgba(18,18,21,.45));background-size:200% 100%}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx.done .tkx-seg i b{background:#018145}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-cut{background:linear-gradient(var(--ph),var(--ph)) top/100% 50% no-repeat,linear-gradient(#fff,#fff) bottom/100% 50% no-repeat}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-cut:after{border-top-color:rgba(18,18,21,.18)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-stub{background:#fff}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-qr{box-shadow:inset 0 0 0 1px rgba(18,18,21,.08)}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-code small,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-code span{color:#6B6B75}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-code b{color:#121215}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-share{background:#121215;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-cut:after{border-top-color:rgba(18,18,21,.16)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-stub{background:#fff;box-shadow:0 10px 24px rgba(18,18,40,.06)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-stub small{color:#6B6B75}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-stub b{color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .tkx-qrb{background:#121215;color:#fff}
+/* QR card */
+.tkq{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;padding:24px}
+.tkq-sc{position:absolute;inset:0;background:rgba(8,8,10,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;transition:opacity .25s ease}
+.tkq-c{position:relative;width:min(320px,100%);padding:22px 22px 18px;border-radius:28px;background:#fff;color:#121215;text-align:center;font-family:inherit;opacity:0;transform:translateY(20px) scale(.96);transition:opacity .28s ease,transform .38s cubic-bezier(.32,.72,0,1);box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+.tkq.on .tkq-sc{opacity:1}.tkq.on .tkq-c{opacity:1;transform:none}
+.tkq-c small{display:block;font-size:13px;color:#6B6B75}
+.tkq-q{width:220px;height:220px;margin:14px auto 12px;padding:12px;border-radius:18px;box-shadow:inset 0 0 0 1px rgba(18,18,21,.08)}
+.tkq-q svg{width:100%;height:100%;display:block}
+.tkq-c b{display:block;font-size:22px;letter-spacing:.08em}
+.tkq-c span{display:block;margin-top:4px;font-size:13.5px;color:#6B6B75}
+.tkq-c button{all:unset;box-sizing:border-box;display:block;width:100%;height:48px;margin-top:16px;border-radius:24px;background:#121215;color:#fff;font-size:15px;font-weight:600;cursor:pointer}
 @media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .tkx *{animation:none!important}}
 </style>
 <script>
@@ -7743,7 +7747,7 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   if(t.closest('[data-ckpin]')){e.preventDefault();e.stopImmediatePropagation();openPick();return;}
   if(t.closest('[data-ppok]')){e.preventDefault();e.stopImmediatePropagation();closePick(true);return;}
   if(t.closest('[data-ppno]')){e.preventDefault();e.stopImmediatePropagation();closePick(false);return;}
-  var sp=t.closest('[data-ckspot]');if(sp){e.preventDefault();e.stopImmediatePropagation();var p=spots()[+sp.dataset.ckspot];if(p){CK.hall=p.hall;CK.spot=p.spot||'';if(p.pin)CK.pin=p.pin;save();sub();}return;}
+  var sp=t.closest('[data-ckspot]');if(sp){e.preventDefault();e.stopImmediatePropagation();var p=spots()[+sp.dataset.ckspot];if(p){CK.hall=p.hall;CK.spot=p.spot||'';CK.pin=p.pin||'';save();sub();}return;}
   if(t.closest('[data-cksave]')){e.preventDefault();e.stopImmediatePropagation();CK.saveSpot=CK.saveSpot===false?true:false;save();sub();return;}
   var dl=t.closest('[data-spdel]');if(dl){e.preventDefault();e.stopImmediatePropagation();var a=spots();a.splice(+dl.dataset.spdel,1);try{localStorage.setItem('stafly_spots',JSON.stringify(a));}catch(_){}sub();return;}
   /* paying: put the exact spot in the note for the shop, and remember it */
@@ -7794,6 +7798,72 @@ body.pinpick .mapwrap,body.pinpick #map{visibility:visible!important}
 #pinPick .pp-bar .pp-no{flex:0 0 112px;background:rgba(18,18,21,.82);color:#fff;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 #pinPick .pp-bar .pp-ok{flex:1;background:#7551DC;color:#fff;box-shadow:0 10px 24px rgba(117,81,220,.35)}
 </style>
+<style>
+/* v151 calm delivery picker + spots page */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-c{padding:10px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-row.two{grid-template-columns:repeat(2,1fr)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-t{all:unset;box-sizing:border-box;position:relative;display:flex;flex-direction:column;gap:4px;padding:14px 12px;border-radius:16px;background:rgba(127,127,127,.07);box-shadow:inset 0 0 0 1px transparent;cursor:pointer;transition:background .2s,box-shadow .2s,transform .15s;-webkit-tap-highlight-color:transparent}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-t:active{transform:scale(.97)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-t b{font-size:14px;font-weight:600;line-height:1.2}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-t em{font-style:normal;font-size:13px;opacity:.6}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-t i{position:absolute;top:-8px;right:8px;font-style:normal;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:99px;background:#1F9D55;color:#fff;letter-spacing:.2px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-t.on{background:rgba(117,81,220,.10);box-shadow:inset 0 0 0 1.5px #7551DC}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-t.on em{opacity:.85}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-d{margin:12px 6px 4px;font-size:13.5px;line-height:1.45;opacity:.68;animation:dlIn .28s cubic-bezier(.32,.72,0,1)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-gs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:8px 2px 2px;animation:dlIn .28s cubic-bezier(.32,.72,0,1)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-gs::-webkit-scrollbar{display:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-gs button{all:unset;flex:none;cursor:pointer;font-size:13px;font-weight:500;padding:8px 12px;border-radius:12px;background:rgba(127,127,127,.08)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-gs button small{margin-left:6px;opacity:.6;font-size:12px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .dl-gs button.on{box-shadow:inset 0 0 0 1.5px #7551DC;background:rgba(117,81,220,.10)}
+@keyframes dlIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* spots page */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-hero{padding:4px 4px 18px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-hero p{margin:0;font-size:14px;line-height:1.5;opacity:.62}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-lbl{font-size:12px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;opacity:.5;margin:0 4px 10px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-list{display:flex;flex-direction:column;gap:10px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-c{display:flex;align-items:center;gap:14px;padding:16px;border-radius:22px;background:var(--wh);text-align:left;animation:sxIn .4s cubic-bezier(.32,.72,0,1) both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-ic{flex:none;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:rgba(127,127,127,.09)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-tx{flex:1;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-tx b{display:block;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-tx span{display:block;margin-top:3px;font-size:13.5px;opacity:.62;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-tags{display:flex;gap:6px;margin-top:8px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-tags em{font-style:normal;font-size:11.5px;font-weight:500;padding:3px 9px;border-radius:99px;background:rgba(127,127,127,.1)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-tags em.pin{background:rgba(31,157,85,.14);color:#1F9D55}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-del{all:unset;flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;opacity:.45;transition:opacity .2s,background .2s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-del:hover{opacity:.9;background:rgba(127,127,127,.1)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-del svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-foot{margin:18px 6px 0;font-size:13px;line-height:1.5;opacity:.5;text-align:center}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-empty{padding:40px 20px;text-align:center;border-radius:22px;background:var(--wh)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-empty .sx-ic{margin:0 auto 14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-empty b{display:block;font-size:16px;margin-bottom:6px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sx-empty span{font-size:13.5px;opacity:.6;line-height:1.5}
+@keyframes sxIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+<script>
+(function(){
+/* hall chip clears the dropped pin */
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+  if(t.closest('[data-ckhall]')||t.closest('[data-ckloc]')){try{CK.pin='';localStorage.setItem('stafly_ck',JSON.stringify(CK));}catch(_){}}
+},true);
+/* typing a new place by hand also clears it */
+document.addEventListener('input',function(e){var t=e.target;if(t&&t.matches&&t.matches('#mSub [data-ck="hall"]')&&CK.pin){CK.pin='';try{localStorage.setItem('stafly_ck',JSON.stringify(CK));}catch(_){}
+  var b=document.querySelector('#mSub [data-ckpin]');if(b){b.classList.remove('on');b.textContent='Drop a pin';}}},true);
+var E=function(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+var PIN='<svg viewBox="0 0 24 24"><path d="M12 21s6.5-5.8 6.5-10.6a6.5 6.5 0 1 0-13 0C5.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.3" r="2.3"/></svg>';
+var X='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function L(){try{var a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');return Array.isArray(a)?a.slice(0,6):[];}catch(_){return[];}}
+function page(){var a=L();
+  var h='<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button><h1>Your spots</h1><span style="width:46px"></span></div>';
+  if(!a.length)return h+'<div class="sx-empty"><span class="sx-ic">'+PIN+'</span><b>No saved spots yet</b><span>When you order, keep "Save this spot" on and it shows up here.</span></div>';
+  return h+'<div class="sx-hero"><p>Where your orders come to. Pick one at checkout in one tap.</p></div><div class="sx-list">'+a.map(function(p,i){
+    var tags=(i===0?'<em>Last used</em>':'')+(p.pin?'<em class="pin">On the map</em>':'');
+    return '<div class="sx-c sp-row" style="animation-delay:'+(i*50)+'ms"><span class="sx-ic">'+PIN+'</span><div class="sx-tx"><b>'+E(p.hall)+'</b><span>'+E(p.spot||'No exact spot yet')+'</span>'+(tags?'<div class="sx-tags">'+tags+'</div>':'')+'</div><button type="button" class="sx-del" data-spdel="'+i+'" aria-label="Remove this spot">'+X+'</button></div>';}).join('')+'</div><p class="sx-foot">You can keep up to 6 spots.</p>';}
+var _m=m2Sub;m2Sub=function(k,id){if(k==='spots')return page();return _m.apply(this,arguments);};
+})();
+</script>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
 v.items=[['Jollof rice and chicken',2500,'','','Rice'],['Fried rice and turkey',3000,'','','Rice'],['Ofada rice and ayamase',2800,'','','Rice'],['White rice and stew',1800,'','','Rice'],['Coconut rice and fish',2600,'','','Rice'],['Party jollof (big pack)',4500,'','','Rice'],
