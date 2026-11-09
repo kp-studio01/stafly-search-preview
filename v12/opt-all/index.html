@@ -5222,6 +5222,29 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al-top{max-width:none}
 </style>
 <script>
+(function(){var was=null,t=0;
+function run(cls){var p=document.getElementById('mSub');if(!p)return;p.classList.remove('al-in','al-back');void p.offsetWidth;p.classList.add(cls);clearTimeout(t);t=setTimeout(function(){p.classList.remove(cls);},700);}
+function up(){var p=document.getElementById('mSub');if(!p)return;var all=!!p.querySelector('.al-grid'),shop=!!p.querySelector('.mi-all');
+  if(all&&was==='shop')run('al-in');else if(shop&&was==='all')run('al-back');
+  was=all?'all':shop?'shop':null;}
+function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(up).observe(p,{childList:true});up();}
+start();})();
+</script>
+<style id="v146">
+@keyframes alIn{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+@keyframes alBack{from{opacity:0;transform:translateX(-36px)}to{opacity:1;transform:none}}
+@keyframes alRise{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in>:not(.m-foot){animation:alIn .46s cubic-bezier(.32,.72,0,1) both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in>.al-top{animation-delay:.03s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c{animation:alRise .5s cubic-bezier(.32,.72,0,1) both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c:nth-child(1){animation-delay:.08s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c:nth-child(2){animation-delay:.12s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c:nth-child(3){animation-delay:.16s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c:nth-child(4){animation-delay:.2s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c:nth-child(5){animation-delay:.24s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c:nth-child(6){animation-delay:.28s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-in .al-c:nth-child(n+7){animation-delay:.3s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.al-back>:not(.m-foot){animation:alBack .42s cubic-bezier(.32,.72,0,1) both}
+@media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:is(.al-in,.al-back) *{animation:none!important}}
+</style>
+<script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
 v.items=[['Jollof rice and chicken',2500,'','','Rice'],['Fried rice and turkey',3000,'','','Rice'],['Ofada rice and ayamase',2800,'','','Rice'],['White rice and stew',1800,'','','Rice'],['Coconut rice and fish',2600,'','','Rice'],['Party jollof (big pack)',4500,'','','Rice'],
 ['Amala and ewedu',1500,'','','Swallow'],['Pounded yam and egusi',2200,'','','Swallow'],['Eba and okra',1300,'','','Swallow'],['Semo and efo riro',1600,'','','Swallow'],['Fufu and ogbono',1500,'','','Swallow'],
