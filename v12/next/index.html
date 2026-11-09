@@ -4970,5 +4970,56 @@ function start(){var p=document.getElementById('mPage');if(!p)return setTimeout(
 start();
 })();
 </script>
+<script>
+(function(){
+var sh=null;
+function dk(){return document.body.classList.contains('dk');}
+function key(k){window.dispatchEvent(new KeyboardEvent('keydown',{key:k}));}
+function pos(){var c=sh&&sh.querySelector('.ct');if(!c)return null;var m=c.textContent.match(/(\d+)\s*of\s*(\d+)/);return m?[+m[1],+m[2]]:null;}
+function nav(){if(!sh||!sh.classList.contains('on'))return;var p=pos();
+  var a=sh.querySelector(':scope>.mi-nv.pv'),b=sh.querySelector(':scope>.mi-nv.nx');
+  if(!p){a&&a.remove();b&&b.remove();return;}
+  if(!a){a=document.createElement('button');a.type='button';a.className='mi-nv pv';a.setAttribute('aria-label','Previous');a.innerHTML='<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>';sh.appendChild(a);}
+  if(!b){b=document.createElement('button');b.type='button';b.className='mi-nv nx';b.setAttribute('aria-label','Next');b.innerHTML='<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>';sh.appendChild(b);}
+  a.disabled=p[0]<=1;b.disabled=p[0]>=p[1];}
+window.addEventListener('click',function(e){var n=e.target.closest&&e.target.closest('.mi-nv');if(!n)return;e.preventDefault();e.stopImmediatePropagation();if(!n.disabled)key(n.classList.contains('nx')?'ArrowRight':'ArrowLeft');},true);
+function start(){sh=document.getElementById('miSh');if(!sh)return setTimeout(start,300);
+  new MutationObserver(nav).observe(sh,{childList:true,attributes:true,attributeFilter:['class']});
+  // trackpad / mouse wheel sideways = next or previous product
+  var acc=0,lock=0;sh.addEventListener('wheel',function(e){if(!dk()||Math.abs(e.deltaX)<Math.abs(e.deltaY))return;e.preventDefault();var t=Date.now();if(t<lock)return;acc+=e.deltaX;if(Math.abs(acc)>60){key(acc>0?'ArrowRight':'ArrowLeft');acc=0;lock=t+450;}},{passive:false});
+  // smooth close on desktop: let the window fade out first
+  sh.addEventListener('click',function(e){var x=e.target.closest('[data-mix]');if(!x||!dk()||sh.dataset.closing)return;e.preventDefault();e.stopImmediatePropagation();sh.classList.add('out');sh.dataset.closing='1';setTimeout(function(){x.click();sh.classList.remove('out');delete sh.dataset.closing;},190);},true);
+  addEventListener('keydown',function(e){if(e.key==='Escape'&&sh.classList.contains('on')){var x=sh.querySelector('.x[data-mix]');x&&x.click();}});
+}
+start();
+})();
+</script>
+<style id="v141">
+@keyframes miIn{from{opacity:0;transform:translate(-50%,-48%) scale(.965)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes miFade{from{opacity:0}to{opacity:1}}
+@keyframes miTx{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* smoother slide between products everywhere */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.ph{transition:transform .42s cubic-bezier(.22,1,.36,1),opacity .32s ease,height .25s ease!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.in.sw>:is(h3,.pr,p){animation:miTx .38s cubic-bezier(.22,1,.36,1) both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.in>.mo{z-index:3}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.in.sw>h3{animation-delay:.03s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.in.sw>.pr{animation-delay:.06s}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.in.sw>p{animation-delay:.09s}
+/* desktop: a centred window over a soft dim */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh .sc{background:rgba(8,8,10,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:miFade .28s ease both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh:not(.big) .bx{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;width:480px!important;height:min(640px,calc(100vh - 80px))!important;border-radius:28px!important;transform:translate(-50%,-50%);box-shadow:0 30px 80px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06)!important;animation:miIn .34s cubic-bezier(.22,1,.36,1) both}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light .mi-sh:not(.big) .bx{box-shadow:0 30px 80px -20px rgba(18,18,40,.35),0 0 0 1px rgba(18,18,21,.06)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh:not(.big) .bx>.ph{border-radius:28px 28px 0 0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh.out .bx{transition:opacity .18s ease,transform .18s ease;opacity:0;transform:translate(-50%,-49%) scale(.97)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh.out .sc,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh.out .mi-nv{transition:opacity .18s ease;opacity:0}
+/* arrows either side of the window */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-nv{display:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh:not(.big) .mi-nv{display:grid;place-items:center;position:absolute;top:50%;width:48px;height:48px;margin-top:-24px;border-radius:50%;border:0;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:background .2s,transform .2s,opacity .2s;animation:miFade .34s ease both;z-index:2}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh .mi-nv.pv{left:calc(50% - 240px - 72px)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh .mi-nv.nx{left:calc(50% + 240px + 24px)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh .mi-nv:hover:not(:disabled){background:rgba(255,255,255,.2);transform:scale(1.06)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh .mi-nv:disabled{opacity:.3;cursor:default}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh .mi-nv svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light .mi-sh .mi-nv{background:#fff;color:#121215;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light .mi-sh .mi-nv:hover:not(:disabled){background:#fff}
+@media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh *{animation:none!important;transition:none!important}}
+</style>
 </body>
 </html>
