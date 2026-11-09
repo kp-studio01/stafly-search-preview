@@ -4290,7 +4290,7 @@ function countUp(el){if(RM||!el)return;const m=/^(\D*)(\d+)(.*)$/.exec(el.textCo
 const near=document.getElementById('mNear');let last='';
 if(near){new MutationObserver(()=>{const b=near.querySelector('b');if(!b)return;const v=b.textContent;if(v!==last){last=v;countUp(b);}}).observe(near,{childList:true});}
 const page=document.getElementById('mPage');
-if(page){new MutationObserver(()=>{const g=page.querySelector('.gx-live:not([data-cu])');if(g){g.dataset.cu='1';const tn=[...g.childNodes].find(n=>n.nodeType===3&&/\d/.test(n.textContent));if(tn){const sp=document.createElement('span');sp.textContent=tn.textContent;tn.replaceWith(sp);countUp(sp);}}}).observe(page,{childList:true});}
+if(page){new MutationObserver(()=>{const g=page.querySelector('.gx-live:not([data-cu])');if(g){g.dataset.cu='1';if(window.__mBackNoCU)return;const tn=[...g.childNodes].find(n=>n.nodeType===3&&/\d/.test(n.textContent));if(tn){const sp=document.createElement('span');sp.textContent=tn.textContent;tn.replaceWith(sp);countUp(sp);}}}).observe(page,{childList:true});}
 /* confetti + a little bounce when you join a group */
 function confetti(x,y){if(RM)return;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}const c=document.createElement('canvas');c.id='fxConf';const d=Math.min(devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;document.body.appendChild(c);const g=c.getContext('2d');g.scale(d,d);
   const C=['#7551DC','#9B82EA','#F5B000','#FFD15C','#FFFFFF'];
@@ -8114,6 +8114,11 @@ html body.m2on.m-light #mSub .sp-cover .g-art .gn{mix-blend-mode:multiply;opacit
 html body.m2on.m-light #mSub .sp-cover:has(.g-art) .g-shade{background:linear-gradient(180deg,rgba(245,245,246,.35),rgba(245,245,246,0) 35%,rgba(245,245,246,0) 70%,rgba(245,245,246,.85))!important}
 html body.m2on.m-light #mSub .sp-cover:has(.g-art) .sp-bar button{background:#fff!important;color:#121215!important;border-color:transparent!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 </style>
+<script>
+/* v160: going back from a sub page to the same tab: no count-up on the Groups header (it re-ran every frame during the back slide) */
+(function(){let last=null;const _a=window.m2Apply;window.m2Apply=function(){let back=false;try{back=!!(last&&last.s&&CUR&&!CUR.s&&CUR.t===last.t);}catch(_){}
+  window.__mBackNoCU=back;try{return _a.apply(this,arguments);}finally{try{last=CUR?{t:CUR.t,s:CUR.s}:null;}catch(_){}setTimeout(function(){window.__mBackNoCU=false;},0);}};})();
+</script>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
 v.items=[['Jollof rice and chicken',2500,'','','Rice'],['Fried rice and turkey',3000,'','','Rice'],['Ofada rice and ayamase',2800,'','','Rice'],['White rice and stew',1800,'','','Rice'],['Coconut rice and fish',2600,'','','Rice'],['Party jollof (big pack)',4500,'','','Rice'],
