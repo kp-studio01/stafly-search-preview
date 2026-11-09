@@ -4838,7 +4838,7 @@ function draw(){if(!IT)return;const v=vOf(IT.id),it=v.items[IT.k];if(!it)return 
     ${ORD().length>1&&ORD().length<=12?`<div class="dt">${ORD().map(k=>`<i class="${k===IT.k?'on':''}"></i>`).join('')}</div>`:''}
     <div class="in${IT.sw?' sw':''}"><button type="button" class="mo" data-mimore="1" hidden>More</button><h3>${it[0]}</h3><div class="pr">${naira(it[1])}</div>${it[3]?`<p>${it[3]}</p>`:`<p>Ask ${v.name} in chat if you'd like to know more about this.</p>`}</div>
     <div class="mi-ft"><span class="mi-qa"><button type="button" class="mi-qb" data-miq="-1" aria-label="One less">−</button><span class="mi-qn">${IT.q}</span><button type="button" class="mi-qb" data-miq="1" aria-label="One more">+</button></span>
-    <button type="button" class="ad${miIn(IT.id,IT.k)&&!IT.q?' rm':''}" data-miadd="1">${miIn(IT.id,IT.k)?(IT.q?(IT.q===miIn(IT.id,IT.k)?'In basket':'Update'):'Remove from basket'):'Add'}${IT.q?` · ${naira((typeof it[1]==='string'?Number(String(it[1]).replace('from ','')):Number(it[1]))*IT.q)}`:''}</button></div></div>`;
+    <button type="button" class="ad${miIn(IT.id,IT.k)&&!IT.q?' rm':''}" data-miadd="1">${miIn(IT.id,IT.k)?'In basket ✓':'Add'}${IT.q?` · ${naira((typeof it[1]==='string'?Number(String(it[1]).replace('from ','')):Number(it[1]))*IT.q)}`:''}</button></div></div>`;
   requestAnimationFrame(()=>{const p=sh.querySelector('.in p');const m=sh.querySelector('[data-mimore]');if(p&&m){m.hidden=!(p.scrollHeight>p.clientHeight+2||sh.classList.contains('open'));m.textContent=sh.classList.contains('open')?'Less':'More';}});}
 document.addEventListener('click',e=>{
   const t=e.target;
@@ -4847,8 +4847,8 @@ document.addEventListener('click',e=>{
     const pk=t.closest('[data-mipic]');if(pk){IT.p=Number(pk.dataset.mipic);return draw();}
     if(t.closest('[data-mimore]')){sh.classList.toggle('open');return draw();}
     if(t.closest('.ph')&&!t.closest('.ph.ic')){sh.classList.toggle('big');return;}
-    const q=t.closest('[data-miq]');if(q){IT.q=Math.max(miIn(IT.id,IT.k)?0:1,Math.min(20,IT.q+Number(q.dataset.miq)));return draw();}
-    if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;try{const v0=vOf(IT.id),it0=v0.items[k];if(IT.p>0&&it0&&(it0[5]||[]).length){const tag=it0[0]+': photo '+(IT.p+1);if((CK.note||'').indexOf(tag)<0){CK.note=((CK.note||'')+(CK.note?', ':'')+tag).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}}}catch(_){}const had=miIn(IT.id,k);let df=n-had;
+    const q=t.closest('[data-miq]');if(q){const d=Number(q.dataset.miq),have=miIn(IT.id,IT.k);if(have){const bb=document.querySelector('#mSub [data-m'+(d>0?'add':'dec')+'="'+IT.k+'"]');if(bb&&(d<0||have<20))bb.click();IT.q=miIn(IT.id,IT.k)||1;draw();return;}IT.q=Math.max(1,Math.min(20,IT.q+d));return draw();}
+    if(t.closest('[data-miadd]')){const k=IT.k,n=IT.q;try{const v0=vOf(IT.id),it0=v0.items[k];if(IT.p>0&&it0&&(it0[5]||[]).length){const tag=it0[0]+': photo '+(IT.p+1);if((CK.note||'').indexOf(tag)<0){CK.note=((CK.note||'')+(CK.note?', ':'')+tag).trim();localStorage.setItem('stafly_ck',JSON.stringify(CK));}}}catch(_){}const had=miIn(IT.id,k);let df=n-had;if(had&&!df){close();return;}
       if(df>0){for(let i=0;i<df;i++){const bb=document.querySelector('#mSub [data-madd="'+k+'"]');bb&&bb.click();}}
       else if(df<0){for(let i=0;i<-df;i++){const bb=document.querySelector('#mSub [data-mdec="'+k+'"]');bb&&bb.click();}}
       if(!miIn(IT.id,k))IT.q=1;draw();const ad=sh.querySelector('[data-miadd]');if(ad&&df){ad.classList.add('ok');setTimeout(()=>ad.classList.remove('ok'),700);}return;}
@@ -7912,37 +7912,38 @@ html body .mi-sh .mi-bk:active{transform:translateX(-50%) scale(.96)}
 html body .mi-sh .ad.rm{background:transparent!important;color:#E5484D!important;box-shadow:inset 0 0 0 1.5px rgba(229,72,77,.5)!important}
 </style>
 <script>
-/* v153: bubble grows into the checkout */
+/* v153b: basket bar and bubble both grow into the checkout (clip-path, no layout work per frame) */
 (function(){
-function goCk(b){var id=b.dataset.mibk,r=b.getBoundingClientRect(),p=document.querySelector('#mSub'),pr=p?p.getBoundingClientRect():{left:0,top:0,width:innerWidth,height:innerHeight};
-  var lt=document.body.classList.contains('m-light');
-  var m=document.createElement('div');m.className='mi-morph';m.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;background:'+(lt?'#F5F5F6':'#141417');
-  m.innerHTML='<span>'+b.innerHTML+'</span>';document.body.appendChild(m);b.style.visibility='hidden';
-  var sh=document.getElementById('miSh');if(sh)sh.classList.add('mi-going');
-  requestAnimationFrame(function(){requestAnimationFrame(function(){m.classList.add('grow');m.style.left=pr.left+'px';m.style.top=pr.top+'px';m.style.width=pr.width+'px';m.style.height=pr.height+'px';});});
-  var x=document.querySelector('#miSh .x[data-mix]');
-  setTimeout(function(){if(x)x.click();},60);
-  setTimeout(function(){try{m2Nav({t:CUR.t,s:'cart',id:id});}catch(_){}var q=document.querySelector('#mSub');if(q){q.classList.remove('ck-rise');void q.offsetWidth;q.classList.add('ck-rise');setTimeout(function(){q.classList.remove('ck-rise');},900);}
-    if(sh)sh.classList.remove('mi-going');m.classList.add('out');setTimeout(function(){m.remove();},380);},470);}
-window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;var b=t.closest('#miSh [data-mibk]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();goCk(b);},true);
+var BUSY=false,EZ='cubic-bezier(.32,.72,0,1)';
+function cover(el,fromBg,cb){var r=el.getBoundingClientRect(),p=document.querySelector('#mSub'),pr=p?p.getBoundingClientRect():{left:0,top:0,right:innerWidth,bottom:innerHeight,width:innerWidth,height:innerHeight};
+  var lt=document.body.classList.contains('m-light'),toBg=lt?'#F5F5F6':'#141417',rad=parseFloat(getComputedStyle(el).borderRadius)||20;
+  var m=document.createElement('div');m.className='mi-morph';
+  m.style.cssText='left:'+pr.left+'px;top:'+pr.top+'px;width:'+pr.width+'px;height:'+pr.height+'px;background:'+fromBg+';clip-path:inset('+(r.top-pr.top)+'px '+(pr.left+pr.width-r.right)+'px '+(pr.top+pr.height-r.bottom)+'px '+(r.left-pr.left)+'px round '+rad+'px)';
+  document.body.appendChild(m);el.style.visibility='hidden';
+  m.getBoundingClientRect();
+  m.style.transition='clip-path .5s '+EZ+',background-color .22s ease,opacity .32s ease';
+  m.style.clipPath='inset(0px 0px 0px 0px round '+(document.body.classList.contains('dk')?28:0)+'px)';m.style.backgroundColor=toBg;
+  setTimeout(function(){cb();var q=document.querySelector('#mSub');if(q){q.classList.remove('ck-rise');void q.offsetWidth;q.classList.add('ck-rise');setTimeout(function(){q.classList.remove('ck-rise');},950);}
+    requestAnimationFrame(function(){m.style.opacity='0';setTimeout(function(){m.remove();el.style.visibility='';BUSY=false;},360);});},430);}
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+  var b=t.closest('#miSh [data-mibk]');
+  if(b){e.preventDefault();e.stopImmediatePropagation();if(BUSY)return;BUSY=true;var id=b.dataset.mibk;
+    cover(b,'#1d1d22',function(){try{m2Nav({t:CUR.t,s:'cart',id:id});}catch(_){}});
+    setTimeout(function(){var x=document.querySelector('#miSh .x[data-mix]');if(x)x.click();},120);return;}
+  var k=t.closest('#mSub [data-mbask]');
+  if(k&&!window.__mbGo){e.preventDefault();e.stopImmediatePropagation();if(BUSY)return;BUSY=true;
+    cover(k,getComputedStyle(k).backgroundColor||'#fff',function(){window.__mbGo=1;try{k.click();}finally{window.__mbGo=0;}});}
+},true);
 })();
 </script>
 <style>
-.mi-morph{position:fixed;z-index:4000;border-radius:20px;overflow:hidden;display:grid;place-items:center;pointer-events:none;box-shadow:0 20px 60px rgba(0,0,0,.35);
-  transition:left .46s cubic-bezier(.32,.72,0,1),top .46s cubic-bezier(.32,.72,0,1),width .46s cubic-bezier(.32,.72,0,1),height .46s cubic-bezier(.32,.72,0,1),border-radius .46s cubic-bezier(.32,.72,0,1),opacity .34s ease}
-.mi-morph>span{display:inline-flex;align-items:center;gap:8px;color:#fff;font:600 14px 'DM Sans',sans-serif;white-space:nowrap;transition:opacity .2s ease,transform .46s cubic-bezier(.32,.72,0,1)}
-body.m-light .mi-morph>span{color:#121215}
-.mi-morph>span svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}
-.mi-morph>span i{font-style:normal;padding:4px 12px;border-radius:14px;background:#fff;color:#121215;font-size:13px}
-.mi-morph.grow{border-radius:28px}.mi-morph.grow>span{opacity:0;transform:scale(1.15)}
-.mi-morph.out{opacity:0}
-html body .mi-sh.mi-going{transition:transform .4s cubic-bezier(.32,.72,0,1),opacity .3s ease!important}
-html body #mSub.ck-rise>*{animation:ckRise .5s cubic-bezier(.32,.72,0,1) both}
+.mi-morph{position:fixed;z-index:4000;pointer-events:none;will-change:clip-path,opacity}
+html body #mSub.ck-rise>*{animation:ckRise .55s cubic-bezier(.32,.72,0,1) both}
 html body #mSub.ck-rise>*:nth-child(2){animation-delay:.04s}html body #mSub.ck-rise>*:nth-child(3){animation-delay:.08s}html body #mSub.ck-rise>*:nth-child(4){animation-delay:.12s}html body #mSub.ck-rise>*:nth-child(5){animation-delay:.16s}html body #mSub.ck-rise>*:nth-child(n+6){animation-delay:.2s}
-@keyframes ckRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes ckRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 html body .mi-sh .ad.ok{animation:miOk .6s ease}
 @keyframes miOk{30%{transform:scale(.96)}60%{transform:scale(1.02)}}
-@media (prefers-reduced-motion:reduce){.mi-morph{transition:none}html body #mSub.ck-rise>*{animation:none}}
+@media (prefers-reduced-motion:reduce){.mi-morph{transition:none!important}html body #mSub.ck-rise>*{animation:none}}
 </style>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
