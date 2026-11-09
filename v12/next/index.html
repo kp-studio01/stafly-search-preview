@@ -4961,5 +4961,14 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mPage,#mSub,#mDir,#mSheet
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2 .mlg.ph,
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2:is(:hover,.dk-on) .mlg.ph{background:var(--lg) center/cover no-repeat!important}
 </style>
+<script>
+(function(){
+var busy=false;
+function fix(){if(busy)return;var p=document.getElementById('mPage');if(!p)return;
+  if(p.querySelector('[data-lvtab]')&&!p.querySelector('#lvQ')){busy=true;try{var y=p.scrollTop;p.innerHTML=window.m2Page('live');p.scrollTop=y;}catch(_){}busy=false;}}
+function start(){var p=document.getElementById('mPage');if(!p)return setTimeout(start,300);new MutationObserver(fix).observe(p,{childList:true});fix();}
+start();
+})();
+</script>
 </body>
 </html>

@@ -4963,6 +4963,15 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2:is(:h
 </style>
 <script>
 (function(){
+var busy=false;
+function fix(){if(busy)return;var p=document.getElementById('mPage');if(!p)return;
+  if(p.querySelector('[data-lvtab]')&&!p.querySelector('#lvQ')){busy=true;try{var y=p.scrollTop;p.innerHTML=window.m2Page('live');p.scrollTop=y;}catch(_){}busy=false;}}
+function start(){var p=document.getElementById('mPage');if(!p)return setTimeout(start,300);new MutationObserver(fix).observe(p,{childList:true});fix();}
+start();
+})();
+</script>
+<script>
+(function(){
 var V='b';document.documentElement.setAttribute('data-spv',V);
 var IC={clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
 pin:'<svg viewBox="0 0 24 24"><path d="M12 21s6.5-5.8 6.5-10.6a6.5 6.5 0 1 0-13 0C5.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.3" r="2.3"/></svg>',
