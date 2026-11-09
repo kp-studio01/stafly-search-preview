@@ -7989,11 +7989,21 @@ function page(id){var v=vOf(id),g=GROUPS[id];if(!v||!g)return'<div class="m-h c"
    '<div><span>Delivery</span><b>'+naira(fee)+' shared · you pay '+naira(shr)+'</b></div>'+
    '<div><span>If more join</span><b>Your share drops, we send back the difference</b></div></div>'+
   '<div class="m-foot gp-foot"><button type="button" class="m-pay gp-go" data-gpgo="'+id+'">'+(my.length?(me?'See your order':'Join with your items')+' · '+naira(sub+shr):'Pick your items')+'</button></div>';}
+function joinFx(id,v,cb){var g=GROUPS[id],c=document.querySelector('#mSub .gp-card');if(!c||!g)return cb();
+  var fee=v.deliv?v.deliv.fee:0,shr=share(v,g.n+1),n=g.n+1,left=g.need-n;
+  var seg=[].slice.call(c.querySelectorAll('.g-seg i')).filter(function(i){return!i.className;})[0];if(seg){seg.className='me gx-pop';}
+  var fs=c.querySelector('.gp-faces>span');if(fs)fs.insertAdjacentHTML('beforeend','<i class="you gx-drop">You</i>');
+  var b=c.querySelector('.gp-faces b');if(b)b.textContent=n+' of '+g.need+' in';
+  var em=c.querySelector('.gp-faces em');if(em){em.classList.add('gx-tick');setTimeout(function(){em.textContent=left>0?left+(left===1?' spot':' spots')+' left':'Full';},180);}
+  var pb=c.querySelector('.g-cap .pr b');if(pb){var t0=performance.now();pb.classList.add('gx-cnt');(function f(t){var k=Math.min(1,(t-t0)/700),e=1-Math.pow(1-k,3);pb.textContent=naira(Math.round(fee+(shr-fee)*e));if(k<1)requestAnimationFrame(f);})(t0);}
+  var you=document.querySelector('#mSub .gp-you');if(you){you.classList.add('gx-in');var tg=you.querySelector('b em');if(tg)tg.textContent='In';}
+  var bt=document.querySelector('#mSub [data-gpgo]');if(bt){bt.classList.add('gx-ok');bt.innerHTML='You’re in ✓';}
+  setTimeout(cb,1150);}
 var _m=m2Sub;m2Sub=function(k,id){if(k==='grp')return page(id);return _m.apply(this,arguments);};
 window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   var go=t.closest('[data-gpgo]');if(go){e.preventDefault();e.stopImmediatePropagation();var id=go.dataset.gpgo,v=vOf(id);
     try{var G=groupsFor(v);if(G[0]){CK.mode=G[0].id;if(!CK.hall)CK.hall=G[0].hall;localStorage.setItem('stafly_ck',JSON.stringify(CK));}}catch(_){}
-    var my=mine(id,v);m2Nav({t:CUR.t,s:my.length?'cart':'shop',id:id});
+    var my=mine(id,v);if(my.length&&!joined.has(id)&&!go.dataset.fx){go.dataset.fx=1;return joinFx(id,v,function(){m2Nav({t:CUR.t,s:'cart',id:id});});}m2Nav({t:CUR.t,s:my.length?'cart':'shop',id:id});
     if(!my.length)setTimeout(function(){var mm=document.querySelector('#mSub .mi-list,#mSub [data-mitem]');if(mm)mm.scrollIntoView({block:'start',behavior:'smooth'});},350);return;}
   var sh=t.closest('[data-gpshare]');if(sh){e.preventDefault();e.stopImmediatePropagation();var v2=vOf(sh.dataset.gpshare),g=GROUPS[sh.dataset.gpshare];
     var url=location.origin+location.pathname+'#grp/'+sh.dataset.gpshare,txt='Join my group order from '+v2.name+' to '+g.hall+'. We split the delivery fee.';
@@ -8037,6 +8047,17 @@ html body.m2on #mSub .gp-det span{opacity:.6;flex:none}
 html body.m2on #mSub .gp-det b{font-weight:500;text-align:right}
 html body.m2on #mSub .gp-sh svg{width:19px;height:19px}
 html body.m2on #mSub .gp-sh.ok{background:rgba(31,157,85,.25)!important}
+html body.m2on #mSub .g-seg i.gx-pop{animation:gxSeg .5s cubic-bezier(.32,.72,0,1) both;transform-origin:left}
+@keyframes gxSeg{from{transform:scaleX(0)}to{transform:none}}
+html body.m2on #mSub .gp-faces>span i.gx-drop{animation:gxDrop .6s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes gxDrop{from{opacity:0;transform:translateY(-26px) scale(.4)}to{opacity:1;transform:none}}
+html body.m2on #mSub .gp-faces em.gx-tick{animation:gxTick .36s ease both}
+@keyframes gxTick{0%{opacity:.6;transform:none}45%{opacity:0;transform:translateY(-8px)}55%{opacity:0;transform:translateY(8px)}100%{opacity:.6;transform:none}}
+html body.m2on #mSub .g-cap .pr b.gx-cnt{display:block;transform-origin:right;animation:gxPrice .8s ease both}
+@keyframes gxPrice{50%{transform:scale(1.08)}}
+html body.m2on #mSub .gp-you.gx-in .gp-av{animation:gxDrop .55s .15s cubic-bezier(.34,1.56,.64,1) both}
+html body.m2on #mSub .gp-go.gx-ok{animation:gxOk .5s ease both}
+@keyframes gxOk{30%{transform:scale(.97)}65%{transform:scale(1.02)}}
 html body.m2on #mPage .g-card{cursor:pointer}
 </style>
 <style>
