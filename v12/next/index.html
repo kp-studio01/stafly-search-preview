@@ -4493,11 +4493,11 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   ${v.deliv?`<div class="m-sh"><b>Delivery</b><span>Pick one</span></div><div class="m-card" style="padding:2px 16px">
     ${opt('solo','Just me','To your door, '+v.deliv.eta,naira(fee(v)))}
     ${G.map(g=>opt(g.id,'Join the group going to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),g.share<fee(v)?naira(fee(v)):'')).join('')}
-    ${opt('new','Start a group for '+(CK.hall?String(CK.hall).split(',')[0].slice(0,28):'where you are'),'Pay normal delivery now. It gets cheaper as people join, and we send you the difference',naira(fee(v)),'')}
+    ${opt('new','Start a group'+(CK.hall&&!/^\s*off[ -]?campus\s*$/i.test(CK.hall)?' for '+String(CK.hall).split(',')[0].trim().slice(0,24):''),'Gets cheaper as people join',naira(fee(v)),'')}
   </div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
-    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="Hall, room or area, like Moremi Hall, Block 3" value="${(CK.hall||'').replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.pin?'on':''}">${CK.pin?'Pin added ✓':'Use my location'}</button>${hallKeys.map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
+    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.pin?'on':''}">${CK.pin?'Pin added ✓':'Use my location'}</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
     <label class="ck-f"><span>WhatsApp number</span><input data-ck="phone" type="tel" inputmode="tel" placeholder="0803 123 4567" value="${(CK.phone||'').replace(/"/g,'&quot;')}" autocomplete="tel"></label>
     <label class="ck-f"><span>Your name</span><input data-ck="name" type="text" placeholder="First name" value="${(CK.name||'').replace(/"/g,'&quot;')}" autocomplete="given-name"></label>
     <label class="ck-f"><span>Note for the shop</span><input data-ck="note" type="text" placeholder="Optional, like extra pepper" value="${(CK.note||'').replace(/"/g,'&quot;')}"></label>
@@ -4508,7 +4508,7 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   ${ERR?`<div class="ck-err">${ERR}</div>`:''}
   <div class="m-foot"><button type="button" class="m-pay" data-mpay="${v.id}"${BUSY?' disabled':''}>${BUSY?'Getting your payment ready…':'Pay '+naira(tot)}</button></div>`;}
 async function pay(v){ERR='';
-  const ph=String(CK.phone||'').replace(/\D/g,'');if(!CK.hall.trim()){ERR='Tell the shop where to bring it.';return rer();}
+  const ph=String(CK.phone||'').replace(/\D/g,'');if(!CK.hall.trim()||/^\s*off[ -]?campus\s*$/i.test(CK.hall)){ERR=/off/i.test(CK.hall)?'Which area off campus? Like Asherifa or Mayfair.':'Tell the shop where to bring it.';return rer();}
   if(!/^(0[789]\d{9}|234[789]\d{9}|[789]\d{9})$/.test(ph)){ERR='Add your WhatsApp number, like 0803 123 4567.';return rer();}
   const L=lines(v);if(!L.length)return;BUSY=true;rer();
   const body={vid:(localStorage.getItem('stafly_vid')||('v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10))).replace(/[^a-z0-9]/g,'').slice(0,24),phone:ph,name:CK.name,hall:CK.hall,note:CK.note,items:L.map(l=>({name:l.name,qty:l.qty})),back:location.origin+location.pathname};
@@ -5028,6 +5028,107 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk .mi-sh .bx>.mi-nv svg{width
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light .mi-sh .bx>.mi-nv{background:rgba(255,255,255,.9);color:#121215;box-shadow:0 2px 10px rgba(0,0,0,.12)}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light .mi-sh .bx>.mi-nv:hover{background:#fff}
 @media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.in.sw>*{animation:none!important}}
+</style>
+<script>
+window.ckOff=function(){try{var h=String((window.CK&&CK.hall)||'').trim();if(/^off[ -]?campus$/i.test(h))return true;if(['Asherifa','Mayfair','Fasina','Lagere','Parakin','Damico'].some(function(a){return h.indexOf(a)===0;}))return true;var u=JSON.parse(localStorage.getItem('stafly_user')||'null');return !h&&!!u&&u.hk==='off';}catch(_){return false;}};
+</script>
+<style id="v142">
+/* phone Places list: same breathing room as the shop menu */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2{padding:16px 0!important;gap:14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2 .mlg{width:56px!important;height:56px!important;flex:0 0 56px!important;border-radius:16px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2 .tx b,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2 .tx strong{margin-bottom:3px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst{padding-top:4px!important;padding-bottom:4px!important}
+</style>
+<script>
+(function(){
+var V='b';document.documentElement.setAttribute('data-spv',V);
+var IC={clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+pin:'<svg viewBox="0 0 24 24"><path d="M12 21s6.5-5.8 6.5-10.6a6.5 6.5 0 1 0-13 0C5.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.3" r="2.3"/></svg>',
+bike:'<svg viewBox="0 0 24 24"><circle cx="5.5" cy="16.5" r="3.2"/><circle cx="18.5" cy="16.5" r="3.2"/><path d="M5.5 16.5 9 9.5h5l4.5 7M9 9.5 7.8 7H6M14 9.5l1.6-3H18"/></svg>'};
+function shopId(){var m=(location.hash||'').match(/shop\/([^/?#]+)/);return m?m[1]:null;}
+function fmt(m){var h=Math.floor(m/60),r=m%60;return h&&r?h+'h '+r+'m':h?h+'h':r+'m';}
+function fix(el){
+  if(el.dataset.v)return;el.dataset.v=1;
+  var d=el.children;if(d.length<3)return;
+  [['clock',0],['pin',1],['bike',2]].forEach(function(x){var e=document.createElement('em');e.className='sp-ic';e.innerHTML=IC[x[0]];d[x[1]].insertBefore(e,d[x[1]].firstChild);});
+  var v=null;try{v=vOf(shopId());}catch(_){}
+  if(V==='c'){var sp=d[1].querySelector('span');if(sp)sp.textContent='walk';}
+  if(V==='a'){
+    var qa=el.nextElementSibling;var w=document.createElement('div');w.className='sp-pass';el.parentNode.insertBefore(w,el);w.appendChild(el);
+    if(qa&&qa.classList.contains('m-qa'))w.appendChild(qa);
+    var st=d[0],b=st.querySelector('b'),span=st.querySelector('span');var left='',pct=0;
+    if(v&&v.hours&&b&&b.className==='open'){var pt={};try{new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Lagos',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()).forEach(function(q){pt[q.type]=+q.value;});}catch(_){var n=new Date();pt={hour:n.getHours(),minute:n.getMinutes()};}var now=(pt.hour%24)*60+pt.minute,o=v.hours[0],c=v.hours[1];if(c>o&&now>=o&&now<c){pct=Math.round((c-now)/(c-o)*100);left='closes in '+fmt(c-now);}}
+    if(!pct)return;var bar=document.createElement('span');bar.className='sp-day';bar.innerHTML='<i style="width:'+pct+'%"></i>';st.appendChild(bar);
+    if(left&&span)span.textContent=span.textContent+' · '+left;
+  }
+}
+new MutationObserver(function(){document.querySelectorAll('.sp-info:not([data-v])').forEach(fix);}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+<style id="v138">
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-ic{display:none}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-ic svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* B: ticket */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info{position:relative;margin-top:18px!important;border-radius:18px!important;background:rgba(255,255,255,.06)!important;box-shadow:none!important;padding:4px 0!important;
+ -webkit-mask:radial-gradient(circle 9px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
+ mask:radial-gradient(circle 9px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info div{padding:14px 8px 12px!important;display:flex;flex-direction:column;align-items:center}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info div+div{border-left:1.5px dashed rgba(255,255,255,.12)!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-ic{display:block;width:20px;height:20px;margin-bottom:8px;color:rgba(255,255,255,.55)}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info b{font-size:16px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info{background:#fff!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info div+div{border-left-color:rgba(18,18,21,.14)!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-ic{color:#6B6B75}
+</style>
+<script>
+(function(){
+function sid(){var m=(location.hash||'').match(/shop\/([^/?#]+)/);return m?m[1]:null;}
+function tag(el){if(el.dataset.cat)return;var v=null;try{v=vOf(sid());}catch(_){}var c=(v&&v.cat)||'food';el.dataset.cat=c;el.classList.add('sptk',c);
+ var w=document.createElement('i');w.className='tk-wm';var big=document.querySelector('#mSub .sp-cover .lv-ph i, #mSub .sp-logo .mlg svg');
+ try{var ic=(window.CATICON&&CATICON[c])||null;}catch(_){}
+ var h='';try{var t=document.createElement('div');t.innerHTML=window.lvPh(v||{cat:c});var q=t.querySelector('i svg');h=q?q.outerHTML:'';}catch(_){}w.innerHTML=h;el.appendChild(w);}
+new MutationObserver(function(){document.querySelectorAll('#mSub .sp-info[data-v]:not([data-cat])').forEach(tag);}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+<style id="v139">
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk{--ph:#2A2A31;background:var(--ph)!important;overflow:hidden;isolation:isolate;border-radius:20px!important;padding:6px 0!important;margin-top:20px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.food{--ph:#3A2B22}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.fashion{--ph:#2C2A38}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.beauty{--ph:#3A2A31}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.printing{--ph:#24303B}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.gadgets{--ph:#22313A}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.services{--ph:#2F3227}
+/* the cover's dots and soft edge light */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk:before{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.07) 1.2px,transparent 1.6px);background-size:16px 16px}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 45%,rgba(0,0,0,.18))}
+/* big faded icon, like the cover */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk .tk-wm{position:absolute;z-index:-1;right:-34px;bottom:-44px;width:120px;height:120px;color:rgba(255,255,255,.045);transform:rotate(-12deg);pointer-events:none}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk .tk-wm svg{width:100%!important;height:100%!important;stroke:currentColor!important;stroke-width:1.6}
+/* stubs: icon in a soft ring, value, label */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div{position:relative;padding:14px 6px 12px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk .sp-ic{width:34px!important;height:34px!important;padding:8px;margin-bottom:9px!important;border-radius:50%;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);color:rgba(255,255,255,.85)!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk b{color:#fff!important;font-size:16.5px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk b.open{color:#7BEDB5!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk span{color:rgba(255,255,255,.6)!important}
+/* punched cut lines: dashes plus a half-hole top and bottom */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div+div{border-left:1.5px dashed rgba(255,255,255,.16)!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div+div:before,html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div+div:after{content:"";position:absolute;left:-7px;width:12px;height:12px;border-radius:50%;background:var(--sbg,#151518)}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div+div:before{top:-12px}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div+div:after{bottom:-12px}
+/* light mode: pale category colour, ink text */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk{--ph:#ECEAE6}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.food{--ph:#EADBCB}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.fashion{--ph:#E2DFEC}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.beauty{--ph:#EEDDE3}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.printing{--ph:#DCE5EC}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.gadgets{--ph:#D9E4E9}html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk.services{--ph:#E2E6D6}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk:before{background-image:radial-gradient(rgba(18,18,21,.08) 1.2px,transparent 1.6px)}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk:after{background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 50%)}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk .tk-wm{color:rgba(18,18,21,.045)}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk .sp-ic{background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px rgba(18,18,21,.06);color:#121215!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk b{color:#121215!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk b.open{color:#018145!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk span{color:rgba(18,18,21,.6)!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div+div{border-left-color:rgba(18,18,21,.18)!important}
+/* keep the same height before the icons are added, so the page never jumps */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info:not(.sptk){padding:6px 0!important;margin-top:20px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info:not(.sptk) div{padding:57px 6px 12px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info:not(.sptk) b{font-size:16.5px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage){--sbg:#151518}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage){--sbg:#F5F5F6}
 </style>
 </body>
 </html>

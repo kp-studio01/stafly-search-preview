@@ -4493,11 +4493,11 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   ${v.deliv?`<div class="m-sh"><b>Delivery</b><span>Pick one</span></div><div class="m-card" style="padding:2px 16px">
     ${opt('solo','Just me','To your door, '+v.deliv.eta,naira(fee(v)))}
     ${G.map(g=>opt(g.id,'Join the group going to '+g.hall,g.joined+' of '+g.size+' joined. One rider, you pay a share',naira(g.share),g.share<fee(v)?naira(fee(v)):'')).join('')}
-    ${opt('new','Start a group for '+(CK.hall?String(CK.hall).split(',')[0].slice(0,28):'where you are'),'Pay normal delivery now. It gets cheaper as people join, and we send you the difference',naira(fee(v)),'')}
+    ${opt('new','Start a group'+(CK.hall&&!/^\s*off[ -]?campus\s*$/i.test(CK.hall)?' for '+String(CK.hall).split(',')[0].trim().slice(0,24):''),'Gets cheaper as people join',naira(fee(v)),'')}
   </div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
-    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="Hall, room or area, like Moremi Hall, Block 3" value="${(CK.hall||'').replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.pin?'on':''}">${CK.pin?'Pin added ✓':'Use my location'}</button>${hallKeys.map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
+    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckloc="1" class="${CK.pin?'on':''}">${CK.pin?'Pin added ✓':'Use my location'}</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>
     <label class="ck-f"><span>WhatsApp number</span><input data-ck="phone" type="tel" inputmode="tel" placeholder="0803 123 4567" value="${(CK.phone||'').replace(/"/g,'&quot;')}" autocomplete="tel"></label>
     <label class="ck-f"><span>Your name</span><input data-ck="name" type="text" placeholder="First name" value="${(CK.name||'').replace(/"/g,'&quot;')}" autocomplete="given-name"></label>
     <label class="ck-f"><span>Note for the shop</span><input data-ck="note" type="text" placeholder="Optional, like extra pepper" value="${(CK.note||'').replace(/"/g,'&quot;')}"></label>
@@ -4508,7 +4508,7 @@ function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   ${ERR?`<div class="ck-err">${ERR}</div>`:''}
   <div class="m-foot"><button type="button" class="m-pay" data-mpay="${v.id}"${BUSY?' disabled':''}>${BUSY?'Getting your payment ready…':'Pay '+naira(tot)}</button></div>`;}
 async function pay(v){ERR='';
-  const ph=String(CK.phone||'').replace(/\D/g,'');if(!CK.hall.trim()){ERR='Tell the shop where to bring it.';return rer();}
+  const ph=String(CK.phone||'').replace(/\D/g,'');if(!CK.hall.trim()||/^\s*off[ -]?campus\s*$/i.test(CK.hall)){ERR=/off/i.test(CK.hall)?'Which area off campus? Like Asherifa or Mayfair.':'Tell the shop where to bring it.';return rer();}
   if(!/^(0[789]\d{9}|234[789]\d{9}|[789]\d{9})$/.test(ph)){ERR='Add your WhatsApp number, like 0803 123 4567.';return rer();}
   const L=lines(v);if(!L.length)return;BUSY=true;rer();
   const body={vid:(localStorage.getItem('stafly_vid')||('v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10))).replace(/[^a-z0-9]/g,'').slice(0,24),phone:ph,name:CK.name,hall:CK.hall,note:CK.note,items:L.map(l=>({name:l.name,qty:l.qty})),back:location.origin+location.pathname};
@@ -5030,6 +5030,16 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.m-light .mi-sh .bx>.mi-nv:h
 @media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.in.sw>*{animation:none!important}}
 </style>
 <script>
+window.ckOff=function(){try{var h=String((window.CK&&CK.hall)||'').trim();if(/^off[ -]?campus$/i.test(h))return true;if(['Asherifa','Mayfair','Fasina','Lagere','Parakin','Damico'].some(function(a){return h.indexOf(a)===0;}))return true;var u=JSON.parse(localStorage.getItem('stafly_user')||'null');return !h&&!!u&&u.hk==='off';}catch(_){return false;}};
+</script>
+<style id="v142">
+/* phone Places list: same breathing room as the shop menu */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2{padding:16px 0!important;gap:14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2 .mlg{width:56px!important;height:56px!important;flex:0 0 56px!important;border-radius:16px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2 .tx b,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst .m-row2 .tx strong{margin-bottom:3px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage .m-lst{padding-top:4px!important;padding-bottom:4px!important}
+</style>
+<script>
 (function(){
 var V='b';document.documentElement.setAttribute('data-spv',V);
 var IC={clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
@@ -5113,6 +5123,10 @@ html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mS
 html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk b.open{color:#018145!important}
 html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk span{color:rgba(18,18,21,.6)!important}
 html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk div+div{border-left-color:rgba(18,18,21,.18)!important}
+/* keep the same height before the icons are added, so the page never jumps */
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info:not(.sptk){padding:6px 0!important;margin-top:20px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info:not(.sptk) div{padding:57px 6px 12px!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage,#mSheet,#mDir) .sp-info:not(.sptk) b{font-size:16.5px!important}
 html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mSub,#mPage){--sbg:#151518}
 html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage){--sbg:#F5F5F6}
 </style>
