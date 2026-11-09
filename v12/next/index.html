@@ -4559,9 +4559,32 @@ const _sub=m2Sub;m2Sub=function(k,id){
     if(count(v))h=h.replace(/<div class="m-foot">[\s\S]*<\/div>\s*$/,`<div class="m-foot">${baskHtml(v)}</div>`);
     if(isReal(v)&&!GR[v.id]){GR[v.id]=[];fetch(API+'/api/w/'+v.sid+'/groups').then(r=>r.ok?r.json():null).then(j=>{if(j&&j.groups)GR[v.id]=j.groups;}).catch(()=>{});}}}
   return h;};
+
+/* v144: all products page */
+const ALLN=8,TOPN=6,ARW='<svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const _mhAll=menuHtml;menuHtml=function(v){if(!v.items||v.items.length<=ALLN||CUR.s==='all')return _mhAll(v);
+  let h=_mhAll(Object.assign({},v,{items:v.items.slice(0,TOPN)}));h=h.replace(/<div class="mi-cats">[\s\S]*?<\/div>/,'').replace(/<div class="mi-gl">[^<]*<\/div>/g,'');
+  return h.replace(/<\/div>$/,`<button type="button" class="mi-all" data-mall="${v.id}"><span>See all ${v.items.length} products</span>${ARW}</button></div>`);};
+function allPage(v){const q=cartOf(v.id);
+  const cp=it=>{const p=String(it[4]||'').split(/\s*(?:·|\/|>|-)\s*/).filter(Boolean);return p[0]||'';};
+  const cap=x=>String(x||'').replace(/^./,m=>m.toUpperCase());
+  const tops=[...new Set(v.items.map(cp).filter(Boolean))];const sel=(window.MCAT||{})[v.id]||'';const sq=String(window.ALLQ||'').toLowerCase();
+  const card=(it,k)=>{const n=q[k]||0,hit=!sq||(it[0]+' '+(it[3]||'')).toLowerCase().indexOf(sq)>=0;
+    return`<div class="al-c${hit?'':' hide'}" data-mitem="${k}" data-alq="${String(it[0]+' '+(it[3]||'')).toLowerCase().replace(/"/g,'')}"><span class="al-ph${it[2]?'':' ic'}"${it[2]?` style="background-image:url(${it[2]})"`:''}>${it[2]?'':S(ICON[v.cat])}<span class="qa">${n?`<button type="button" class="qb" data-mdec="${k}" aria-label="One less">${MINUS}</button><span class="qn">${n}</span>`:''}<button type="button" class="qb add" data-madd="${k}" aria-label="Add ${it[0]}">${PLUS}</button></span></span><span class="pp"><b>${it[0]}</b><small>${naira(it[1])}</small></span></div>`;};
+  const list=v.items.map((it,k)=>[it,k]).filter(([it])=>!sel||cp(it)===sel);
+  return`<div class="m-h c">${back()}<h1>All products</h1><span style="width:46px"></span></div>
+  <div class="al-top"><div class="al-sub">${v.name} · ${v.items.length} products</div>
+  <label class="al-q"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" data-allq="1" placeholder="Search ${v.name.replace(/"/g,'')}" value="${String(window.ALLQ||'').replace(/"/g,'&quot;')}" autocomplete="off"></label>
+  ${tops.length>1?`<div class="mi-cats">${['',...tops].map(t=>`<button type="button" data-micat="${t}" class="${sel===t?'on':''}">${cap(t)||'All'}</button>`).join('')}</div>`:''}</div>
+  <div class="al-grid">${list.map(([it,k])=>card(it,k)).join('')}</div><div class="al-none"${list.some(([it])=>!sq||(it[0]+' '+(it[3]||'')).toLowerCase().indexOf(sq)>=0)?' hidden':''}>Nothing matches that. Try another word.</div>
+  ${count(v)?`<div class="m-foot">${baskHtml(v)}</div>`:''}`;}
+const _sAll=m2Sub;m2Sub=function(k,id){if(k==='all'){const v=vOf(id);return v?allPage(v):'';}return _sAll.apply(this,arguments);};
+document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;const a=t.closest('#mSub [data-mall]');if(!a)return;e.preventDefault();e.stopImmediatePropagation();window.ALLQ='';window.MCAT=window.MCAT||{};MCAT[a.dataset.mall]='';m2Nav({t:CUR.t,s:'all',id:a.dataset.mall});},true);
+document.addEventListener('input',e=>{const i=e.target;if(!i||!i.dataset||!i.dataset.allq)return;window.ALLQ=i.value.slice(0,40);const sq=ALLQ.toLowerCase();let any=false;
+  document.querySelectorAll('#mSub .al-c').forEach(c=>{const hit=!sq||c.dataset.alq.indexOf(sq)>=0;c.classList.toggle('hide',!hit);any=any||hit;});const n=document.querySelector('#mSub .al-none');if(n)n.hidden=any;},true);
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
   const sub=t.closest('#mSub');if(!sub)return;
-  const id=CUR.s==='shop'||CUR.s==='cart'?CUR.id:null,v=id&&vOf(id);
+  const id=CUR.s==='shop'||CUR.s==='cart'||CUR.s==='all'?CUR.id:null,v=id&&vOf(id);
   const a=t.closest('[data-madd]'),d=t.closest('[data-mdec]');
   if((a||d)&&v){e.preventDefault();e.stopImmediatePropagation();setQty(v,+(a||d).dataset[a?'madd':'mdec'],a?1:-1);ERR='';return rer();}
   if(t.closest('[data-mbask]')){e.preventDefault();e.stopImmediatePropagation();ERR='';return m2Nav({t:CUR.t,s:'cart',id:t.closest('[data-mbask]').dataset.mbask});}
@@ -4719,7 +4742,7 @@ html body.m2on .mi-cats+.mi-gh{margin-top:4px}
 const sh=document.createElement('div');sh.className='mi-sh';sh.id='miSh';document.body.appendChild(sh);
 let IT=null;
 /* the items in the order the menu shows them (respects the chosen category) */
-const ORD=()=>{const ks=[...document.querySelectorAll('#mSub [data-mitem]')].map(r=>Number(r.dataset.mitem));return ks.length?ks:(IT?[IT.k]:[]);};
+const ORD=()=>{const ks=[...document.querySelectorAll('#mSub [data-mitem]:not(.hide)')].map(r=>Number(r.dataset.mitem));return ks.length?ks:(IT?[IT.k]:[]);};
 function go(d){if(!IT)return;const o=ORD(),i=o.indexOf(IT.k),j=i+d;if(i<0||j<0||j>=o.length){const ph=sh.querySelector('.ph');if(ph){ph.style.transform='translateX('+(-d*18)+'px)';setTimeout(()=>{ph.style.transform='';},160);}return;}
   sh.classList.remove('open');IT.k=o[j];IT.q=1;IT.p=0;IT.sw=1;draw();IT.sw=0;const ph=sh.querySelector('.ph');if(ph){ph.style.transition='none';ph.style.transform='translateX('+(d*40)+'%)';ph.style.opacity='.4';requestAnimationFrame(()=>requestAnimationFrame(()=>{ph.style.transition='';ph.style.transform='';ph.style.opacity='';}));}}
 let TX=null,TY=0;
@@ -5135,6 +5158,56 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2 .mlg{width:52px!important;height:52px!important;flex:0 0 52px!important;border-radius:14px!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2 .tx b,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2 .tx strong{margin-bottom:3px}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mPage .m-lst .m-row2:after{left:10px!important;right:10px!important}
+</style>
+<style id="v144">
+/* See all button, a quiet row at the end of the menu card */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-all{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:52px;margin:2px 0 6px;border-radius:16px;cursor:pointer;font-size:15px;font-weight:600;color:#F4F3F7;background:rgba(255,255,255,.06);transition:background .2s ease}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-all:hover{background:rgba(255,255,255,.09)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-row:has(+ .mi-all){border-bottom:0!important;box-shadow:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-row:has(+ .mi-all):after{display:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-all{margin:6px 0 12px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-all svg{width:18px;height:18px;opacity:.7;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-all:hover svg{transform:translateX(3px)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .mi-all{color:#121215;background:#F1F1F3}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .mi-all:hover{background:#EAEAED}
+/* All products page */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-top{padding:2px 0 4px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-sub{font-size:14px;color:rgba(255,255,255,.55);margin:-6px 0 14px;text-align:center}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-q{display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-radius:24px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);margin-bottom:12px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-q svg{width:19px;height:19px;flex:none;opacity:.6}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-q input{all:unset;flex:1;min-width:0;font-size:15px;color:#F4F3F7}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-q input::placeholder{color:rgba(255,255,255,.45)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-q input::-webkit-search-cancel-button{-webkit-appearance:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:6px 0 18px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c{position:relative;display:flex;flex-direction:column;border-radius:20px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);overflow:hidden;cursor:pointer;transition:transform .2s ease,background .2s ease}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c:hover{background:rgba(255,255,255,.08)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c:active{transform:scale(.98)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c.hide{display:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-ph{display:grid;place-items:center;aspect-ratio:1/1;background:rgba(255,255,255,.04) center/cover no-repeat;color:rgba(255,255,255,.55)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-ph.ic>svg{width:26%;height:26%;opacity:.75}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .pp{display:flex;flex-direction:column;gap:3px;padding:11px 12px 14px;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .pp b{font-size:14.5px;font-weight:600;line-height:1.3;color:#F4F3F7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .pp small{font-size:14px;color:rgba(255,255,255,.6)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-ph{position:relative}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .qa{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:6px;padding:0;border-radius:20px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .qb{all:unset;box-sizing:border-box;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:#fff;color:#121215;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:transform .15s ease}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .qb:active{transform:scale(.9)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .qb:not(.add){background:transparent;color:#fff;box-shadow:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .qb svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-c .qa:not(:has(.qn)) .qb.add{background:#121215;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .qa:has(.qn){background:rgba(18,18,21,.7);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:3px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-c .qa .qn{min-width:14px;text-align:center;font-size:14px;font-weight:600;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .al-none{text-align:center;color:rgba(255,255,255,.55);font-size:14.5px;padding:30px 0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-sub{color:#6B6B75}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-q{background:#fff;box-shadow:0 0 0 1px rgba(18,18,21,.04),0 4px 14px rgba(18,18,21,.04)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-q input{color:#121215}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-q input::placeholder{color:#8A8A93}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-c{background:#fff;box-shadow:0 0 0 1px rgba(18,18,21,.04),0 6px 18px rgba(18,18,21,.05)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-c:hover{background:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-ph{background-color:#F1F1F3;color:#6B6B75}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-c .pp b{color:#121215}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-c .pp small{color:#6B6B75}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-none{color:#6B6B75}
+/* desktop panel is narrower per card: keep two columns, a bit tighter */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mSub .al-grid{gap:10px}
 </style>
 </body>
 </html>
