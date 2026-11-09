@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>You marker options</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#7551DC;--ink:#121215}
+*{box-sizing:border-box;margin:0}
+body{background:#0E0E10;color:#F4F3F7;font-family:'DM Sans',system-ui,sans-serif;padding:28px 16px 40px}
+h1{font-size:22px;font-weight:700;text-align:center;margin-bottom:6px}
+p.s{color:rgba(255,255,255,.55);text-align:center;font-size:14.5px;margin-bottom:24px}
+.row{display:flex;flex-wrap:wrap;justify-content:center;gap:18px}
+.card{width:340px;max-width:100%}
+.map{position:relative;height:364px;border-radius:24px;overflow:hidden;background:#1d1d21 url(bg.jpg) center/cover}
+.lab{margin-top:12px;font-weight:700;font-size:17px}
+.lab span{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--ink);font-size:14px;margin-right:8px}
+.d{color:rgba(255,255,255,.6);font-size:14px;margin-top:4px;line-height:1.45}
+.m{position:absolute;left:50%;top:58%;width:0;height:0}
+.tag{position:absolute;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:700;background:#fff;color:var(--ink);padding:4px 10px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.35);white-space:nowrap}
+
+/* A: pulse + facing beam */
+.a .beam{position:absolute;left:-70px;top:-70px;width:140px;height:140px;border-radius:50%;background:conic-gradient(from -28deg,rgba(117,81,220,.55),rgba(117,81,220,0) 56deg,transparent 0);-webkit-mask:radial-gradient(circle,#000 20%,transparent 70%);mask:radial-gradient(circle,#000 20%,transparent 70%);transform-origin:50% 50%;animation:look 5s ease-in-out infinite}
+@keyframes look{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(25deg)}}
+.a .ring{position:absolute;left:-11px;top:-11px;width:22px;height:22px;border-radius:50%;border:2px solid rgba(117,81,220,.7);animation:ring 2.4s cubic-bezier(.2,.6,.3,1) infinite}
+.a .r2{animation-delay:1.2s}
+@keyframes ring{from{transform:scale(1);opacity:.9}to{transform:scale(4.4);opacity:0}}
+.a .dot{position:absolute;left:-11px;top:-11px;width:22px;height:22px;border-radius:50%;background:var(--p);border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.a .tag{top:22px}
+
+/* B: your face bubble */
+.b .shadow{position:absolute;left:-16px;top:-5px;width:32px;height:10px;border-radius:50%;background:rgba(0,0,0,.55);filter:blur(2px);animation:sh 2.2s ease-in-out infinite}
+.b .ground{position:absolute;left:-30px;top:-15px;width:60px;height:30px;border-radius:50%;border:2px solid rgba(117,81,220,.55);animation:gr 2.2s ease-out infinite}
+@keyframes gr{from{transform:scale(.5);opacity:.9}to{transform:scale(1.6);opacity:0}}
+.b .pin{position:absolute;left:-28px;top:-74px;width:56px;height:66px;animation:bob 2.2s ease-in-out infinite}
+.b .face{position:absolute;inset:0 0 auto 0;height:56px;border-radius:50%;background:var(--p);border:3px solid #fff;box-shadow:0 8px 20px rgba(0,0,0,.45);display:grid;place-items:center;font-weight:700;font-size:22px;color:#fff;overflow:hidden}
+.b .face svg{width:60%;height:60%;fill:#fff;opacity:.95;margin-top:14px}
+.b .tail{position:absolute;left:21px;top:50px;width:14px;height:14px;background:#fff;transform:rotate(45deg);border-radius:2px;z-index:-1}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes sh{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(.75);opacity:.35}}
+.b .wave{position:absolute;right:-6px;top:-4px;width:24px;height:24px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.3);animation:wave 2.2s ease-in-out infinite;transform-origin:70% 70%}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(18deg)}80%{transform:rotate(-12deg)}90%{transform:rotate(12deg)}}
+.b .tag{top:14px}
+
+/* C: walker with footsteps */
+.c .step{position:absolute;width:7px;height:11px;border-radius:50%;background:rgba(255,255,255,.75);opacity:0;animation:fp 2.8s linear infinite}
+@keyframes fp{0%{opacity:0}8%{opacity:.85}60%{opacity:.25}100%{opacity:0}}
+.c .puck{position:absolute;left:-23px;top:-23px;width:46px;height:46px;border-radius:50%;background:#fff;box-shadow:0 0 0 8px rgba(117,81,220,.25),0 6px 16px rgba(0,0,0,.5);display:grid;place-items:center}
+.c .puck svg{width:26px;height:26px;fill:none;stroke:var(--p);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.c .puck .lg1{animation:leg1 .9s ease-in-out infinite;transform-origin:12px 13px}
+.c .puck .lg2{animation:leg2 .9s ease-in-out infinite;transform-origin:12px 13px}
+.c .puck .ar{animation:leg2 .9s ease-in-out infinite;transform-origin:12px 8px}
+@keyframes leg1{0%,100%{transform:rotate(18deg)}50%{transform:rotate(-18deg)}}
+@keyframes leg2{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(18deg)}}
+.c .tag{top:34px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body>
+<h1>Fun "You" marker</h1>
+<p class="s">Three ideas, shown moving on the real map. Pick one (or mix).</p>
+<div class="row">
+ <div class="card"><div class="map"><div class="m a"><span class="beam"></span><span class="ring"></span><span class="ring r2"></span><span class="dot"></span><span class="tag">You</span></div></div>
+  <div class="lab"><span>A</span>Pulse and beam</div><div class="d">Soft rings breathe out, and a purple beam shows the way your phone is facing. Clean, like Google Maps, but ours.</div></div>
+ <div class="card"><div class="map"><div class="m b"><span class="ground"></span><span class="shadow"></span><div class="pin"><span class="tail"></span><div class="face"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.2"/><path d="M3.5 22c0-5 3.8-8 8.5-8s8.5 3 8.5 8z"/></svg></div><span class="wave">👋</span></div><span class="tag">You</span></div></div>
+  <div class="lab"><span>B</span>Your face</div><div class="d">Your profile photo floats on the map and gently bobs, with a little wave now and then. Before sign in it shows a plain person shape.</div></div>
+ <div class="card"><div class="map"><div class="m c" id="walker"><div class="puck"><svg viewBox="0 0 24 24"><circle cx="12" cy="4.6" r="1.9"/><path d="M12 7.5v5.5"/><path class="ar" d="M8.5 10.5 12 8.5l3.5 2"/><path class="lg1" d="M12 13l-2.5 5"/><path class="lg2" d="M12 13l2.5 5"/></svg></div><span class="tag">You</span></div></div>
+  <div class="lab"><span>C</span>Little walker</div><div class="d">A small walking person in a white disc, leaving fading footsteps behind as you move. Fun when you tap Start walking.</div></div>
+</div>
+<script>
+(function(){var w=document.getElementById('walker');var steps=[[-70,40],[-60,28],[-50,18],[-40,8],[-31,-1]];
+steps.forEach(function(p,i){var s=document.createElement('span');s.className='step';s.style.left=(p[0]+(i%2?5:-5))+'px';s.style.top=(p[1])+'px';s.style.transform='rotate(-48deg)';s.style.animationDelay=(i*0.35)+'s';w.insertBefore(s,w.firstChild);});})();
+</script>
+</body></html>
