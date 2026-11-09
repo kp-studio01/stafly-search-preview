@@ -5210,6 +5210,18 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-no
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mSub .al-grid{gap:10px}
 </style>
 <script>
+(function(){function up(){var on=!!document.querySelector('#mSub .al-grid');document.body.classList.toggle('al-wide',on);}
+function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(up).observe(p,{childList:true});addEventListener('popstate',function(){setTimeout(up,0);});up();}
+start();})();
+</script>
+<style id="v145">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mSub{transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .32s ease,width .45s cubic-bezier(.16,1,.3,1)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub{width:min(720px,calc(100vw - var(--rail) - var(--pw) - 3 * var(--gap) - 12px))!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al-grid{grid-template-columns:repeat(3,1fr);gap:12px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al-c .pp b{font-size:14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al-top{max-width:none}
+</style>
+<script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
 v.items=[['Jollof rice and chicken',2500,'','','Rice'],['Fried rice and turkey',3000,'','','Rice'],['Ofada rice and ayamase',2800,'','','Rice'],['White rice and stew',1800,'','','Rice'],['Coconut rice and fish',2600,'','','Rice'],['Party jollof (big pack)',4500,'','','Rice'],
 ['Amala and ewedu',1500,'','','Swallow'],['Pounded yam and egusi',2200,'','','Swallow'],['Eba and okra',1300,'','','Swallow'],['Semo and efo riro',1600,'','','Swallow'],['Fufu and ogbono',1500,'','','Swallow'],

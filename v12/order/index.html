@@ -5209,5 +5209,17 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .al-no
 /* desktop panel is narrower per card: keep two columns, a bit tighter */
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mSub .al-grid{gap:10px}
 </style>
+<script>
+(function(){function up(){var on=!!document.querySelector('#mSub .al-grid');document.body.classList.toggle('al-wide',on);}
+function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(up).observe(p,{childList:true});addEventListener('popstate',function(){setTimeout(up,0);});up();}
+start();})();
+</script>
+<style id="v145">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk #mSub{transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .32s ease,width .45s cubic-bezier(.16,1,.3,1)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub{width:min(720px,calc(100vw - var(--rail) - var(--pw) - 3 * var(--gap) - 12px))!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al-grid{grid-template-columns:repeat(3,1fr);gap:12px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al-c .pp b{font-size:14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.dk.al-wide #mSub .al-top{max-width:none}
+</style>
 </body>
 </html>
