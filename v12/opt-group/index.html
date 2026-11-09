@@ -3405,9 +3405,9 @@ function m2Page(t){
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
       const steps=Array.from({length:g.need},(_,i)=>{const c=i<g.n?'f':(me&&i===g.n?'me':'');return(i?`<span class="ln${i<n?' f':''}"></span>`:'')+`<span class="st ${c}">${c?mS('check'):''}</span>`;}).join('');
       const left=g.need-n;
-      return`<div class="g-card${me?' in':''}"><div class="g-media">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:lvPh(v)}<span class="g-shade"></span>
+      return`<div class="g-card${me?' in':''}"><div class="g-media${CV(v)?'':' g-poster'}">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:gArt(v)}<span class="g-shade"></span>
         <span class="g-tag">${mS('users3')}Group order</span><span class="g-time${g.closes<=15?' soon':''}">${mS('clock')}${g.closes} min left</span>
-        ${CV(v)?'':`<span class="g-pin">${mLogo(v)}</span>`}
+        
         <div class="g-cap"><div class="nm"><b>${v.name}</b><span>Delivering to ${g.hall}</span></div><div class="pr"><b>${naira(share(v,me?n:n+1))}</b><span>${me?'your share':'your share'} · <s>${naira(fee)}</s></span></div></div></div>
         <div class="g-body"><div class="g-seg">${Array.from({length:g.need},(_,k)=>`<i class="${k<g.n?'f':(me&&k===g.n?'me':'')}"></i>`).join('')}</div>
         <div class="g-stats"><div>${mS('users3')}<span>Joined</span><b>${n}/${g.need}</b></div><div>${mS('clock')}<span>Spots</span><b>${left>0?left+' left':'Full'}</b></div><div>${mS('walk')}<span>Shop</span><b>${walk(v)} min</b></div></div>
@@ -7977,8 +7977,8 @@ function page(id){var v=vOf(id),g=GROUPS[id];if(!v||!g)return'<div class="m-h c"
   var youRow=me||my.length?'<div class="gp-m gp-you"><span class="gp-av">You</span><div><b>You'+(me?'':'<em>Not in yet</em>')+'</b><span>'+(my.length?my.map(function(x){return E(x[0])+(x[1]>1?' ×'+x[1]:'');}).join(', '):'Nothing picked yet')+'</span></div></div>':'<div class="gp-m gp-open gp-mine"><span class="gp-av">+</span><div><b>Your spot</b><span>Pick what you want from the menu</span></div></div>';
   var sub=my.reduce(function(a,x){return a+pr(x[2])*x[1];},0),shr=share(v,me?n:n+1);
   return'<div class="m-h c">'+back()+'<h1>Group order</h1><button type="button" class="m-circ gp-sh" data-gpshare="'+id+'" aria-label="Invite friends">'+mS('share')+'</button></div>'+
-  '<div class="g-card gp-card"><div class="g-media">'+(cv?'<img class="g-photo" src="'+cv+'" alt="">':lvPh(v))+'<span class="g-shade"></span>'+
-   '<span class="g-tag">'+mS('users3')+'Group order</span><span class="g-time'+(g.closes<=15?' soon':'')+'">'+mS('clock')+g.closes+' min left</span>'+(cv?'':'<span class="g-pin">'+mLogo(v)+'</span>')+
+  '<div class="g-card gp-card"><div class="g-media'+(cv?'':' g-poster')+'">'+(cv?'<img class="g-photo" src="'+cv+'" alt="">':gArt(v,1))+'<span class="g-shade"></span>'+
+   '<span class="g-tag">'+mS('users3')+'Group order</span><span class="g-time'+(g.closes<=15?' soon':'')+'">'+mS('clock')+g.closes+' min left</span>'+
    '<div class="g-cap"><div class="nm"><b>'+E(v.name)+'</b><span>Delivering to '+E(g.hall)+'</span></div><div class="pr"><b>'+naira(shr)+'</b><span>your share · <s>'+naira(fee)+'</s></span></div></div></div>'+
    '<div class="g-body"><div class="g-seg">'+Array.from({length:g.need},function(_,k){return'<i class="'+(k<g.n?'f':(me&&k===g.n?'me':''))+'"></i>';}).join('')+'</div>'+
    '<div class="gp-faces"><span>'+faces+'</span><b>'+n+' of '+g.need+' in</b><em>'+(left>0?left+(left===1?' spot':' spots')+' left':'Full')+'</em></div></div></div>'+
@@ -8046,6 +8046,30 @@ html body.m2on.m2on.m2on.m2on.m2on:not(.dk).m-subon #mSub{transition:transform .
 html body.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-subon) #mSub{transition:transform .44s cubic-bezier(.32,.72,0,1)!important;box-shadow:-18px 0 40px -10px rgba(0,0,0,0)}
 html body.m2on.m2on.m2on.m2on.m2on.m-light:not(.dk).m-subon #mSub{box-shadow:-18px 0 40px -10px rgba(18,18,40,.18)}
 @media (prefers-reduced-motion:reduce){html body.m2on.m2on.m2on.m2on.m2on:not(.dk) #mPage,html body.m2on.m2on.m2on.m2on.m2on:not(.dk) #mSub{transition:none!important}}
+</style>
+<script>
+window.gArt=function(v,anim){var T={food:'#F07A3A',fashion:'#7C93FF',beauty:'#FF7AA8',printing:'#45BCD0',gadgets:'#4CC7A4',services:'#D7BC4A'};
+  var wm='';try{var t=document.createElement('div');t.innerHTML=lvPh(v);var q=t.querySelector('i svg')||t.querySelector('svg');wm=q?q.outerHTML:'';}catch(_){}
+  return '<div class="g-art'+(anim?' run':'')+'" style="--tt:'+(T[v.cat]||T.food)+'"><span class="sl"></span><i class="c">'+wm+'</i><i class="b">'+wm+'</i><i class="a">'+wm+'</i><span class="gn"></span></div>';};
+</script>
+<style>
+html body.m2on .g-media.g-poster{background:#0E0E11}
+html body.m2on .g-art{position:absolute;inset:0;overflow:hidden;background:radial-gradient(120% 90% at 100% 25%,color-mix(in srgb,var(--tt) 30%,transparent),transparent 60%),#0E0E11}
+html body.m2on .g-art i{display:block;position:absolute;right:-24px;top:-6px;width:210px;height:210px;color:var(--tt);transform:rotate(-10deg)}
+html body.m2on .g-art i svg{width:100%!important;height:100%!important;fill:none;stroke:currentColor;stroke-width:1.1}
+html body.m2on .g-art i.a{opacity:.5}
+html body.m2on .g-art i.b{opacity:.32;filter:blur(5px);transform:translateX(-44px) rotate(-10deg)}
+html body.m2on .g-art i.c{opacity:.16;filter:blur(12px);transform:translateX(-104px) rotate(-10deg)}
+html body.m2on .g-art .sl{position:absolute;left:0;right:0;top:18%;height:58%;background:repeating-linear-gradient(180deg,transparent 0 13px,color-mix(in srgb,var(--tt) 22%,transparent) 13px 14px);-webkit-mask:linear-gradient(90deg,transparent 5%,#000 55%,transparent 92%);mask:linear-gradient(90deg,transparent 5%,#000 55%,transparent 92%);opacity:.7}
+html body.m2on .g-art .gn{position:absolute;inset:0;opacity:.18;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+html body.m2on .g-poster .g-shade{background:linear-gradient(180deg,rgba(14,14,17,.25),rgba(14,14,17,.1) 35%,rgba(14,14,17,.75) 78%,#0E0E11)!important}
+html body.m2on .g-art.run i.a{animation:gRunA 1.1s cubic-bezier(.32,.72,0,1) both}
+html body.m2on .g-art.run i.b{animation:gRunB 1.1s cubic-bezier(.32,.72,0,1) both}
+html body.m2on .g-art.run i.c{animation:gRunC 1.1s cubic-bezier(.32,.72,0,1) both}
+@keyframes gRunA{from{opacity:0;transform:translateX(-120px) rotate(-10deg)}to{opacity:.5;transform:rotate(-10deg)}}
+@keyframes gRunB{from{opacity:0;transform:translateX(-160px) rotate(-10deg)}to{opacity:.32;transform:translateX(-44px) rotate(-10deg)}}
+@keyframes gRunC{from{opacity:0;transform:translateX(-200px) rotate(-10deg)}to{opacity:.16;transform:translateX(-104px) rotate(-10deg)}}
+@media (prefers-reduced-motion:reduce){html body.m2on .g-art.run i{animation:none!important}}
 </style>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
