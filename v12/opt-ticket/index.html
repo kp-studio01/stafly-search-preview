@@ -4568,7 +4568,7 @@ function tkPage(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);
   <div class="m-foot">${mFoot(v)}</div>`;}
 
 /* v149: premium ticket */
-const TKSEEN={};
+const TKSEEN={};(function(){const _a=window.m2Apply;window.m2Apply=function(){try{if(CUR&&CUR.s==='track')delete TKSEEN[CUR.id];}catch(_){}return _a.apply(this,arguments);};})();
 function tkCode(ref){return 'SF-'+String(ref||'').replace(/[^A-Za-z0-9]/g,'').slice(-6).toUpperCase();}
 function tkLink(ref){return location.origin+location.pathname+'#track/'+encodeURIComponent(ref);}
 function tkQR(txt){try{if(typeof qrcode!=='function')return '';const q=qrcode(0,'M');q.addData(txt);q.make();const n=q.getModuleCount();let d='';
@@ -4586,11 +4586,11 @@ tkPage=function(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);if(!o||!d)r
   const pending=d.status!=='paid',declined=d.stage==='declined',k=pending||declined?-1:STEPS.findIndex(x=>x[0]===d.stage),done=d.stage==='delivered';
   const head=pending?'Waiting for payment':declined?'Not accepted':done?'Received':STEPS[k][1]==='Paid'?'Order received':STEPS[k][1];
   const sub=pending?'Finish paying to send it to the shop':declined?'You will get your money back':TKLINE[d.stage]||'';
-  const prev=TKSEEN[ref],key=d.stage+'|'+d.status,fresh=prev===undefined,moved=!fresh&&prev!==key;TKSEEN[ref]=key;
+  const prev=TKSEEN[ref],key=d.stage+'|'+d.status,onIt=!!document.querySelector('#mSub .tkx[data-ref="'+ref+'"]'),fresh=prev===undefined||!onIt,moved=!fresh&&prev!==key;TKSEEN[ref]=key;
   const code=tkCode(ref),cat=(v&&v.cat)||'food';let wm='';try{const t=document.createElement('div');t.innerHTML=lvPh(v||{cat});const q=t.querySelector('i svg');wm=q?q.outerHTML:'';}catch(_){}
   const seg=pending||declined?'':`<div class="tkx-seg">${STEPS.map((s,i)=>`<i class="${i<k||done?'on':i===k?'on cur':''}"><b></b></i>`).join('')}</div>`;
   return`<div class="m-h c">${back()}<h1>Your order</h1><span style="width:46px"></span></div>
-  <div class="tkx ${cat}${fresh?' in':''}${moved?' moved':''}${done?' done':''}" style="--tt:${TKT[cat]||TKT.food}">
+  <div data-ref="${ref}" class="tkx ${cat}${fresh?' in':''}${moved?' moved':''}${done?' done':''}" style="--tt:${TKT[cat]||TKT.food}">
    <div class="tkx-top">${tkArt(v,d,wm)}<span class="tkx-gr"></span>
     <div class="tkx-row">${mLogo(v)}<span><small>Order ticket</small>${d.shop||v.name}</span><button type="button" class="tkx-sh" data-tkshare="${ref}" aria-label="Send to a friend"><svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 8.5 12 4l4.5 4.5M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14"/></svg></button></div>
     <h2 class="tkx-h">${head}</h2><p class="tkx-sub">${sub}</p>${seg}
@@ -4618,7 +4618,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
   else{try{navigator.clipboard.writeText(txt+' '+url);b.classList.add('ok');setTimeout(()=>b.classList.remove('ok'),1400);}catch(_){}}},true);
 addEventListener('keydown',e=>{if(e.key==='Escape')tkQrClose();});
 /* ---- your orders, in the menu drawer and on the Chats page ---- */
-function minePage(){return`<div class="m-h c">${back()}<h1>Your orders</h1><span style="width:46px"></span></div>${MINE.length?'<div class="m-card" style="padding:2px 16px">'+MINE.map(o=>{const v=vOf(o.shop),d=tkData(o.ref),st=d?(d.stage==='delivered'?'Delivered':d.status!=='paid'?'Not paid':(STEPS.find(x=>x[0]===d.stage)||[0,'On it'])[1]):'Open';
+function minePage(){return`<div class="m-h c">${back()}<h1>Your orders</h1><span style="width:46px"></span></div>${MINE.length?'<div class="m-card" style="padding:2px 16px">'+MINE.map(o=>{const v=vOf(o.shop),d=tkData(o.ref),st=d?(d.stage==='delivered'?'Received':d.status!=='paid'?'Not paid':(STEPS.find(x=>x[0]===d.stage)||[0,'On it'])[1]):'Open';
   return`<button type="button" class="od-mine" data-mtrack="${o.ref}">${mLogo(v)}<div><b>${v.name}</b><span>${naira(o.total)} · ${new Date(o.at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div><em>${st}</em></button>`;}).join('')+'</div>':`<div class="m-empty"><b>No orders yet</b>When you order from a shop, you can follow it here.</div>`}`;}
 const _sub=m2Sub;m2Sub=function(k,id){
   if(k==='cart')return ckPage(vOf(id));
@@ -4667,7 +4667,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;cons
   if(t.closest('[data-mmine]')){e.preventDefault();e.stopImmediatePropagation();m2Nav({t:CUR.t,s:'mine'});}},true);
 document.addEventListener('input',e=>{const k=e.target&&e.target.dataset&&e.target.dataset.ck;if(!k)return;CK[k]=e.target.value.slice(0,k==='note'?200:60);sv('stafly_ck',CK);if(ERR){ERR='';}},true);
 /* "Your orders" on the Chats page */
-const _pg=m2Page;m2Page=function(t){let h=_pg.apply(this,arguments);if(t==='chats'&&MINE.length&&typeof h==='string'){const o=MINE[0],v=vOf(o.shop),d=tkData(o.ref);const st=d?(d.stage==='delivered'?'Delivered':(STEPS.find(x=>x[0]===d.stage)||[0,'On it'])[1]):'Open';
+const _pg=m2Page;m2Page=function(t){let h=_pg.apply(this,arguments);if(t==='chats'&&MINE.length&&typeof h==='string'){const o=MINE[0],v=vOf(o.shop),d=tkData(o.ref);const st=d?(d.stage==='delivered'?'Received':(STEPS.find(x=>x[0]===d.stage)||[0,'On it'])[1]):'Open';
   h=h.replace(/(<div class="m-h"><h1>Chats<\/h1><\/div>)/,`$1<div class="m-sh" style="margin-top:0"><b>Your orders</b><button type="button" class="lnk" data-mmine="1" style="width:auto;height:auto;padding:0;border:0;background:none;color:inherit;font:600 13px 'DM Sans',sans-serif;opacity:.7">See all</button></div><div class="m-card" style="padding:2px 16px"><button type="button" class="od-mine" data-mtrack="${o.ref}">${mLogo(v)}<div><b>${v.name}</b><span>${naira(o.total)}</span></div><em>${st}</em></button></div><div class="m-sh"><b>Messages</b></div>`);}
   return h;};
 /* back from Paystack: ?track=REF.TOKEN opens the order */
@@ -7918,13 +7918,13 @@ var BUSY=false,EZ='cubic-bezier(.32,.72,0,1)';
 function cover(el,fromBg,cb){var r=el.getBoundingClientRect(),p=document.querySelector('#mSub'),pr=p?p.getBoundingClientRect():{left:0,top:0,right:innerWidth,bottom:innerHeight,width:innerWidth,height:innerHeight};
   var lt=document.body.classList.contains('m-light'),toBg=lt?'#F5F5F6':'#141417',rad=parseFloat(getComputedStyle(el).borderRadius)||20;
   var m=document.createElement('div');m.className='mi-morph';
-  m.style.cssText='left:'+pr.left+'px;top:'+pr.top+'px;width:'+pr.width+'px;height:'+pr.height+'px;background:'+fromBg+';clip-path:inset('+(r.top-pr.top)+'px '+(pr.left+pr.width-r.right)+'px '+(pr.top+pr.height-r.bottom)+'px '+(r.left-pr.left)+'px round '+rad+'px)';
-  document.body.appendChild(m);el.style.visibility='hidden';
+  m.style.cssText='left:'+pr.left+'px;top:'+pr.top+'px;width:'+pr.width+'px;height:'+pr.height+'px;background:'+toBg+';clip-path:inset('+(r.top-pr.top)+'px '+(pr.left+pr.width-r.right)+'px '+(pr.top+pr.height-r.bottom)+'px '+(r.left-pr.left)+'px round '+rad+'px)';
+  m.innerHTML='<i class="mm-face" style="background:'+fromBg+'"></i>';document.body.appendChild(m);el.style.visibility='hidden';
   m.getBoundingClientRect();
-  m.style.transition='clip-path .5s '+EZ+',background-color .22s ease,opacity .32s ease';
-  m.style.clipPath='inset(0px 0px 0px 0px round '+(document.body.classList.contains('dk')?28:0)+'px)';m.style.backgroundColor=toBg;
+  m.style.transition='clip-path .5s '+EZ+',opacity .3s ease';
+  m.style.clipPath='inset(0px 0px 0px 0px round '+(document.body.classList.contains('dk')?28:0)+'px)';m.firstChild.style.opacity='0';
   setTimeout(function(){cb();var q=document.querySelector('#mSub');if(q){q.classList.remove('ck-rise');void q.offsetWidth;q.classList.add('ck-rise');setTimeout(function(){q.classList.remove('ck-rise');},950);}
-    requestAnimationFrame(function(){m.style.opacity='0';setTimeout(function(){m.remove();el.style.visibility='';BUSY=false;},360);});},430);}
+    requestAnimationFrame(function(){requestAnimationFrame(function(){m.style.opacity='0';setTimeout(function(){m.remove();el.style.visibility='';BUSY=false;},340);});});},440);}
 window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   var b=t.closest('#miSh [data-mibk]');
   if(b){e.preventDefault();e.stopImmediatePropagation();if(BUSY)return;BUSY=true;var id=b.dataset.mibk;
@@ -7937,13 +7937,20 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
 })();
 </script>
 <style>
-.mi-morph{position:fixed;z-index:4000;pointer-events:none;will-change:clip-path,opacity}
+.mi-morph{position:fixed;z-index:4000;pointer-events:none;will-change:clip-path,opacity;contain:strict}
+.mi-morph .mm-face{position:absolute;inset:0;transition:opacity .16s ease}
 html body #mSub.ck-rise>*{animation:ckRise .55s cubic-bezier(.32,.72,0,1) both}
 html body #mSub.ck-rise>*:nth-child(2){animation-delay:.04s}html body #mSub.ck-rise>*:nth-child(3){animation-delay:.08s}html body #mSub.ck-rise>*:nth-child(4){animation-delay:.12s}html body #mSub.ck-rise>*:nth-child(5){animation-delay:.16s}html body #mSub.ck-rise>*:nth-child(n+6){animation-delay:.2s}
 @keyframes ckRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 html body .mi-sh .ad.ok{animation:miOk .6s ease}
 @keyframes miOk{30%{transform:scale(.96)}60%{transform:scale(1.02)}}
 @media (prefers-reduced-motion:reduce){.mi-morph{transition:none!important}html body #mSub.ck-rise>*{animation:none}}
+</style>
+<style>
+/* v154: order list icon tiles (shops with no logo photo) */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .od-mine .mlg:not(:has(img)){display:grid!important;place-items:center!important;background:rgba(255,255,255,.06)!important;border:0!important;box-shadow:none!important;padding:0!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .od-mine .mlg:not(:has(img)) svg{width:46%!important;height:46%!important;margin:0!important;position:static!important;opacity:.85}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .od-mine .mlg:not(:has(img)){background:#F1F1F3!important}
 </style>
 <script>
 (function(){function go(){try{var v=vOf('mamatee');if(!v)return setTimeout(go,200);if(v.items&&v.items.length>20)return;
