@@ -8509,33 +8509,61 @@ function card(a){var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
    '<span class="g-tag'+(a.m<=30?' hot':'')+'">'+(a.m<=30?'<i class="lvd"></i>New':mS('clock')+ago(a.m))+'</span><span class="g-time">'+cl(a.c)+'</span>'+
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div>'+(a.b?'<span class="ak-bd">Budget ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'</div></div>'+
    '<div class="g-body">'+(a.me?'<div class="ak-rh">'+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'<span>'+esc(a.h)+' · '+ago(a.m)+'</span></div>':'<div class="lv-who"><span class="logo mlg ak-in">'+ini(a.n)+'</span><div><b>'+esc(a.n==='You'?'Your post':a.n)+'</b><span>'+esc(a.h)+' · '+(oc?oc+(oc===1?' shop replied':' shops replied'):'No replies yet')+'</span></div><span class="tm">'+ago(a.m)+'</span></div>')+
-   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+'</b><small class="ak-rs">'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. We’ll tell you on WhatsApp.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
-        :(OPEN[id]?'<div class="ak-rb"><div class="ak-rbh">'+(done?'Edit your reply':'Reply to '+esc(a.n.split(' ')[0]))+'</div><span class="ak-fl">Price</span><label class="ak-rpr"><span>₦</span><input class="ak-pp" inputmode="numeric" placeholder="3,000"></label><span class="ak-fl">Message</span><textarea class="ak-pm" maxlength="160" placeholder="e.g. New Oraimo, can deliver"></textarea><div class="g-act"><button type="button" class="g-ghost" data-akcan="'+esc(id)+'">Cancel</button><button type="button" class="g-go" data-aksend="'+esc(id)+'">'+(done?'Update reply':'Send reply')+'<i>'+mS('arrow')+'</i></button></div></div>'
-        :done?'<div class="ak-yr"><div class="ak-yrh"><b>Your reply</b><strong>'+(done.p?'₦'+done.p.toLocaleString('en-US'):'')+'</strong></div>'+(done.m?'<p>'+esc(done.m)+'</p>':'')+'</div><div class="g-act"><button type="button" class="g-ghost" data-akhas="'+esc(id)+'">Edit reply</button><button type="button" class="g-go" data-akmsg="1">Message '+esc(a.n.split(' ')[0])+'<i>'+mS('arrow')+'</i></button></div>'
+   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+'</b><small class="ak-rs">'+esc(r[1]?r[1]+' · ':'')+ago(r[4]).toLowerCase()+'</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. Replies show up here.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
+        :(OPEN[id]?'<div class="ak-rb"><div class="ak-rbh">'+(done?'Edit your reply':'Reply to '+esc(fnm(a.n)))+'</div><span class="ak-fl">Price</span><label class="ak-rpr"><span>₦</span><input class="ak-pp" inputmode="numeric" placeholder="3,000"></label><span class="ak-fl">Message</span><textarea class="ak-pm" maxlength="160" placeholder="e.g. New Oraimo, can deliver"></textarea><div class="g-act"><button type="button" class="g-ghost" data-akcan="'+esc(id)+'">Cancel</button><button type="button" class="g-go" data-aksend="'+esc(id)+'">'+(done?'Update reply':'Send reply')+'<i>'+mS('arrow')+'</i></button></div></div>'
+        :done?'<div class="ak-yr"><div class="ak-yrh"><b>Your reply</b><strong>'+(done.p?'₦'+done.p.toLocaleString('en-US'):'')+'</strong></div>'+(done.m?'<p>'+esc(done.m)+'</p>':'')+'</div><div class="g-act"><button type="button" class="g-ghost" data-akhas="'+esc(id)+'">Edit reply</button><button type="button" class="g-go" data-akmsg="1">Message '+esc(fnm(a.n))+'<i>'+mS('arrow')+'</i></button></div>'
         :'<div class="g-act"><button type="button" class="g-ghost" data-akmsg="1">Message</button><button type="button" class="g-go" data-akhas="'+esc(id)+'">I have this<i>'+mS('arrow')+'</i></button></div>'))+
    '</div></div>';}
 function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'You haven’t replied to anyone yet.':'Nothing here yet. Be the first to post.')+'</div>';return L.map(card).join('');}
 function sw(){return'<div class="lv-tabs ak-sw"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
 function buyerPage(head){
-  return head+sw()+pv()+'<div class="ak-bh"><b>Can’t find something?</b><span>Tell shops what you need. Only verified shops see it, and they reply here and on WhatsApp.</span></div>'+cmpH(true)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div>';}
+  return head+sw()+pv()+'<div class="ak-bh"><b>Can’t find something?</b><span>Tell shops what you need. Only verified shops see it, and they reply here.</span></div>'+cmpH(true)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div>';}
 function mineCard(a){var R=a.R||[],n=R.length;
   var off=R.map(function(r){var v={cat:a.c};return'<div class="ak-of"><span class="logo mlg">'+icon(a.c)+'</span><div class="ak-ofm"><div class="ak-ofh"><b>'+esc(r[0])+'</b><strong>₦'+r[2].toLocaleString('en-US')+'</strong></div><small>'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-ofb"><button type="button" class="ak-oc" data-akmsg="1">'+mS('chat')+'Chat</button></div></div></div>';}).join('');
   return'<div class="ak-mc"><div class="ak-mh"><span class="ak-mi">'+icon(a.c)+'</span><div><b>'+cl(a.c)+'</b><small>Posted '+ago(a.m).toLowerCase()+'</small></div><span class="ak-st"><i></i>Open</span></div>'+
    '<p class="ak-mq">'+esc(a.t)+'</p><div class="ak-mm">'+(a.b?'<span>'+mS('tag')+'Up to ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'<span>'+mS('pin')+esc(a.h)+'</span></div>'+
-   '<div class="ak-os"><div class="ak-osh">'+(n?n+(n===1?' reply':' replies'):'No replies yet')+'</div>'+(n?off:'<p class="ak-wt">Shops that sell this will see it soon. We’ll tell you on WhatsApp.</p>')+'</div>'+
+   '<div class="ak-os"><div class="ak-osh">'+(n?n+(n===1?' reply':' replies'):'No replies yet')+'</div>'+(n?off:'<p class="ak-wt">Shops that sell this will see it soon. Replies show up here.</p>')+'</div>'+
    '<div class="ak-mf"><button type="button" class="ak-mx" data-akclose="'+esc(a.id)+'">Close post</button><button type="button" class="ak-md" data-akdone="'+esc(a.id)+'">I found it</button></div></div>';}
 function cmpH(open){return '<div class="ak-wrap'+(open?' open':'')+'"><div class="ak-cmp" data-aknew="1"><span class="logo mlg">'+mS('search')+'</span><div><b>Can’t find it?</b><small>Post it and shops will reply.</small></div><button type="button" class="g-go">Post<i>'+mS('arrow')+'</i></button></div>'+
    '<div class="ak-form"><b>What do you need?</b><textarea maxlength="160" placeholder="e.g. Type-C charger before 6pm"></textarea>'+
    '<div class="ak-cts">'+CATS.map(function(c,i){return'<button type="button" data-akpc="'+c[0]+'" class="'+(i===0?'on':'')+'">'+c[1]+'</button>';}).join('')+'</div>'+
    '<div class="ak-fr"><input type="text" class="ak-hall" placeholder="Your hall" value="'+esc(myHall())+'"><input type="text" class="ak-bud" inputmode="numeric" placeholder="Budget (optional)"></div>'+
    '<div class="g-act"><button type="button" class="g-ghost" data-akno="1">Clear</button><button type="button" class="g-go" data-akpost="1">Post it<i>'+mS('arrow')+'</i></button></div></div></div>';}
-function pv(){return'<div class="ak-pv"><span>Preview</span><button type="button" data-akrole="buyer" class="'+(ROLE==='buyer'?'on':'')+'">View as buyer</button><button type="button" data-akrole="seller" class="'+(ROLE==='seller'?'on':'')+'">View as seller</button></div>';}
+function pv(){if(SHOP)return'';return'<div class="ak-pv"><span>Preview</span><button type="button" data-akrole="buyer" class="'+(ROLE==='buyer'?'on':'')+'">View as buyer</button><button type="button" data-akrole="seller" class="'+(ROLE==='seller'?'on':'')+'">View as seller</button></div>';}
 function needPage(head){
   var circ='<div class="lv-row lv2">'+CATS.map(function(c){return'<button type="button" class="lv-st ak-ct'+(AKC===c[0]?' on':'')+'" data-akcat="'+c[0]+'"><span class="rg"><span class="logo mlg">'+icon(c[0])+'</span></span><em>'+c[1]+'</em></button>';}).join('')+'</div>';
   var bar='<label class="m-field lv-q">'+mS('search')+'<input id="akQ" type="search" placeholder="Search what students need" value="'+esc(AKQ)+'" autocomplete="off" enterkeyhint="search"></label>';
   var tabs='<div class="lv-tabs">'+[['foryou','For you'],['near','Near you'],['mine','Replied']].map(function(x){return'<button type="button" data-aktab="'+x[0]+'" class="'+(AKT===x[0]?'on':'')+'">'+x[1]+'</button>';}).join('')+'</div>';
   return head+sw()+pv()+circ+bar+tabs+'<div id="akList">'+cards()+'</div>';}
-var _pg=window.m2Page;window.m2Page=function(t){var h=_pg.apply(this,arguments);if(t!=='live'||typeof h!=='string')return h;
+
+/* m177: real server */
+var API=(function(){var u='';try{u=new URLSearchParams(location.search).get('api')||'';}catch(_){}return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(u)?u:'https://kp-assistant.onrender.com';})();
+var SIDV={seller1:'foodhunt'},VSID={foodhunt:'seller1'},FOCUS=null,LOADM=0,LOADF=0;
+function vidG(){var v='';try{v=localStorage.getItem('stafly_vid')||'';}catch(_){}if(!/^[a-z0-9]{12,32}$/.test(v)){v=(Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)).replace(/[^a-z0-9]/g,'').slice(0,24);try{localStorage.setItem('stafly_vid',v);}catch(_){}}return v;}
+function api(path,body){return fetch(API+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{}).then(function(r){return r.json().catch(function(){return{};}).then(function(d){if(!r.ok){var e=new Error(d.error||'Something went wrong. Please try again.');e.status=r.status;throw e;}return d;});});}
+function mins(at){return Math.max(0,Math.round((Date.now()-(+at||Date.now()))/60000));}
+function fnm(n){return n==='Student'?'the student':String(n||'').split(' ')[0];}
+function realId(id){return /^[a-f0-9]{12}$/.test(String(id||''));}
+var SHOP=null;try{SHOP=JSON.parse(localStorage.getItem('stafly_shop')||'null');}catch(_){}
+(function(){var p;try{p=new URLSearchParams(location.search);}catch(_){return;}var sid=p.get('sid'),st=p.get('st');
+  if(sid&&st&&/^[a-f0-9]{32}$/.test(st)){SHOP={sid:sid,st:st};try{localStorage.setItem('stafly_shop',JSON.stringify(SHOP));}catch(_){}}
+  if(SHOP&&!(SHOP.sid&&SHOP.st))SHOP=null;
+  if(SHOP)ROLE='seller';
+  if(p.get('ask')&&SHOP){AKM='need';FOCUS=p.get('ask');setTimeout(function(){try{m2Nav({t:'live'});}catch(_){}},0);}})();
+function buyerList(){var l=document.getElementById('akList');if(!l||!document.querySelector('#mPage .ak-bh'))return;l.innerHTML=MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>';}
+function loadMine(){if(LOADM)return;LOADM=1;api('/api/search/asks/mine?vid='+vidG()).then(function(d){
+  MINEASK=(d.asks||[]).map(function(a){return{id:a.id,n:'You',h:a.hall||'On campus',m:mins(a.at),t:a.text,c:a.cat,b:a.budget||0,o:(a.replies||[]).length,me:1,
+    R:(a.replies||[]).map(function(r){return[r.shop,r.place||'',r.price||0,r.msg||'',mins(r.at),r.sid];})};});buyerList();}).catch(function(){}).then(function(){LOADM=0;});}
+function loadFeed(){if(!SHOP||LOADF)return;LOADF=1;api('/api/search/asks?sid='+encodeURIComponent(SHOP.sid)+'&st='+encodeURIComponent(SHOP.st)).then(function(d){
+  ASKS=(d.asks||[]).map(function(a){if(a.mine)SENT[a.id]={p:a.mine.price||0,m:a.mine.msg||''};return{id:a.id,n:(a.name&&a.name!=='A student')?a.name:'Student',h:a.hall||'On campus',m:mins(a.at),t:a.text,c:a.cat,b:a.budget||0,o:Math.max(0,(a.replies||0)-(a.mine?1:0))};});
+  if(FOCUS){var i=-1;ASKS.forEach(function(a,j){if(a.id===FOCUS)i=j;});if(i>=0){ASKS.unshift(ASKS.splice(i,1)[0]);if(!SENT[FOCUS]){OPEN={};OPEN[FOCUS]=1;}}AKT='foryou';AKC='';FOCUS=null;relist();setTimeout(function(){var c=document.querySelector('#mPage .ak-rb');if(c)c.scrollIntoView({block:'center'});},60);}
+  if(ROLE==='seller'&&document.getElementById('akList')&&!document.querySelector('#mPage .ak-rb textarea:focus,#mPage .ak-rb input:focus'))relist();}).catch(function(e){
+  if(e.status===403){SHOP=null;try{localStorage.removeItem('stafly_shop');}catch(_){}}}).then(function(){LOADF=0;});}
+function loadNow(){if(AKM!=='need')return;if(ROLE==='seller')loadFeed();else loadMine();}
+setInterval(function(){if(document.hidden||!document.getElementById('akList'))return;if(document.querySelector('#mPage .ak-rb'))return;loadNow();},30000);
+window.akReport=function(o){try{var v=window.vOf&&vOf(o.shop);api('/api/search/report',{vid:vidG(),sid:VSID[o.shop]||'',shop:(v&&v.name)||'',why:o.why,note:o.note||''}).catch(function(){});}catch(_){}};
+function akErr(el,msg){var p=el.querySelector('.ak-er');if(!p){p=document.createElement('p');p.className='ak-er';var g=el.querySelector('.g-act');el.insertBefore(p,g);}p.textContent=msg;}
+var _pg=window.m2Page;window.m2Page=function(t){var h=_pg.apply(this,arguments);if(t!=='live'||typeof h!=='string')return h;if(AKM==='need')setTimeout(loadNow,0);
   var a=h.indexOf('<div class="lv-row lv2">');if(a<0)return h;
   var b=h.indexOf('<label class="m-field lv-q">');if(b<0)b=h.indexOf('<div class="lv-tabs">');if(b<0)return h;
   if(AKM==='need')return ROLE==='seller'?needPage(h.slice(0,a)):buyerPage(h.slice(0,a));
@@ -8550,7 +8578,7 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   var x=t.closest('[data-akrole],[data-akdone],[data-akm],[data-aktab],[data-akcat],[data-aknew],[data-akno],[data-akpost],[data-akpc],[data-akhas],[data-akmsg],[data-akclose],[data-akcan],[data-aksend]');if(!x)return;
   e.preventDefault();e.stopImmediatePropagation();var w=document.querySelector('#mPage .ak-wrap');
   if(x.dataset.akrole){ROLE=x.dataset.akrole;try{localStorage.setItem('stafly_demo_role',ROLE);}catch(_){}AKT='foryou';return redraw(1);}
-  if(x.dataset.akdone){MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akdone;});return redraw();}
+  if(x.dataset.akdone){if(realId(x.dataset.akdone))api('/api/search/asks/'+x.dataset.akdone+'/close',{vid:vidG(),found:true}).catch(function(){});MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akdone;});return buyerList();}
   if(x.dataset.akm){if(AKM!==x.dataset.akm){AKM=x.dataset.akm;redraw(1);}return;}
   if(x.dataset.aktab){AKT=x.dataset.aktab;[].forEach.call(document.querySelectorAll('#mPage [data-aktab]'),function(b){b.classList.toggle('on',b===x);});return relist();}
   if(x.dataset.akcat){AKC=AKC===x.dataset.akcat?'':x.dataset.akcat;[].forEach.call(document.querySelectorAll('#mPage [data-akcat]'),function(b){b.classList.toggle('on',b.dataset.akcat===AKC);});return relist();}
@@ -8558,13 +8586,17 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   if(x.dataset.akno){w.querySelector('textarea').value='';if(ROLE==='seller')w.classList.remove('open');return;}
   if(x.dataset.akpc){[].forEach.call(w.querySelectorAll('[data-akpc]'),function(b){b.classList.toggle('on',b===x);});return;}
   if(x.dataset.akpost){var ta2=w.querySelector('textarea'),tx=ta2.value.trim();if(!tx){ta2.focus();return;}var pc=w.querySelector('[data-akpc].on');
-    MINEASK.unshift({id:'me'+Date.now(),n:'You',h:w.querySelector('.ak-hall').value.trim()||'On campus',m:0,t:tx,c:pc?pc.dataset.akpc:'services',b:parseInt(w.querySelector('.ak-bud').value.replace(/\D/g,''),10)||0,o:0,me:1});
-    ta2.value='';return redraw();}
+    var np={id:'me'+Date.now(),n:'You',h:w.querySelector('.ak-hall').value.trim()||'On campus',m:0,t:tx,c:pc?pc.dataset.akpc:'services',b:parseInt(w.querySelector('.ak-bud').value.replace(/\D/g,''),10)||0,o:0,me:1};
+    if(x.disabled)return;x.disabled=true;var er0=w.querySelector('.ak-er');if(er0)er0.remove();
+    api('/api/search/asks',{vid:vidG(),text:np.t,cat:np.c,hall:np.h,budget:np.b,name:(window.CK&&CK.name)||''}).then(function(d){np.id=d.id;MINEASK.unshift(np);ta2.value='';ta2.style.height='';x.disabled=false;buyerList();loadMine();})
+      .catch(function(e){x.disabled=false;if(e.status===400||e.status===429){akErr(w.querySelector('.ak-form'),e.message);return;}MINEASK.unshift(np);ta2.value='';buyerList();});
+    return;}
   if(x.dataset.akhas){var k=x.dataset.akhas;OPEN={};OPEN[k]=1;relist();var c=document.querySelector('#mPage .ak-rb');if(c){var pv0=SENT[k];if(pv0){c.querySelector('.ak-pp').value=pv0.p?pv0.p.toLocaleString('en-US'):'';var tm=c.querySelector('.ak-pm');tm.value=pv0.m||'';tm.style.height='auto';tm.style.height=tm.scrollHeight+'px';}c.scrollIntoView({block:'center',behavior:'smooth'});var ip=c.querySelector('.ak-pp');if(window.innerWidth>820)ip.focus();}return;}
   if(x.dataset.akcan){OPEN={};return relist();}
-  if(x.dataset.aksend){var rb=x.closest('.ak-rb'),pp=parseInt(rb.querySelector('.ak-pp').value.replace(/\D/g,''),10)||0,pm=rb.querySelector('.ak-pm').value.trim();if(!pp&&!pm){rb.querySelector('.ak-pp').focus();return;}SENT[x.dataset.aksend]={p:pp,m:pm};OPEN={};return relist();}
-  if(x.dataset.akclose){MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akclose;});return redraw();}
-  if(x.dataset.akmsg){var o=x.innerHTML;x.textContent='Opening chat…';setTimeout(function(){if(x.isConnected)x.innerHTML=o;},1200);}},true);
+  if(x.dataset.aksend){var rb=x.closest('.ak-rb'),pp=parseInt(rb.querySelector('.ak-pp').value.replace(/\D/g,''),10)||0,pm=rb.querySelector('.ak-pm').value.trim();if(!pp&&!pm){rb.querySelector('.ak-pp').focus();return;}var kid=x.dataset.aksend;if(SHOP&&realId(kid)){if(x.disabled)return;x.disabled=true;api('/api/search/asks/'+kid+'/reply',{sid:SHOP.sid,st:SHOP.st,price:pp,msg:pm}).then(function(){SENT[kid]={p:pp,m:pm};OPEN={};relist();}).catch(function(e){x.disabled=false;akErr(rb,e.message);});return;}
+    SENT[kid]={p:pp,m:pm};OPEN={};return relist();}
+  if(x.dataset.akclose){if(realId(x.dataset.akclose))api('/api/search/asks/'+x.dataset.akclose+'/close',{vid:vidG(),found:false}).catch(function(){});MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akclose;});return buyerList();}
+  if(x.dataset.akmsg){if(x.dataset.aksid&&SIDV[x.dataset.aksid]){try{m2Nav({t:CUR.t,s:'talk',id:SIDV[x.dataset.aksid]});}catch(_){}return;}var o=x.innerHTML;if(SHOP&&ROLE==='seller'){x.textContent='They’ll see your reply here';setTimeout(function(){if(x.isConnected)x.innerHTML=o;},1800);return;}x.textContent='Opening chat…';setTimeout(function(){if(x.isConnected)x.innerHTML=o;},1200);}},true);
 window.addEventListener('wheel',function(e){var r=e.target.closest&&e.target.closest('#mPage .ak-form .ak-cts');if(!r||Math.abs(e.deltaY)<Math.abs(e.deltaX))return;e.preventDefault();r.scrollLeft+=e.deltaY;},{passive:false,capture:true});
 window.addEventListener('input',function(e){var ta=e.target;if(ta.classList&&(ta.classList.contains('ak-pm')||ta.closest&&ta.closest('#mPage .ak-form'))&&ta.tagName==='TEXTAREA'){ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';}},true);
 window.addEventListener('input',function(e){if(e.target.id!=='akQ')return;AKQ=e.target.value;relist();},true);
@@ -8677,10 +8709,15 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   if(k==='report')return report();
   if(k==='block')return blockAsk();
   if(k==='back')return menu(cur);
-  if(k==='send'){if(why<0)return;var R=ld('stafly_reports');R.push({shop:cur,why:REASONS[why],note:box.querySelector('textarea').value.trim(),at:Date.now()});sv('stafly_reports',R);
+  if(k==='send'){if(why<0)return;var R=ld('stafly_reports');R.push({shop:cur,why:REASONS[why],note:box.querySelector('textarea').value.trim(),at:Date.now()});sv('stafly_reports',R);if(window.akReport)akReport(R[R.length-1]);
     return show('<div class="cm-c"><div class="cm-ok">'+TICK+'</div><h3>Thanks for telling us</h3><p class="cm-sub">Stafly will look into it within 24 hours and message you on WhatsApp. The shop won’t see your name.</p></div><div class="cm-bt"><button type="button" class="cm-go" data-cmx="1">Done</button></div>');}
   if(k==='doblock'){var B=ld('stafly_block');if(B.indexOf(cur)<0)B.push(cur);sv('stafly_block',B);close();toast(vOf(cur).name+' blocked');setTimeout(function(){try{history.back();}catch(_){}},300);}},true);
 document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
 })();</script>
+<style id="m177">
+html body.m2on #mPage .ak-er{margin:2px 0 10px;font-size:13px;line-height:1.4;color:#F87171}
+html body.m2on.m-light #mPage .ak-er{color:#DC2626}
+html body.m2on #mPage .g-go:disabled{opacity:.6;pointer-events:none}
+</style>
 </body>
 </html>
