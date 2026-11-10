@@ -8500,5 +8500,112 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   if(!t.closest('#mSheet .m-who>.logo,#mSheet .m-who>.nm'))return;var b=w.querySelector('[data-msave]');if(!b)return;
   e.preventDefault();e.stopImmediatePropagation();m2Nav({t:CUR.t,s:'shop',id:b.dataset.msave,sel:CUR.s?null:CUR.sel});},true);
 })();</script>
+<style id="m175">
+#cmS{position:fixed;inset:0;z-index:9000;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+#cmS .cm-bg{position:absolute;inset:0;background:rgba(0,0,0,.55);opacity:0;transition:opacity .22s ease}
+#cmS .cm-p{position:relative;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;padding:10px 20px calc(20px + env(safe-area-inset-bottom));box-sizing:border-box;border-radius:28px 28px 0 0;background:#1A1A1F;box-shadow:0 -1px 0 rgba(255,255,255,.08);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);font-family:"DM Sans",sans-serif;color:#fff}
+#cmS.on{pointer-events:auto}#cmS.on .cm-bg{opacity:1}#cmS.on .cm-p{transform:none}
+#cmS .cm-gr{width:40px;height:5px;margin:0 auto 14px;border-radius:3px;background:rgba(255,255,255,.18)}
+#cmS .cm-hd{display:flex;align-items:center;gap:12px;padding:4px 0 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+#cmS .cm-hd .mlg{width:44px!important;height:44px!important;flex:none}
+#cmS .cm-hd b{display:block;font-size:16px;font-weight:600}
+#cmS .cm-hd small{display:block;margin-top:2px;font-size:13px;color:rgba(255,255,255,.5)}
+#cmS .cm-it{display:flex;align-items:center;gap:14px;width:100%;padding:13px 0;border:0;background:none;color:#fff;font:inherit;text-align:left;cursor:pointer}
+#cmS .cm-it+.cm-it{border-top:1px solid rgba(255,255,255,.06)}
+#cmS .cm-ic{width:40px;height:40px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06)}
+#cmS .cm-ic svg{width:19px;height:19px}
+#cmS .cm-it span b{display:block;font-size:15.5px;font-weight:600}
+#cmS .cm-it span small{display:block;margin-top:2px;font-size:13px;color:rgba(255,255,255,.5)}
+#cmS .cm-it.red span b{color:#FF6B6B}#cmS .cm-it.red .cm-ic{color:#FF6B6B;background:rgba(255,90,90,.1)}
+#cmS .cm-sep{height:8px}
+#cmS h3{margin:2px 0 4px;font-size:20px;font-weight:600;letter-spacing:-.01em}
+#cmS .cm-sub{margin:0 0 14px;font-size:14px;line-height:1.45;color:rgba(255,255,255,.55)}
+#cmS .cm-r{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:14px 0;border:0;border-top:1px solid rgba(255,255,255,.06);background:none;color:#fff;font:500 15.5px "DM Sans",sans-serif;text-align:left;cursor:pointer}
+#cmS .cm-r:first-of-type{border-top:0}
+#cmS .cm-r i{width:22px;height:22px;flex:none;border-radius:50%;box-sizing:border-box;border:2px solid rgba(255,255,255,.3)}
+#cmS .cm-r.on i{border:7px solid #fff}
+#cmS .cm-fl{display:block;margin:14px 0 6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
+#cmS textarea{display:block;width:100%;min-height:84px;padding:12px 16px;border:0;border-radius:16px;resize:none;outline:none;box-sizing:border-box;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);font:400 15px/1.45 "DM Sans",sans-serif;color:#fff}
+#cmS textarea:focus{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55)}
+#cmS textarea::placeholder{color:rgba(255,255,255,.38)}
+#cmS .cm-bt{display:flex;gap:10px;margin-top:18px}
+#cmS .cm-bt button{flex:1;height:50px;border:0;border-radius:999px;font:600 15.5px "DM Sans",sans-serif;cursor:pointer}
+#cmS .cm-no{background:rgba(255,255,255,.08);color:#fff}
+#cmS .cm-go{background:#fff;color:#121215}
+#cmS .cm-go:disabled{opacity:.35;cursor:default}
+#cmS .cm-go:not(:disabled){opacity:1!important}
+#cmS .cm-dg{background:#E5484D;color:#fff}
+#cmS .cm-ok{width:56px;height:56px;margin:8px auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(52,199,120,.16);color:#4ADE80}
+#cmS .cm-ok svg{width:26px;height:26px}
+#cmS .cm-c{text-align:center}
+#cmTo{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));z-index:9100;transform:translate(-50%,20px);opacity:0;padding:12px 18px;border-radius:999px;background:#fff;color:#121215;font:600 14px "DM Sans",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap}
+#cmTo.on{opacity:1;transform:translate(-50%,0)}
+html body.m2on .wa-h .wa-cm svg{width:22px;height:22px}
+body.m-light #cmS .cm-p{background:#fff;color:#121215;box-shadow:0 -1px 0 #ECECEF}
+body.m-light #cmS .cm-gr{background:#DCDCE0}
+body.m-light #cmS .cm-hd,body.m-light #cmS .cm-it+.cm-it,body.m-light #cmS .cm-r{border-color:#EFEFF2}
+body.m-light #cmS .cm-hd small,body.m-light #cmS .cm-it span small,body.m-light #cmS .cm-sub{color:#6B6B75}
+body.m-light #cmS .cm-it,body.m-light #cmS .cm-r{color:#121215}
+body.m-light #cmS .cm-ic{background:#F3F3F5;color:#121215}
+body.m-light #cmS .cm-it.red span b{color:#D93036}body.m-light #cmS .cm-it.red .cm-ic{color:#D93036;background:#FDECEC}
+body.m-light #cmS .cm-r i{border-color:#C9C9CF}body.m-light #cmS .cm-r.on i{border-color:#121215}
+body.m-light #cmS .cm-fl{color:#55555E}
+body.m-light #cmS textarea{background:#F5F5F6;box-shadow:inset 0 0 0 1px #E2E2E6;color:#121215}
+body.m-light #cmS textarea:focus{box-shadow:inset 0 0 0 1.5px #121215}
+body.m-light #cmS textarea::placeholder{color:#9A9AA3}
+body.m-light #cmS .cm-no{background:#F1F1F3;color:#121215}
+body.m-light #cmS .cm-go{background:#121215;color:#fff}
+body.m-light #cmS .cm-ok{background:#E7F8EE;color:#16A34A}
+body.m-light #cmTo{background:#121215;color:#fff}
+</style>
+<script>(function(){
+var DOTS='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';
+var BELLX='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.6 4.3A6 6 0 0 1 18 9c0 4 1 6 2 7H9"/><path d="M6.3 6.6C6.1 7.4 6 8.2 6 9c0 4-1 6-2 7h1"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/><path d="M3 3l18 18"/></svg>';
+var FLAG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg>';
+var BLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></svg>';
+var RCPT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>';
+var TICK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+var REASONS=['Never delivered','Wrong or bad item','Price was not what they said','Rude or made me feel unsafe','Scam or fake shop','Something else'];
+function ld(k){try{return JSON.parse(localStorage.getItem(k)||'[]');}catch(_){return[];}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}}
+function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='talk'||typeof h!=='string')return h;
+  return h.replace(/<button type="button" class="wa-i wa-pf" data-mshop="([^"]+)" aria-label="Shop profile">[\s\S]*?<\/button>/,function(m,sid){return'<button type="button" class="wa-i wa-pf wa-cm" data-cmenu="'+sid+'" aria-label="More options">'+DOTS+'</button>';});};
+var box,cur=null,why=-1;
+function el(){if(box)return box;box=document.createElement('div');box.id='cmS';box.innerHTML='<div class="cm-bg" data-cmx="1"></div><div class="cm-p"></div>';document.body.appendChild(box);return box;}
+function toast(t){var o=document.getElementById('cmTo');if(!o){o=document.createElement('div');o.id='cmTo';document.body.appendChild(o);}o.textContent=t;o.classList.add('on');clearTimeout(o._t);o._t=setTimeout(function(){o.classList.remove('on');},2200);}
+function show(html){var b=el();b.querySelector('.cm-p').innerHTML='<div class="cm-gr"></div>'+html;requestAnimationFrame(function(){b.classList.add('on');});}
+function close(){if(box)box.classList.remove('on');}
+function menu(id){cur=id;var v=vOf(id),mu=ld('stafly_mute').indexOf(id)>=0;
+  show('<div class="cm-hd">'+mLogo(v)+'<div><b>'+esc(v.name)+'</b><small>'+esc(String(v.place||'').split(',')[0])+'</small></div></div>'+
+   '<button type="button" class="cm-it" data-cma="shop"><span class="cm-ic">'+mS('store')+'</span><span><b>View shop</b><small>Menu, prices, reviews and location</small></span></button>'+
+   '<button type="button" class="cm-it" data-cma="orders"><span class="cm-ic">'+RCPT+'</span><span><b>Your orders here</b><small>Past orders and tracking</small></span></button>'+
+   '<button type="button" class="cm-it" data-cma="mute"><span class="cm-ic">'+(mu?mS('bell'):BELLX)+'</span><span><b>'+(mu?'Unmute chat':'Mute chat')+'</b><small>'+(mu?'Get alerts from this shop again':'No alerts from this shop')+'</small></span></button>'+
+   '<div class="cm-sep"></div>'+
+   '<button type="button" class="cm-it red" data-cma="report"><span class="cm-ic">'+FLAG+'</span><span><b>Report a problem</b><small>Stafly will look into it</small></span></button>'+
+   '<button type="button" class="cm-it red" data-cma="block"><span class="cm-ic">'+BLOCK+'</span><span><b>Block shop</b><small>They can’t message you</small></span></button>');}
+function report(){why=-1;var v=vOf(cur);
+  show('<h3>What went wrong?</h3><p class="cm-sub">With '+esc(v.name)+'. Pick one.</p>'+REASONS.map(function(r,i){return'<button type="button" class="cm-r" data-cmw="'+i+'">'+r+'<i></i></button>';}).join('')+
+   '<span class="cm-fl">Note (optional)</span><textarea maxlength="300" placeholder="e.g. Paid at 2pm, nothing came"></textarea>'+
+   '<div class="cm-bt"><button type="button" class="cm-no" data-cma="back">Back</button><button type="button" class="cm-go" data-cma="send" disabled>Send report</button></div>');}
+function blockAsk(){var v=vOf(cur);
+  show('<h3>Block '+esc(v.name)+'?</h3><p class="cm-sub">They can’t message you, and you won’t see them in your feed. You can unblock them from your profile.</p><div class="cm-bt"><button type="button" class="cm-no" data-cma="back">Cancel</button><button type="button" class="cm-dg" data-cma="doblock">Block</button></div>');}
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+  var m=t.closest('[data-cmenu]');if(m){e.preventDefault();e.stopImmediatePropagation();return menu(m.dataset.cmenu);}
+  if(!t.closest('#cmS'))return;
+  if(t.closest('[data-cmx]')){e.preventDefault();return close();}
+  var w=t.closest('[data-cmw]');if(w){why=+w.dataset.cmw;[].forEach.call(box.querySelectorAll('.cm-r'),function(x){x.classList.toggle('on',x===w);});var sb=box.querySelector('[data-cma="send"]');sb.disabled=false;sb.style.setProperty('opacity','1','important');return;}
+  var a=t.closest('[data-cma]');if(!a)return;e.preventDefault();e.stopImmediatePropagation();var k=a.dataset.cma;
+  if(k==='shop'){close();return m2Nav({t:CUR.t,s:'shop',id:cur});}
+  if(k==='orders'){close();return m2Nav({t:CUR.t,s:'mine'});}
+  if(k==='mute'){var L=ld('stafly_mute'),i=L.indexOf(cur);if(i>=0){L.splice(i,1);toast('Chat unmuted');}else{L.push(cur);toast('Chat muted');}sv('stafly_mute',L);return close();}
+  if(k==='report')return report();
+  if(k==='block')return blockAsk();
+  if(k==='back')return menu(cur);
+  if(k==='send'){if(why<0)return;var R=ld('stafly_reports');R.push({shop:cur,why:REASONS[why],note:box.querySelector('textarea').value.trim(),at:Date.now()});sv('stafly_reports',R);
+    return show('<div class="cm-c"><div class="cm-ok">'+TICK+'</div><h3>Thanks for telling us</h3><p class="cm-sub">Stafly will look into it within 24 hours and message you on WhatsApp. The shop won’t see your name.</p></div><div class="cm-bt"><button type="button" class="cm-go" data-cmx="1">Done</button></div>');}
+  if(k==='doblock'){var B=ld('stafly_block');if(B.indexOf(cur)<0)B.push(cur);sv('stafly_block',B);close();toast(vOf(cur).name+' blocked');setTimeout(function(){try{history.back();}catch(_){}},300);}},true);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();</script>
 </body>
 </html>
