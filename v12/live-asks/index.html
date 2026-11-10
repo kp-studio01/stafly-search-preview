@@ -8368,6 +8368,29 @@ html body.m2on .ak-rf{display:flex;align-items:center;justify-content:space-betw
 html body.m2on .ak-rf strong{font-size:17px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
 html body.m2on.m-light .ak-rf strong{color:#121215}
 html body.m2on.m-light .ak-rp .ak-rt strong{color:#121215}html body.m2on.m-light .ak-rp .ak-rs{color:#6B6B75}
+html body.m2on .ak-rb{margin:14px 0 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+html body.m2on .ak-rbh{font-size:15px;font-weight:600;color:#fff;margin-bottom:10px}
+html body.m2on .ak-rpr{display:flex;align-items:center;gap:8px;height:50px;padding:0 16px;border-radius:16px;background:rgba(255,255,255,.06)}
+html body.m2on .ak-rpr span{font-size:18px;font-weight:600;color:rgba(255,255,255,.6)}
+html body.m2on .ak-rpr input{flex:1;min-width:0;border:0;background:none;outline:none;font:600 18px "DM Sans",sans-serif;color:#fff}
+html body.m2on .ak-rpr input::placeholder,html body.m2on .ak-pm::placeholder{color:rgba(255,255,255,.38);font-weight:400}
+html body.m2on .ak-pm{display:block;width:100%;min-height:80px;margin:10px 0 14px;padding:12px 16px;border:0;border-radius:16px;resize:none;background:rgba(255,255,255,.06);outline:none;font:400 15px/1.45 "DM Sans",sans-serif;color:#fff;box-sizing:border-box}
+html body.m2on .ak-yr{margin:14px 0 14px;padding:14px 16px;border-radius:18px;background:rgba(52,199,120,.08);box-shadow:inset 0 0 0 1px rgba(52,199,120,.18)}
+html body.m2on .ak-yrh{display:flex;align-items:center;gap:8px}
+html body.m2on .ak-yok{width:22px;height:22px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#34C778;color:#0B0B0D}
+html body.m2on .ak-yok svg{width:13px;height:13px;stroke-width:2.6}
+html body.m2on .ak-yrh b{font-size:14.5px;font-weight:600;color:#fff}
+html body.m2on .ak-yrh strong{margin-left:auto;font-size:17px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+html body.m2on .ak-yr p{margin:8px 0 0;font-size:14.5px;line-height:1.45;color:rgba(255,255,255,.8)}
+html body.m2on .ak-yr small{display:block;margin-top:8px;font-size:12.5px;color:rgba(255,255,255,.5)}
+html body.m2on.m-light .ak-rb{border-top-color:#EFEFF2}
+html body.m2on.m-light .ak-rbh,html body.m2on.m-light .ak-rpr input,html body.m2on.m-light .ak-pm,html body.m2on.m-light .ak-yrh b,html body.m2on.m-light .ak-yrh strong{color:#121215}
+html body.m2on.m-light .ak-rpr,html body.m2on.m-light .ak-pm{background:#F5F5F6}
+html body.m2on.m-light .ak-rpr span{color:#6B6B75}
+html body.m2on.m-light .ak-rpr input::placeholder,html body.m2on.m-light .ak-pm::placeholder{color:#9A9AA3}
+html body.m2on.m-light .ak-yr{background:#F1FBF5;box-shadow:inset 0 0 0 1px #CDEFD9}
+html body.m2on.m-light .ak-yok{color:#fff;background:#16A34A}
+html body.m2on.m-light .ak-yr p{color:#2A2A30}html body.m2on.m-light .ak-yr small{color:#6B6B75}
 </style>
 <script>(function(){
 function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -8382,7 +8405,7 @@ var ASKS=[
  {n:'Bisi T.',h:'Moremi Hall',m:52,t:'Need someone to iron 6 shirts before 8am tomorrow.',c:'services',b:1500,o:0},
  {n:'Zainab M.',h:'Mozambique Hall',m:70,t:'Looking for a used lab coat, size M.',c:'fashion',b:4000,o:1}];
 var ROLE='buyer';try{ROLE=localStorage.getItem('stafly_demo_role')||'buyer';}catch(_){}
-var MINEASK=[{id:'me0',n:'You',h:'Moremi Hall',m:9,t:'Anyone selling a power bank near Moremi? 10,000mAh or more.',c:'gadgets',b:7000,o:2,me:1,
+var OPEN={};var MINEASK=[{id:'me0',n:'You',h:'Moremi Hall',m:9,t:'Anyone selling a power bank near Moremi? 10,000mAh or more.',c:'gadgets',b:7000,o:2,me:1,
   R:[['Tech Corner','SUB',6500,'10,000mAh Oraimo, new in box. I can bring it to Moremi.',4],['PhoneFix OAU','Moremi Hall',7000,'20,000mAh, used for one month. You can pick it up now.',7]]}],AKM='shops',AKT='foryou',AKC='',AKQ='',SENT={};
 function ago(m){return m<1?'Just now':m<60?m+' min ago':Math.round(m/60)+' h ago';}
 function ini(n){return n==='You'?'You':n.split(' ').map(function(x){return x[0];}).join('').slice(0,2).toUpperCase();}
@@ -8392,13 +8415,15 @@ function list(){var L=ASKS.filter(function(a){return AKT!=='mine'||SENT[a.id||(a
   if(AKC)L=L.filter(function(a){return a.c===AKC;});
   if(AKQ.trim()){var q=AKQ.trim().toLowerCase();L=L.filter(function(a){return(a.t+' '+a.h+' '+cl(a.c)).toLowerCase().indexOf(q)>=0;});}
   return L;}
-function card(a){var id=a.id||(a.n+a.m),done=SENT[id];
+function card(a){var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
   return'<div class="g-card lv-card ak-card"><div class="g-media lv-media g-poster">'+(window.gArt?gArt({cat:a.c,name:'',id:'',place:''}):'')+'<span class="g-shade"></span>'+
    '<span class="g-tag'+(a.m<=30?' hot':'')+'">'+(a.m<=30?'<i class="lvd"></i>New':mS('clock')+ago(a.m))+'</span><span class="g-time">'+cl(a.c)+'</span>'+
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div>'+(a.b?'<span class="ak-bd">Budget ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'</div></div>'+
-   '<div class="g-body">'+(a.me?'<div class="ak-rh">'+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'<span>'+esc(a.h)+' · '+ago(a.m)+'</span></div>':'<div class="lv-who"><span class="logo mlg ak-in">'+ini(a.n)+'</span><div><b>'+esc(a.n==='You'?'Your post':a.n)+'</b><span>'+esc(a.h)+' · '+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'</span></div><span class="tm">'+ago(a.m)+'</span></div>')+
+   '<div class="g-body">'+(a.me?'<div class="ak-rh">'+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'<span>'+esc(a.h)+' · '+ago(a.m)+'</span></div>':'<div class="lv-who"><span class="logo mlg ak-in">'+ini(a.n)+'</span><div><b>'+esc(a.n==='You'?'Your post':a.n)+'</b><span>'+esc(a.h)+' · '+(oc?oc+(oc===1?' shop replied':' shops replied'):'No replies yet')+'</span></div><span class="tm">'+ago(a.m)+'</span></div>')+
    (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+'</b><small class="ak-rs">'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. We’ll tell you on WhatsApp.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
-        :'<div class="g-act"><button type="button" class="g-ghost" data-akmsg="1">Message</button><button type="button" class="g-go'+(done?' done':'')+'" data-akhas="'+esc(id)+'">'+(done?'Sent to '+esc(a.n.split(' ')[0]):'I have this<i>'+mS('arrow')+'</i>')+'</button></div>')+
+        :(OPEN[id]?'<div class="ak-rb"><div class="ak-rbh">Reply to '+esc(a.n.split(' ')[0])+'</div><label class="ak-rpr"><span>₦</span><input class="ak-pp" inputmode="numeric" placeholder="Your price"></label><textarea class="ak-pm" maxlength="160" placeholder="What do you have? For example: new Oraimo Type-C, I can bring it to '+esc(a.h.split(' ')[0])+'."></textarea><div class="g-act"><button type="button" class="g-ghost" data-akcan="'+esc(id)+'">Cancel</button><button type="button" class="g-go" data-aksend="'+esc(id)+'">Send reply<i>'+mS('arrow')+'</i></button></div></div>'
+        :done?'<div class="ak-yr"><div class="ak-yrh"><span class="ak-yok">'+mS('check')+'</span><b>You replied</b><strong>'+(done.p?'₦'+done.p.toLocaleString('en-US'):'')+'</strong></div>'+(done.m?'<p>'+esc(done.m)+'</p>':'')+'<small>'+esc(a.n.split(' ')[0])+' will see it here and on WhatsApp.</small></div><div class="g-act"><button type="button" class="g-ghost" data-akhas="'+esc(id)+'">Edit reply</button><button type="button" class="g-go" data-akmsg="1">Message '+esc(a.n.split(' ')[0])+'<i>'+mS('arrow')+'</i></button></div>'
+        :'<div class="g-act"><button type="button" class="g-ghost" data-akmsg="1">Message</button><button type="button" class="g-go" data-akhas="'+esc(id)+'">I have this<i>'+mS('arrow')+'</i></button></div>'))+
    '</div></div>';}
 function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'You haven’t replied to anyone yet.':'Nothing here yet. Be the first to post.')+'</div>';return L.map(card).join('');}
 function sw(){return'<div class="lv-tabs ak-sw"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
@@ -8433,7 +8458,7 @@ var _pg=window.m2Page;window.m2Page=function(t){var h=_pg.apply(this,arguments);
 function redraw(top){var p=document.getElementById('mPage'),y=p.scrollTop;p.innerHTML=m2Page('live');p.scrollTop=top?0:y;}
 function relist(){var l=document.getElementById('akList');if(l)l.innerHTML=cards();}
 window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.closest('#mPage'))return;
-  var x=t.closest('[data-akrole],[data-akdone],[data-akm],[data-aktab],[data-akcat],[data-aknew],[data-akno],[data-akpost],[data-akpc],[data-akhas],[data-akmsg],[data-akclose]');if(!x)return;
+  var x=t.closest('[data-akrole],[data-akdone],[data-akm],[data-aktab],[data-akcat],[data-aknew],[data-akno],[data-akpost],[data-akpc],[data-akhas],[data-akmsg],[data-akclose],[data-akcan],[data-aksend]');if(!x)return;
   e.preventDefault();e.stopImmediatePropagation();var w=document.querySelector('#mPage .ak-wrap');
   if(x.dataset.akrole){ROLE=x.dataset.akrole;try{localStorage.setItem('stafly_demo_role',ROLE);}catch(_){}AKT='foryou';return redraw(1);}
   if(x.dataset.akdone){MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akdone;});return redraw();}
@@ -8446,7 +8471,9 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   if(x.dataset.akpost){var ta2=w.querySelector('textarea'),tx=ta2.value.trim();if(!tx){ta2.focus();return;}var pc=w.querySelector('[data-akpc].on');
     MINEASK.unshift({id:'me'+Date.now(),n:'You',h:w.querySelector('.ak-hall').value.trim()||'On campus',m:0,t:tx,c:pc?pc.dataset.akpc:'services',b:parseInt(w.querySelector('.ak-bud').value.replace(/\D/g,''),10)||0,o:0,me:1});
     ta2.value='';return redraw();}
-  if(x.dataset.akhas){SENT[x.dataset.akhas]=1;return relist();}
+  if(x.dataset.akhas){var k=x.dataset.akhas;OPEN={};OPEN[k]=1;relist();var c=document.querySelector('#mPage .ak-rb');if(c){var pv0=SENT[k];if(pv0){c.querySelector('.ak-pp').value=pv0.p?pv0.p.toLocaleString('en-US'):'';c.querySelector('.ak-pm').value=pv0.m||'';}c.scrollIntoView({block:'center',behavior:'smooth'});var ip=c.querySelector('.ak-pp');if(window.innerWidth>820)ip.focus();}return;}
+  if(x.dataset.akcan){OPEN={};return relist();}
+  if(x.dataset.aksend){var rb=x.closest('.ak-rb'),pp=parseInt(rb.querySelector('.ak-pp').value.replace(/\D/g,''),10)||0,pm=rb.querySelector('.ak-pm').value.trim();if(!pp&&!pm){rb.querySelector('.ak-pp').focus();return;}SENT[x.dataset.aksend]={p:pp,m:pm};OPEN={};return relist();}
   if(x.dataset.akclose){MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akclose;});return redraw();}
   if(x.dataset.akmsg){var o=x.innerHTML;x.textContent='Opening chat…';setTimeout(function(){if(x.isConnected)x.innerHTML=o;},1200);}},true);
 window.addEventListener('wheel',function(e){var r=e.target.closest&&e.target.closest('#mPage .ak-form .ak-cts');if(!r||Math.abs(e.deltaY)<Math.abs(e.deltaX))return;e.preventDefault();r.scrollLeft+=e.deltaY;},{passive:false,capture:true});
