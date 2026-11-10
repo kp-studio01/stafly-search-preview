@@ -8391,6 +8391,16 @@ html body.m2on.m-light .ak-rpr input::placeholder,html body.m2on.m-light .ak-pm:
 html body.m2on.m-light .ak-yr{background:#F1FBF5;box-shadow:inset 0 0 0 1px #CDEFD9}
 html body.m2on.m-light .ak-yok{color:#fff;background:#16A34A}
 html body.m2on.m-light .ak-yr p{color:#2A2A30}html body.m2on.m-light .ak-yr small{color:#6B6B75}
+html body.m2on .ak-fl{display:block;margin:12px 0 6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
+html body.m2on .ak-rbh+.ak-fl{margin-top:0}
+html body.m2on #mPage textarea.ak-pm,html body.m2on #mPage .ak-form textarea{background:rgba(255,255,255,.06)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)!important;border:0!important;border-radius:16px!important;padding:12px 16px!important;margin:0 0 14px!important;min-height:84px}
+html body.m2on #mPage textarea.ak-pm:focus,html body.m2on #mPage .ak-form textarea:focus,html body.m2on #mPage .ak-rpr:focus-within{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55)!important}
+html body.m2on #mPage .ak-rpr{box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+html body.m2on #mPage .ak-form textarea{margin:12px 0 0!important}
+html body.m2on.m-light .ak-fl{color:#55555E}
+html body.m2on.m-light #mPage textarea.ak-pm,html body.m2on.m-light #mPage .ak-form textarea{background:#F5F5F6!important;box-shadow:inset 0 0 0 1px #E2E2E6!important}
+html body.m2on.m-light #mPage .ak-rpr{box-shadow:inset 0 0 0 1px #E2E2E6}
+html body.m2on.m-light #mPage textarea.ak-pm:focus,html body.m2on.m-light #mPage .ak-form textarea:focus,html body.m2on.m-light #mPage .ak-rpr:focus-within{box-shadow:inset 0 0 0 1.5px #121215!important}
 </style>
 <script>(function(){
 function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -8421,7 +8431,7 @@ function card(a){var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div>'+(a.b?'<span class="ak-bd">Budget ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'</div></div>'+
    '<div class="g-body">'+(a.me?'<div class="ak-rh">'+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'<span>'+esc(a.h)+' · '+ago(a.m)+'</span></div>':'<div class="lv-who"><span class="logo mlg ak-in">'+ini(a.n)+'</span><div><b>'+esc(a.n==='You'?'Your post':a.n)+'</b><span>'+esc(a.h)+' · '+(oc?oc+(oc===1?' shop replied':' shops replied'):'No replies yet')+'</span></div><span class="tm">'+ago(a.m)+'</span></div>')+
    (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+'</b><small class="ak-rs">'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. We’ll tell you on WhatsApp.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
-        :(OPEN[id]?'<div class="ak-rb"><div class="ak-rbh">Reply to '+esc(a.n.split(' ')[0])+'</div><label class="ak-rpr"><span>₦</span><input class="ak-pp" inputmode="numeric" placeholder="Your price"></label><textarea class="ak-pm" maxlength="160" placeholder="What do you have? For example: new Oraimo Type-C, I can bring it to '+esc(a.h.split(' ')[0])+'."></textarea><div class="g-act"><button type="button" class="g-ghost" data-akcan="'+esc(id)+'">Cancel</button><button type="button" class="g-go" data-aksend="'+esc(id)+'">Send reply<i>'+mS('arrow')+'</i></button></div></div>'
+        :(OPEN[id]?'<div class="ak-rb"><div class="ak-rbh">Reply to '+esc(a.n.split(' ')[0])+'</div><span class="ak-fl">Price</span><label class="ak-rpr"><span>₦</span><input class="ak-pp" inputmode="numeric" placeholder="3,000"></label><span class="ak-fl">Message</span><textarea class="ak-pm" maxlength="160" placeholder="e.g. New Oraimo, can deliver"></textarea><div class="g-act"><button type="button" class="g-ghost" data-akcan="'+esc(id)+'">Cancel</button><button type="button" class="g-go" data-aksend="'+esc(id)+'">Send reply<i>'+mS('arrow')+'</i></button></div></div>'
         :done?'<div class="ak-yr"><div class="ak-yrh"><span class="ak-yok">'+mS('check')+'</span><b>You replied</b><strong>'+(done.p?'₦'+done.p.toLocaleString('en-US'):'')+'</strong></div>'+(done.m?'<p>'+esc(done.m)+'</p>':'')+'<small>'+esc(a.n.split(' ')[0])+' will see it here and on WhatsApp.</small></div><div class="g-act"><button type="button" class="g-ghost" data-akhas="'+esc(id)+'">Edit reply</button><button type="button" class="g-go" data-akmsg="1">Message '+esc(a.n.split(' ')[0])+'<i>'+mS('arrow')+'</i></button></div>'
         :'<div class="g-act"><button type="button" class="g-ghost" data-akmsg="1">Message</button><button type="button" class="g-go" data-akhas="'+esc(id)+'">I have this<i>'+mS('arrow')+'</i></button></div>'))+
    '</div></div>';}
@@ -8436,7 +8446,7 @@ function mineCard(a){var R=a.R||[],n=R.length;
    '<div class="ak-os"><div class="ak-osh">'+(n?n+(n===1?' reply':' replies'):'No replies yet')+'</div>'+(n?off:'<p class="ak-wt">Shops that sell this will see it soon. We’ll tell you on WhatsApp.</p>')+'</div>'+
    '<div class="ak-mf"><button type="button" class="ak-mx" data-akclose="'+esc(a.id)+'">Close post</button><button type="button" class="ak-md" data-akdone="'+esc(a.id)+'">I found it</button></div></div>';}
 function cmpH(open){return '<div class="ak-wrap'+(open?' open':'')+'"><div class="ak-cmp" data-aknew="1"><span class="logo mlg">'+mS('search')+'</span><div><b>Can’t find it?</b><small>Post it and shops will reply.</small></div><button type="button" class="g-go">Post<i>'+mS('arrow')+'</i></button></div>'+
-   '<div class="ak-form"><b>What do you need?</b><textarea maxlength="160" placeholder="For example: anyone selling a Type-C charger near Moremi?"></textarea>'+
+   '<div class="ak-form"><b>What do you need?</b><textarea maxlength="160" placeholder="e.g. Type-C charger before 6pm"></textarea>'+
    '<div class="ak-cts">'+CATS.map(function(c,i){return'<button type="button" data-akpc="'+c[0]+'" class="'+(i===0?'on':'')+'">'+c[1]+'</button>';}).join('')+'</div>'+
    '<div class="ak-fr"><input type="text" class="ak-hall" placeholder="Your hall" value="'+esc(myHall())+'"><input type="text" class="ak-bud" inputmode="numeric" placeholder="Budget (optional)"></div>'+
    '<div class="g-act"><button type="button" class="g-ghost" data-akno="1">Clear</button><button type="button" class="g-go" data-akpost="1">Post it<i>'+mS('arrow')+'</i></button></div></div></div>';}
