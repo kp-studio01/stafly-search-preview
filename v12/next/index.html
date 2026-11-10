@@ -3755,12 +3755,11 @@ function authClose(){document.body.classList.remove('m-authon');}
 function fmtPh(d){return d.replace(/^0/,'').replace(/(\d{3})(\d{3})(\d{0,4}).*/,'$1 $2 $3').trim();}
 function authRender(){const A=AUTH,el=$('#mAuth'),st3=`<div class="steps">${[1,2,3].map(i=>`<i class="${i<=A.step?'f':''}"></i>`).join('')}</div>`;
   if(A.step===1)el.innerHTML=`<div class="m-grab"></div>${st3}<h2>Continue with WhatsApp</h2><p class="sub">${A.why||'Save shops and join group orders.'} No password needed.</p>
-    <label class="ph"><span>🇳🇬 +234</span><input id="aPh" type="tel" inputmode="numeric" placeholder="801 234 5678" value="${A.ph}" autocomplete="tel-national"></label>
-    <button class="m-cta" type="button" data-asend="1" ${A.ph.replace(/\D/g,'').replace(/^0/,'').length>=10&&!A.busy?'':'disabled'}>${mS('chat')}${A.busy?'One moment…':'Send code on WhatsApp'}</button>${A.err?`<p class="a-er">${A.err}</p>`:''}
-    <p class="fine">${mS('lock')}We only use your number to sign you in.</p>`;
-  if(A.step===2)el.innerHTML=`<div class="m-grab"></div>${st3}<h2>Enter your code</h2><p class="sub">${A.wa?`Tap below and send the message from WhatsApp +234 ${fmtPh(A.ph.replace(/\D/g,''))}. Your 6-digit code comes right back.`:`We sent a 6-digit code to WhatsApp +234 ${fmtPh(A.ph.replace(/\D/g,''))}.`} <span class="lnk" data-astep="1">Change</span></p>${A.wa?`<button class="m-cta a-wa" type="button" data-awa="1">${mS('chat')}Verify with WhatsApp</button>`:''}
-    <input class="code" id="aCode" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="······">
-    ${A.err?`<p class="a-er">${A.err}</p>`:''}${A.wa?`<p class="fine">${mS('lock')}We only use your number to sign you in.</p>`:`<p class="fine">${mS('info')}Didn’t get it? <span class="lnk" data-aresend="1">${A.sent?'Sent again':'Resend code'}</span></p>`}`;
+    <button class="m-cta" type="button" data-atap="1">${mS('chat')}Continue with WhatsApp</button>${A.err?`<p class="a-er">${A.err}</p>`:''}
+    <p class="fine">${mS('lock')}We only use your WhatsApp number to sign you in.</p>`;
+  if(A.step===2)el.innerHTML=`<div class="m-grab"></div>${st3}<h2>Tap Send in WhatsApp</h2><p class="sub">Send the message that’s ready for you, then come back here. You’ll be signed in by yourself.</p>
+    <div class="a-wait"><i></i>Waiting for your message</div>${A.err?`<p class="a-er">${A.err}</p>`:''}
+    <p class="fine">${mS('info')}WhatsApp didn’t open? <span class="lnk" data-atap="1">Try again</span></p>`;
   if(A.step===3)el.innerHTML=`<div class="m-grab"></div>${st3}<h2>Almost done</h2><p class="sub">This helps vendors know who is ordering and where to deliver.</p>
     <label class="lbl" for="aNm">Your first name</label><input class="nm" id="aNm" type="text" placeholder="e.g. Tolu" value="${A.name}" autocomplete="given-name">
     <span class="lbl">Your hall</span><div class="halls">${HALLS.map(([k,l])=>`<button type="button" class="${A.hall===k?'on':''}" data-ahall="${k}">${l}</button>`).join('')}</div>
@@ -3776,6 +3775,21 @@ function authResend(){AUTH.sent=1;AUTH.err='';authApi('/api/search/signin/start'
 function authVerify(code){AUTH.busy=1;AUTH.err='';authApi('/api/search/signin/verify',{vid:window.staflyVid?staflyVid():'',phone:authPh(),code})
   .then(()=>{AUTH.busy=0;AUTH.ok=1;if(USER&&USER.hk&&HALLS.some(x=>x[0]===USER.hk)){AUTH.name=USER.name;AUTH.hall=USER.hk;return authDone();}AUTH.step=3;authRender();setTimeout(()=>{const i=$('#mAuth input');i&&i.focus();},60);})
   .catch(e=>{AUTH.busy=0;AUTH.err=e.message;authRender();const i=$('#aCode');i&&i.focus();});}
+const SL_WA='2348137192500';
+function authRef(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';try{const r=crypto.getRandomValues(new Uint8Array(6));r.forEach(x=>s+=A[x%32]);}catch(_){for(let i=0;i<6;i++)s+=A[Math.floor(Math.random()*32)];}return s;}
+function authGet(path){const base=window.staflyApi||'https://kp-assistant.onrender.com';return fetch(base+path,{cache:'no-store'}).then(r=>r.ok?r.json():{});}
+function authTap(){const A=AUTH;if(!A.ref){A.ref=authRef();A.linked=0;}
+  window.open('https://wa.me/'+SL_WA+'?text='+encodeURIComponent('Hi Stafly, sign me in please ('+A.ref+')'),'_blank');
+  A.err='';A.step=2;authRender();
+  if(!A.linked){A.linked=1;authApi('/api/search/signin/link',{vid:window.staflyVid?staflyVid():'',ref:A.ref}).catch(e=>{A.linked=0;A.err=e.message;if(A.step===2)authRender();});}
+  authPoll();}
+function authPoll(){clearTimeout(AUTH.pt);const A=AUTH,ref=A.ref,t0=A.t0||(A.t0=Date.now());
+  if(!ref||A.step!==2||!document.body.classList.contains('m-authon'))return;
+  if(Date.now()-t0>10*60000){A.ref='';A.t0=0;A.step=1;A.err='That took a while. Please try again.';return authRender();}
+  authGet('/api/search/signin/check?vid='+(window.staflyVid?staflyVid():'')+'&ref='+ref).then(d=>{if(AUTH.ref!==ref||AUTH.step!==2)return;
+    if(d&&d.ok){AUTH.ok=1;AUTH.ref='';AUTH.t0=0;if(USER&&USER.hk&&HALLS.some(x=>x[0]===USER.hk)){AUTH.name=USER.name;AUTH.hall=USER.hk;return authDone();}AUTH.step=3;authRender();return;}
+    AUTH.pt=setTimeout(authPoll,document.hidden?6000:2000);}).catch(()=>{AUTH.pt=setTimeout(authPoll,4000);});}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AUTH&&AUTH.step===2&&AUTH.ref)authPoll();});
 function authDone(){const h=HALLS.find(x=>x[0]===AUTH.hall);USER={name:AUTH.name.trim().split(' ')[0],hall:h[0]==='off'?'Off campus':h[1]+(h[0]==='pg'?'':' Hall'),hk:h[0]};if(AUTH.ok)USER.wa=1;try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}
   authClose();m2Home();const p=PEND;PEND=null;
   if(p){if(p.k==='save'){SAVED.add(p.id);if(CUR.s==='shop')$('#mSub').innerHTML=m2Sub('shop',p.id);if(CUR.sel)m2SheetSave(p.id);}
@@ -3787,7 +3801,7 @@ document.addEventListener('input',e=>{if(e.target.id==='aPh'){AUTH.ph=e.target.v
 document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=q=>t.closest(q);let el;
   const halt=()=>{e.stopImmediatePropagation();e.preventDefault();};
   if(a('#mAScrim')){halt();return authClose();}
-  if(a('#mAuth')){halt();if(a('[data-asend]')&&!a('[data-asend]').disabled)return authSend();if(a('[data-aresend]')&&!AUTH.sent)return authResend();if(a('[data-awa]'))return authWa();if(el=a('[data-astep]')){AUTH.err='';AUTH.step=+el.dataset.astep;authRender();setTimeout(()=>{const i=$('#mAuth input');i&&i.focus();},60);}
+  if(a('#mAuth')){halt();if(a('[data-atap]'))return authTap();if(a('[data-asend]')&&!a('[data-asend]').disabled)return authSend();if(a('[data-aresend]')&&!AUTH.sent)return authResend();if(a('[data-awa]'))return authWa();if(el=a('[data-astep]')){AUTH.err='';AUTH.step=+el.dataset.astep;authRender();setTimeout(()=>{const i=$('#mAuth input');i&&i.focus();},60);}
     if(el=a('[data-ahall]')){AUTH.hall=el.dataset.ahall;AUTH.name=($('#aNm')||{}).value||AUTH.name;authRender();}
     if(a('[data-adone]')&&!a('[data-adone]').disabled)authDone();return;}
   if(a('[data-msign]')){halt();return authOpen('');}
@@ -8784,6 +8798,12 @@ html body.m2on #mSub .gs-go:disabled{opacity:.6;pointer-events:none}
 #mAuth .a-wa{margin:4px 0 14px}
 #mAuth .a-er{margin:10px 0 0;font-size:13px;line-height:1.4;color:#F87171}
 body.m-light #mAuth .a-er{color:#DC2626}
+</style>
+<style id="m182">
+#mAuth .a-wait{display:flex;align-items:center;gap:10px;margin:6px 0 16px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.06);font-size:14px;color:inherit}
+body.m-light #mAuth .a-wait{background:#F3F2EF}
+#mAuth .a-wait i{width:10px;height:10px;border-radius:50%;background:#4ADE80;animation:aw 1.2s ease-in-out infinite}
+@keyframes aw{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
 </style>
 </body>
 </html>
