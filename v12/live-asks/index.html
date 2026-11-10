@@ -8479,5 +8479,11 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
 window.addEventListener('wheel',function(e){var r=e.target.closest&&e.target.closest('#mPage .ak-form .ak-cts');if(!r||Math.abs(e.deltaY)<Math.abs(e.deltaX))return;e.preventDefault();r.scrollLeft+=e.deltaY;},{passive:false,capture:true});
 window.addEventListener('input',function(e){if(e.target.id!=='akQ')return;AKQ=e.target.value;relist();},true);
 })();</script>
+<style id="m174">html body.m2on #mSheet .m-who>.logo,html body.m2on #mSheet .m-who>.nm{cursor:pointer}</style>
+<script>(function(){
+window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;var w=t.closest('#mSheet .m-who');if(!w||t.closest('button'))return;
+  if(!t.closest('#mSheet .m-who>.logo,#mSheet .m-who>.nm'))return;var b=w.querySelector('[data-msave]');if(!b)return;
+  e.preventDefault();e.stopImmediatePropagation();m2Nav({t:CUR.t,s:'shop',id:b.dataset.msave,sel:CUR.s?null:CUR.sel});},true);
+})();</script>
 </body>
 </html>
