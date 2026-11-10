@@ -8509,14 +8509,14 @@ function card(a){var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
    '<span class="g-tag'+(a.m<=30?' hot':'')+'">'+(a.m<=30?'<i class="lvd"></i>New':mS('clock')+ago(a.m))+'</span><span class="g-time">'+cl(a.c)+'</span>'+
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div>'+(a.b?'<span class="ak-bd">Budget ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'</div></div>'+
    '<div class="g-body">'+(a.me?'<div class="ak-rh">'+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'<span>'+esc(a.h)+' · '+ago(a.m)+'</span></div>':'<div class="lv-who"><span class="logo mlg ak-in">'+ini(a.n)+'</span><div><b>'+esc(a.n==='You'?'Your post':a.n)+'</b><span>'+esc(a.h)+' · '+(oc?oc+(oc===1?' shop replied':' shops replied'):'No replies yet')+'</span></div><span class="tm">'+ago(a.m)+'</span></div>')+
-   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+'</b><small class="ak-rs">'+esc(r[1]?r[1]+' · ':'')+ago(r[4]).toLowerCase()+'</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. Replies show up here.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
+   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+(r[6]&&NEWK[r[6]]?'<em class="ak-new">New</em>':'')+'</b><small class="ak-rs">'+esc(r[1]?r[1]+' · ':'')+ago(r[4]).toLowerCase()+'</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. Replies show up here.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
         :(OPEN[id]?'<div class="ak-rb"><div class="ak-rbh">'+(done?'Edit your reply':'Reply to '+esc(fnm(a.n)))+'</div><span class="ak-fl">Price</span><label class="ak-rpr"><span>₦</span><input class="ak-pp" inputmode="numeric" placeholder="3,000"></label><span class="ak-fl">Message</span><textarea class="ak-pm" maxlength="160" placeholder="e.g. New Oraimo, can deliver"></textarea><div class="g-act"><button type="button" class="g-ghost" data-akcan="'+esc(id)+'">Cancel</button><button type="button" class="g-go" data-aksend="'+esc(id)+'">'+(done?'Update reply':'Send reply')+'<i>'+mS('arrow')+'</i></button></div></div>'
         :done?'<div class="ak-yr"><div class="ak-yrh"><b>Your reply</b><strong>'+(done.p?'₦'+done.p.toLocaleString('en-US'):'')+'</strong></div>'+(done.m?'<p>'+esc(done.m)+'</p>':'')+'</div><div class="g-act"><button type="button" class="g-ghost" data-akhas="'+esc(id)+'">Edit reply</button><button type="button" class="g-go" data-akmsg="1">Message '+esc(fnm(a.n))+'<i>'+mS('arrow')+'</i></button></div>'
         :'<div class="g-act"><button type="button" class="g-ghost" data-akmsg="1">Message</button><button type="button" class="g-go" data-akhas="'+esc(id)+'">I have this<i>'+mS('arrow')+'</i></button></div>'))+
    '</div></div>';}
 function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'You haven’t replied to anyone yet.':'Nothing here yet. Be the first to post.')+'</div>';return L.map(card).join('');}
-function sw(){return'<div class="lv-tabs ak-sw"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
-function buyerPage(head){
+function sw(){return'<div class="lv-tabs ak-sw'+(ROLE!=='seller'&&UNS>0&&AKM!=='need'?' ak-sdot':'')+'"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
+function buyerPage(head){if(liveNow())markSeen();else countNew();setTimeout(akDots,0);
   return head+sw()+pv()+'<div class="ak-bh"><b>Can’t find something?</b><span>Tell shops what you need. Only verified shops see it, and they reply here.</span></div>'+cmpH(true)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div>';}
 function mineCard(a){var R=a.R||[],n=R.length;
   var off=R.map(function(r){var v={cat:a.c};return'<div class="ak-of"><span class="logo mlg">'+icon(a.c)+'</span><div class="ak-ofm"><div class="ak-ofh"><b>'+esc(r[0])+'</b><strong>₦'+r[2].toLocaleString('en-US')+'</strong></div><small>'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-ofb"><button type="button" class="ak-oc" data-akmsg="1">'+mS('chat')+'Chat</button></div></div></div>';}).join('');
@@ -8550,10 +8550,21 @@ var SHOP=null;try{SHOP=JSON.parse(localStorage.getItem('stafly_shop')||'null');}
   if(SHOP&&!(SHOP.sid&&SHOP.st))SHOP=null;
   if(SHOP)ROLE='seller';
   if(p.get('ask')&&SHOP){AKM='need';FOCUS=p.get('ask');setTimeout(function(){try{m2Nav({t:'live'});}catch(_){}},0);}})();
-function buyerList(){var l=document.getElementById('akList');if(!l||!document.querySelector('#mPage .ak-bh'))return;l.innerHTML=MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>';}
+
+/* m178: new replies */
+var NEWK={},UNS=0,SEEN={};try{SEEN=JSON.parse(localStorage.getItem('stafly_ask_seen')||'{}')||{};}catch(_){SEEN={};}
+function liveNow(){try{return CUR.t==='live'&&!CUR.s&&!document.body.classList.contains('m-subon');}catch(_){return true;}}
+function onBuyerPage(){return !!document.querySelector('#mPage .ak-bh');}
+function repKeys(){var k=[];MINEASK.forEach(function(a){(a.R||[]).forEach(function(r){if(r[6])k.push(r[6]);});});return k;}
+function countNew(){UNS=repKeys().filter(function(k){return !SEEN[k];}).length;}
+function markSeen(){var ks=repKeys();if(!ks.length)return;ks.forEach(function(k){if(!SEEN[k])NEWK[k]=1;});var keep={};ks.forEach(function(k){keep[k]=1;});SEEN=keep;try{localStorage.setItem('stafly_ask_seen',JSON.stringify(SEEN));}catch(_){}UNS=0;}
+function akDots(){var lt=document.querySelector('#mTabs [data-mtab="live"]');if(lt){var has=lt.querySelector('i');if(UNS>0&&ROLE!=='seller'&&!has)lt.insertAdjacentHTML('beforeend','<i class="ak-ti"></i>');if(!(UNS>0)&&has&&has.classList.contains('ak-ti'))has.remove();}
+  var s=document.querySelector('#mPage .ak-sw');if(s)s.classList.toggle('ak-sdot',ROLE!=='seller'&&UNS>0&&AKM!=='need');}
+function hasAsks(){try{return localStorage.getItem('stafly_has_asks')==='1';}catch(_){return false;}}
+function buyerList(){var l=document.getElementById('akList');if(!l||!document.querySelector('#mPage .ak-bh')||!liveNow()){countNew();akDots();if(l&&document.querySelector('#mPage .ak-bh'))l.innerHTML=MINEASK.map(card).join('');return;}markSeen();akDots();l.innerHTML=MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>';}
 function loadMine(){if(LOADM)return;LOADM=1;api('/api/search/asks/mine?vid='+vidG()).then(function(d){
   MINEASK=(d.asks||[]).map(function(a){return{id:a.id,n:'You',h:a.hall||'On campus',m:mins(a.at),t:a.text,c:a.cat,b:a.budget||0,o:(a.replies||[]).length,me:1,
-    R:(a.replies||[]).map(function(r){return[r.shop,r.place||'',r.price||0,r.msg||'',mins(r.at),r.sid];})};});buyerList();}).catch(function(){}).then(function(){LOADM=0;});}
+    R:(a.replies||[]).map(function(r){return[r.shop,r.place||'',r.price||0,r.msg||'',mins(r.at),r.sid,a.id+':'+r.sid+':'+r.at];})};});buyerList();}).catch(function(){}).then(function(){LOADM=0;});}
 function loadFeed(){if(!SHOP||LOADF)return;LOADF=1;api('/api/search/asks?sid='+encodeURIComponent(SHOP.sid)+'&st='+encodeURIComponent(SHOP.st)).then(function(d){
   ASKS=(d.asks||[]).map(function(a){if(a.mine)SENT[a.id]={p:a.mine.price||0,m:a.mine.msg||''};return{id:a.id,n:(a.name&&a.name!=='A student')?a.name:'Student',h:a.hall||'On campus',m:mins(a.at),t:a.text,c:a.cat,b:a.budget||0,o:Math.max(0,(a.replies||0)-(a.mine?1:0))};});
   if(FOCUS){var i=-1;ASKS.forEach(function(a,j){if(a.id===FOCUS)i=j;});if(i>=0){ASKS.unshift(ASKS.splice(i,1)[0]);if(!SENT[FOCUS]){OPEN={};OPEN[FOCUS]=1;}}AKT='foryou';AKC='';FOCUS=null;relist();setTimeout(function(){var c=document.querySelector('#mPage .ak-rb');if(c)c.scrollIntoView({block:'center'});},60);}
@@ -8562,6 +8573,11 @@ function loadFeed(){if(!SHOP||LOADF)return;LOADF=1;api('/api/search/asks?sid='+e
 function loadNow(){if(AKM!=='need')return;if(ROLE==='seller')loadFeed();else loadMine();}
 setInterval(function(){if(document.hidden||!document.getElementById('akList'))return;if(document.querySelector('#mPage .ak-rb'))return;loadNow();},30000);
 window.akReport=function(o){try{var v=window.vOf&&vOf(o.shop);api('/api/search/report',{vid:vidG(),sid:VSID[o.shop]||'',shop:(v&&v.name)||'',why:o.why,note:o.note||''}).catch(function(){});}catch(_){}};
+
+(function(){var _t=window.m2Tabs;if(typeof _t==='function'){window.m2Tabs=function(){var r=_t.apply(this,arguments);try{akDots();}catch(_){}return r;};}})();
+setTimeout(function(){if(hasAsks()&&ROLE!=='seller')loadMine();},2500);
+setInterval(function(){if(document.hidden||!hasAsks()||ROLE==='seller')return;if(document.querySelector('#mPage .ak-form textarea:focus'))return;loadMine();},45000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&hasAsks()&&ROLE!=='seller')loadMine();});
 function akErr(el,msg){var p=el.querySelector('.ak-er');if(!p){p=document.createElement('p');p.className='ak-er';var g=el.querySelector('.g-act');el.insertBefore(p,g);}p.textContent=msg;}
 var _pg=window.m2Page;window.m2Page=function(t){var h=_pg.apply(this,arguments);if(t!=='live'||typeof h!=='string')return h;if(AKM==='need')setTimeout(loadNow,0);
   var a=h.indexOf('<div class="lv-row lv2">');if(a<0)return h;
@@ -8579,7 +8595,7 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   e.preventDefault();e.stopImmediatePropagation();var w=document.querySelector('#mPage .ak-wrap');
   if(x.dataset.akrole){ROLE=x.dataset.akrole;try{localStorage.setItem('stafly_demo_role',ROLE);}catch(_){}AKT='foryou';return redraw(1);}
   if(x.dataset.akdone){if(realId(x.dataset.akdone))api('/api/search/asks/'+x.dataset.akdone+'/close',{vid:vidG(),found:true}).catch(function(){});MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akdone;});return buyerList();}
-  if(x.dataset.akm){if(AKM!==x.dataset.akm){AKM=x.dataset.akm;redraw(1);}return;}
+  if(x.dataset.akm){if(AKM!==x.dataset.akm){AKM=x.dataset.akm;if(AKM!=='need')NEWK={};redraw(1);}return;}
   if(x.dataset.aktab){AKT=x.dataset.aktab;[].forEach.call(document.querySelectorAll('#mPage [data-aktab]'),function(b){b.classList.toggle('on',b===x);});return relist();}
   if(x.dataset.akcat){AKC=AKC===x.dataset.akcat?'':x.dataset.akcat;[].forEach.call(document.querySelectorAll('#mPage [data-akcat]'),function(b){b.classList.toggle('on',b.dataset.akcat===AKC);});return relist();}
   if(x.dataset.aknew){w.classList.add('open');var ta=w.querySelector('textarea');if(ta&&window.innerWidth>820)ta.focus();return;}
@@ -8588,7 +8604,7 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   if(x.dataset.akpost){var ta2=w.querySelector('textarea'),tx=ta2.value.trim();if(!tx){ta2.focus();return;}var pc=w.querySelector('[data-akpc].on');
     var np={id:'me'+Date.now(),n:'You',h:w.querySelector('.ak-hall').value.trim()||'On campus',m:0,t:tx,c:pc?pc.dataset.akpc:'services',b:parseInt(w.querySelector('.ak-bud').value.replace(/\D/g,''),10)||0,o:0,me:1};
     if(x.disabled)return;x.disabled=true;var er0=w.querySelector('.ak-er');if(er0)er0.remove();
-    api('/api/search/asks',{vid:vidG(),text:np.t,cat:np.c,hall:np.h,budget:np.b,name:(window.CK&&CK.name)||''}).then(function(d){np.id=d.id;MINEASK.unshift(np);ta2.value='';ta2.style.height='';x.disabled=false;buyerList();loadMine();})
+    api('/api/search/asks',{vid:vidG(),text:np.t,cat:np.c,hall:np.h,budget:np.b,name:(window.CK&&CK.name)||''}).then(function(d){np.id=d.id;try{localStorage.setItem('stafly_has_asks','1');}catch(_){}MINEASK.unshift(np);ta2.value='';ta2.style.height='';x.disabled=false;buyerList();loadMine();})
       .catch(function(e){x.disabled=false;if(e.status===400||e.status===429){akErr(w.querySelector('.ak-form'),e.message);return;}MINEASK.unshift(np);ta2.value='';buyerList();});
     return;}
   if(x.dataset.akhas){var k=x.dataset.akhas;OPEN={};OPEN[k]=1;relist();var c=document.querySelector('#mPage .ak-rb');if(c){var pv0=SENT[k];if(pv0){c.querySelector('.ak-pp').value=pv0.p?pv0.p.toLocaleString('en-US'):'';var tm=c.querySelector('.ak-pm');tm.value=pv0.m||'';tm.style.height='auto';tm.style.height=tm.scrollHeight+'px';}c.scrollIntoView({block:'center',behavior:'smooth'});var ip=c.querySelector('.ak-pp');if(window.innerWidth>820)ip.focus();}return;}
@@ -8718,6 +8734,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
 html body.m2on #mPage .ak-er{margin:2px 0 10px;font-size:13px;line-height:1.4;color:#F87171}
 html body.m2on.m-light #mPage .ak-er{color:#DC2626}
 html body.m2on #mPage .g-go:disabled{opacity:.6;pointer-events:none}
+</style>
+<style id="m178">
+html body.m2on #mPage .ak-new{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:999px;background:#FF4D5E;color:#fff;font:600 11px/1.4 "DM Sans",sans-serif;font-style:normal;letter-spacing:.02em;vertical-align:2px}
+html body.m2on #mPage .ak-sw.ak-sdot [data-akm="need"]{position:relative}
+html body.m2on #mPage .ak-sw.ak-sdot [data-akm="need"]::after{content:"";position:absolute;top:10px;right:14px;width:8px;height:8px;border-radius:50%;background:#FF4D5E}
 </style>
 </body>
 </html>
