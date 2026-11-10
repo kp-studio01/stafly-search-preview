@@ -4535,7 +4535,7 @@ async function pay(v){ERR='';
   if(isReal(v)){try{const r=await fetch(API+'/api/w/'+v.sid+'/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       if(r.status!==404){const j=await r.json().catch(()=>({}));BUSY=false;
         if(!r.ok||!j.pay){ERR=(j&&j.error)||'Something went wrong. Please try again.';return rer();}
-        MINE.unshift({shop:v.id,ref:j.ref,track:j.track,total:j.total,at:Date.now()});sv('stafly_orders',MINE.slice(0,20));CART={shop:null,q:{}};sv('stafly_cart',CART);
+        MINE.unshift({shop:v.id,ref:j.ref,track:j.track,total:j.total,at:Date.now(),fee:j.deliveryFee,hall:CK.hall,group:CK.mode!=='solo',gmode:CK.mode});sv('stafly_orders',MINE.slice(0,20));CART={shop:null,q:{}};sv('stafly_cart',CART);
         location.href=j.pay;return;}}catch(_){}}
   /* preview: a pretend payment, then the tracking page moves on by itself */
   BUSY=false;const ref='DEMO-'+Date.now().toString(36).toUpperCase(),d=delivery(v);
@@ -4673,35 +4673,37 @@ const _pg=m2Page;m2Page=function(t){let h=_pg.apply(this,arguments);if(t==='chat
 /* m172: Send it now for group starters */
 const GSW=20*60*1000,GSN=5;
 const GSTICK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-function gsStarter(o){return !!(o&&o.demo&&o.gmode==='new');}
-function gsLeft(o){var ms=Math.max(0,o.at+GSW-Date.now()),s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function gsG(o){var d=o&&!o.demo&&TK[o.ref];return d&&d.group||null;}
+function gsStarter(o){if(!o)return false;if(o.demo)return o.gmode==='new';var g=gsG(o);return !!(g&&g.mine);}
+function gsLeft(o){var g=gsG(o),end=g?Date.parse(g.closesAt):o.at+GSW;var ms=Math.max(0,end-Date.now()),s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
 function gsSave(){try{localStorage.setItem('stafly_orders',JSON.stringify(MINE.slice(0,20)));}catch(_){}}
 function gsN(n){return '₦'+Math.round(n).toLocaleString('en-US');}
 {const _ds=demoStage;demoStage=function(o){if(!gsStarter(o))return _ds(o);
   const go=o.sentAt||(o.at+GSW);if(Date.now()<go)return'paid';return _ds(Object.assign({},o,{at:go}));};}
 function gsCard(o,ask){
-  if(o.sentAt)return'<div class="gs-c sent"><span class="gs-ok">'+GSTICK+'</span><div><b>Sent to the shop</b><small>They’ll start making it now</small></div></div>';
-  const hall=String(o.hall||'your hall').split(',')[0].replace(/</g,'&lt;'),fee=+o.fee||0,back=fee*(GSN-1)/GSN;
-  let seats='<i class="me">You</i>';for(let i=1;i<GSN;i++)seats+='<i>+</i>';
+  var G=gsG(o);if(o.sentAt||(G&&G.ready)){var hw=G&&G.why==='full'?'Your group filled up':G&&G.why==='time'&&!G.sent?'Time’s up, sent to the shop':'Sent to the shop';var sb=G&&G.joined>1?G.joined+' orders going together':'They’ll start making it now';return'<div class="gs-c sent"><span class="gs-ok">'+GSTICK+'</span><div><b>'+hw+'</b><small>'+sb+'</small></div></div>';}
+  const N=(G&&G.size)||GSN,J=(G&&G.joined)||1,hall=String((G&&G.hall)||o.hall||'your hall').split(',')[0].replace(/</g,'&lt;'),fee=+((TK[o.ref]&&TK[o.ref].deliveryFee)||o.fee)||0,back=fee*(N-1)/N;
+  let seats='<i class="me">You</i>';for(let i=1;i<N;i++)seats+=i<J?'<i class="in">'+GSTICK+'</i>':'<i>+</i>';
   const btns=ask
-    ?'<p class="gs-ask">Send it now with just you? <b>Nobody else can join</b> after this, and the '+gsN(fee)+' delivery stays all yours to pay.</p><div class="gs-btns"><button type="button" class="gs-alt" data-gsno="1">Not yet</button><button type="button" class="gs-go" data-gsyes="'+o.ref+'">Yes, send it</button></div>'
+    ?'<p class="gs-ask">'+(J>1?'Send it now with '+J+' of you? <b>Nobody else can join</b>':'Send it now with just you? <b>Nobody else can join</b>')+' after this'+(J>1?'.':', and the '+gsN(fee)+' delivery stays all yours to pay.')+'</p><div class="gs-btns"><button type="button" class="gs-alt" data-gsno="1">Not yet</button><button type="button" class="gs-go" data-gsyes="'+o.ref+'">Yes, send it</button></div>'
     :'<div class="gs-btns"><button type="button" class="gs-alt" data-gsinv="'+o.ref+'">Invite friends</button><button type="button" class="gs-go" data-gssend="'+o.ref+'">Send it now</button></div>';
-  return'<div class="gs-c" data-gsref="'+o.ref+'"><div class="gs-top"><div><b>Your group to '+hall+'</b><small>1 of '+GSN+' joined</small></div>'+
+  return'<div class="gs-c" data-gsref="'+o.ref+'"><div class="gs-top"><div><b>Your group to '+hall+'</b><small>'+J+' of '+N+' joined</small></div>'+
     '<div class="gs-tm"><span>Leaves in</span><strong data-gstm="1">'+gsLeft(o)+'</strong></div></div>'+
     '<div class="gs-seats">'+seats+'</div>'+
     '<div class="gs-rows"><div><span>Delivery you paid</span><b>'+gsN(fee)+'</b></div><div><span>Back to you if it fills</span><b class="gn">up to '+gsN(back)+'</b></div></div>'+btns+'</div>';}
 {const _tk=tkPage;tkPage=function(ref){let h=_tk.apply(this,arguments);const o=MINE.find(x=>x.ref===ref);
   if(typeof h!=='string'||!gsStarter(o))return h;const d=tkData(ref);if(!d||d.stage!=='paid')return h;
-  if(!o.sentAt){h=h.replace('Order received','Group forming').replace('The shop has your order','Goes to the shop when it fills or time runs out');}
+  var G0=gsG(o);if(!o.sentAt&&!(G0&&G0.ready)){h=h.replace('Order received','Group forming').replace('The shop has your order','Goes to the shop when it fills or time runs out');}
   let i=h.indexOf('<div class="m-sh"><b>What you ordered');if(i<0)i=h.indexOf('<div class="m-foot">');if(i<0)return h;
   return h.slice(0,i)+gsCard(o)+h.slice(i);};}
+setInterval(function(){try{if(CUR.s!=='track')return;const o=MINE.find(x=>x.ref===CUR.id),g=gsG(o);if(g&&!g.ready&&!document.querySelector('#mSub .gs-ask'))tkFetch(o.ref);}catch(_){}},20000);
 setInterval(function(){const t=document.querySelector('#mSub [data-gstm]');if(!t)return;const c=t.closest('.gs-c'),o=c&&MINE.find(x=>x.ref===c.dataset.gsref);if(o)t.textContent=gsLeft(o);},1000);
 window.addEventListener('click',function(e){const t=e.target;if(!t.closest)return;
   const b=t.closest('#mSub [data-gssend],#mSub [data-gsyes],#mSub [data-gsno],#mSub [data-gsinv]');if(!b)return;
   e.preventDefault();e.stopImmediatePropagation();const c=b.closest('.gs-c'),o=c&&MINE.find(x=>x.ref===c.dataset.gsref);if(!o)return;
   if(b.dataset.gssend){c.outerHTML=gsCard(o,1);return;}
   if(b.dataset.gsno){c.outerHTML=gsCard(o);return;}
-  if(b.dataset.gsyes){o.sentAt=Date.now();gsSave();rer();return;}
+  if(b.dataset.gsyes){if(o.demo){o.sentAt=Date.now();gsSave();rer();return;}var v=vOf(o.shop);if(!v||!v.sid)return;b.disabled=true;b.textContent='Sending…';fetch(API+'/api/w/'+v.sid+'/order/'+encodeURIComponent(o.track)+'/send-now',{method:'POST'}).then(function(r){return r.json().catch(function(){return{};}).then(function(j){if(!r.ok)throw new Error(j.error||'Couldn’t send it. Please try again.');if(TK[o.ref])TK[o.ref].group=Object.assign({},TK[o.ref].group,j.group);rer();});}).catch(function(e){b.disabled=false;b.textContent='Yes, send it';var p=c.querySelector('.gs-ask');if(p)p.textContent=e.message;});return;}
   if(b.dataset.gsinv){const v=vOf(o.shop),u=location.origin+location.pathname,txt='Join my '+((v&&v.name)||'food')+' group order to '+String(o.hall||'').split(',')[0]+' on Stafly and we split the delivery.';
     if(navigator.share){navigator.share({title:'Join my group order',text:txt,url:u}).catch(function(){});}
     else{try{navigator.clipboard.writeText(txt+' '+u);}catch(_){}b.textContent='Link copied';setTimeout(function(){if(b.isConnected)b.textContent='Invite friends';},1800);}}},true);
@@ -8739,6 +8741,12 @@ html body.m2on #mPage .g-go:disabled{opacity:.6;pointer-events:none}
 html body.m2on #mPage .ak-new{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:999px;background:#FF4D5E;color:#fff;font:600 11px/1.4 "DM Sans",sans-serif;font-style:normal;letter-spacing:.02em;vertical-align:2px}
 html body.m2on #mPage .ak-sw.ak-sdot [data-akm="need"]{position:relative}
 html body.m2on #mPage .ak-sw.ak-sdot [data-akm="need"]::after{content:"";position:absolute;top:10px;right:14px;width:8px;height:8px;border-radius:50%;background:#FF4D5E}
+</style>
+<style id="m179">
+html body.m2on #mSub .gs-seats i.in{border:0;background:rgba(74,222,128,.16);color:#4ADE80}
+html body.m2on #mSub .gs-seats i.in svg{width:16px;height:16px}
+html body.m2on.m-light #mSub .gs-seats i.in{background:#E7F8EE;color:#16A34A}
+html body.m2on #mSub .gs-go:disabled{opacity:.6;pointer-events:none}
 </style>
 </body>
 </html>
