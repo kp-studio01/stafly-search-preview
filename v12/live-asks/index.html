@@ -8358,12 +8358,22 @@ html body.m2on.m-light .ak-r2i,html body.m2on.m-light .ak-mi{background:#F3F3F5;
 html body.m2on.m-light .ak-pb,html body.m2on.m-light .ak-oc,html body.m2on.m-light .ak-md{background:#121215;color:#fff}
 html body.m2on.m-light .ak-mx{background:#F1F1F3;color:#121215}
 html body.m2on.m-light .ak-st{color:#16A34A;background:#E7F8EE}
+html body.m2on .ak-form .ak-cts{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:12px -16px 0;padding:0 16px;scroll-padding:16px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;-webkit-mask:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 28px),transparent);mask:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 28px),transparent)}
+html body.m2on .ak-form .ak-cts::-webkit-scrollbar{display:none}
+html body.m2on .ak-form .ak-cts button{flex:none}
+html body.m2on .ak-rp .ak-rt{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+html body.m2on .ak-rp .ak-rt strong{font-size:15px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+html body.m2on .ak-rp .ak-rs{display:block;margin-top:1px;font-size:12.5px;color:rgba(255,255,255,.5)}
+html body.m2on .ak-rf{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+html body.m2on .ak-rf strong{font-size:17px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+html body.m2on.m-light .ak-rf strong{color:#121215}
+html body.m2on.m-light .ak-rp .ak-rt strong{color:#121215}html body.m2on.m-light .ak-rp .ak-rs{color:#6B6B75}
 </style>
 <script>(function(){
 function esc(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-var CATS=[['food','Food'],['gadgets','Gadgets'],['printing','Printing'],['beauty','Beauty'],['fashion','Fashion'],['services','Services']];
+var CATS=[['food','Food'],['gadgets','Gadgets'],['printing','Printing'],['beauty','Beauty'],['fashion','Fashion'],['services','Services'],['other','Other']];
 function cl(k){for(var i=0;i<CATS.length;i++)if(CATS[i][0]===k)return CATS[i][1];return'Other';}
-function icon(k){try{var m=lvPh({cat:k,name:'',id:'',place:''}).match(/<svg[\s\S]*?<\/svg>/);return m?m[0]:'';}catch(_){return'';}}
+function icon(k){if(k==='other')return'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>';try{var m=lvPh({cat:k,name:'',id:'',place:''}).match(/<svg[\s\S]*?<\/svg>/);return m?m[0]:'';}catch(_){return'';}}
 var ASKS=[
  {n:'Ada O.',h:'Moremi Hall',m:6,t:'Anyone selling a Type-C charger? Mine just died. Need it before 6pm.',c:'gadgets',b:3500,o:2},
  {n:'Tunde A.',h:'Awo Hall',m:14,t:'Who can do knotless braids this Saturday? Medium size.',c:'beauty',b:15000,o:4},
@@ -8382,24 +8392,18 @@ function list(){var L=ASKS.filter(function(a){return AKT!=='mine'||SENT[a.id||(a
   if(AKC)L=L.filter(function(a){return a.c===AKC;});
   if(AKQ.trim()){var q=AKQ.trim().toLowerCase();L=L.filter(function(a){return(a.t+' '+a.h+' '+cl(a.c)).toLowerCase().indexOf(q)>=0;});}
   return L;}
-function card(a){if(a.me)return mineCard(a);var id=a.id||(a.n+a.m),done=SENT[id];
+function card(a){var id=a.id||(a.n+a.m),done=SENT[id];
   return'<div class="g-card lv-card ak-card"><div class="g-media lv-media g-poster">'+(window.gArt?gArt({cat:a.c,name:'',id:'',place:''}):'')+'<span class="g-shade"></span>'+
    '<span class="g-tag'+(a.m<=30?' hot':'')+'">'+(a.m<=30?'<i class="lvd"></i>New':mS('clock')+ago(a.m))+'</span><span class="g-time">'+cl(a.c)+'</span>'+
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div>'+(a.b?'<span class="ak-bd">Budget ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'</div></div>'+
    '<div class="g-body">'+(a.me?'<div class="ak-rh">'+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'<span>'+esc(a.h)+' · '+ago(a.m)+'</span></div>':'<div class="lv-who"><span class="logo mlg ak-in">'+ini(a.n)+'</span><div><b>'+esc(a.n==='You'?'Your post':a.n)+'</b><span>'+esc(a.h)+' · '+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'</span></div><span class="tm">'+ago(a.m)+'</span></div>')+
-   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+'<small> · '+esc(r[1])+'</small></b><p>'+esc(r[2])+'</p></div><button type="button" class="g-go ak-ch" data-akmsg="1">Chat</button></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. We’ll tell you on WhatsApp.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
+   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+'</b><small class="ak-rs">'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. We’ll tell you on WhatsApp.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
         :'<div class="g-act"><button type="button" class="g-ghost" data-akmsg="1">Message</button><button type="button" class="g-go'+(done?' done':'')+'" data-akhas="'+esc(id)+'">'+(done?'Sent to '+esc(a.n.split(' ')[0]):'I have this<i>'+mS('arrow')+'</i>')+'</button></div>')+
    '</div></div>';}
 function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'You haven’t replied to anyone yet.':'Nothing here yet. Be the first to post.')+'</div>';return L.map(card).join('');}
 function sw(){return'<div class="lv-tabs ak-sw"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
 function buyerPage(head){
-  var form='<div class="ak-wrap open ak-f2"><textarea maxlength="160" placeholder="What do you need? For example: a Type-C charger before 6pm"></textarea>'+
-   '<div class="ak-r2 ak-r2c"><span class="ak-r2l">Category</span><div class="ak-cts">'+CATS.map(function(c,i){return'<button type="button" data-akpc="'+c[0]+'" class="'+(i===0?'on':'')+'">'+c[1]+'</button>';}).join('')+'</div></div>'+
-   '<label class="ak-r2"><span class="ak-r2i">'+mS('pin')+'</span><span class="ak-r2t"><span class="ak-r2l">Where</span><input type="text" class="ak-hall" placeholder="Your hall or spot" value="'+esc(myHall())+'"></span></label>'+
-   '<label class="ak-r2"><span class="ak-r2i">'+mS('tag')+'</span><span class="ak-r2t"><span class="ak-r2l">Budget</span><input type="text" class="ak-bud" inputmode="numeric" placeholder="Optional, e.g. 5,000"></span></label>'+
-   '<button type="button" class="ak-pb" data-akpost="1">Post to shops</button><p class="ak-nt">Only verified shops see this. Replies come here and on WhatsApp.</p></div>';
-  return head+sw()+pv()+'<div class="ak-bh"><b>Ask shops</b><span>Can’t find it? Tell shops what you need.</span></div>'+form+
-    '<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div>';}
+  return head+sw()+pv()+'<div class="ak-bh"><b>Can’t find something?</b><span>Tell shops what you need. Only verified shops see it, and they reply here and on WhatsApp.</span></div>'+cmpH(true)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div>';}
 function mineCard(a){var R=a.R||[],n=R.length;
   var off=R.map(function(r){var v={cat:a.c};return'<div class="ak-of"><span class="logo mlg">'+icon(a.c)+'</span><div class="ak-ofm"><div class="ak-ofh"><b>'+esc(r[0])+'</b><strong>₦'+r[2].toLocaleString('en-US')+'</strong></div><small>'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-ofb"><button type="button" class="ak-oc" data-akmsg="1">'+mS('chat')+'Chat</button></div></div></div>';}).join('');
   return'<div class="ak-mc"><div class="ak-mh"><span class="ak-mi">'+icon(a.c)+'</span><div><b>'+cl(a.c)+'</b><small>Posted '+ago(a.m).toLowerCase()+'</small></div><span class="ak-st"><i></i>Open</span></div>'+
@@ -8410,7 +8414,7 @@ function cmpH(open){return '<div class="ak-wrap'+(open?' open':'')+'"><div class
    '<div class="ak-form"><b>What do you need?</b><textarea maxlength="160" placeholder="For example: anyone selling a Type-C charger near Moremi?"></textarea>'+
    '<div class="ak-cts">'+CATS.map(function(c,i){return'<button type="button" data-akpc="'+c[0]+'" class="'+(i===0?'on':'')+'">'+c[1]+'</button>';}).join('')+'</div>'+
    '<div class="ak-fr"><input type="text" class="ak-hall" placeholder="Your hall" value="'+esc(myHall())+'"><input type="text" class="ak-bud" inputmode="numeric" placeholder="Budget (optional)"></div>'+
-   '<div class="g-act"><button type="button" class="g-ghost" data-akno="1">Cancel</button><button type="button" class="g-go" data-akpost="1">Post it<i>'+mS('arrow')+'</i></button></div></div></div>';}
+   '<div class="g-act"><button type="button" class="g-ghost" data-akno="1">Clear</button><button type="button" class="g-go" data-akpost="1">Post it<i>'+mS('arrow')+'</i></button></div></div></div>';}
 function pv(){return'<div class="ak-pv"><span>Preview</span><button type="button" data-akrole="buyer" class="'+(ROLE==='buyer'?'on':'')+'">View as buyer</button><button type="button" data-akrole="seller" class="'+(ROLE==='seller'?'on':'')+'">View as seller</button></div>';}
 function needPage(head){
   var circ='<div class="lv-row lv2">'+CATS.map(function(c){return'<button type="button" class="lv-st ak-ct'+(AKC===c[0]?' on':'')+'" data-akcat="'+c[0]+'"><span class="rg"><span class="logo mlg">'+icon(c[0])+'</span></span><em>'+c[1]+'</em></button>';}).join('')+'</div>';
@@ -8445,6 +8449,7 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   if(x.dataset.akhas){SENT[x.dataset.akhas]=1;return relist();}
   if(x.dataset.akclose){MINEASK=MINEASK.filter(function(a){return a.id!==x.dataset.akclose;});return redraw();}
   if(x.dataset.akmsg){var o=x.innerHTML;x.textContent='Opening chat…';setTimeout(function(){if(x.isConnected)x.innerHTML=o;},1200);}},true);
+window.addEventListener('wheel',function(e){var r=e.target.closest&&e.target.closest('#mPage .ak-form .ak-cts');if(!r||Math.abs(e.deltaY)<Math.abs(e.deltaX))return;e.preventDefault();r.scrollLeft+=e.deltaY;},{passive:false,capture:true});
 window.addEventListener('input',function(e){if(e.target.id!=='akQ')return;AKQ=e.target.value;relist();},true);
 })();</script>
 </body>
