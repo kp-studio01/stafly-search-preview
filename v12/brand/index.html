@@ -9375,7 +9375,8 @@ function hook(sh){if(!sh||sh.__m202)return;sh.__m202=1;let big=sh.classList.cont
   const box=()=>sh.querySelector('.bx');
   const ro=new ResizeObserver(()=>{const b=box();if(!b||b.classList.contains('mi-flip'))return;lastH=b.getBoundingClientRect().height;if(!sh.classList.contains('big')){const i=b.querySelector(':scope>.in');if(i)lastIn=i.getBoundingClientRect().height;}});
   const watch=()=>{const b=box();if(b&&!b.__ro){b.__ro=1;ro.observe(b);lastH=b.getBoundingClientRect().height;const i=b.querySelector(':scope>.in');if(i)lastIn=i.getBoundingClientRect().height;}};
-  new MutationObserver(()=>{const nb=sh.classList.contains('big');if(nb===big){watch();return;}big=nb;const b=box();if(!b)return;
+  new MutationObserver(()=>{if(sh.classList.contains('big')&&sh.querySelector('.bx>.ph.ic')){sh.classList.remove('big');return;} /* no photo: nothing to show full screen */
+    const nb=sh.classList.contains('big');if(nb===big){watch();return;}big=nb;const b=box();if(!b)return;
     const inn=b.querySelector(':scope>.in');
     if(!nb){if(inn)inn.style.removeProperty('height');return;} /* closing: the height glides down on its own */
     /* opening: text and button stay exactly where they are; the photo grows up from the top */
@@ -9384,6 +9385,28 @@ function hook(sh){if(!sh||sh.__m202)return;sh.__m202=1;let big=sh.classList.cont
   }).observe(sh,{attributes:true,attributeFilter:['class'],childList:true});watch();}
 const go=()=>hook(document.getElementById('miSh'));go();
 new MutationObserver(go).observe(document.body,{childList:true});
+})();
+</script>
+<style id="m203">@media (prefers-reduced-motion: reduce){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx{transition:none!important}}</style>
+<script>
+/* m203: the phone's Back button closes the Filters and Categories sheets (before, it left the page and the sheet stayed open) */
+(function(){
+let OPEN=null,IGN=false;
+const isOpen={fs:()=>{const e=document.getElementById('mFs');return !!(e&&e.classList.contains('in'));},
+              cat:()=>{const e=document.getElementById('catSheet');return !!(e&&e.classList.contains('on'));}};
+const shut={fs:()=>{const b=document.querySelector('#mFs [data-fs="close"]');if(b)b.click();else{const e=document.getElementById('mFs');e&&e.classList.remove('in','on');}},
+            cat:()=>{const s=document.getElementById('catScrim');if(s)s.click();}};
+function sync(k){const o=isOpen[k]();
+  if(o&&OPEN!==k){if(OPEN)return;OPEN=k;try{history.pushState(Object.assign({},history.state||{},{sh:k}),'',location.href);}catch(_){}}
+  else if(!o&&OPEN===k){OPEN=null;if(history.state&&history.state.sh===k){IGN=true;history.back();}}}
+function wrap(){if(!window.m2Apply||m2Apply.__m203)return;const _a=m2Apply;const w=function(){
+  const sh=history.state&&history.state.sh;
+  if(IGN&&!sh){IGN=false;return;}
+  if(OPEN&&sh!==OPEN){const k=OPEN;OPEN=null;shut[k]();return;}
+  return _a.apply(this,arguments);};w.__m203=1;window.m2Apply=w;try{m2Apply=w;}catch(_){}}
+const hooked=new Set();
+function hook(){wrap();[['mFs','fs'],['catSheet','cat']].forEach(([id,k])=>{const e=document.getElementById(id);if(e&&!hooked.has(e)){hooked.add(e);new MutationObserver(()=>sync(k)).observe(e,{attributes:true,attributeFilter:['class']});}});}
+hook();new MutationObserver(hook).observe(document.body,{childList:true});
 })();
 </script>
 </body>
