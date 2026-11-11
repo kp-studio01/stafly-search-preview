@@ -9297,5 +9297,18 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) :is(#mDrawer.m-d
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mAuth :is(input.nm,input.code,.ph){background:#16161A!important;box-shadow:0 0 0 1px rgba(255,255,255,.08)!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mDrawer .m-sign b{color:#fff!important}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mDrawer .m-sign span{color:rgba(255,255,255,.62)!important}
 </style>
+<script>
+/* m198: clean boxes for signed-out visitors */
+(function(){const IN=()=>!!(window.USER&&USER.wa);
+const HIDE='[data-msub="alerts"],[data-msub="saved"],[data-msub="following"],[data-msub="chats"],[data-mmine],[data-msub="me"]';
+function prune(root){if(!root||IN())return;
+  root.querySelectorAll(':is(.m-dg,.m-lst,.m-list,.m-card) > :is('+HIDE+')').forEach(e=>e.remove());
+  if(root.id==='mDrawer'){const cats=root.querySelector('[data-msub="cats"]'),first=root.querySelector('.m-dg');if(cats&&first&&cats.parentElement!==first)first.appendChild(cats);}
+  root.querySelectorAll('.m-dg').forEach(g=>{if(!g.children.length){const l=g.previousElementSibling;if(l&&l.classList.contains('m-dl'))l.remove();g.remove();}});}
+window.staflyPrune=prune;
+if(window.m2Drawer){const _d=m2Drawer;m2Drawer=function(){const r=_d.apply(this,arguments);prune(document.getElementById('mDrawer'));return r;};}
+if(window.m2Apply){const _a=m2Apply;m2Apply=function(){const r=_a.apply(this,arguments);prune(document.getElementById('mPage'));prune(document.getElementById('mSub'));return r;};}
+})();
+</script>
 </body>
 </html>
