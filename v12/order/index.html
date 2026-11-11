@@ -1,6 +1,22 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>
+/* m190: the sign-in key travels in a header, only to Stafly's account endpoints */
+(function(){const F=window.fetch.bind(window),K='stafly_key';
+const get=()=>{try{return localStorage.getItem(K)||'';}catch(_){return'';}};
+const set=k=>{try{k?localStorage.setItem(K,k):localStorage.removeItem(K);}catch(_){}};
+const acct=u=>/\/api\/search\/(?!shops)/.test(u)||/\/api\/w\/[^/]+\/messages/.test(u)&&/acct/.test(u);
+window.fetch=function(input,init){const u=String(typeof input==='string'?input:(input&&input.url)||'');
+  let body=init&&init.body;if(!acct(u)&&!(typeof body==='string'&&/\/api\/w\/[^/]+\/messages/.test(u)&&/"acct":1/.test(body)))return F(input,init);
+  const k=get();init=Object.assign({},init||{});const hd=new Headers(init.headers||{});if(k)hd.set('X-Stafly-Key',k);init.headers=hd;
+  return F(input,init).then(r=>{
+    if(/\/api\/search\/signout/.test(u))set('');
+    if(/\/api\/search\/(signin\/verify|signin\/check|email\/verify)/.test(u)&&r.ok)r.clone().json().then(d=>{if(d&&typeof d.key==='string')set(d.key);}).catch(()=>{});
+    return r;});};
+window.staflyKey=get;
+})();
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Stafly Search · OAU</title>
@@ -9109,5 +9125,90 @@ const _nv=m2Nav;m2Nav=function(o){const r=_nv.apply(this,arguments);
 setInterval(()=>{const on=!!(window.USER&&USER.wa);if(on&&!was){setTimeout(slChats,1500);setTimeout(slChats,6000);}if(!on&&was){CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}was=on;},800);
 })();
 </script>
+<script>
+/* m190: a sign-in from before keys existed signs in once more */
+(function(){try{if(window.USER&&USER.wa&&!staflyKey()){delete USER.wa;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(_){}})();
+</script>
+<script>
+/* m191: one Stafly account: confirm email, open a shop */
+(function(){if(!window.authRender||!window.m2Page)return;
+const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const IN=()=>!!(window.USER&&USER.wa);
+const save=()=>{try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}};
+let SHOP=null; // {shop:{name}|null}
+function openSheet(st){AUTH=Object.assign({hall:null,name:'',email:''},st);PEND=null;document.body.classList.remove('m-drw');authRender();document.body.classList.add('m-authon');}
+window.acctConfirm=function(em,next){try{if(CUR.t==='you'&&!CUR.s)$('#mPage').innerHTML=m2Page('you');}catch(_){}openSheet({step:'ev',em:em||(USER&&USER.emailNew)||'',next:next||''});setTimeout(()=>{const i=$('#aVCode');i&&i.focus();},420);};
+window.acctShop=function(){if(!IN())return authOpen('',{k:'nav',o:{t:'you'}});
+  if(SHOP&&SHOP.shop)return acctGo();
+  if(!(USER.email&&USER.ev))return USER.emailNew?(acctResend(USER.emailNew),acctConfirm(USER.emailNew,'shop')):openSheet({step:'evadd',next:'shop',em:USER.email||''});
+  openSheet({step:'shop',sname:'',skind:'goods'});setTimeout(()=>{const i=$('#aShop');i&&i.focus();},420);};
+function acctResend(em){return authApi('/api/search/me',{vid:vidQ(),email:em,resend:1}).catch(()=>{});}
+function acctGo(){const A=AUTH;A.busy=1;authApi('/api/search/shop/open',{vid:vidQ()}).then(d=>{location.href=(window.staflyApi||'https://kp-assistant.onrender.com')+d.go;}).catch(e=>{A.busy=0;A.err=e.message;authRender();});}
+const _ar=authRender;authRender=function(){const A=AUTH;if(!['ev','evadd','shop'].includes(A.step))return _ar.apply(this,arguments);
+  const el=$('#mAuth'),anim=A._last!==A.step;A._last=A.step;const er=A.err?`<p class="a-er">${A.err}</p>`:'';let b='';
+  if(A.step==='evadd')b=`<h2>Add your email</h2>
+    <label class="lbl" for="aVEm">Email</label><input class="nm" id="aVEm" type="email" inputmode="email" placeholder="you@gmail.com" value="${esc(A.em)}" autocomplete="email">${er}
+    <button class="m-cta" type="button" data-avadd="1" ${A.busy?'disabled':''}>${A.busy?'One moment…':'Send code'}</button>`;
+  if(A.step==='ev')b=`<h2>Confirm your email</h2><p class="sub">Enter the code sent to ${esc(A.em)}.</p>
+    <input class="code" id="aVCode" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="······">${er}
+    <p class="a-alt"><span class="lnk" data-avsend="1">${A.sent?'Sent again':'Resend code'}</span> · <span class="lnk" data-avchg="1">Change email</span></p>`;
+  if(A.step==='shop')b=`<h2>Open your shop</h2>
+    <label class="lbl" for="aShop">Shop name</label><input class="nm" id="aShop" type="text" placeholder="e.g. Tolu’s Kitchen" value="${esc(A.sname)}" maxlength="60">
+    <span class="lbl">You sell</span><div class="halls"><button type="button" class="${A.skind==='goods'?'on':''}" data-askind="goods">Products</button><button type="button" class="${A.skind==='bookable'?'on':''}" data-askind="bookable">Services</button></div>${er}
+    <button class="m-cta" type="button" data-ashop="1" ${String(A.sname||'').trim().length>=2&&!A.busy?'':'disabled'}>${A.busy?'One moment…':'Continue'}</button>`;
+  el.innerHTML=`<div class="m-grab"></div><div class="a-pg${anim?' a-in':''}">${b}</div>`;};
+window.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
+  if(t.closest('[data-myshop]')){e.stopImmediatePropagation();e.preventDefault();acctShop();return;}
+  if(t.closest('[data-aconf]')){e.stopImmediatePropagation();e.preventDefault();if(USER&&USER.emailNew){acctResend(USER.emailNew);acctConfirm(USER.emailNew);}else openSheet({step:'evadd',em:''});return;}
+  if(!t.closest('#mAuth'))return;const A=AUTH;
+  if(t.closest('[data-avadd]')){e.stopImmediatePropagation();const em=String(($('#aVEm')||{}).value||'').trim();A.busy=1;A.err='';authRender();
+    authApi('/api/search/me',{vid:vidQ(),email:em}).then(d=>{A.busy=0;if(d.email===em.toLowerCase()&&d.ev){USER.email=d.email;USER.ev=1;save();return A.next==='shop'?acctShop():authClose();}
+      USER.emailNew=d.emailNew;save();if(d.mailSent===false){A.err='We couldn’t send the email just now. Please try again later.';return authRender();}A.step='ev';A.em=d.emailNew;authRender();setTimeout(()=>{const i=$('#aVCode');i&&i.focus();},80);})
+      .catch(er=>{A.busy=0;A.err=er.message;authRender();});return;}
+  if(t.closest('[data-avsend]')){e.stopImmediatePropagation();if(A.sent)return;A.sent=1;acctResend(A.em).then(()=>{authRender();setTimeout(()=>{A.sent=0;if(A.step==='ev')authRender();},30000);});return;}
+  if(t.closest('[data-avchg]')){e.stopImmediatePropagation();A.step='evadd';A.err='';authRender();return;}
+  const k=t.closest('[data-askind]');if(k){e.stopImmediatePropagation();A.skind=k.dataset.askind;authRender();return;}
+  if(t.closest('[data-ashop]')&&!t.closest('[data-ashop]').disabled){e.stopImmediatePropagation();A.busy=1;A.err='';authRender();
+    authApi('/api/search/shop/open',{vid:vidQ(),businessName:String(A.sname||'').trim(),businessType:A.skind}).then(d=>{SHOP={shop:d.shop};location.href=(window.staflyApi||'https://kp-assistant.onrender.com')+d.go;})
+      .catch(er=>{A.busy=0;A.err=er.message;authRender();});return;}
+},true);
+document.addEventListener('input',e=>{const t=e.target;if(!t||!AUTH)return;
+  if(t.id==='aShop'){AUTH.sname=t.value;const b=$('#mAuth [data-ashop]');if(b)b.disabled=AUTH.busy||t.value.trim().length<2;}
+  if(t.id==='aVCode'){t.value=t.value.replace(/\D/g,'').slice(0,6);if(t.value.length===6&&!AUTH.busy){const A=AUTH;A.busy=1;A.err='';t.blur();
+    authApi('/api/search/email/confirm',{vid:vidQ(),code:t.value}).then(p=>{A.busy=0;USER.email=p.email;USER.ev=1;delete USER.emailNew;save();
+      if(A.next==='shop')return acctShop();authClose();try{if(CUR.t==='you')$('#mPage').innerHTML=m2Page('you');}catch(_){}})
+      .catch(er=>{A.busy=0;A.err=er.message;authRender();const i=$('#aVCode');i&&i.focus();});}}},true);
+// sign-up: the email they typed gets a code to confirm it
+const _aa=authApi;authApi=function(path,body){return _aa.apply(this,arguments).then(d=>{
+  if(path==='/api/search/me'&&body&&body.email!=null&&!body.resend&&d&&d.emailNew&&d.mailSent&&AUTH&&AUTH.step!=='evadd'){setTimeout(()=>{if(USER){USER.emailNew=d.emailNew;delete USER.ev;save();}acctConfirm(d.emailNew);},700);}
+  return d;});};
+// what the server knows: confirmed email, waiting email, shop
+const _pa=profApply;profApply=function(p){_pa.apply(this,arguments);if(USER&&p&&p.signedIn!==false){if(p.email){USER.email=p.email;USER.ev=1;}else delete USER.ev;if(p.emailNew)USER.emailNew=p.emailNew;else delete USER.emailNew;save();}};
+function shopLoad(){if(!IN())return;authGet('/api/search/shop?vid='+vidQ()).then(d=>{if(!d||d.error)return;SHOP=d;if(d.email){USER.email=d.email;USER.ev=1;}if(d.emailNew)USER.emailNew=d.emailNew;save();
+  try{if(CUR.t==='you'&&!CUR.s)$('#mPage').innerHTML=m2Page('you');}catch(_){}});}
+const _nv=m2Nav;m2Nav=function(o){const r=_nv.apply(this,arguments);if(o&&o.t==='you'&&!o.s)shopLoad();return r;};
+const _pg=m2Page;m2Page=function(t){let x=_pg.apply(this,arguments);if(t!=='you'||typeof x!=='string'||!IN())return x;
+  // email row: confirmed, or waiting for the code
+  const ok=USER.email&&USER.ev;
+  x=x.replace(/<div class="m-li pf-em">[\s\S]*?<\/div>/,ok?`<div class="m-li pf-em pf-ro">${mS('chat')}<span>Email</span><small><i class="em-t">${esc(USER.email)}</i><em class="a-vf">${mS('check')}Verified</em></small></div>`
+    :`<button class="m-li pf-em" type="button" data-aconf="1">${mS('chat')}<span>Email</span><small><i class="em-t">${esc(USER.emailNew||USER.email||'')}</i><em class="a-nv">${USER.emailNew||USER.email?'Confirm':'Add'}</em></small>${mS('chev')}</button>`);
+  const has=SHOP&&SHOP.shop;
+  const row=`<div class="m-dl">Selling</div><div class="m-dg"><button class="m-li" type="button" data-myshop="1">${mS('store')}<span>${has?esc(SHOP.shop.name)||'Your shop':'Open a shop'}</span><small>${has?'Dashboard':''}</small>${mS('chev')}</button></div>`;
+  x=x.replace('<div class="m-dl">Appearance</div>',row+'<div class="m-dl">Appearance</div>');
+  return x;};
+try{if(CUR&&CUR.t==='you'&&!CUR.s){shopLoad();$('#mPage').innerHTML=m2Page('you');}}catch(_){}
+})();
+</script>
+<style id="m191">
+html body.m2on .m-li.pf-em>span{flex:none}
+html body.m2on .m-li.pf-em small{min-width:0;margin-left:auto;padding-left:12px}
+html body.m2on .m-li.pf-em .em-t{font-style:normal;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body.m2on .m-li.pf-em em{flex:none}
+html body.m2on .pf-em .a-nv{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;background:rgba(251,191,36,.15);color:#FBBF24;font:600 11px "DM Sans",sans-serif;font-style:normal}
+html body.m2on.m-light .pf-em .a-nv{background:#FEF3C7;color:#B45309}
+html body.m2on .pf-em.pf-ro .a-vf{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:rgba(74,222,128,.15)!important;color:#4ADE80!important;font:600 11px "DM Sans",sans-serif;font-style:normal}
+html body.m2on.m-light .pf-em.pf-ro .a-vf{background:#E7F8EE!important;color:#16A34A!important}
+html body.m2on .pf-em .a-vf svg{width:11px;height:11px}
+</style>
 </body>
 </html>
