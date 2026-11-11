@@ -1,0 +1,25 @@
+name: Map screenshots
+# Takes screenshots of a page with the real map tiles, for design review.
+on:
+  workflow_dispatch:
+    inputs:
+      page:
+        description: Page path
+        default: v12/brand/index.html
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Shoot
+        run: |
+          mkdir -p shots /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i playwright@1.48.2 >/dev/null && npx playwright install --with-deps chromium >/dev/null
+          cd $GITHUB_WORKSPACE && (python3 -m http.server 8000 >/dev/null 2>&1 &) && sleep 2
+          NODE_PATH=/tmp/pw/node_modules PAGE="${{ inputs.page }}" node .github/shots/shot.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shots
+          path: shots/

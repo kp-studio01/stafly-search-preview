@@ -9527,5 +9527,29 @@ body.lv-on #lvBk{display:block}
   document.body.appendChild(b);}
 if(document.body)mk();else document.addEventListener('DOMContentLoaded',mk);})();
 </script>
+<script id="m215">
+/* m215: glowing roads on the Map view (Danny's white-map reference). Satellite view unchanged. */
+(function(){
+var G={light:{maj:'#FF9F2E',min:'#FFB65C',path:'rgba(255,170,80,.55)',gmaj:'rgba(255,150,40,.55)',gmin:'rgba(255,165,70,.38)'},
+       dark:{maj:'#FFB14E',min:'rgba(255,184,96,.78)',path:'rgba(255,180,100,.32)',gmaj:'rgba(255,145,40,.62)',gmin:'rgba(255,160,60,.36)'}};
+function W(a,b,c){return ['interpolate',['exponential',1.6],['zoom'],13,a,16,b,19,c];}
+function ensure(){if(typeof map==='undefined'||!map.getLayer||!map.getLayer('minor'))return false;
+  if(!map.getLayer('glw-min'))map.addLayer({id:'glw-min',type:'line',source:'ofm','source-layer':'transportation',filter:['in',['get','class'],['literal',['minor','service','residential','unclassified']]],layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'rgba(0,0,0,0)','line-width':W(3,10,34),'line-blur':W(2,7,24)}},'minor');
+  if(!map.getLayer('glw-maj'))map.addLayer({id:'glw-maj',type:'line',source:'ofm','source-layer':'transportation',filter:['in',['get','class'],['literal',['primary','secondary','tertiary','trunk','motorway']]],layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'rgba(0,0,0,0)','line-width':W(6,18,56),'line-blur':W(4,12,40)}},'minor');
+  return true;}
+function paint(){if(!ensure())return;var on=typeof SAT!=='undefined'&&SAT;var t=document.body.classList.contains('m-light')?G.light:G.dark;
+  var sp=function(id,k,v){try{map.setPaintProperty(id,k,v);}catch(_){}};
+  ['glw-min','glw-maj'].forEach(function(id){try{map.setLayoutProperty(id,'visibility',on?'none':'visible');}catch(_){}});
+  if(on)return;
+  sp('glw-maj','line-color',t.gmaj);sp('glw-min','line-color',t.gmin);
+  sp('major','line-color',t.maj);sp('minor','line-color',t.min);sp('paths','line-color',t.path);
+  sp('major','line-width',W(1,3.2,12));sp('minor','line-width',W(.5,1.8,7));}
+window.m215Paint=paint;
+var o=window.setSat;if(typeof o==='function'){window.setSat=function(){var r=o.apply(this,arguments);paint();return r;};}
+var oa=window.applyTheme;if(typeof oa==='function'){window.applyTheme=function(){var r=oa.apply(this,arguments);paint();return r;};}
+function hook(){if(typeof map!=='undefined'&&map.on){if(map.loaded&&map.loaded())paint();map.on('load',paint);map.on('style.load',paint);}else setTimeout(hook,300);}
+hook();
+})();
+</script>
 </body>
 </html>
