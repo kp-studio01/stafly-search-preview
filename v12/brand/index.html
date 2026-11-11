@@ -9365,20 +9365,23 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .ph:not(.ic):
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .ph:not(.ic):not(:has(.pk))::after{bottom:14px!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .ph:not(.ic)::after{top:auto!important;bottom:30px!important;right:16px!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .ph:not(.ic):not(:has(.pk))::after{bottom:16px!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx{transition:border-radius .25s ease!important;will-change:transform}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx.mi-flip{transition:transform .32s cubic-bezier(.2,.8,.2,1),border-radius .25s ease!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx{max-height:none!important;transition:height .38s cubic-bezier(.32,.72,0,1),border-radius .3s ease!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx.mi-flip{transition:transform .46s cubic-bezier(.32,.72,0,1),border-radius .3s ease!important;will-change:transform}
 </style>
 <script>
 /* m202: expanding a product photo slides the sheet up on the graphics card, no stutter */
 (function(){
 function hook(sh){if(!sh||sh.__m202)return;sh.__m202=1;let big=sh.classList.contains('big'),lastH=0;
   const box=()=>sh.querySelector('.bx');
-  const ro=new ResizeObserver(()=>{const b=box();if(b)lastH=b.getBoundingClientRect().height;});
+  const ro=new ResizeObserver(()=>{const b=box();if(b&&!b.classList.contains('mi-flip'))lastH=b.getBoundingClientRect().height;});
   const watch=()=>{const b=box();if(b&&!b.__ro){b.__ro=1;ro.observe(b);lastH=b.getBoundingClientRect().height;}};
-  new MutationObserver(()=>{watch();const nb=sh.classList.contains('big');if(nb===big)return;big=nb;const b=box();if(!b)return;
-    const oldH=lastH,newH=b.getBoundingClientRect().height;if(!oldH||!nb||newH<=oldH)return;
-    b.classList.remove('mi-flip');b.style.transform='translateY('+(newH-oldH)+'px)';b.getBoundingClientRect();
-    requestAnimationFrame(()=>{b.classList.add('mi-flip');b.style.transform='';setTimeout(()=>b.classList.remove('mi-flip'),360);});
+  new MutationObserver(()=>{const nb=sh.classList.contains('big');if(nb===big){watch();return;}big=nb;const b=box();if(!b)return;
+    if(!nb)return; /* closing: the height glides down on its own */
+    const oldH=lastH;b.style.setProperty('transition','none','important');const newH=b.getBoundingClientRect().height;
+    if(!oldH||newH<=oldH){b.style.removeProperty('transition');return;}
+    b.style.transform='translateY('+(newH-oldH)+'px)';b.getBoundingClientRect();
+    b.style.removeProperty('transition');b.classList.add('mi-flip');
+    requestAnimationFrame(()=>{b.style.transform='';setTimeout(()=>{b.classList.remove('mi-flip');lastH=b.getBoundingClientRect().height;},500);});
   }).observe(sh,{attributes:true,attributeFilter:['class'],childList:true});watch();}
 const go=()=>hook(document.getElementById('miSh'));go();
 new MutationObserver(go).observe(document.body,{childList:true});
