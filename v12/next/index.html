@@ -3243,7 +3243,7 @@ ISL.addEventListener('click',e=>{const t=e.target;if(window.__m2&&!t.closest('[d
 var APPI=(document.querySelector('.appicon svg')||{outerHTML:''}).outerHTML;
 var NI={map:'<path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" /><path d="M15 5.764v15" /><path d="M9 3.236v15" />',list:'<path d="M3 12h.01" /><path d="M3 18h.01" /><path d="M3 6h.01" /><path d="M8 12h13" /><path d="M8 18h13" /><path d="M8 6h13" />',radio:'<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" /><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" /><circle cx="12" cy="12" r="2" /><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" /><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" />',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />',grid:'<rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" />',chat:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />',heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />',store:'<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" /><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" /><path d="M2 7h20" /><path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7" />',info:'<circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />',arrow:'<path d="M5 12h14" /><path d="m12 5 7 7-7 7" />',list2:'<path d="M3 12h.01" /><path d="M3 18h.01" /><path d="M3 6h.01" /><path d="M8 12h13" /><path d="M8 18h13" /><path d="M8 6h13" />'};
 var PG='map';
-var CHATS=[{id:'mamatee',t:"Your jollof is packed. Rider leaves in 5 minutes, I'll send his number.",tm:'1:12 PM',n:1},{id:'printpro',t:'Got your PDF. 24 pages, spiral binding, ready by 3pm.',tm:'11:40 AM',n:1},{id:'tolu',t:'Saturday 9am works. See you then, babe.',tm:'Yesterday',n:0}];
+var CHATS=[];
 function shellCounts(){const op=V.filter(isOpen).length;return{op,live:DROPS.length,groups:Object.keys(GROUPS).length,chats:CHATS.filter(c=>c.n).length};}
 function renderShell(){
   const c=shellCounts();
@@ -3345,7 +3345,7 @@ addEventListener('resize',placePop);
 var MI;
 MI={"user": "<circle cx=\"12\" cy=\"8\" r=\"5\" /><path d=\"M20 21a8 8 0 0 0-16 0\" />", "search": "<circle cx=\"11\" cy=\"11\" r=\"8\" /><path d=\"m21 21-4.3-4.3\" />", "sliders": "<line x1=\"21\" x2=\"14\" y1=\"4\" y2=\"4\" /><line x1=\"10\" x2=\"3\" y1=\"4\" y2=\"4\" /><line x1=\"21\" x2=\"12\" y1=\"12\" y2=\"12\" /><line x1=\"8\" x2=\"3\" y1=\"12\" y2=\"12\" /><line x1=\"21\" x2=\"16\" y1=\"20\" y2=\"20\" /><line x1=\"12\" x2=\"3\" y1=\"20\" y2=\"20\" /><line x1=\"14\" x2=\"14\" y1=\"2\" y2=\"6\" /><line x1=\"8\" x2=\"8\" y1=\"10\" y2=\"14\" /><line x1=\"16\" x2=\"16\" y1=\"18\" y2=\"22\" />", "bell": "<path d=\"M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9\" /><path d=\"M10.3 21a1.94 1.94 0 0 0 3.4 0\" />", "compass": "<path d=\"m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z\" /><circle cx=\"12\" cy=\"12\" r=\"10\" />", "list": "<path d=\"M3 12h.01\" /><path d=\"M3 18h.01\" /><path d=\"M3 6h.01\" /><path d=\"M8 12h13\" /><path d=\"M8 18h13\" /><path d=\"M8 6h13\" />", "radio": "<path d=\"M4.9 19.1C1 15.2 1 8.8 4.9 4.9\" /><path d=\"M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5\" /><circle cx=\"12\" cy=\"12\" r=\"2\" /><path d=\"M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5\" /><path d=\"M19.1 4.9C23 8.8 23 15.1 19.1 19\" />", "users": "<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\" /><circle cx=\"9\" cy=\"7\" r=\"4\" /><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\" /><path d=\"M16 3.13a4 4 0 0 1 0 7.75\" />", "chat": "<path d=\"M7.9 20A9 9 0 1 0 4 16.1L2 22Z\" />", "phone": "<path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\" />", "chev": "<path d=\"m9 18 6-6-6-6\" />", "back": "<path d=\"m12 19-7-7 7-7\" /><path d=\"M19 12H5\" />", "heart": "<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\" />", "share": "<circle cx=\"18\" cy=\"5\" r=\"3\" /><circle cx=\"6\" cy=\"12\" r=\"3\" /><circle cx=\"18\" cy=\"19\" r=\"3\" /><line x1=\"8.59\" x2=\"15.42\" y1=\"13.51\" y2=\"17.49\" /><line x1=\"15.41\" x2=\"8.59\" y1=\"6.51\" y2=\"10.49\" />", "nav": "<polygon points=\"3 11 22 2 13 21 11 13 3 11\" />", "store": "<path d=\"m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7\" /><path d=\"M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8\" /><path d=\"M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4\" /><path d=\"M2 7h20\" /><path d=\"M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7\" />", "grid": "<rect width=\"7\" height=\"7\" x=\"3\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"7\" x=\"14\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"7\" x=\"14\" y=\"14\" rx=\"1\" /><rect width=\"7\" height=\"7\" x=\"3\" y=\"14\" rx=\"1\" />", "info": "<circle cx=\"12\" cy=\"12\" r=\"10\" /><path d=\"M12 16v-4\" /><path d=\"M12 8h.01\" />", "check": "<path d=\"M20 6 9 17l-5-5\" />", "clock": "<circle cx=\"12\" cy=\"12\" r=\"10\" /><polyline points=\"12 6 12 12 16 14\" />", "bike": "<circle cx=\"18.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"5.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"15\" cy=\"5\" r=\"1\" /><path d=\"M12 17.5V14l-3-3 4-3 2 3h2\" />", "pin": "<path d=\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0\" /><circle cx=\"12\" cy=\"10\" r=\"3\" />", "tag": "<path d=\"M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z\" /><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" />", "star": "<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\" />", "x": "<path d=\"M18 6 6 18\" /><path d=\"m6 6 12 12\" />", "walk": "<path d=\"M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z\" /><path d=\"M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z\" /><path d=\"M16 17h4\" /><path d=\"M4 13h4\" />", "shield": "<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\" /><path d=\"m9 12 2 2 4-4\" />", "zap": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\" />", "up": "<path d=\"M7 7h10v10\" /><path d=\"M7 17 17 7\" />"};
 var CUR={t:'explore',s:null,id:null,sel:null};
-var SAVED=new Set(['printpro','tolu']);var ALSEEN=false;
+var SAVED=new Set();var ALSEEN=false;
 const mS=k=>S(MI[k]);
 const catL=k=>CATS.find(c=>c[0]===k)[1].replace(' and repairs','');
 const rateTxt=v=>v.reviews>=3?`${STAR}<b>${v.rating.toFixed(1)}</b> (${v.reviews})`:`New · ${v.orders} orders`;
@@ -3367,7 +3367,7 @@ function m2Apply(){const b=document.body;b.classList.remove('m-drw');
 function m2Hide(){document.body.classList.remove('m-sheeton');if(st.sel){st.sel=null;setRoute([]);for(const k in markers)markers[k].getElement().classList.remove('sel');}}
 function m2Top(){const d=document.querySelector('.m-top .dot');if(d)d.style.display=UNSEEN?'':'none';}
 function m2Tabs(){const fresh=DROPS.some(d=>d.m<2),un=CHATS.filter(c=>c.n).length;
-  $('#mTabs').innerHTML=[['explore','Explore','compass'],['places','Places','list'],['live','Live','radio'],['groups','Groups','users'],['you','You','user']].map(([k,l,ic])=>`<button class="m-tab${CUR.t===k?' on':''}" type="button" data-mtab="${k}" aria-label="${l}">${CUR.t===k&&MIF[ic]?S(MIF[ic]):mS(ic)}<span>${l}</span>${(k==='live'&&fresh)||(k==='you'&&un)?'<i></i>':''}</button>`).join('');}
+  $('#mTabs').innerHTML=[['explore','Explore','compass'],['places','Places','list'],['live','Live','radio'],['groups','Groups','users'],['you','You','user']].map(([k,l,ic])=>`<button class="m-tab${CUR.t===k?' on':''}" type="button" data-mtab="${k}" aria-label="${l}">${CUR.t===k&&MIF[ic]?S(MIF[ic]):mS(ic)}<span>${l}</span>${(k==='live'&&fresh)||(k==='you'&&un&&USER&&USER.wa)?'<i></i>':''}</button>`).join('');}
 function m2Chips(){return (st.type?`<button class="mc on mc-type" type="button" data-typex="1">${S(ICON[st.cat])}${typeL(st.type)}<b aria-label="Clear">×</b></button>`:'')+CATS.filter(([k])=>k!=='all'||!st.type).map(([k,l])=>`<button class="mc${st.cat===k?' on':''}" type="button" data-cat="${k}">${k==='all'?mS('grid'):S(ICON[k])}${k==='all'?'All':catL(k)}</button>`).join('')+`<button class="mc mc-more" type="button" data-catall="1">${mS('grid')}More</button>`;}
 function m2Refresh(){if(!$('#mChips'))return;$('#mChips').innerHTML=m2Chips();
   const op=results.filter(r=>isOpen(r.v)),nr=op.slice().sort((a,b)=>dist(a.v)-dist(b.v))[0];
@@ -3412,7 +3412,7 @@ function m2Page(t){
         <div class="g-stats"><div>${mS('users3')}<span>Joined</span><b>${n}/${g.need}</b></div><div>${mS('clock')}<span>Spots</span><b>${left>0?left+' left':'Full'}</b></div><div>${mS('walk')}<span>Shop</span><b>${walk(v)} min</b></div></div>
         <div class="g-act"><button type="button" class="g-ghost" data-mshop="${id}">View shop</button><button type="button" class="g-go" data-mjoin="${id}">${me?'You’re in':'Join group'}<i>${me?mS('check'):mS('arrow')}</i></button></div></div></div>`;}).join('')}
     <p class="m-note">Group orders close when the timer ends or the group fills. You only pay when the vendor confirms.</p>`;}
-  if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-mtalk="${v.id}">${mLogo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}<p class="m-note">Chats with shops, here on Stafly or on WhatsApp. Each shop’s assistant replies in seconds, any time of day.</p>`;
+  if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.length?'':`<div class="m-empty"><span class="ei">${mS('chat')}</span><b>No chats yet</b></div>`}${CHATS.filter(c=>vOf(c.id)).map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-mtalk="${v.id}">${mLogo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}`;
   return'';
 }
 function m2Sub(k,id){if(k==='talk')return mTalk(id);
@@ -3440,8 +3440,6 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
     ${NOTES.length?'<div class="m-sh" style="margin-top:0"><b>New</b><span>'+NOTES.length+'</span></div>':''}
     ${NOTES.map(n=>{const B=banOf(n);return al(n.kind==='group'?'users':'radio',n.kind==='group'?'var(--act)':'#FFF1F2',n.kind==='group'?'var(--ac)':'#E5394F',B.lt||n.title,B.long,Date.now()-n.at<60000?'Just now':Math.round((Date.now()-n.at)/60000)+' min ago',B.go);}).join('')}
     <div class="m-sh"><b>Earlier</b></div>
-    ${al('chat','var(--okt)','var(--ok)',mt.name+' replied',CHATS[0].t,'8 min ago','data-chat="mamatee"')}
-    ${al('zap','var(--amt)','var(--am)','PrintPro OAU has no queue',dropOf('printpro')?dropOf('printpro').t:'Walk in now.','11 min ago','data-mshop="printpro"')}
     ${al('info','#fff','var(--ink)','Welcome to Stafly Search','Tap any pin to see the walk, prices and reviews. Ordering happens in a WhatsApp chat with the shop.','Today','data-mabout="1"')}`;}
   if(k==='cats'){const tint={food:'#F6D77A',fashion:'#FFD7B5',beauty:'#F7C6E6',gadgets:'#D9CCFF',printing:'#BDEBD3',services:'#C9E4FF'};
     return`<div class="m-h c">${back()}<h1>Categories</h1><span style="width:46px"></span></div><div class="m-grid">${CATS.filter(c=>c[0]!=='all').map(([c])=>{const n=V.filter(v=>v.cat===c).length,o=V.filter(v=>v.cat===c&&isOpen(v)).length;return`<button class="m-tile" type="button" data-mcat="${c}"><span class="ci" style="background:${tint[c]}">${S(ICON[c])}</span><span><b>${catL(c)}</b><span>${n} ${n===1?'place':'places'} · ${o} open</span></span></button>`;}).join('')}</div>`;}
@@ -3827,7 +3825,7 @@ function emVerify(code){const A=AUTH;A.busy=1;A.err='';authApi('/api/search/emai
 function authDone(){const h=HALLS.find(x=>x[0]===AUTH.hall);USER={name:AUTH.name.trim().split(' ')[0],hall:h[0]==='off'?'Off campus':h[1]+(h[0]==='pg'?'':' Hall'),hk:h[0]};if(AUTH.ok)USER.wa=1;if(AUTH.email)USER.email=AUTH.email;try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}
   authClose();m2Home();const p=PEND;PEND=null;
   if(p){if(p.k==='save'){SAVED.add(p.id);try{profPush();}catch(_){}if(CUR.s==='shop')$('#mSub').innerHTML=m2Sub('shop',p.id);if(CUR.sel)m2SheetSave(p.id);}
-    else if(p.k==='join')m2Join(p.id,p.go);else if(p.k==='follow')doFollow(p.id);else if(p.k==='ask'&&window.akPostAgain)setTimeout(akPostAgain,120);else if(p.k==='talk')setTimeout(()=>m2Nav({t:CUR.t,s:'talk',id:p.id}),120);}}
+    else if(p.k==='join')m2Join(p.id,p.go);else if(p.k==='follow')doFollow(p.id);else if(p.k==='ask'&&window.akPostAgain)setTimeout(akPostAgain,120);else if(p.k==='talk')setTimeout(()=>m2Nav({t:CUR.t,s:'talk',id:p.id}),120);else if(p.k==='nav')setTimeout(()=>m2Nav(p.o),120);}}
 setTimeout(function(){if(!(USER&&USER.wa))return;authGet('/api/search/me?vid='+vidQ()).then(p=>{if(!p||p.signedIn===undefined)return;if(!p.signedIn){delete USER.wa;try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}return;}profApply(p);}).catch(()=>{});},1800);
 
 /* m186: email first, WhatsApp verified once, smooth screens */
@@ -4093,7 +4091,7 @@ const _dr=m2Drawer;m2Drawer=function(){_dr();const h=document.querySelector('#mD
 document.addEventListener('click',e=>{const t=e.target;let el;
   if(el=t.closest('[data-pfhall]')){e.stopImmediatePropagation();const h=HALLS.find(x=>x[0]===el.dataset.pfhall);if(USER&&h){USER.hall=h[0]==='off'?'Off campus':h[1]+(h[0]==='pg'?'':' Hall');USER.hk=h[0];try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}}
     document.querySelectorAll('.pf-h').forEach(b=>b.classList.toggle('on',b===el));return;}
-  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
+  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}catch(_){}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
   if(el=t.closest('#mSub [data-mtheme]')){setTimeout(()=>{if(CUR.s==='me'){const m=document.getElementById('mSub');if(m)m.innerHTML=m2Sub('me');}},30);}
 },true);
 })();
@@ -4220,7 +4218,16 @@ const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Than
 /* 2) real chat with Amara through Stafly's website-chat line */
 let vid='';try{vid=localStorage.getItem('stafly_vid')||'';}catch(e){}
 if(!/^[a-z0-9]{12,32}$/.test(vid)){vid=(Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)).replace(/[^a-z0-9]/g,'').slice(0,24);try{localStorage.setItem('stafly_vid',vid);}catch(e){}}
-let last=0,busy=false;const SEEN=new Set();
+let last=0,busy=false,got=0;const SEEN=new Set();
+const hm=at=>new Date(at||Date.now()).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+function hist(){if(!(window.USER&&USER.wa)||!ON)return;
+  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages?acct=1&vid='+vid+'&since=0',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(!j||busy)return;got=1;
+    const L=TALK[v.id]=[];SEEN.clear();
+    (j.messages||[]).forEach(m=>{last=Math.max(last,m.at||0);if(m.role==='visitor'){L.push({me:1,t:esc(m.text),tm:hm(m.at)});return;}
+      SEEN.add((m.at||0)+'|'+(m.text||'')+'|'+(m.img||''));
+      const t=m.img&&safeUrl(m.img)?`<img src="${esc(safeUrl(m.img))}" alt="" style="display:block;max-width:220px;border-radius:10px">${m.caption?'<br>'+html(m.caption):''}`:html(m.text);if(t)L.push({t,tm:hm(m.at)});});
+    if(CUR&&CUR.s==='talk'&&CUR.id===v.id)mTalkRender(v.id);}).catch(()=>{});}
+(window.SLCH=window.SLCH||{})[LIVE.sid]={v,hist,reset(){last=0;got=0;SEEN.clear();delete TALK[v.id];}};
 function push(ms){const L=TALK[v.id]=TALK[v.id]||[];let added=false;
   (ms||[]).forEach(m=>{if(!m||m.role==='visitor')return;const k=(m.at||0)+'|'+(m.text||'')+'|'+(m.img||'');if(SEEN.has(k))return;SEEN.add(k);last=Math.max(last,m.at||0);
     const t=m.img&&safeUrl(m.img)?`<img src="${esc(safeUrl(m.img))}" alt="" style="display:block;max-width:220px;border-radius:10px">${m.caption?'<br>'+html(m.caption):''}`:html(m.text);
@@ -4231,16 +4238,17 @@ const _send=mTalkSend;mTalkSend=function(id,t){if(id!==v.id||!ON)return _send.ap
   t=String(t||'').trim();if(!t)return;const L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);
   L.push({me:1,t:esc(t),tm:now()});if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:now(),n:0});
   TYP[id]=1;mTalkRender(id,true);busy=true;
-  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vid,text:t,name:(USER&&USER.name)||'',page:'Stafly Search'})})
+  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vid,acct:1,text:t,name:(USER&&USER.name)||'',page:'Stafly Search'})})
    .then(r=>r.json().then(j=>({ok:r.ok,j}))).then(({ok,j})=>{TYP[id]=0;busy=false;
+     if(!ok&&j&&j.signin){L.pop();try{if(USER){delete USER.wa;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(_){}mTalkRender(id);authOpen('',{k:'talk',id});return;}
+     if(ok){got=1;window.slChats&&setTimeout(slChats,400);}
      if(!ok){L.push({t:esc(j&&j.error||'Something went wrong. Please try again.'),tm:now()});}
      else if(!push(j.messages)&&j.paused){/* owner is replying personally; their answer arrives by polling */}
-     if(first&&!USER)L.push({sys:1,t:`Want replies from ${v.name} after you leave? <button type="button" class="lnk" data-msign="1">Add your WhatsApp number</button>`});
      mTalkRender(id);})
    .catch(()=>{TYP[id]=0;busy=false;L.push({t:`I couldn't reach ${esc(v.name)} just now. Please try again in a moment, or tap the WhatsApp button.`,tm:now()});mTalkRender(id);});};
 /* owner replies (when they take over from the dashboard) show up while the chat is open */
-setInterval(()=>{if(busy||document.hidden||!CUR||CUR.s!=='talk'||CUR.id!==v.id||!last)return;
-  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages?vid='+vid+'&since='+last).then(r=>r.ok?r.json():null).then(j=>{if(j&&push(j.messages))mTalkRender(v.id);}).catch(()=>{});},6000);
+setInterval(()=>{if(busy||document.hidden||!CUR||CUR.s!=='talk'||CUR.id!==v.id||!got||!(window.USER&&USER.wa))return;
+  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages?acct=1&vid='+vid+'&since='+last).then(r=>r.ok?r.json():null).then(j=>{if(j&&push(j.messages))mTalkRender(v.id);}).catch(()=>{});},6000);
 }
 staflyLiveShop({base:'https://kp-assistant.onrender.com',sid:'seller1',id:'foodhunt',check:/food\s*hunt/i});
 /* m180: every other real shop on Stafly */
@@ -9061,5 +9069,45 @@ html body.m2on .pf-ro .a-vf{display:inline-flex;align-items:center;gap:4px;paddi
 html body.m2on.m-light .pf-ro .a-vf{background:#E7F8EE;color:#16A34A}
 html body.m2on .pf-ro .a-vf svg{width:11px;height:11px}
 </style>
+<script>
+/* m188: personal things only for signed-in buyers */
+(function(){
+const IN=()=>!!(window.USER&&USER.wa);
+const MINE_ONLY={alerts:1,saved:1,following:1,mine:1,chats:1,spots:1};
+function mark(){document.body.classList.toggle('m-guest',!IN());}
+mark();setInterval(mark,800);
+if(window.m2Nav){const _nv=m2Nav;m2Nav=function(o){
+  if(o&&o.s&&MINE_ONLY[o.s]&&!IN()){authOpen('',{k:'nav',o:Object.assign({},o)});return;}
+  return _nv.apply(this,arguments);};}
+// no pop-up alerts for guests
+if(window.m2Notify){const _no=m2Notify;m2Notify=function(o){if(!IN())return;return _no.apply(this,arguments);};try{if(typeof notify!=='undefined')notify=m2Notify;}catch(_){}}
+// desktop menu: personal pages too
+document.addEventListener('click',e=>{const g=e.target.closest&&e.target.closest('#drawer [data-go="chats"],#drawer [data-go="saved"]');if(g&&!IN()){e.preventDefault();e.stopImmediatePropagation();authOpen('');}},true);
+})();
+</script>
+<style id="m188">
+body.m-guest [data-msub="alerts"],body.m-guest [data-msub="saved"],body.m-guest [data-msub="following"],body.m-guest [data-msub="chats"],
+body.m-guest [data-mmine],body.m-guest #mDrawer [data-msub="me"],body.m-guest [data-lvtab="following"],body.m-guest #drawer [data-go="chats"],body.m-guest #drawer [data-go="saved"],body.m-guest .m-top .dot,body.m-guest #mBan{display:none!important}
+</style>
+<script>
+/* m189: your real chats, from your account */
+(function(){
+const esc=x=>String(x||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hm=at=>{const d=new Date(at),t=new Date();return d.toDateString()===t.toDateString()?d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):(t-d<6*864e5?d.toLocaleDateString('en-US',{weekday:'short'}):d.toLocaleDateString('en-US',{day:'numeric',month:'short'}));};
+let busy=0,was=0;
+window.slChats=function(){if(!(window.USER&&USER.wa)||busy)return;busy=1;
+  authGet('/api/search/chats?vid='+vidQ()).then(d=>{busy=0;if(!d||!Array.isArray(d.chats))return;
+    const real=d.chats.map(c=>{const x=(window.SLCH||{})[c.sid],id=x?x.v.id:(c.sid==='seller1'?'foodhunt':'s_'+c.sid);return{id,t:(c.mine?'You: ':'')+esc(c.text),tm:hm(c.at),n:0};}).filter(c=>vOf(c.id));
+    const ids=new Set(real.map(c=>c.id)),rest=CHATS.filter(c=>!ids.has(c.id)&&!(window.SLCH&&Object.values(SLCH).some(x=>x.v.id===c.id)));
+    CHATS.length=0;real.concat(rest).forEach(c=>CHATS.push(c));
+    if(CUR&&CUR.s==='chats')$('#mSub').innerHTML=m2Sub('chats');},()=>{busy=0;});};
+const _nv=m2Nav;m2Nav=function(o){const r=_nv.apply(this,arguments);
+  if(o&&o.s==='chats')slChats();
+  if(o&&o.s==='talk'&&window.USER&&USER.wa){const x=Object.values(window.SLCH||{}).find(x=>x.v.id===o.id);if(x)x.hist();}
+  return r;};
+// first time signed in on this page (or right after signing in): fetch chats once shops have loaded
+setInterval(()=>{const on=!!(window.USER&&USER.wa);if(on&&!was){setTimeout(slChats,1500);setTimeout(slChats,6000);}if(!on&&was){CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}was=on;},800);
+})();
+</script>
 </body>
 </html>
