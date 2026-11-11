@@ -9365,8 +9365,8 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .ph:not(.ic):
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .ph:not(.ic):not(:has(.pk))::after{bottom:14px!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .ph:not(.ic)::after{top:auto!important;bottom:30px!important;right:16px!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .ph:not(.ic):not(:has(.pk))::after{bottom:16px!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx{max-height:none!important;transition:height .38s cubic-bezier(.32,.72,0,1),border-radius .3s ease!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx.mi-flip{transition:clip-path .48s cubic-bezier(.4,0,.2,1)!important;will-change:clip-path}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx{max-height:none!important;transition:height .42s cubic-bezier(.4,0,.2,1),border-radius .3s ease!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx{contain:layout paint}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.ph{will-change:height;backface-visibility:hidden}
 </style>
 <script>
 /* m202: expanding a product photo slides the sheet up on the graphics card, no stutter */
@@ -9380,11 +9380,7 @@ function hook(sh){if(!sh||sh.__m202)return;sh.__m202=1;let big=sh.classList.cont
     if(!nb){if(inn)inn.style.removeProperty('height');return;} /* closing: the height glides down on its own */
     /* opening: text and button stay exactly where they are; the photo grows up from the top */
     if(inn&&lastIn&&!sh.classList.contains('open'))inn.style.setProperty('height',lastIn+'px','important');
-    const oldH=lastH;b.style.setProperty('transition','none','important');const newH=b.getBoundingClientRect().height;
-    if(!oldH||newH<=oldH){b.style.removeProperty('transition');return;}
-    b.style.clipPath='inset('+(newH-oldH)+'px 0 0 0 round 28px 28px 0 0)';b.getBoundingClientRect();
-    b.style.removeProperty('transition');b.classList.add('mi-flip');
-    requestAnimationFrame(()=>{b.style.clipPath='inset(0px 0 0 0 round 0px 0px 0 0)';setTimeout(()=>{b.classList.remove('mi-flip');b.style.clipPath='';lastH=b.getBoundingClientRect().height;},500);});
+    /* the box height glides up (CSS), so the photo grows with the motion */
   }).observe(sh,{attributes:true,attributeFilter:['class'],childList:true});watch();}
 const go=()=>hook(document.getElementById('miSh'));go();
 new MutationObserver(go).observe(document.body,{childList:true});
