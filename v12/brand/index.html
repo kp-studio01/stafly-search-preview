@@ -9319,5 +9319,22 @@ if(window.m2Drawer){const _d=m2Drawer;m2Drawer=function(){const r=_d.apply(this,
 if(window.m2Apply){const _a=m2Apply;m2Apply=function(){const r=_a.apply(this,arguments);prune(document.getElementById('mPage'));prune(document.getElementById('mSub'));return r;};}
 })();
 </script>
+<style id="m199">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) .mi-sh .bx{background:#0E0E11!important;box-shadow:0 0 0 1px rgba(255,255,255,.05)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .ad:not(.rm){background:#7551DC!important;background-image:none!important;color:#fff!important;box-shadow:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) .mi-sh .mi-qb{border-color:rgba(255,255,255,.12)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) .mi-sh .ph.ic{background:#16161A!important}
+html:not(.boot-light) #boot{background:#0B0B0E!important}
+#mLocT{transition:opacity .3s,transform .3s}
+</style>
+<script>
+/* m199: the location note sits just above the "places" card, same gap on every phone */
+(function(){const t=document.getElementById('mLocT');if(!t)return;
+function place(){const n=document.querySelector('.m-near');let b=null;
+  if(n&&n.offsetParent!==null){const r=n.getBoundingClientRect();if(r.height&&r.top<innerHeight)b=Math.round(innerHeight-r.top+12);}
+  t.style.setProperty('bottom',(b||238)+'px','important');}
+new MutationObserver(()=>{if(t.classList.contains('in'))place();}).observe(t,{attributes:true,attributeFilter:['class']});
+addEventListener('resize',place);place();})();
+</script>
 </body>
 </html>
