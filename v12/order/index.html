@@ -8,7 +8,7 @@ const get=()=>{try{return localStorage.getItem(K)||'';}catch(_){return'';}};
 const set=k=>{try{k?localStorage.setItem(K,k):localStorage.removeItem(K);}catch(_){}};
 const acct=u=>/\/api\/search\/(?!shops)/.test(u)||/\/api\/w\/[^/]+\/messages/.test(u)&&/acct/.test(u);
 window.fetch=function(input,init){const u=String(typeof input==='string'?input:(input&&input.url)||'');
-  let body=init&&init.body;if(!acct(u)&&!(typeof body==='string'&&/\/api\/w\/[^/]+\/messages/.test(u)&&/"acct":1/.test(body)))return F(input,init);
+  let body=init&&init.body;if(!acct(u)&&!(typeof body==='string'&&/\/api\/w\/[^/]+\/(messages|order)/.test(u)&&/"acct":1/.test(body)))return F(input,init);
   const k=get();init=Object.assign({},init||{});const hd=new Headers(init.headers||{});if(k)hd.set('X-Stafly-Key',k);init.headers=hd;
   return F(input,init).then(r=>{
     if(/\/api\/search\/signout/.test(u))set('');
@@ -4107,7 +4107,7 @@ const _dr=m2Drawer;m2Drawer=function(){_dr();const h=document.querySelector('#mD
 document.addEventListener('click',e=>{const t=e.target;let el;
   if(el=t.closest('[data-pfhall]')){e.stopImmediatePropagation();const h=HALLS.find(x=>x[0]===el.dataset.pfhall);if(USER&&h){USER.hall=h[0]==='off'?'Off campus':h[1]+(h[0]==='pg'?'':' Hall');USER.hk=h[0];try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}}
     document.querySelectorAll('.pf-h').forEach(b=>b.classList.toggle('on',b===el));return;}
-  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}catch(_){}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
+  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();try{FOLLOW.clear();SAVED.clear();localStorage.removeItem('stafly_follow');}catch(_){}try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}catch(_){}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
   if(el=t.closest('#mSub [data-mtheme]')){setTimeout(()=>{if(CUR.s==='me'){const m=document.getElementById('mSub');if(m)m.innerHTML=m2Sub('me');}},30);}
 },true);
 })();
@@ -4712,7 +4712,7 @@ async function pay(v){ERR='';
   const ph=String(CK.phone||'').replace(/\D/g,'');if(!CK.hall.trim()||/^\s*off[ -]?campus\s*$/i.test(CK.hall)){ERR=/off/i.test(CK.hall)?'Which area off campus? Like Asherifa or Mayfair.':'Tell the shop where to bring it.';return rer();}
   if(!/^(0[789]\d{9}|234[789]\d{9}|[789]\d{9})$/.test(ph)){ERR='Add your WhatsApp number, like 0803 123 4567.';return rer();}
   const L=lines(v);if(!L.length)return;BUSY=true;rer();
-  const body={vid:(localStorage.getItem('stafly_vid')||('v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10))).replace(/[^a-z0-9]/g,'').slice(0,24),phone:ph,name:CK.name,hall:CK.hall,note:CK.note,items:L.map(l=>({name:l.name,qty:l.qty})),back:location.origin+location.pathname};
+  const body={acct:1,vid:(localStorage.getItem('stafly_vid')||('v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10))).replace(/[^a-z0-9]/g,'').slice(0,24),phone:ph,name:CK.name,hall:CK.hall,note:CK.note,items:L.map(l=>({name:l.name,qty:l.qty})),back:location.origin+location.pathname};
   if(CK.mode==='new'){body.group='new';body.groupSize=4;}else if(CK.mode!=='solo')body.group=CK.mode;
   if(isReal(v)){try{const r=await fetch(API+'/api/w/'+v.sid+'/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       if(r.status!==404){const j=await r.json().catch(()=>({}));BUSY=false;
@@ -8677,7 +8677,7 @@ var ASKS=[
  {n:'Femi K.',h:'Angola Hall',m:41,t:'Who has amala and ewedu near Angola right now?',c:'food',b:2500,o:5},
  {n:'Bisi T.',h:'Moremi Hall',m:52,t:'Need someone to iron 6 shirts before 8am tomorrow.',c:'services',b:1500,o:0},
  {n:'Zainab M.',h:'Mozambique Hall',m:70,t:'Looking for a used lab coat, size M.',c:'fashion',b:4000,o:1}];
-var ROLE='buyer';try{ROLE=localStorage.getItem('stafly_demo_role')||'buyer';}catch(_){}
+var ROLE='buyer';try{ROLE=(/[?&]preview=1/.test(location.search)&&localStorage.getItem('stafly_demo_role'))||'buyer';}catch(_){}
 var OPEN={};var MINEASK=[{id:'me0',n:'You',h:'Moremi Hall',m:9,t:'Anyone selling a power bank near Moremi? 10,000mAh or more.',c:'gadgets',b:7000,o:2,me:1,
   R:[['Tech Corner','SUB',6500,'10,000mAh Oraimo, new in box. I can bring it to Moremi.',4],['PhoneFix OAU','Moremi Hall',7000,'20,000mAh, used for one month. You can pick it up now.',7]]}],AKM='shops',AKT='foryou',AKC='',AKQ='',SENT={};
 function ago(m){return m<1?'Just now':m<60?m+' min ago':Math.round(m/60)+' h ago';}
@@ -8713,7 +8713,7 @@ function cmpH(open){return '<div class="ak-wrap'+(open?' open':'')+'"><div class
    '<div class="ak-cts">'+CATS.map(function(c,i){return'<button type="button" data-akpc="'+c[0]+'" class="'+(i===0?'on':'')+'">'+c[1]+'</button>';}).join('')+'</div>'+
    '<div class="ak-fr"><input type="text" class="ak-hall" placeholder="Your hall" value="'+esc(myHall())+'"><input type="text" class="ak-bud" inputmode="numeric" placeholder="Budget (optional)"></div>'+
    '<div class="g-act"><button type="button" class="g-ghost" data-akno="1">Clear</button><button type="button" class="g-go" data-akpost="1">Post it<i>'+mS('arrow')+'</i></button></div></div></div>';}
-function pv(){if(SHOP)return'';return'<div class="ak-pv"><span>Preview</span><button type="button" data-akrole="buyer" class="'+(ROLE==='buyer'?'on':'')+'">View as buyer</button><button type="button" data-akrole="seller" class="'+(ROLE==='seller'?'on':'')+'">View as seller</button></div>';}
+function pv(){if(SHOP||!/[?&]preview=1/.test(location.search))return'';return'<div class="ak-pv"><span>Preview</span><button type="button" data-akrole="buyer" class="'+(ROLE==='buyer'?'on':'')+'">View as buyer</button><button type="button" data-akrole="seller" class="'+(ROLE==='seller'?'on':'')+'">View as seller</button></div>';}
 function needPage(head){
   var circ='<div class="lv-row lv2">'+CATS.map(function(c){return'<button type="button" class="lv-st ak-ct'+(AKC===c[0]?' on':'')+'" data-akcat="'+c[0]+'"><span class="rg"><span class="logo mlg">'+icon(c[0])+'</span></span><em>'+c[1]+'</em></button>';}).join('')+'</div>';
   var bar='<label class="m-field lv-q">'+mS('search')+'<input id="akQ" type="search" placeholder="Search what students need" value="'+esc(AKQ)+'" autocomplete="off" enterkeyhint="search"></label>';
@@ -8769,7 +8769,7 @@ var _pg=window.m2Page;window.m2Page=function(t){var h=_pg.apply(this,arguments);
   var a=h.indexOf('<div class="lv-row lv2">');if(a<0)return h;
   var b=h.indexOf('<label class="m-field lv-q">');if(b<0)b=h.indexOf('<div class="lv-tabs">');if(b<0)return h;
   if(AKM==='need')return ROLE==='seller'?needPage(h.slice(0,a)):buyerPage(h.slice(0,a));
-  var F=(typeof FOLLOW!=='undefined'&&FOLLOW)||new Set(),mine=[],rest=[];
+  var F=(window.USER&&USER.wa&&typeof FOLLOW!=='undefined'&&FOLLOW)||new Set(),mine=[],rest=[];
   h.slice(a,b).replace(/<button type="button" class="lv-st[^"]*" data-lvgo="([^"]+)">[\s\S]*?<\/em><\/button>/g,function(m,id){if(F.has(id))mine.push(m);else rest.push(m.replace(/<i class="lv-dot">NEW<\/i>/,'').replace('</span><em>','</span><i class="ak-fo">+</i><em>'));return m;});
   var lab=mine.length?'Your shops<span style="opacity:.5">·</span>Suggested':'Suggested shops';
   var row='<div class="ak-lb">'+lab+'</div><div class="lv-row lv2">'+mine.join('')+(mine.length&&rest.length?'<span class="ak-dv"></span>':'')+rest.join('')+'</div>';
@@ -9209,6 +9209,17 @@ html body.m2on.m-light .pf-em .a-nv{background:#FEF3C7;color:#B45309}
 html body.m2on .pf-em.pf-ro .a-vf{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:rgba(74,222,128,.15)!important;color:#4ADE80!important;font:600 11px "DM Sans",sans-serif;font-style:normal}
 html body.m2on.m-light .pf-em.pf-ro .a-vf{background:#E7F8EE!important;color:#16A34A!important}
 html body.m2on .pf-em .a-vf svg{width:11px;height:11px}
+</style>
+<script>
+/* m193: paying needs your account; profile page as a guest -> sign in */
+(function(){const IN=()=>!!(window.USER&&USER.wa);
+window.addEventListener('click',e=>{const t=e.target;if(!t.closest||IN())return;
+  if(t.closest('[data-mpay]')){e.stopImmediatePropagation();e.preventDefault();authOpen('',{k:'nav',o:Object.assign({},CUR)});}},true);
+if(window.m2Nav){const _nv=m2Nav;m2Nav=function(o){if(o&&o.s==='me'&&!IN())o=Object.assign({},o,{t:'you',s:null});return _nv.call(this,o);};}
+})();
+</script>
+<style id="m193">
+body.m-guest .ak-lb2,body.m-guest #akList{display:none!important}
 </style>
 </body>
 </html>
