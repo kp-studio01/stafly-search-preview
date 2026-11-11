@@ -9512,5 +9512,20 @@ function go(){var f=function(){(window.requestIdleCallback||function(cb){setTime
 if(document.readyState==='complete')go();else addEventListener('load',go);
 })();
 </script>
+<style id="m214">
+/* m214: desktop selected menu item readable again (ink on light pill, dark mode) */
+html body.m2on.m2on.m2on.dk:not(.m-light) #mTabs .m-tab.on,html body.m2on.m2on.m2on.dk:not(.m-light) #mTabs .m-tab.on span,html body.m2on.m2on.m2on.dk:not(.m-light) #mTabs .m-tab.on svg{color:#121215!important}
+/* m214: Live viewer blocks the page behind it */
+#lvBk{position:fixed;inset:0;z-index:2599;display:none;background:transparent}
+html body.m2on.m2on.m2on.dk #lvBk{z-index:1199}
+body.lv-on #lvBk{display:block}
+</style>
+<script>
+(function(){function mk(){if(document.getElementById('lvBk'))return;var b=document.createElement('div');b.id='lvBk';b.setAttribute('aria-hidden','true');
+  b.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();try{lvClose();}catch(_){}});
+  ['wheel','touchmove'].forEach(function(t){b.addEventListener(t,function(e){e.preventDefault();},{passive:false});});
+  document.body.appendChild(b);}
+if(document.body)mk();else document.addEventListener('DOMContentLoaded',mk);})();
+</script>
 </body>
 </html>
