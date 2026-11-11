@@ -9375,8 +9375,7 @@ function hook(sh){if(!sh||sh.__m202)return;sh.__m202=1;let big=sh.classList.cont
   const box=()=>sh.querySelector('.bx');
   const ro=new ResizeObserver(()=>{const b=box();if(!b||b.classList.contains('mi-flip'))return;lastH=b.getBoundingClientRect().height;if(!sh.classList.contains('big')){const i=b.querySelector(':scope>.in');if(i)lastIn=i.getBoundingClientRect().height;}});
   const watch=()=>{const b=box();if(b&&!b.__ro){b.__ro=1;ro.observe(b);lastH=b.getBoundingClientRect().height;const i=b.querySelector(':scope>.in');if(i)lastIn=i.getBoundingClientRect().height;}};
-  new MutationObserver(()=>{if(sh.classList.contains('big')&&sh.querySelector('.bx>.ph.ic')){sh.classList.remove('big');return;} /* no photo: nothing to show full screen */
-    const nb=sh.classList.contains('big');if(nb===big){watch();return;}big=nb;const b=box();if(!b)return;
+  new MutationObserver(()=>{const nb=sh.classList.contains('big');if(nb===big){watch();return;}big=nb;const b=box();if(!b)return;
     const inn=b.querySelector(':scope>.in');
     if(!nb){if(inn)inn.style.removeProperty('height');return;} /* closing: the height glides down on its own */
     /* opening: text and button stay exactly where they are; the photo grows up from the top */
@@ -9408,6 +9407,16 @@ const hooked=new Set();
 function hook(){wrap();[['mFs','fs'],['catSheet','cat']].forEach(([id,k])=>{const e=document.getElementById(id);if(e&&!hooked.has(e)){hooked.add(e);new MutationObserver(()=>sync(k)).observe(e,{attributes:true,attributeFilter:['class']});}});}
 hook();new MutationObserver(hook).observe(document.body,{childList:true});
 })();
+</script>
+<style id="m204">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .pk,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .pk{bottom:14px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .ph:not(.ic)::after{bottom:24px!important}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .ph:not(.ic):not(:has(.pk))::after{bottom:16px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big .bx>.ph.ic{cursor:zoom-out}
+</style>
+<script>
+/* m204: in full screen, a product with no photo stays full screen while you swipe; a tap on it goes back to normal size */
+window.addEventListener('click',e=>{const sh=document.getElementById('miSh');if(!sh||!sh.classList.contains('big'))return;
+  const t=e.target;if(t.closest&&t.closest('.bx>.ph.ic')&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();sh.classList.remove('big');}},true);
 </script>
 </body>
 </html>
