@@ -2728,8 +2728,8 @@ function undo(){OFF=true;try{localStorage.setItem('stafly_cdn_off','1');}catch(_
     try{(typeof DROPS!=='undefined'?DROPS:[]).forEach(function(d){d.img=back(d.img);(d.slides||[]).forEach(function(x){x.img=back(x.img);});});}catch(_){}
     try{render();}catch(_){}try{m2Apply();}catch(_){}}catch(_){}}
 if(CLD){var im=new Image(),done=false;
-  var CK=/[?&]cdncheck/.test(location.search);im.onload=function(){if(CK)setTimeout(function(){alert('Fast photos: ON')},800);done=true;try{localStorage.removeItem('stafly_cdn_off');}catch(_){}OFF=false;};
-  im.onerror=function(){if(CK)setTimeout(function(){alert('Fast photos: OFF')},800);done=true;undo();};
+  im.onload=function(){done=true;try{localStorage.removeItem('stafly_cdn_off');}catch(_){}OFF=false;};
+  im.onerror=function(){done=true;undo();};
   im.src='https://res.cloudinary.com/'+CLD+'/image/fetch/f_auto,q_auto,w_16/https://kp-assistant.onrender.com/ui/auth-window.jpg?p=1';
   setTimeout(function(){if(!done)undo();},12000);}
 })();
@@ -9511,6 +9511,21 @@ new MutationObserver(mapOff).observe(document.body,{attributes:true,attributeFil
 function go(){var f=function(){(window.requestIdleCallback||function(cb){setTimeout(cb,1)})(warm,{timeout:1500});};setTimeout(f,2500);setTimeout(decode,3000);}
 if(document.readyState==='complete')go();else addEventListener('load',go);
 })();
+</script>
+<style id="m214">
+/* m214: desktop selected menu item readable again (ink on light pill, dark mode) */
+html body.m2on.m2on.m2on.dk:not(.m-light) #mTabs .m-tab.on,html body.m2on.m2on.m2on.dk:not(.m-light) #mTabs .m-tab.on span,html body.m2on.m2on.m2on.dk:not(.m-light) #mTabs .m-tab.on svg{color:#121215!important}
+/* m214: Live viewer blocks the page behind it */
+#lvBk{position:fixed;inset:0;z-index:2599;display:none;background:transparent}
+html body.m2on.m2on.m2on.dk #lvBk{z-index:1199}
+body.lv-on #lvBk{display:block}
+</style>
+<script>
+(function(){function mk(){if(document.getElementById('lvBk'))return;var b=document.createElement('div');b.id='lvBk';b.setAttribute('aria-hidden','true');
+  b.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();try{lvClose();}catch(_){}});
+  ['wheel','touchmove'].forEach(function(t){b.addEventListener(t,function(e){e.preventDefault();},{passive:false});});
+  document.body.appendChild(b);}
+if(document.body)mk();else document.addEventListener('DOMContentLoaded',mk);})();
 </script>
 </body>
 </html>
