@@ -9418,5 +9418,24 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh.big
 window.addEventListener('click',e=>{const sh=document.getElementById('miSh');if(!sh||!sh.classList.contains('big'))return;
   const t=e.target;if(t.closest&&t.closest('.bx>.ph.ic')&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();sh.classList.remove('big');}},true);
 </script>
+<script>
+/* m205: product photos are loaded and decoded ahead, so swiping to the next product never shows a blank flash */
+(function(){
+const KEEP=new Map();
+function want(u){if(!u||KEEP.has(u))return;const im=new Image();im.decoding='async';im.src=u;KEEP.set(u,im);if(im.decode)im.decode().catch(()=>{});}
+function shopNow(){try{const m=(location.hash||'').match(/shop\/([^/?#]+)/);return m&&window.vOf?vOf(m[1]):null;}catch(_){return null;}}
+function warm(){const v=shopNow();if(!v||!Array.isArray(v.items))return;
+  v.items.forEach(it=>{if(!it)return;want(it[2]);(it[5]||[]).forEach(want);});
+  if(KEEP.size>120){const ks=[...KEEP.keys()];ks.slice(0,KEEP.size-120).forEach(k=>KEEP.delete(k));}}
+/* any photo already on screen in the sheet counts too */
+function fromSheet(){const sh=document.getElementById('miSh');if(!sh)return;sh.querySelectorAll('[style*="background-image"]').forEach(e=>{const m=/url\(["']?([^"')]+)["']?\)/.exec(e.style.backgroundImage);if(m)want(m[1]);});}
+addEventListener('hashchange',()=>setTimeout(warm,50));
+const go=()=>{const sh=document.getElementById('miSh');if(!sh)return setTimeout(go,300);
+  new MutationObserver(()=>{if(sh.classList.contains('on')){warm();fromSheet();}}).observe(sh,{attributes:true,attributeFilter:['class'],childList:true});};
+go();setTimeout(warm,800);
+/* the outgoing copy keeps a solid dark base, so nothing grey shows through while it slides away */
+const st=document.createElement('style');st.textContent='html body .mi-sh .bx>.ph.mi-old{background-color:transparent!important}';document.head.appendChild(st);
+})();
+</script>
 </body>
 </html>
