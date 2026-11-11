@@ -2728,8 +2728,8 @@ function undo(){OFF=true;try{localStorage.setItem('stafly_cdn_off','1');}catch(_
     try{(typeof DROPS!=='undefined'?DROPS:[]).forEach(function(d){d.img=back(d.img);(d.slides||[]).forEach(function(x){x.img=back(x.img);});});}catch(_){}
     try{render();}catch(_){}try{m2Apply();}catch(_){}}catch(_){}}
 if(CLD){var im=new Image(),done=false;
-  im.onload=function(){done=true;try{localStorage.removeItem('stafly_cdn_off');}catch(_){}OFF=false;};
-  im.onerror=function(){done=true;undo();};
+  var CK=/[?&]cdncheck/.test(location.search);im.onload=function(){if(CK)setTimeout(function(){alert('Fast photos: ON')},800);done=true;try{localStorage.removeItem('stafly_cdn_off');}catch(_){}OFF=false;};
+  im.onerror=function(){if(CK)setTimeout(function(){alert('Fast photos: OFF')},800);done=true;undo();};
   im.src='https://res.cloudinary.com/'+CLD+'/image/fetch/f_auto,q_auto,w_16/https://kp-assistant.onrender.com/ui/auth-window.jpg?p=1';
   setTimeout(function(){if(!done)undo();},12000);}
 })();
