@@ -10431,6 +10431,46 @@ window.authDone=function(){var A=AUTH,photo=A&&A.photo,room=A&&String(A.room||''
   return r;};
 })();
 </script>
+<style id="m228">
+/* m228: "account created" moment after the profile setup */
+#mAuth .ob-done{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px 0 34px;overflow:hidden}
+#mAuth .ob-done .ring{position:relative;width:96px;height:96px;margin-bottom:18px}
+#mAuth .ob-done .ring svg.r{position:absolute;inset:0;width:96px;height:96px;transform:rotate(-90deg)}
+#mAuth .ob-done .ring svg.r circle{fill:none;stroke:#4ADE80;stroke-width:3;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289;animation:obDraw .7s .1s cubic-bezier(.4,0,.2,1) forwards}
+body.m-light #mAuth .ob-done .ring svg.r circle{stroke:#16A34A}
+#mAuth .ob-done .av{position:absolute;inset:8px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 32px/1 "DM Sans",sans-serif;background:#7551DC;color:#fff;overflow:hidden;animation:obPop .45s cubic-bezier(.2,.9,.3,1.3) both}
+#mAuth .ob-done .av img{width:100%;height:100%;object-fit:cover}
+#mAuth .ob-done .ck{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#4ADE80;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--wh,#141418);animation:obPop .4s .75s cubic-bezier(.2,.9,.3,1.4) both}
+body.m-light #mAuth .ob-done .ck{background:#16A34A;box-shadow:0 0 0 4px #fff}
+#mAuth .ob-done .ck svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+#mAuth .ob-done h2{margin:0;animation:obUp .45s .55s both}
+#mAuth .ob-done p{margin:6px 0 0;opacity:.62;font-size:15px;animation:obUp .45s .68s both}
+#mAuth .ob-done i.cf{position:absolute;top:58px;left:50%;width:7px;height:11px;border-radius:2px;opacity:0;animation:obCf 1.3s .8s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes obDraw{to{stroke-dashoffset:0}}
+@keyframes obPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes obUp{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+@keyframes obCf{0%{opacity:0;transform:translate(0,0) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){#mAuth .ob-done *{animation-duration:.01s!important;animation-delay:0s!important}}
+</style>
+<script id="m228s">
+(function(){
+var D=window.authDone;if(typeof D!=='function')return;
+function E(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+window.authDone=function(){var A=AUTH,self=this,args=arguments;
+  if(!A||A.step!==3||A.edit||A._celebrated)return D.apply(self,args);
+  A._celebrated=1;var el=document.getElementById('mAuth'),pg=el&&el.querySelector('.a-pg');if(!pg)return D.apply(self,args);
+  var nm=String(A.name||'').trim().split(' ')[0],cols=['#7551DC','#4ADE80','#F5B83D','#FF7A59','#5AB0FF'],cf='';
+  for(var i=0;i<14;i++){var ang=(i/14)*Math.PI*2+Math.random()*.4,d=70+Math.random()*60;
+    cf+='<i class="cf" style="background:'+cols[i%5]+';--x:'+Math.round(Math.cos(ang)*d*1.6)+'px;--y:'+Math.round(Math.sin(ang)*d-20)+'px;--r:'+Math.round(Math.random()*540-270)+'deg;animation-delay:'+(0.8+Math.random()*.15).toFixed(2)+'s"></i>';}
+  var h0=el.offsetHeight;
+  pg.className='a-pg a-in';
+  pg.innerHTML='<div class="ob-done">'+cf+'<div class="ring"><svg class="r" viewBox="0 0 96 96"><circle cx="48" cy="48" r="46"/></svg><span class="av">'+(A.photo?'<img src="'+A.photo+'" alt="">':E((nm[0]||'').toUpperCase()))+'</span><span class="ck"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div><h2>You’re all set'+(nm?', '+E(nm):'')+'</h2><p>Your Stafly account is ready.</p></div>';
+  var bar=el.querySelector('.steps');if(bar)bar.style.visibility='hidden';
+  try{var h1=el.offsetHeight;if(Math.abs(h1-h0)>2){el.style.overflow='hidden';el.style.height=h0+'px';void el.offsetHeight;el.style.transition='transform .4s cubic-bezier(.2,.9,.2,1),height .44s cubic-bezier(.2,.8,.2,1)';el.style.height=h1+'px';setTimeout(function(){el.style.height='';el.style.overflow='';},480);}}catch(e){}
+  try{navigator.vibrate&&navigator.vibrate(18);}catch(e){}
+  setTimeout(function(){if(AUTH===A)D.apply(self,args);},2300);};
+})();
+</script>
 <style id="m222">
 /* m222: smoother sign-in step changes */
 #mAuth .a-pg.a-in{animation:aIn2 .46s cubic-bezier(.2,.8,.2,1) both}
