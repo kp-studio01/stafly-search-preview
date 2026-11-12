@@ -17,7 +17,7 @@ for(const theme of ['dark','light']) for(const [w,h,name] of [[1280,760,'desk'],
   try{await p.evaluate(()=>{window.__m220h=null;try{m220Day(true);}catch(e){}});const id=await p.evaluate(()=>__m221demo());await p.waitForTimeout(2500);
     await p.evaluate(()=>{const v=__SFO.MINE[0];const s=V.find(x=>x.id===v.shop);map.jumpTo({center:[s.ll[1],s.ll[0]],zoom:16.4,pitch:50,bearing:-20});});await p.waitForTimeout(5000);
     await p.screenshot({path:`shots/${name}-${theme}-rider.png`});console.log('rider',id,await p.evaluate(()=>document.querySelectorAll('.m221r').length));
-    await p.evaluate(()=>map.jumpTo({center:[4.5188,7.5214],zoom:17.2,pitch:50,bearing:-20}));await p.waitForTimeout(5000);await p.screenshot({path:`shots/${name}-${theme}-names.png`});
+    await p.evaluate(()=>{map.jumpTo({center:[4.5188,7.5214],zoom:17.2,pitch:50,bearing:-20});});await p.waitForTimeout(5000);await p.screenshot({path:`shots/${name}-${theme}-names.png`});
     console.log('life',await p.evaluate(()=>{try{return map.getSource('m221life')._data.features.length}catch(e){return e.message}}));}catch(e){console.log('m221err',e.message);}
   if(name==='desk'&&theme==='dark')console.log('trees',await p.evaluate(()=>{try{return map.getSource('m217t')._data.features.length}catch(e){return e.message}}),'layers',await p.evaluate(()=>map.getStyle().layers.map(l=>l.id).join(',')));
   await p.close();}
