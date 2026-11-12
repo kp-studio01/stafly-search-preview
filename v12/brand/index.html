@@ -10797,5 +10797,35 @@ window.slChatsPage=function(){document.body.classList.remove('sl-wait');try{var 
 try{if(window.USER&&USER.wa){document.body.classList.add('sl-wait');setTimeout(function(){document.body.classList.remove('sl-wait');},8000);}}catch(e){}
 </script>
 <style>body.sl-wait #mPage .m-empty{visibility:hidden}</style>
+<style id="m246">
+/* m246: chat opens smoothly: a touch quicker slide, messages fade in softly instead of popping */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk).m-subon #mSub:has(.cx-hero){transition:transform .36s cubic-bezier(.32,.72,0,1)!important;will-change:transform}
+@keyframes cxIn{from{opacity:0}to{opacity:1}}
+#mSub #mThread.cx-fade{animation:cxIn .22s ease-out both}
+</style>
+<script id="m246js">
+(function(){
+var K='stafly_tc_';
+function liveOf(id){var L=window.SLCH||{};for(var k in L){if(L[k].v&&L[k].v.id===id)return k;}return null;}
+function load(sid){try{var x=JSON.parse(localStorage.getItem(K+sid)||'null');return Array.isArray(x)?x:null;}catch(e){return null;}}
+function save(sid,L){try{localStorage.setItem(K+sid,JSON.stringify((L||[]).slice(-40)));}catch(e){}}
+function wipe(){try{Object.keys(localStorage).forEach(function(k){if(k.indexOf(K)===0)localStorage.removeItem(k);});}catch(e){}}
+var SIG={};
+function sig(id){try{return JSON.stringify(TALK[id]||[]);}catch(e){return '';}}
+/* 1) open with the last messages you saw, so nothing pops in */
+var N=window.m2Nav;if(N){window.m2Nav=m2Nav=function(o){try{if(o&&o.s==='talk'&&window.USER&&USER.wa){var sid=liveOf(o.id);if(sid&&!(TALK[o.id]&&TALK[o.id].length)){var c=load(sid);if(c&&c.length){TALK[o.id]=c;SIG[o.id]=sig(o.id);}}}}catch(e){}
+  var r=N.apply(this,arguments);try{if(o&&o.s==='talk'){var m=document.getElementById('mSub');if(m)m.scrollTop=1e6;SIG[o.id]=sig(o.id);}}catch(e){}return r;};}
+/* 2) when fresh messages arrive: skip if nothing changed; otherwise update in place, already at the bottom */
+var R=window.mTalkRender;if(R){window.mTalkRender=mTalkRender=function(id){var th=document.getElementById('mThread');var s0=sig(id);
+  var sid=liveOf(id);if(sid&&window.USER&&USER.wa)save(sid,TALK[id]);
+  if(th&&SIG[id]===s0&&th.children.length>1)return;
+  var wasEmpty=!th||!th.querySelector('.msg');
+  var r=R.apply(this,arguments);SIG[id]=s0;
+  try{var m=document.getElementById('mSub');if(m)m.scrollTop=1e6;var t2=document.getElementById('mThread');if(t2&&wasEmpty&&t2.querySelector('.msg')){t2.classList.remove('cx-fade');void t2.offsetWidth;t2.classList.add('cx-fade');}}catch(e){}return r;};}
+/* 3) signing out removes the saved messages from this phone */
+var O=window.staflySignOut;if(O){window.staflySignOut=function(){wipe();return O.apply(this,arguments);};}
+setInterval(function(){if(!(window.USER&&USER.wa))wipe();},3000);
+})();
+</script>
 </body>
 </html>
