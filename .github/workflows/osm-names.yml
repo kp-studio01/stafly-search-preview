@@ -1,0 +1,27 @@
+name: Fetch OAU named places
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ask OpenStreetMap
+        run: |
+          mkdir -p v12/data
+          Q='[out:json][timeout:90];(nwr["name"](7.495,4.495,7.545,4.560);nwr["building"]["name"](7.47,4.47,7.56,4.58););out tags center;'
+          for host in https://overpass-api.de https://overpass.private.coffee https://maps.mail.ru/osm/tools/overpass https://overpass.kumi.systems; do
+            code=$(curl -s -m 170 -A "StaflySearchMap/1.0 (+https://github.com/kp-studio01/stafly-search-preview)" -H "Accept: application/json" -o v12/data/oau-names.json -w '%{http_code}' -X POST "$host/api/interpreter" --data-urlencode "data=$Q" || echo fail)
+            echo "$host -> $code"
+            if [ "$code" = "200" ] && python3 -c "import json;json.load(open('v12/data/oau-names.json'))"; then break; fi
+            rm -f v12/data/oau-names.json
+          done
+          python3 -c "import json;d=json.load(open('v12/data/oau-names.json'));print(len(d['elements']),'named')"
+      - name: Save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v12/data/oau-names.json
+          git commit -m "OAU named places from OpenStreetMap" || echo "no change"
+          git push
