@@ -9968,11 +9968,11 @@ var last='';
 function build(){if(map.getZoom()<14.8)return;
   var src=[];['landcover','park'].forEach(function(l){try{src=src.concat(map.querySourceFeatures('ofm',{sourceLayer:l}));}catch(e){}});
   var bl=[];try{map.querySourceFeatures('ofm',{sourceLayer:'building'}).forEach(function(f){polys(f.geometry).forEach(function(p){bl.push({p:p,b:bbox(p[0])});});});}catch(e){}
-  var seen={},feats=[],MAX=5200;
+  var seen={},feats=[],MAX=5200;var bb0=map.getBounds(),pad=.002,VB=[bb0.getWest()-pad,bb0.getSouth()-pad,bb0.getEast()+pad,bb0.getNorth()+pad];
   for(var i=0;i<src.length&&feats.length<MAX;i++){var f=src[i],cl=(f.properties||{}).class||'park';
     if(['grass','wood','forest','scrub','farmland','park','nature_reserve','garden'].indexOf(cl)<0&&f.sourceLayer!=='park')continue;
     var dense=(cl==='wood'||cl==='forest')?11:(cl==='scrub'?14:17);
-    polys(f.geometry).forEach(function(p){var b=bbox(p[0]);var sx=dense*MLNG,sy=dense*MLAT;
+    polys(f.geometry).forEach(function(p){var b=bbox(p[0]);b=[Math.max(b[0],VB[0]),Math.max(b[1],VB[1]),Math.min(b[2],VB[2]),Math.min(b[3],VB[3])];if(b[0]>b[2]||b[1]>b[3])return;var sx=dense*MLNG,sy=dense*MLAT;
       for(var gx=Math.floor(b[0]/sx);gx*sx<=b[2]&&feats.length<MAX;gx++)for(var gy=Math.floor(b[1]/sy);gy*sy<=b[3]&&feats.length<MAX;gy++){
         var key=dense+':'+gx+':'+gy;if(seen[key])continue;var h=hash(gx,gy);if(dense>=17&&h<.22){seen[key]=1;continue;}
         var pt=[(gx+.15+.7*hash(gy,gx))*sx,(gy+.15+.7*h)*sy];
