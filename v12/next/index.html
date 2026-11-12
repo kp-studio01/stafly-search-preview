@@ -10827,5 +10827,24 @@ var O=window.staflySignOut;if(O){window.staflySignOut=function(){wipe();return O
 setInterval(function(){if(!(window.USER&&USER.wa))wipe();},3000);
 })();
 </script>
+<style id="m247">
+/* m247: side menu slides smoothly (no live blur behind it while it moves); product sheet: count and X stay on top while you swipe, no notch between photos */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .m-drawer{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;will-change:transform;transition:transform .34s cubic-bezier(.32,.72,0,1)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) .m-drawer{background:#0B0B0E!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .m-scrim{transition:opacity .34s cubic-bezier(.32,.72,0,1)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.x,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.ct{z-index:6!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.ph,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.mi-peek{border-radius:0!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .mi-sh .bx>.ct{transition:none!important}
+</style>
+<style id="m248">
+/* m248: chat photos keep their space before they load, so the chat opens at the right spot with no jump */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .m-thread .msg>img{aspect-ratio:4/5;width:100%!important;max-width:none!important;height:auto!important;object-fit:cover;background:rgba(127,127,140,.12)}
+</style>
+<script id="m248js">
+(function(){var near=true;
+document.addEventListener('scroll',function(e){var m=e.target;if(m&&m.id==='mSub'){near=m.scrollHeight-m.scrollTop-m.clientHeight<140;}},true);
+document.addEventListener('load',function(e){var t=e.target;if(!t||t.tagName!=='IMG'||!t.closest||!t.closest('#mThread'))return;var m=document.getElementById('mSub');if(m&&near)m.scrollTop=1e6;},true);
+})();
+</script>
 </body>
 </html>
