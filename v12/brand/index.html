@@ -10846,5 +10846,22 @@ document.addEventListener('scroll',function(e){var m=e.target;if(m&&m.id==='mSub
 document.addEventListener('load',function(e){var t=e.target;if(!t||t.tagName!=='IMG'||!t.closest||!t.closest('#mThread'))return;var m=document.getElementById('mSub');if(m&&near)m.scrollTop=1e6;},true);
 })();
 </script>
+<script id="m249">
+/* m249: chat opens perfectly still: photo captions are laid out in the same instant (no 14px nudge), and a refresh with the same messages changes nothing */
+(function(){
+function wrap(root){var did=false;(root||document).querySelectorAll('#mSub .m-thread .msg>img').forEach(function(im){var m=im.parentNode;if(m.querySelector('.cx-cap'))return;var nodes=[];var n=im.nextSibling;while(n){var nx=n.nextSibling;if(!(n.nodeType===1&&(n.classList.contains('meta')||n.tagName==='BR')))nodes.push(n);n=nx;}
+  var txt=nodes.map(function(x){return x.textContent;}).join('').trim();if(!txt)return;var c=document.createElement('span');c.className='cx-cap';nodes.forEach(function(x){c.appendChild(x);});var meta=m.querySelector('.meta');m.insertBefore(c,meta||null);did=true;});return did;}
+var near=true;document.addEventListener('scroll',function(e){var m=e.target;if(m&&m.id==='mSub')near=m.scrollHeight-m.scrollTop-m.clientHeight<140;},true);
+var mo=new MutationObserver(function(){var m=document.getElementById('mSub');if(!m)return;if(wrap()&&near)m.scrollTop=1e6;});
+(function w(){var m=document.getElementById('mSub');if(m)mo.observe(m,{childList:true,subtree:true});else setTimeout(w,300);})();
+/* remember exactly what the open chat shows, so the server refresh can skip an identical redraw */
+var K='stafly_tc_';function liveOf(id){var L=window.SLCH||{};for(var k in L){if(L[k].v&&L[k].v.id===id)return k;}return null;}
+var T=window.mTalk;if(T){window.mTalk=function(id){try{if(window.USER&&USER.wa&&!(TALK[id]&&TALK[id].length)){var sid=liveOf(id);if(sid){var c=JSON.parse(localStorage.getItem(K+sid)||'null');if(Array.isArray(c)&&c.length)TALK[id]=c;}}}catch(e){}
+  var h=T.apply(this,arguments);try{window.__cxSig=window.__cxSig||{};window.__cxSig[id]=JSON.stringify(TALK[id]||[]);}catch(e){}return h;};}
+var R=window.mTalkRender;if(R){window.mTalkRender=mTalkRender=function(id){try{var th=document.getElementById('mThread');var s0=JSON.stringify(TALK[id]||[]);var sid=liveOf(id);if(sid&&window.USER&&USER.wa){try{localStorage.setItem(K+sid,JSON.stringify((TALK[id]||[]).slice(-40)));}catch(e){}}
+  if(th&&th.querySelector('.msg')&&window.__cxSig&&window.__cxSig[id]===s0)return;
+  var r=R.apply(this,arguments);window.__cxSig=window.__cxSig||{};window.__cxSig[id]=s0;wrap();var m=document.getElementById('mSub');if(m)m.scrollTop=1e6;return r;}catch(e){return R.apply(this,arguments);}};}
+})();
+</script>
 </body>
 </html>
