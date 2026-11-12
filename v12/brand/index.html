@@ -8940,12 +8940,12 @@ function show(html){var b=el();b.querySelector('.cm-p').innerHTML='<div class="c
 function close(){if(box)box.classList.remove('on');}
 function menu(id){cur=id;var v=vOf(id),mu=ld('stafly_mute').indexOf(id)>=0;
   show('<div class="cm-hd">'+mLogo(v)+'<div><b>'+esc(v.name)+'</b><small>'+esc(String(v.place||'').split(',')[0])+'</small></div></div>'+
-   '<button type="button" class="cm-it" data-cma="shop"><span class="cm-ic">'+mS('store')+'</span><span><b>View shop</b><small>Menu, prices, reviews and location</small></span></button>'+
-   '<button type="button" class="cm-it" data-cma="orders"><span class="cm-ic">'+RCPT+'</span><span><b>Your orders here</b><small>Past orders and tracking</small></span></button>'+
-   '<button type="button" class="cm-it" data-cma="mute"><span class="cm-ic">'+(mu?mS('bell'):BELLX)+'</span><span><b>'+(mu?'Unmute chat':'Mute chat')+'</b><small>'+(mu?'Get alerts from this shop again':'No alerts from this shop')+'</small></span></button>'+
+   '<button type="button" class="cm-it" data-cma="shop"><span class="cm-ic">'+mS('store')+'</span><span><b>View shop</b></span></button>'+
+   '<button type="button" class="cm-it" data-cma="orders"><span class="cm-ic">'+RCPT+'</span><span><b>Your orders</b></span></button>'+
+   '<button type="button" class="cm-it" data-cma="mute"><span class="cm-ic">'+(mu?mS('bell'):BELLX)+'</span><span><b>'+(mu?'Unmute chat':'Mute chat')+'</b></span></button>'+
    '<div class="cm-sep"></div>'+
-   '<button type="button" class="cm-it red" data-cma="report"><span class="cm-ic">'+FLAG+'</span><span><b>Report a problem</b><small>Stafly will look into it</small></span></button>'+
-   '<button type="button" class="cm-it red" data-cma="block"><span class="cm-ic">'+BLOCK+'</span><span><b>Block shop</b><small>They can’t message you</small></span></button>');}
+   '<button type="button" class="cm-it red" data-cma="report"><span class="cm-ic">'+FLAG+'</span><span><b>Report a problem</b></span></button>'+
+   '<button type="button" class="cm-it red" data-cma="block"><span class="cm-ic">'+BLOCK+'</span><span><b>Block shop</b></span></button>');}
 function report(){why=-1;var v=vOf(cur);
   show('<h3>What went wrong?</h3><p class="cm-sub">With '+esc(v.name)+'. Pick one.</p>'+REASONS.map(function(r,i){return'<button type="button" class="cm-r" data-cmw="'+i+'">'+r+'<i></i></button>';}).join('')+
    '<span class="cm-fl">Note (optional)</span><textarea maxlength="300" placeholder="e.g. Paid at 2pm, nothing came"></textarea>'+
@@ -10713,5 +10713,37 @@ html body #mSub .sp-cover,html body #mSub .sp-cover *,html body #mSub .sp-info,h
 html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk{--ph:#3A2A31!important}
 html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk{--ph:#EEDDE3!important}
 </style>
+<style id="m237">
+/* m237: photo messages sized like WhatsApp (photo fills the bubble, thin edge, caption under it) + one pill message box */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg:has(>img){width:min(268px,74%)!important;max-width:none!important;padding:4px 4px 7px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg>img{display:block!important;width:100%!important;max-width:none!important;height:auto;max-height:340px;object-fit:cover;border-radius:16px!important;margin:0 0 6px!important;background:rgba(255,255,255,.06)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg.in:has(>img){border-bottom-left-radius:6px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg:has(>img)>br{display:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg:has(>img){text-indent:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg:has(>img) .meta{padding-right:6px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg:has(>img){padding-left:4px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg:has(>img)::first-line{}
+/* caption: give the text its own side padding */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg .cx-cap{display:block;padding:0 8px}
+/* message box: one rounded bar, send button inside it */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-comp{background:linear-gradient(180deg,rgba(22,22,27,0),var(--cxbg,#16161B) 38%)!important;border-top:0!important;padding:10px 14px max(12px,env(safe-area-inset-bottom))!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub:has(.cx-hero) .m-comp{background:linear-gradient(180deg,rgba(248,248,247,0),var(--cxbg,#F8F8F7) 38%)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-bar{display:flex!important;align-items:center!important;gap:6px!important;height:54px!important;padding:0 6px 0 18px!important;border-radius:27px!important;background:#222229!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)!important;transition:box-shadow .2s ease}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-bar:focus-within{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-bar input{flex:1;min-width:0;height:100%!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;font-size:15.5px!important;color:#F1F0F5!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-bar input::placeholder{color:rgba(255,255,255,.42)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-send{width:42px!important;height:42px!important;border-radius:50%!important;background:#7551DC!important;box-shadow:none!important;color:#fff!important;flex:none;display:grid!important;place-items:center}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-send svg{width:19px!important;height:19px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub:has(.cx-hero) .wa-bar{background:#FFFFFF!important;box-shadow:0 1px 2px rgba(18,18,21,.05),0 6px 22px rgba(18,18,21,.07)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub:has(.cx-hero) .wa-bar input{color:#121215!important}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub:has(.cx-hero) .wa-bar input::placeholder{color:#9A9AA3!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub:has(.cx-hero) .wa-send{background:#7551DC!important;color:#fff!important}
+</style>
+<script id="m237s">
+/* wrap a photo caption so it gets side padding */
+(function(){function fix(){document.querySelectorAll('#mSub .m-thread .msg>img').forEach(function(im){var m=im.parentNode;if(m.querySelector('.cx-cap'))return;var nodes=[];var n=im.nextSibling;while(n){var nx=n.nextSibling;if(!(n.nodeType===1&&(n.classList.contains('meta')||n.tagName==='BR')))nodes.push(n);n=nx;}
+  var txt=nodes.map(function(x){return x.textContent;}).join('').trim();if(!txt)return;var c=document.createElement('span');c.className='cx-cap';nodes.forEach(function(x){c.appendChild(x);});var meta=m.querySelector('.meta');m.insertBefore(c,meta||null);});}
+var mo=new MutationObserver(function(){requestAnimationFrame(fix);});(function w(){var m=document.getElementById('mSub');if(m)mo.observe(m,{childList:true,subtree:true});else setTimeout(w,500);})();})();
+</script>
+<style id="m238">.cm-it>span:last-child{display:flex;align-items:center}</style>
 </body>
 </html>
