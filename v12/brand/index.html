@@ -10360,6 +10360,33 @@ setInterval(function(){try{riderTick();}catch(e){}},400);
 window.__m221demo=function(id){try{var MINE=O().MINE;var v=id?vOf(id):V.find(function(x){return x.ll&&x.id!=='foodhunt';});MINE.unshift({shop:v.id,ref:'DEMO-T'+Date.now().toString(36),track:'x',total:0,at:Date.now()-95000,demo:1,items:[],fee:0,hall:'Moremi Hall'});riderTick();return v.id;}catch(e){return e.message;}};
 })();
 </script>
+<style id="m225">
+#mAuth .a-wa2{margin:4px 0 14px}
+</style>
+<script id="m225s">
+/* m225: WhatsApp code the standard way, for free: tap Open WhatsApp, send "Hi Stafly, please send my sign-in code",
+   Stafly replies with a 6-digit code, type it here. (Works without the paid template.) */
+(function(){
+function fx(id){setTimeout(function(){var i=document.getElementById(id);i&&i.focus();},80);}
+window.authPhSend=function(){var A=AUTH;A.busy=1;A.err='';authRender();
+  authApi('/api/search/signin/start',{vid:vidQ(),phone:authPh()}).then(function(d){A.busy=0;
+    A.viaWa=!!(d&&d.wa);A.waNum=(d&&d.wa)||'';A.waText=(d&&d.text)||'Hi Stafly, please send my sign-in code.';
+    A.step='code';authRender();if(!A.viaWa)fx('aCode');})
+  .catch(function(e){A.busy=0;A.err=e.message;authRender();});};
+function openWa(){var A=AUTH;window.open('https://wa.me/'+A.waNum+'?text='+encodeURIComponent(A.waText),'_blank');A.asked=1;authRender();fx('aCode');}
+var R=window.authRender;
+window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
+  if(A&&A.step==='code'&&A.viaWa){var el=document.getElementById('mAuth');var pg=el&&el.querySelector('.a-pg');if(pg&&!pg.querySelector('.a-wa2')){
+    var h=pg.querySelector('h2'),sub=pg.querySelector('.sub'),inp=pg.querySelector('#aCode');
+    if(h)h.textContent='Get your code';
+    if(sub)sub.innerHTML='Send the message on WhatsApp and we’ll reply with your code. <span class="lnk" data-aphchg="1">Change number</span>';
+    var b=document.createElement('button');b.type='button';b.className='m-cta a-wa2';b.innerHTML=(typeof mS==='function'?mS('wa'):'')+(A.asked?'Open WhatsApp again':'Open WhatsApp');
+    b.addEventListener('click',function(e){e.stopPropagation();openWa();});
+    if(inp)inp.parentNode.insertBefore(b,inp);
+    var alt=pg.querySelector('.a-alt');if(alt)alt.style.display='none';}}
+  return r;};
+})();
+</script>
 <style id="m222">
 /* m222: smoother sign-in step changes */
 #mAuth .a-pg.a-in{animation:aIn2 .46s cubic-bezier(.2,.8,.2,1) both}
