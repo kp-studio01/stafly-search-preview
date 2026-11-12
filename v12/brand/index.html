@@ -10186,10 +10186,10 @@ if(typeof map==='undefined'||!map.on)return;
 var LT=function(){return document.body.classList.contains('m-light');};
 /* ---------- day and night ---------- */
 function phase(){var d=new Date(),h=d.getHours()+d.getMinutes()/60;if(window.__m220h!=null)h=window.__m220h;return h>=19||h<5.5?'night':h<7.5?'morning':h>=17?'sunset':'day';}
-var LIGHT={morning:{c:'#FFE4C2',i:.36,az:95,po:58},day:{c:'#FFFFFF',i:.3,az:200,po:40},sunset:{c:'#FFBE80',i:.44,az:268,po:62},night:{c:'#BFC8FF',i:.18,az:220,po:45}};
-var GROUND={morning:'#F1EEE8',sunset:'#F0E9E0',night:'#E7E8EC'};
+var LIGHT={morning:{c:'#FFF6EA',i:.32,az:95,po:55},day:{c:'#FFFFFF',i:.3,az:200,po:40},sunset:{c:'#FFEBD6',i:.36,az:268,po:60},night:{c:'#F1F2FF',i:.2,az:220,po:45}};
+var GROUND={morning:'#F0EEEA',sunset:'#EFEBE6',night:'#E9E9EC'};
 function ensure(){if(!map.getLayer('bld')||map.getLayer('m220spill'))return!!map.getLayer('m220spill');
-  var lit=['==',['%',['round',['*',['coalesce',['get','render_height'],6],13.7]],4],0];
+  var lit=['==',['%',['to-number',['id'],1],4],0];
   map.addLayer({id:'m220spill',type:'line',source:'ofm','source-layer':'building',minzoom:14.5,filter:lit,layout:{'visibility':'none','line-join':'round'},paint:{'line-color':'#FFB347','line-width':['interpolate',['linear'],['zoom'],15,4,18,14],'line-blur':['interpolate',['linear'],['zoom'],15,4,18,12],'line-opacity':.22}},'bld');
   window.__m220lit=lit;return true;}
 var lastPh='',lastTh='';

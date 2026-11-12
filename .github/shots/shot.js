@@ -12,8 +12,8 @@ for(const theme of ['dark','light']) for(const [w,h,name] of [[1280,760,'desk'],
     const f=`shots/${name}-${theme}-walk.png`;await p.screenshot({path:f});out.push(f);await p.evaluate(()=>staflyWalk.stop());await p.waitForTimeout(1500);await p.evaluate(()=>history.back());await p.waitForTimeout(800);}catch(e){console.log('walkerr',e.message);}
   try{await p.evaluate(([c,t])=>{window.__m220h=t==='dark'?21:18;m220Day(true);map.jumpTo({center:c,zoom:16.6,pitch:50,bearing:-20});},[C,theme]);await p.waitForTimeout(5000);
     await p.screenshot({path:`shots/${name}-${theme}-time.png`});
-    const pt=await p.evaluate(()=>{const f=map.queryRenderedFeatures({layers:['lmk','bld'].filter(i=>map.getLayer(i))});if(!f.length)return null;const g=f[0].geometry;const c=g.type==='Polygon'?g.coordinates[0][0]:g.coordinates[0][0][0];const q=map.project(c);return [q.x,q.y];});
-    if(pt){await p.mouse.click(pt[0]+2,pt[1]+2);await p.waitForTimeout(900);await p.screenshot({path:`shots/${name}-${theme}-tap.png`});}}catch(e){console.log('timeerr',e.message);}
+    const pt=await p.evaluate(()=>{const W=innerWidth,H=innerHeight;for(let y=H*.35;y<H*.75;y+=12)for(let x=W*.45;x<W*.9;x+=12){const f=map.queryRenderedFeatures([x,y],{layers:['lmk','bld'].filter(i=>map.getLayer(i))});if(f.length)return [x,y];}return null;});
+    console.log('ids',await p.evaluate(()=>map.queryRenderedFeatures({layers:['bld']}).slice(0,5).map(f=>f.id).join(',')));if(pt){await p.mouse.click(pt[0],pt[1]);await p.waitForTimeout(900);console.log('card',name,theme,await p.evaluate(()=>document.getElementById('m220c').className+' '+document.getElementById('m220c').textContent));await p.screenshot({path:`shots/${name}-${theme}-tap.png`});}}catch(e){console.log('timeerr',e.message);}
   if(name==='desk'&&theme==='dark')console.log('trees',await p.evaluate(()=>{try{return map.getSource('m217t')._data.features.length}catch(e){return e.message}}),'layers',await p.evaluate(()=>map.getStyle().layers.map(l=>l.id).join(',')));
   await p.close();}
 console.log(out.join('\n'));await b.close();})();
