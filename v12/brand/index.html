@@ -10269,7 +10269,7 @@ var FC=function(f){return{type:'FeatureCollection',features:f||[]};};
 
 /* ---------- 3. busy right now ---------- */
 function busyData(){var now=new Date(),m=now.getHours()*60+now.getMinutes(),f=[];
-  (typeof V!=='undefined'?V:[]).forEach(function(v){if(!v.ll)return;var h=v.hours;if(h&&!(m>=h[0]&&m<h[1]))return;
+  (typeof V!=='undefined'?V:[]).forEach(function(v){if(!v.ll)return;/* preview: every shop counts until live order data is wired */
     var w=.25+Math.min(.75,Math.log10((v.orders||0)+1)/3.2);f.push({type:'Feature',properties:{w:w},geometry:{type:'Point',coordinates:[v.ll[1],v.ll[0]]}});});
   return FC(f);}
 /* ---------- more names ---------- */
@@ -10308,7 +10308,7 @@ setTimeout(function(){try{map.getSource('m221busy').setData(busyData());}catch(e
 var AG=[],seedAt=null,phone=!matchMedia('(min-width:821px)').matches;
 function cum(p){var c=[0];for(var i=1;i<p.length;i++)c.push(c[i-1]+dist(p[i-1],p[i]));return c;}
 function seed(){AG=[];var z=map.getZoom();seedAt={c:map.getCenter(),z:z};if(z<15.2){push();return;}
-  var fs=[];try{fs=map.querySourceFeatures('openmaptiles',{sourceLayer:'transportation'});}catch(e){}
+  var fs=[];try{fs=map.querySourceFeatures('ofm',{sourceLayer:'transportation'});}catch(e){}
   var b=map.getBounds(),W=b.getWest(),E=b.getEast(),Sn=b.getSouth(),N=b.getNorth(),big=[],small=[];
   fs.forEach(function(f){var c=(f.properties&&f.properties['class'])||'',g=f.geometry,parts=g.type==='LineString'?[g.coordinates]:g.type==='MultiLineString'?g.coordinates:[];
     parts.forEach(function(p){if(p.length<2)return;var inn=false;for(var i=0;i<p.length;i++){var q=p[i];if(q[0]>W&&q[0]<E&&q[1]>Sn&&q[1]<N){inn=true;break;}}if(!inn)return;
