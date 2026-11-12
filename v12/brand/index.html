@@ -10032,7 +10032,7 @@ window.m218Paint=paint;
 var oa=window.applyTheme;if(typeof oa==='function')window.applyTheme=function(){var r=oa.apply(this,arguments);try{paint();}catch(e){}return r;};
 var os=window.setSat;if(typeof os==='function')window.setSat=function(){var r=os.apply(this,arguments);try{paint();}catch(e){}return r;};
 var n=0,tk=setInterval(function(){n++;try{if(map.getLayer('lmk')&&map.getLayer('pop3')&&map.getLayer('m217tree')){paint();clearInterval(tk);}}catch(e){}if(n>80)clearInterval(tk);},250);
-map.on('idle',function(){if(!window.__m218once&&map.getLayer('lmk')){window.__m218once=1;paint();}});
+var lastP=0;map.on('idle',function(){var n=Date.now();if(n-lastP<1500)return;lastP=n;try{paint();}catch(e){}});
 })();
 </script>
 <style id="m219">
@@ -10068,6 +10068,7 @@ body.m-light #mWalk .wk-card .lg{background-color:#F1F1F3}
 .wk-me .wk-body{position:absolute;left:50%;bottom:4px;width:20px;height:24px;margin-left:-10px;border-radius:10px 10px 8px 8px;background:#7551DC;box-shadow:inset -3px -3px 0 rgba(0,0,0,.18)}
 .wk-me .wk-head{position:absolute;left:50%;bottom:26px;width:17px;height:17px;margin-left:-8.5px;border-radius:50%;background:#F2C9A0;box-shadow:inset -2px -2px 0 rgba(0,0,0,.12)}
 .wk-me .wk-cone{position:absolute;left:50%;bottom:-36px;width:0;height:0;margin-left:-26px;border-left:26px solid transparent;border-right:26px solid transparent;border-bottom:44px solid rgba(117,81,220,.22);transform-origin:50% 0;opacity:0}
+.wk-me .wk-in{position:absolute;inset:0}
 .wk-me.moving .wk-in{animation:wkBob .42s ease-in-out infinite}
 @keyframes wkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 </style>
@@ -10090,7 +10091,7 @@ function mkMe(){var el=document.createElement('div');el.className='wk-me';el.inn
   me=new maplibregl.Marker({element:el,anchor:'bottom'}).setLngLat(pos).addTo(map);}
 function shopCard(v,d,go){var img=v.img||'';
   card.innerHTML='<i class="lg"'+(img?' style="background-image:url(\''+String(img).replace(/'/g,'')+'\')"':'')+'></i><div><b>'+esc(v.name)+'</b><span></span></div>';
-  card.querySelector('span').textContent=go?(d<15?'You’re here':fmt(d)+' · '+mins(d)+' · tap to open'):fmt(d)+' away · tap to go';
+  card.querySelector('span').textContent=go?(d<15?'You’re here':fmt(d)+' · '+mins(d)):fmt(d)+' away';
   card.dataset.id=v.id;card.classList.add('in');}
 function routeTo(v){if(!pos||typeof setRoute!=='function')return;lastRoute=pos.slice();
   var a=[pos[1],pos[0]],b=v.ll;setRoute([a,b]);
