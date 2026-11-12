@@ -10197,7 +10197,7 @@ var lastPh='',lastTh='';
 function day(force){if(!ensure())return;var ph=phase(),th=LT()?'l':'d',sat=typeof SAT!=='undefined'&&SAT;
   if(!force&&ph===lastPh&&th===lastTh)return;lastPh=ph;lastTh=th;
   var L=LIGHT[ph];try{map.setLight({anchor:'map',position:[1.5,L.az,L.po],color:L.c,intensity:L.i});}catch(e){}
-  var night=ph==='night'&&th==='d'&&!sat;
+  var night=false;/* night lights removed 2026-11-12 */
   try{map.setLayoutProperty('m220spill','visibility',night?'visible':'none');}catch(e){}
   try{var base=th==='l'?['interpolate',['linear'],['coalesce',['get','render_height'],6],0,'#FAFAF9',20,'#FFFFFF']:['interpolate',['linear'],['coalesce',['get','render_height'],6],0,'#202025',20,'#25252B'];
     map.setPaintProperty('bld','fill-extrusion-color',night?['case',window.__m220lit,'#5E4B30',base]:base);}catch(e){}
@@ -10217,8 +10217,7 @@ function bubbles(){if(typeof markers==='undefined'||typeof DROPS==='undefined')r
     b.style.backgroundImage='url("'+String(img).replace(/"/g,'')+'")';}}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.m220b');if(!b)return;e.stopPropagation();e.preventDefault();
   try{LVLIST=DROPS;lvOpen(DROPS.findIndex(function(d){return d.id===b.dataset.lv;}));}catch(_){}},true);
-var orr=window.render;if(typeof orr==='function')window.render=function(){var r=orr.apply(this,arguments);try{bubbles();}catch(e){}return r;};
-setTimeout(bubbles,1500);setTimeout(bubbles,4000);
+/* bubbles removed 2026-11-12 (Danny: too much on the map) */
 /* ---------- tap a building ---------- */
 var card=document.createElement('div');card.id='m220c';document.body.appendChild(card);var ht=0;
 function hide(){card.classList.remove('in');}
