@@ -10039,7 +10039,7 @@ map.on('idle',function(){if(!window.__m218once&&map.getLayer('lmk')){window.__m2
 /* m219: Walk mode. Tap yourself, walk around campus. */
 body.m-walk #m2>*:not(#mWalk){opacity:0!important;pointer-events:none!important;transition:opacity .35s}
 body.m-walk .youwrap{opacity:0!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-walk):not(.pinpick) .youwrap{pointer-events:auto!important;cursor:pointer}
+body.m-walk #mDir{opacity:0!important;pointer-events:none!important}
 #mWalk{position:fixed;inset:0;pointer-events:none;z-index:1300;opacity:0;transition:opacity .35s}
 body.m-walk #mWalk{opacity:1}
 #mWalk .wk-top{position:absolute;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 6px 6px 16px;border-radius:999px;background:rgba(18,18,21,.86);color:#fff;font:600 14px/1 inherit;pointer-events:auto;box-shadow:0 8px 24px rgba(0,0,0,.25)}
@@ -10072,7 +10072,7 @@ body.m-light #mWalk .wk-card .lg{background-color:#F1F1F3}
 @keyframes wkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 </style>
 <script id="m219s">
-/* m219: Walk mode follows your real steps (GPS location). Tap a nearby shop to get a glowing path there. */
+/* m219: Walk mode follows your real steps (GPS). Tap a nearby shop to get a glowing path there. */
 (function(){
 if(typeof map==='undefined'||!map.on)return;
 var X='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>';
@@ -10123,10 +10123,10 @@ function step(t){if(!on)return;raf=requestAnimationFrame(step);var dt=Math.min(.
   if(!pos||!(keys.up||keys.left||keys.right))return;if(keys.left)camB-=100*dt;if(keys.right)camB+=100*dt;
   var ll=pos;if(keys.up){var r=camB*Math.PI/180;ll=[pos[0]+Math.sin(r)*5*dt*MLNG,pos[1]+Math.cos(r)*5*dt*MLAT];walked+=5*dt;}
   pos=ll;me.setLngLat(pos);me.getElement().classList.toggle('moving',!!keys.up);map.jumpTo({center:pos,bearing:camB});top();if(Math.random()<.1)update();}
-function start(){if(on)return;on=true;saved={center:map.getCenter(),zoom:map.getZoom(),pitch:map.getPitch(),bearing:map.getBearing()};
+function start(sid){if(on)return;on=true;saved={center:map.getCenter(),zoom:map.getZoom(),pitch:map.getPitch(),bearing:map.getBearing()};
   try{saved.mp=map.getMaxPitch();map.setMaxPitch(62);}catch(e){}
   pos=null;walked=0;tgt=null;cmp=null;camB=map.getBearing();hint.style.opacity=0;
-  try{if(typeof CUR!=='undefined'&&CUR.sel&&typeof V!=='undefined'){var v=V.find(function(x){return x.id===CUR.sel;});if(v&&v.ll)tgt=v;}}catch(e){}
+  try{var want=sid||(typeof CUR!=='undefined'&&(CUR.dir||CUR.sel));if(want&&typeof V!=='undefined'){var v=V.find(function(x){return x.id===want;});if(v&&v.ll)tgt=v;}}catch(e){}
   if(typeof SAT!=='undefined'&&SAT&&typeof setSat==='function'){saved.sat=true;setSat(false);}
   document.body.classList.add('m-walk');top();
   var y=(typeof YOU!=='undefined'&&YOU)?YOU:[7.5196,4.5186];place([y[1],y[0]],false);map.easeTo({center:pos,zoom:18.2,pitch:58,bearing:camB,duration:1100});
@@ -10144,8 +10144,7 @@ ui.querySelector('.wk-x').addEventListener('click',stop);
 card.addEventListener('click',function(){var id=card.dataset.id;if(!id||typeof V==='undefined')return;var v=V.find(function(x){return x.id===id;});if(!v)return;
   if(tgt&&tgt.id===id){stop();setTimeout(function(){try{m2Open(id);}catch(e){}},300);return;}
   tgt=v;routeTo(v);update();});
-document.addEventListener('click',function(e){if(on)return;var y=e.target.closest&&e.target.closest('.youwrap');if(!y)return;e.stopPropagation();e.preventDefault();start();},true);
-map.on('click',function(e){if(on||typeof YOU==='undefined'||!YOU)return;try{var p=map.project([YOU[1],YOU[0]]);if(Math.hypot(p.x-e.point.x,p.y-e.point.y)<34)start();}catch(_){}});
+document.addEventListener('click',function(e){if(on)return;var g=e.target.closest&&e.target.closest('#mDir .dir-go');if(!g)return;e.stopPropagation();e.preventDefault();start(typeof CUR!=='undefined'?CUR.dir:null);},true);
 var KM={ArrowUp:'up',ArrowLeft:'left',ArrowRight:'right'};
 addEventListener('keydown',function(e){if(!on)return;if(e.key==='Escape'){stop();return;}var k=KM[e.code];if(k){keys[k]=true;e.preventDefault();e.stopPropagation();}},true);
 addEventListener('keyup',function(e){var k=KM[e.code];if(k)keys[k]=false;},true);
