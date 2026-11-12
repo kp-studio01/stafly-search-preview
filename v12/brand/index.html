@@ -2867,6 +2867,9 @@ const NEAR=[[/moremi/i,'moremi'],[/awo(lowo)?\b/i,'awo'],[/fajuyi/i,'fajuyi'],[/
 window.staflyPin=function(v){let k='';for(const[re,x]of NEAR)if(re.test(v.place||'')&&LM[x]){k=x;break;}
   if(k){v.near=k;v.noloc=0;}else v.noloc=1;};
 window.sPin=v=>!(v&&v.real&&v.noloc);
+/* real follower count: the server's number, less you if you followed before it was counted, plus you now */
+window.sFol=(v,fo)=>Math.max(0,(v.fol||0)-(v.fol0||0)+(fo?1:0));
+window.sDel=v=>v.deliv?(v.deliv.fee?naira(v.deliv.fee):'Free'):'';
 const youKnown=()=>!!((window.USER&&USER.hk&&LM[USER.hk])||window.__gpsYou);
 /* walk time and distance only when both ends are real */
 window.sKnow=v=>sPin(v)&&!(v&&v.real&&!youKnown());
@@ -3448,7 +3451,7 @@ function m2Refresh(){if(!$('#mChips'))return;$('#mChips').innerHTML=m2Chips();
   if(CUR.t==='places')m2PlacesList();m2Tabs();}
 function mLogo(v){return v.img?`<span class="logo mlg ph${isOpen(v)?'':' off'}" style="background:url(${v.img}) center/cover;--lg:url(${v.img})"></span>`:`<span class="logo mlg${isOpen(v)?'':' off'}">${S(ICON[v.cat])}</span>`;}
 function m2Shop(v,extra=''){const s=status(v),g=GROUPS[v.id];
-  return`<button class="m-row2${isOpen(v)?'':' closed'}" type="button" data-mshop="${v.id}">${mLogo(v)}<span class="tx"><b>${v.name}</b><span class="sb">${v.reviews>=3?`<span class="r">${v.rating.toFixed(1)}</span>${STAR}`:'<span class="r">New</span>'}<i></i>${catL(v.cat)}${v.deliv?'<i></i>Delivers':v.real?'':'<i></i>Pick up'}</span>${extra}</span><span class="rt">${sKnow(v)?`<b>${walk(v)} min</b>`:''}${s.k==='na'?'':s.k!=='open'?`<small class="${s.k}">${s.k==='shut'?s.t:'Closes soon'}</small>`:g?`<small class="gq">${S(MI.users)}${g.n+(joined.has(v.id)?1:0)}/${g.need}</small>`:sKnow(v)?`<small>${dtxt(v)}</small>`:''}</span></button>`;}
+  return`<button class="m-row2${isOpen(v)?'':' closed'}" type="button" data-mshop="${v.id}">${mLogo(v)}<span class="tx"><b>${v.name}</b><span class="sb">${v.reviews>=3?`<span class="r">${v.rating.toFixed(1)}</span>${STAR}`:'<span class="r">New</span>'}<i></i>${catL(v.cat)}${v.deliv?'<i></i>Delivers':(v.pickup||!v.real)?'<i></i>Pick up':''}</span>${extra}</span><span class="rt">${sKnow(v)?`<b>${walk(v)} min</b>`:''}${s.k==='na'?'':s.k!=='open'?`<small class="${s.k}">${s.k==='shut'?s.t:'Closes soon'}</small>`:g?`<small class="gq">${S(MI.users)}${g.n+(joined.has(v.id)?1:0)}/${g.need}</small>`:sKnow(v)?`<small>${dtxt(v)}</small>`:''}</span></button>`;}
 function m2PlacesList(){const el=$('#mList');if(!el)return;
   const pc=$('#mPChips');if(pc)pc.innerHTML=m2Chips();
   const tg=$('#mTg');if(tg)tg.innerHTML=[['open','Open now','clock'],['delivers','Delivers','bike'],['verified','Verified','shield']].map(([k,l,ic])=>`<button class="${st.f.has(k)?'on':''}" type="button" data-f="${k}">${mS(ic)}${l}</button>`).join('')+`<button class="${st.sort==='near'?'on':''}" type="button" data-near="1">${mS('nav')}Nearest</button>`;
@@ -3466,7 +3469,7 @@ function m2Page(t){
     return`<div class="m-h"><h1>Live</h1><button class="m-circ" type="button" data-msub="alerts" aria-label="Alerts">${mS('bell')}</button></div>
     <div class="lv-row lv2">${ST.map(d=>{const v=vOf(d.id),sn=LVSEEN.has(d.id);return`<button type="button" class="lv-st${sn?'':' new'}" data-lvgo="${d.id}"><span class="rg">${mLogo(v)}</span>${d.m<=60&&!sn?'<i class="lv-dot">NEW</i>':''}<em>${v.name.split(' ').slice(0,2).join(' ')}</em></button>`;}).join('')}</div>
     <div class="lv-tabs">${[['foryou','For you'],['following','Following'],['near','Near you']].map(([k,l])=>`<button type="button" data-lvtab="${k}" class="${LVTAB===k?'on':''}">${l}</button>`).join('')}</div>
-    ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${v.real?catL(v.cat):fmtK(followers(v))+' followers'}</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
+    ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${v.real?(sFol(v,0)?fmtK(sFol(v,0))+' follower'+(sFol(v,0)===1?'':'s'):catL(v.cat)):fmtK(followers(v))+' followers'}</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
     ${LL.map(d=>{const v=vOf(d.id);return`<div class="g-card lv-card" id="lv-${d.id}"><div class="g-media lv-media${(d.img||CV(v))?'':' g-poster'}">${(d.img||CV(v))?`<img class="g-photo" src="${d.img||CV(v)}" alt="">`:(window.gArt?gArt(v):lvPh(v))}<span class="g-shade"></span>
       ${d.slides&&d.slides.length>1?`<span class="lv-cnt"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="13" height="13" rx="3"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>${d.slides.length}</span>`:''}<span class="g-tag${d.m<=60?' hot':''}">${d.m<=60?'<i class="lvd"></i>New':mS('clock')+ago(d.m)}</span><span class="g-time">${catL(v.cat)}</span>
       <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
@@ -3494,16 +3497,17 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
     return`<div class="sp-cover">${(v.cover!==undefined?v.cover:v.img)?`<img class="g-photo" src="${v.cover!==undefined?v.cover:v.img}" alt="">`:spNoCover(v)}<span class="g-shade"></span>
       <div class="sp-bar">${back()}<button class="m-circ" type="button" data-mshare="${id}" aria-label="Share">${mS('share')}</button><button class="m-circ" type="button" data-msave="${id}" aria-label="Save">${S(sv?MIF.heart:MI.heart,sv?'i sv':'i')}</button></div></div>
     <div class="sp-head"><span class="sp-logo${d?' live':''}"${d?` data-lvgo="${id}"`:''}>${mLogo(v)}${d?'<em class="sp-lt">Live</em>':''}</span><button type="button" class="sp-follow${fo?' on':''}" data-mfollow="${id}">${fo?mS('check')+'Following':'Follow'}</button></div>
-    <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)}${v.real?'':` · ${fmtK(followers(v)+(fo?1:0))} followers`}</div><p>${v.tag?`<b>${v.tag}.</b> `:''}${v.about[0]}.</p></div>
-    <div class="sp-info">${s.k==='na'?'':`<div><b class="${s.k}"><i></i>${s.k==='open'?'Open':s.k==='soon'?'Soon':'Closed'}</b><span>${s.t.replace(/^Open(?!s)\s*/,'').replace(/^’til/,'till').replace(/^'til/,'till')||'today'}</span></div>`}${sKnow(v)?`<div><b>${walk(v)} min</b><span>${dtxt(v)} walk</span></div>`:''}${v.deliv||!v.real?`<div><b>${v.deliv?naira(v.deliv.fee):'Pick up'}</b><span>${v.deliv?'delivery':'only'}</span></div>`:''}</div>
+    <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)}${v.real?(sFol(v,fo)?` · ${fmtK(sFol(v,fo))} follower${sFol(v,fo)===1?'':'s'}`:''):` · ${fmtK(followers(v)+(fo?1:0))} followers`}</div><p>${v.tag?`<b>${v.tag}.</b> `:''}${v.about[0]}.</p></div>
+    <div class="sp-info">${s.k==='na'?'':`<div><b class="${s.k}"><i></i>${s.k==='open'?'Open':s.k==='soon'?'Soon':'Closed'}</b><span>${s.t.replace(/^Open(?!s)\s*/,'').replace(/^’til/,'till').replace(/^'til/,'till')||'today'}</span></div>`}${sKnow(v)?`<div><b>${walk(v)} min</b><span>${dtxt(v)} walk</span></div>`:''}${v.deliv?`<div><b>${sDel(v)}</b><span>delivery</span></div>`:(v.pickup||!v.real)?`<div><b>Pick up</b><span>only</span></div>`:''}</div>
     
     <div class="m-qa"><button type="button" data-mtalk="${id}">${mS('chat')}Chat</button>${sPin(v)?`<button type="button" data-mdir="${id}">${mS('nav')}Directions</button>`:''}</div>
-    ${v.deliv?`<div class="m-sh"><b>How you want it</b>${g?`<span>Pick one</span>`:''}</div><div class="m-card od">
-      <button type="button" class="od-opt" data-mtalk="${id}"><span class="od-ic">${mS('user')}</span><div><b>Just me</b><span>Delivered to you${v.deliv.eta?', '+v.deliv.eta:''}</span></div><em>${naira(v.deliv.fee)}</em></button>
-      ${g?`<button type="button" class="od-opt" data-mjoin="${id}"><span class="od-ic g">${mS('users')}</span><div><b>${joined.has(id)?'You’re in the group':'Group order'}</b><span>${g.n+(joined.has(id)?1:0)} of ${g.need} to ${g.hall} · ${g.closes} min left</span></div><em>${naira(share(v,g.n+1))}<s>${naira(v.deliv.fee)}</s></em></button>`:''}
+    ${v.deliv||(v.real&&v.pickup)?`<div class="m-sh"><b>How you want it</b>${g&&v.deliv||(v.deliv&&v.pickup)?`<span>Pick one</span>`:''}</div><div class="m-card od">
+      ${v.deliv?`<button type="button" class="od-opt" data-mtalk="${id}"><span class="od-ic">${mS('user')}</span><div><b>Just me</b><span>Delivered to you${v.deliv.eta?', '+v.deliv.eta:''}</span></div><em>${sDel(v)}</em></button>`:''}
+      ${v.real&&v.pickup?`<button type="button" class="od-opt" data-mtalk="${id}"><span class="od-ic">${mS('store')}</span><div><b>Pick up</b><span>Collect it from the shop</span></div><em>Free</em></button>`:''}
+      ${g&&v.deliv?`<button type="button" class="od-opt" data-mjoin="${id}"><span class="od-ic g">${mS('users')}</span><div><b>${joined.has(id)?'You’re in the group':'Group order'}</b><span>${g.n+(joined.has(id)?1:0)} of ${g.need} to ${g.hall} · ${g.closes} min left</span></div><em>${naira(share(v,g.n+1))}<s>${naira(v.deliv.fee)}</s></em></button>`:''}
     </div>`:''}
     <div class="m-sh"><b>Menu</b><span>Prices set by the shop</span></div><div class="m-card" style="padding:4px 16px">${v.items.map(i=>`<div class="m-price"><span>${i[0]}</span><b>${naira(i[1])}</b></div>`).join('')}</div>
-    <div class="m-sh"><b>Where</b><span>${s.k==='na'?'':s.k==='shut'?s.t:'Every day, '+tfmt(v.hours[0])+' to '+tfmt(v.hours[1])}</span></div><div class="m-card"><div class="m-where wh"><span class="wh-ic">${mS('pin')}</span><div><b style="font-size:16px">${v.place||'Location not added yet'}</b><span>${v.deliv?(v.deliv.to?'Delivers to '+v.deliv.to+', '+v.deliv.eta:'Delivers'):v.real?'Ask the shop about delivery':'Pick up only. Chat first and it will be ready when you arrive'}</span></div></div></div>
+    <div class="m-sh"><b>Where</b><span>${s.k==='na'?'':s.k==='shut'?s.t:'Every day, '+tfmt(v.hours[0])+' to '+tfmt(v.hours[1])}</span></div><div class="m-card"><div class="m-where wh"><span class="wh-ic">${mS('pin')}</span><div><b style="font-size:16px">${v.place||'Location not added yet'}</b><span>${v.deliv?(v.deliv.to?'Delivers to '+v.deliv.to+', '+v.deliv.eta:(v.real&&v.pickup?'Delivers or pick up':'Delivers')):v.real?(v.pickup?'Pick up only':'Ask the shop about delivery'):'Pick up only. Chat first and it will be ready when you arrive'}</span></div></div></div>
     <div class="m-sh"><b>Reviews</b><span>${v.reviews?'From paid orders':'None yet'}</span></div><div class="m-card rv2">${v.reviews?`<div class="rv-sum"><div class="rv-big"><b>${v.rating.toFixed(1)}</b>${stz(Math.round(v.rating))}<span>${v.reviews} reviews</span></div><div class="rv-bars">${(v.dist||rvDist(v.rating)).map((x,i)=>`<div><span>${5-i}</span><i><u style="width:${x}%"></u></i></div>`).join('')}</div></div>`:''}${v.rev.length?v.rev.map(r=>`<div class="rv-it"><div class="rv-h"><span class="rv-av">${r[0].split(' ').map(w=>w[0]).join('').slice(0,2)}</span><div><b>${r[0]}</b><div class="rv-s">${stz(r[1])}<span>${r[3]}</span></div></div></div><p>${r[2]}</p>${r[4]?`<div class="rv-rp"><b>${v.name}</b>${r[4]}</div>`:''}</div>`).join(''):`<div class="rv-it"><p>${v.real?'Buyers who pay can leave a review.':`New on Stafly with ${v.orders} completed orders. Stars show after 3 reviews from real buyers.`}</p></div>`}</div>
     <p class="m-note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':v.real?'':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</p>
     <div class="m-foot">${mFoot(v)}</div>`;}
@@ -3567,7 +3571,7 @@ mThread=function(id){const L=TALK[id]||[];
 mTalk=function(id){const v=vOf(id),L=TALK[id]||[],r=reach(v),s=status(v);const loc=(USER&&USER.hall)||'Moremi Hall';
   const qs=[ask(v).replace(/^Hi, I found you on Stafly\. /,''),v.deliv?`Do you deliver to ${loc.replace(' Hall','')}?`:'Where exactly are you?','Can I see your prices?'];
   return`<div class="m-th">${back()}<div class="who">${mLogo(v)}<div class="tt"><b>${v.name}</b><span><i></i>Online · replies in seconds</span></div></div>${r==='both'?`<button class="m-circ" type="button" data-chat="${id}" aria-label="Open in WhatsApp">${mS('wa')}</button>`:''}</div>
-  <div class="m-ctx"><span class="pill ${s.k}"><i></i>${s.t}</span><span class="dt">${[sKnow(v)?walk(v)+' min':'',v.deliv?naira(v.deliv.fee)+' delivery':v.real?'':'Pick up only'].filter(Boolean).join(' · ')}</span><button type="button" data-mshop="${id}">View shop</button></div>
+  <div class="m-ctx"><span class="pill ${s.k}"><i></i>${s.t}</span><span class="dt">${[sKnow(v)?walk(v)+' min':'',v.deliv?(v.deliv.fee?naira(v.deliv.fee)+' delivery':'Free delivery'):(v.pickup||!v.real)?'Pick up only':''].filter(Boolean).join(' · ')}</span><button type="button" data-mshop="${id}">View shop</button></div>
   <div class="m-thread" id="mThread">${mThreadAll(id)}</div>
   <div class="m-comp">${L.length?'':`<div class="m-qs">${qs.map(q=>`<button type="button" data-mq="${q.replace(/"/g,'&quot;')}">${q}</button>`).join('')}</div>`}
    <form class="m-in" id="mIn" data-id="${id}"><button type="button" class="att" aria-label="Send a photo">${mS('plus')}</button><input id="mMsg" type="text" placeholder="Message…" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send">${mS('send')}</button></form></div>`;};
@@ -4273,7 +4277,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   v.place=clean(d.location);staflyPin(v);
   const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':SCDN(safeUrl(i.img),600),clean(i.desc||''),clean(i.cat||i.category||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3).map(function(u){return SCDN(u,600);})]);if(it.length)v.items=it.slice(0,30);
   v.wa=waDigits(d.whatsapp);try{REACH[v.id]=!v.wa?'stafly':(d.reach==='whatsapp'||d.reach==='stafly'?d.reach:'both');}catch(e){}
-  {const fee=Math.max(0,Number(d.defaultFee)||0);v.deliv=fee?{fee,eta:'',to:''}:null;}
+  v.deliv=typeof d.campusFee==='number'&&d.campusFee>=0?{fee:Math.round(d.campusFee),eta:'',to:''}:null;v.pickup=!!d.pickup;v.fol=Math.max(0,Number(d.followers)||0);try{v.fol0=FOLLOW.has(v.id)?1:0;}catch(_){v.fol0=0;}
   const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}else{v.hours=null;v.days=null;v.closedToday=false;}
   const rv=d.reviews||{};const L=(rv.latest||[]).filter(r=>r&&r.rating>=1&&r.rating<=5);
   if(rv.count>0&&L.length){const ago=t=>{const s=(Date.now()-Date.parse(t))/1000;if(!(s>=0))return '';const d=Math.floor(s/86400);return d<1?'Today':d<2?'Yesterday':d<7?d+' days ago':d<14?'1 week ago':d<60?Math.floor(d/7)+' weeks ago':Math.floor(d/30)+' months ago';};
@@ -4338,7 +4342,7 @@ fetch(BASE+'/api/search/shops').then(r=>r.ok?r.json():null).then(d=>{if(!d||!Arr
     let near='sub',pin=0;for(const[re,k]of NEAR)if(re.test(loc)&&LM[k]){near=k;pin=1;break;}
     const hsh=hash(s.sid),off=[(hsh%70)-35,((hsh>>7)%70)-35];
     V.push({id:'s_'+s.sid,sid:s.sid,name,mono:mono(name),sub:SUB[kind],bg:BG[kind],cat:kind,tier:'listed',rating:Math.min(5,Math.max(0,Number(s.rating)||0)),reviews:Number(s.reviews)||0,orders:0,
-      near,off,noloc:pin?0:1,place:loc,hours:null,deliv:Number(s.defaultFee)>0?{fee:Math.max(0,Number(s.defaultFee)),eta:'',to:''}:null,tag:clean(s.headline)||('Order from '+name+' on Stafly'),
+      near,off,noloc:pin?0:1,place:loc,hours:null,deliv:typeof s.campusFee==='number'&&s.campusFee>=0?{fee:Math.round(s.campusFee),eta:'',to:''}:null,pickup:!!s.pickup,fol:Math.max(0,Number(s.followers)||0),tag:clean(s.headline)||('Order from '+name+' on Stafly'),
       about:['Message us and our assistant replies right away'],items:[],rev:[],real:1});added++;
     staflyLiveShop({base:BASE,sid:s.sid,id:'s_'+s.sid});});
   if(added){try{placeVendors();}catch(_){}try{drawMarkers();}catch(_){}try{render();}catch(_){}try{m2Apply();}catch(_){}}}).catch(()=>{});
@@ -4713,7 +4717,7 @@ const isReal=v=>!!v.sid;
 const fee=v=>v.deliv?Number(v.deliv.fee)||0:0;
 let GR={};/* open groups per shop from the server */
 window.groupsFor=groupsFor;function groupsFor(v){if(isReal(v))return GR[v.id]||[];const g=GROUPS[v.id];return g?[{id:'demo',hall:g.hall,size:g.need,joined:g.n,share:share(v,g.n+1),demo:1}]:[];}
-function delivery(v){if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(CK.mode==='new')return fee(v);const g=groupsFor(v).find(x=>x.id===CK.mode);return g?g.share:fee(v);}
+function delivery(v){if(CK.mode==='pick')return 0;if(!v.deliv)return 0;if(CK.mode==='solo')return fee(v);if(CK.mode==='new')return fee(v);const g=groupsFor(v).find(x=>x.id===CK.mode);return g?g.share:fee(v);}
 function rer(){const p=$('#mSub');if(!p)return;const y=p.scrollTop,a=document.activeElement,aid=a&&a.dataset&&a.dataset.ck,pos=a&&a.selectionStart;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;if(aid){const i=p.querySelector('[data-ck="'+aid+'"]');if(i){i.focus();try{i.setSelectionRange(pos,pos);}catch(_){}}}}
 /* ---- shop page: + buttons on the menu, basket bar in place of the footer ---- */
 function miThumb(v,it){return it[2]?`<span class="mi-th" style="background-image:url(${it[2]})"></span>`:`<span class="mi-th ic">${S(ICON[v.cat])}</span>`;}
@@ -4741,42 +4745,46 @@ function dlvHtml(v,G){const f=fee(v),m=CK.mode||'solo',gs=G.find(g=>g.id===m),lo
   if(m==='solo')det=`<p class="dl-d">Straight to your door${v.deliv.eta?', '+v.deliv.eta:''}.</p>`;
   else if(isG)det=`<p class="dl-d">${gs.joined} of ${gs.size} joined, going to ${gs.hall}. One rider, you pay a share.</p>${G.length>1?`<div class="dl-gs">${G.map(g=>`<button type="button" class="${g.id===m?'on':''}" data-ckmode="${g.id}">${g.hall}<small>${naira(g.share)}</small></button>`).join('')}</div>`:''}`;
   else if(m==='new')det=`<p class="dl-d">${hs?'You start a group to '+hs+'. ':''}Others can join, and it gets cheaper as they do.</p>`;
-  return`<div class="m-sh"><b>Delivery</b></div><div class="m-card dl-c"><div class="dl-row${G.length?'':' two'}">${tile('solo',m==='solo','Just me',naira(f))}${low?tile(isG?gs.id:low.id,isG,'Join group',(isG?naira(gs.share):'from '+naira(low.share)),'Cheaper'):''}${tile('new',m==='new','New group',naira(f))}</div>${det}</div>`;}
+  const pk=!!(v.real&&v.pickup);if(m==='pick')det=`<p class="dl-d">Collect it from the shop. No delivery fee.</p>`;
+  return`<div class="m-sh"><b>Delivery</b></div><div class="m-card dl-c"><div class="dl-row${G.length||pk?'':' two'}">${tile('solo',m==='solo','Just me',f?naira(f):'Free')}${pk?tile('pick',m==='pick','Pick up','Free'):''}${low?tile(isG?gs.id:low.id,isG,'Join group',(isG?naira(gs.share):'from '+naira(low.share)),'Cheaper'):''}${tile('new',m==='new','New group',naira(f))}</div>${det}</div>`;}
 /* ---- checkout ---- */
-function ckPage(v){const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
+function ckFix(v){const pk=!!(v&&v.real&&v.pickup);if(pk&&!v.deliv)CK.mode='pick';else if(CK.mode==='pick'&&!pk)CK.mode='solo';}
+window.ckNone=v=>!!(v&&isReal(v)&&v.real&&!v.deliv&&!v.pickup);
+function ckPage(v){ckFix(v);const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
   if(!L.length)return`<div class="m-h c">${back()}<h1>Basket</h1><span style="width:46px"></span></div><div class="m-empty"><span class="ei">${mS('bag')||''}</span><b>Your basket is empty</b>Add something from ${v.name}'s menu.</div>`;
   const opt=(id,b,sp,em,was)=>`<button type="button" class="ck-o${CK.mode===id?' on':''}" data-ckmode="${id}"><span class="rd"></span><div><b>${b}</b><span>${sp}</span></div><em>${em}${was?`<s>${was}</s>`:''}</em></button>`;
   const hallKeys=HALLS.filter(h=>h[0]!=='off').map(h=>h[1]+(h[0]==='pg'?'':' Hall')).concat(PLACES_EXTRA);
   return`<div class="m-h c">${back()}<h1>Checkout</h1><span style="width:46px"></span></div>
   <div class="m-sh" style="margin-top:0"><b>${v.name}</b><span>${L.reduce((a,l)=>a+l.qty,0)} item${L.length===1&&L[0].qty===1?'':'s'}</span></div>
   <div class="m-card" style="padding:2px 16px">${L.map(l=>`<div class="ck-l"><div><b>${l.name}</b><span>${naira(l.price)} each</span></div><span class="qa"><button type="button" class="qb" data-mdec="${l.i}" aria-label="One less">${MINUS}</button><span class="qn">${l.qty}</span><button type="button" class="qb" data-madd="${l.i}" aria-label="One more">${PLUS}</button></span></div>`).join('')}</div>
-  ${v.deliv?dlvHtml(v,G):''}
+  ${v.deliv?dlvHtml(v,G):(v.real&&v.pickup)?`<div class="m-sh"><b>Pick up</b></div><div class="m-card dl-c"><p class="dl-d" style="margin:0">Collect it from the shop. No delivery fee.</p></div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
   <div class="m-card" style="padding:4px 16px">
-    <label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckpin="1" class="${CK.pin?'on':''}">${CK.pin?'Pin dropped ✓':'Drop a pin'}</button><button type="button" data-ckloc="1">Use my location</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>${window.spotsHtml?spotsHtml():''}
+    ${CK.mode==='pick'||ckNone(v)?'':`<label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckpin="1" class="${CK.pin?'on':''}">${CK.pin?'Pin dropped ✓':'Drop a pin'}</button><button type="button" data-ckloc="1">Use my location</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>${window.spotsHtml?spotsHtml():''}`}
     <label class="ck-f"><span>WhatsApp number</span><input data-ck="phone" type="tel" inputmode="tel" placeholder="0803 123 4567" value="${(CK.phone||'').replace(/"/g,'&quot;')}" autocomplete="tel"></label>
     <label class="ck-f"><span>Your name</span><input data-ck="name" type="text" placeholder="First name" value="${(CK.name||'').replace(/"/g,'&quot;')}" autocomplete="given-name"></label>
     <label class="ck-f"><span>Note for the shop</span><input data-ck="note" type="text" placeholder="Optional, like extra pepper" value="${(CK.note||'').replace(/"/g,'&quot;')}"></label>
   </div>
   <div class="m-sh"><b>Summary</b></div>
-  <div class="m-card ck-sum" style="padding:10px 18px"><div><span>Items</span><b>${naira(sub(v))}</b></div><div><span>Delivery${CK.mode!=='solo'?' (your share)':''}</span><b>${naira(d)}</b></div><div class="tot"><span>Total</span><b>${naira(tot)}</b></div></div>
+  <div class="m-card ck-sum" style="padding:10px 18px"><div><span>Items</span><b>${naira(sub(v))}</b></div>${CK.mode==='pick'?'<div><span>Pick up</span><b>Free</b></div>':ckNone(v)?'':`<div><span>Delivery${CK.mode!=='solo'?' (your share)':''}</span><b>${naira(d)}</b></div>`}<div class="tot"><span>Total</span><b>${naira(tot)}</b></div></div>
   <p class="ck-note">${isReal(v)?'You pay securely with Paystack. The money goes to '+v.name+'.':'Preview shop: no money moves. Real checkout turns on when the shop joins.'} You get a tracking page and WhatsApp updates.</p>
   ${ERR?`<div class="ck-err">${ERR}</div>`:''}
-  <div class="m-foot"><button type="button" class="m-pay" data-mpay="${v.id}"${BUSY?' disabled':''}>${BUSY?'Getting your payment ready…':'Pay '+naira(tot)}</button></div>`;}
-async function pay(v){ERR='';
-  const ph=String(CK.phone||'').replace(/\D/g,'');if(!CK.hall.trim()||/^\s*off[ -]?campus\s*$/i.test(CK.hall)){ERR=/off/i.test(CK.hall)?'Which area off campus? Like Asherifa or Mayfair.':'Tell the shop where to bring it.';return rer();}
+  <div class="m-foot">${ckNone(v)?`<button type="button" class="m-pay" data-mtalk="${v.id}">Chat to order</button>`:`<button type="button" class="m-pay" data-mpay="${v.id}"${BUSY?' disabled':''}>${BUSY?'Getting your payment ready…':'Pay '+naira(tot)}</button>`}</div>`;}
+async function pay(v){ERR='';ckFix(v);if(ckNone(v))return;
+  const ph=String(CK.phone||'').replace(/\D/g,'');if(CK.mode!=='pick'&&!String(CK.hall||'').trim()||CK.mode!=='pick'&&/^\s*off[ -]?campus\s*$/i.test(CK.hall)){ERR=/off/i.test(CK.hall||'')?'Which area off campus? Like Asherifa or Mayfair.':'Tell the shop where to bring it.';return rer();}
+  if(false&&!CK.hall.trim()||/^\s*off[ -]?campus\s*$/i.test(CK.hall)){ERR=/off/i.test(CK.hall)?'Which area off campus? Like Asherifa or Mayfair.':'Tell the shop where to bring it.';return rer();}
   if(!/^(0[789]\d{9}|234[789]\d{9}|[789]\d{9})$/.test(ph)){ERR='Add your WhatsApp number, like 0803 123 4567.';return rer();}
   const L=lines(v);if(!L.length)return;BUSY=true;rer();
   const body={acct:1,vid:(localStorage.getItem('stafly_vid')||('v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10))).replace(/[^a-z0-9]/g,'').slice(0,24),phone:ph,name:CK.name,hall:CK.hall,note:CK.note,items:L.map(l=>({name:l.name,qty:l.qty})),back:location.origin+location.pathname};
-  if(CK.mode==='new'){body.group='new';body.groupSize=4;}else if(CK.mode!=='solo')body.group=CK.mode;
+  if(CK.mode==='pick'){body.pickup=1;body.hall='';}else if(CK.mode==='new'){body.group='new';body.groupSize=4;}else if(CK.mode!=='solo')body.group=CK.mode;
   if(isReal(v)){try{const r=await fetch(API+'/api/w/'+v.sid+'/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       if(r.status!==404){const j=await r.json().catch(()=>({}));BUSY=false;
         if(!r.ok||!j.pay){ERR=(j&&j.error)||'Something went wrong. Please try again.';return rer();}
-        MINE.unshift({shop:v.id,ref:j.ref,track:j.track,total:j.total,at:Date.now(),fee:j.deliveryFee,hall:CK.hall,group:CK.mode!=='solo',gmode:CK.mode});sv('stafly_orders',MINE.slice(0,20));CART={shop:null,q:{}};sv('stafly_cart',CART);
+        MINE.unshift({shop:v.id,ref:j.ref,track:j.track,total:j.total,at:Date.now(),fee:j.deliveryFee,hall:CK.hall,group:CK.mode!=='solo'&&CK.mode!=='pick',gmode:CK.mode,pick:CK.mode==='pick'?1:0});sv('stafly_orders',MINE.slice(0,20));CART={shop:null,q:{}};sv('stafly_cart',CART);
         location.href=j.pay;return;}}catch(_){}}
   /* preview: a pretend payment, then the tracking page moves on by itself */
   BUSY=false;const ref='DEMO-'+Date.now().toString(36).toUpperCase(),d=delivery(v);
-  MINE.unshift({shop:v.id,ref,track:ref,total:sub(v)+d,at:Date.now(),demo:1,items:L.map(l=>({name:l.name,qty:l.qty,price:l.price})),fee:d,hall:CK.hall,group:CK.mode!=='solo',gmode:CK.mode});sv('stafly_orders',MINE.slice(0,20));
+  MINE.unshift({shop:v.id,ref,track:ref,total:sub(v)+d,at:Date.now(),demo:1,items:L.map(l=>({name:l.name,qty:l.qty,price:l.price})),fee:d,hall:CK.hall,group:CK.mode!=='solo'&&CK.mode!=='pick',gmode:CK.mode,pick:CK.mode==='pick'?1:0});sv('stafly_orders',MINE.slice(0,20));
   CART={shop:null,q:{}};sv('stafly_cart',CART);m2Nav({t:CUR.t,s:'track',id:ref});}
 /* ---- tracking ---- */
 const STEPS=[['paid','Paid','The shop has your order'],['accepted','Preparing','The shop is making it'],['on_the_way','On the way','Show your code when it gets to you'],['delivered','Received','Handed over with your code']];
@@ -5237,7 +5245,7 @@ function apply(d,theme){
   v.items=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||''),clean(i.cat||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3)]).slice(0,200);
   v.wa=waDigits(d.whatsapp)||'';
   try{REACH.pvshop=d.reach==='stafly'||d.reach==='whatsapp'?d.reach:'both';if(!v.wa&&REACH.pvshop!=='stafly')REACH.pvshop='stafly';}catch(_){}
-  {const fee=Math.max(0,Number(d.defaultFee)||0);v.deliv=fee?{fee,eta:'',to:''}:null;}v.real=1;v.noloc=1;
+  v.deliv=typeof d.campusFee==='number'&&d.campusFee>=0?{fee:Math.round(d.campusFee),eta:'',to:''}:null;v.pickup=!!d.pickup;v.fol=Math.max(0,Number(d.followers)||0);v.fol0=0;v.real=1;v.noloc=1;
   const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
   else{v.hours=null;v.days=null;v.closedToday=false;}
   const rv=d.reviews||{};const L=(rv.latest||[]).filter(r=>r&&r.rating>=1&&r.rating<=5);
@@ -8513,7 +8521,7 @@ var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='cart'
     top='<div class="dv-row"><span class="dv-ic">'+PIN+'</span><div class="dv-t"><b>'+(place?esc(place):'Choose where to bring it')+'</b><small>'+sub+'</small></div><button type="button" class="dv-ch" data-dvopen="1">'+(place?'Change':'Choose')+'</button></div>'+
       '<div class="dv-pk">'+'<input class="dv-q" type="text" placeholder="Search or type a place" autocomplete="off">'+'<div class="dv-l">'+list+'</div></div>';
   }
-  var dv='<div class="m-sh"><b>Deliver to</b></div><div class="m-card dv-c'+(place||lock?'':' open')+'">'+top+spotLbl+'</div>';
+  var dv=(CK.mode==='pick'||ckNone(vOf(id)))?'':'<div class="m-sh"><b>Deliver to</b></div><div class="m-card dv-c'+(place||lock?'':' open')+'">'+top+spotLbl+'</div>';
   var det='<div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>'+cardOpen+rest;
   return h.slice(0,a)+dv+det;};
 window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;var b=t.closest('#mSub [data-dvopen]');if(!b)return;
