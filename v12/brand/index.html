@@ -3974,7 +3974,7 @@ document.addEventListener('input',e=>{if(e.target.id==='aPh'){AUTH.ph=e.target.v
 document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=q=>t.closest(q);let el;
   const halt=()=>{e.stopImmediatePropagation();e.preventDefault();};
   if(a('#mAScrim')){halt();return authClose();}
-  if(a('#mAuth')){halt();if(a('[data-aem]')&&!a('[data-aem]').disabled)return authEm();if(a('[data-aphs]')&&!a('[data-aphs]').disabled&&!AUTH.sent)return authPhSend();if(a('[data-aphchg]')){AUTH.step='ph';AUTH.err='';authRender();return;}if(a('[data-aback]')){clearTimeout(AUTH.pt);AUTH.ref='';AUTH.err='';AUTH.back=0;AUTH.step='em';authRender();return;}if(a('[data-aedit]')){AUTH.edit=1;AUTH.step=3;AUTH.err='';authRender();return;}if(a('[data-mout]')){authClose();try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return;}if(a('[data-atap]'))return authTap();if(a('[data-awa]'))return authWaOpen();if(a('[data-acopy]'))return authCopy();if(a('[data-aemail]')){AUTH.step='e1';AUTH.err='';authRender();setTimeout(()=>{const i=$('#aEm');i&&i.focus();},60);return;}if(a('[data-aemsend]')&&!a('[data-aemsend]').disabled)return emSend();if(a('[data-asend]')&&!a('[data-asend]').disabled)return authSend();if(a('[data-aresend]')&&!AUTH.sent)return authResend();if(a('[data-awa]'))return authWa();if(el=a('[data-astep]')){AUTH.err='';AUTH.step=+el.dataset.astep;authRender();setTimeout(()=>{const i=$('#mAuth input');i&&i.focus();},60);}
+  if(a('#mAuth')){halt();if(a('[data-aem]')&&!a('[data-aem]').disabled)return authEm();if(a('[data-aphs]')&&!a('[data-aphs]').disabled&&!AUTH.sent)return authPhSend();if(a('[data-aphchg]')){AUTH.step='ph';AUTH.err='';authRender();return;}if(a('[data-aback]')){clearTimeout(AUTH.pt);AUTH.ref='';AUTH.err='';AUTH.back=0;AUTH.step='em';authRender();return;}if(a('[data-aedit]')){AUTH.edit=1;AUTH.step=3;AUTH.err='';authRender();return;}if(a('[data-mout]')){if(window.staflySignOut){return window.staflySignOut();}authClose();try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return;}if(a('[data-atap]'))return authTap();if(a('[data-awa]'))return authWaOpen();if(a('[data-acopy]'))return authCopy();if(a('[data-aemail]')){AUTH.step='e1';AUTH.err='';authRender();setTimeout(()=>{const i=$('#aEm');i&&i.focus();},60);return;}if(a('[data-aemsend]')&&!a('[data-aemsend]').disabled)return emSend();if(a('[data-asend]')&&!a('[data-asend]').disabled)return authSend();if(a('[data-aresend]')&&!AUTH.sent)return authResend();if(a('[data-awa]'))return authWa();if(el=a('[data-astep]')){AUTH.err='';AUTH.step=+el.dataset.astep;authRender();setTimeout(()=>{const i=$('#mAuth input');i&&i.focus();},60);}
     if(el=a('[data-ahall]')){AUTH.hall=el.dataset.ahall;AUTH.name=($('#aNm')||{}).value||AUTH.name;AUTH.email=($('#aEmail')||{}).value||AUTH.email||'';authRender();}
     if(a('[data-adone]')&&!a('[data-adone]').disabled)authFinish();return;}
   if(a('[data-msign]')){halt();return authOpen('');}if(a('[data-mprof]')){halt();return profOpen();}
@@ -4152,7 +4152,7 @@ const _dr=m2Drawer;m2Drawer=function(){_dr();const h=document.querySelector('#mD
 document.addEventListener('click',e=>{const t=e.target;let el;
   if(el=t.closest('[data-pfhall]')){e.stopImmediatePropagation();const h=HALLS.find(x=>x[0]===el.dataset.pfhall);if(USER&&h){USER.hall=h[0]==='off'?'Off campus':h[1]+(h[0]==='pg'?'':' Hall');USER.hk=h[0];try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}}
     document.querySelectorAll('.pf-h').forEach(b=>b.classList.toggle('on',b===el));return;}
-  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();try{FOLLOW.clear();SAVED.clear();localStorage.removeItem('stafly_follow');}catch(_){}try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}catch(_){}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
+  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();if(window.staflySignOut)return window.staflySignOut();try{FOLLOW.clear();SAVED.clear();localStorage.removeItem('stafly_follow');}catch(_){}try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}catch(_){}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
   if(el=t.closest('#mSub [data-mtheme]')){setTimeout(()=>{if(CUR.s==='me'){const m=document.getElementById('mSub');if(m)m.innerHTML=m2Sub('me');}},30);}
 },true);
 })();
@@ -4692,7 +4692,7 @@ const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catc
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}};
 let CART=ld('stafly_cart',{shop:null,q:{}});
 let MINE=ld('stafly_orders',[]);Object.defineProperty(window,'__SFO',{get:()=>({MINE:MINE,TK:TK,demoStage:demoStage,tkFetch:tkFetch}),configurable:true});
-let CK=ld('stafly_ck',{phone:'',name:'',hall:'',note:'',mode:'solo'});Object.defineProperty(window,'CK',{get:()=>CK,configurable:true});/* v124: later add-ons (my location, photo pick) use the same checkout details */
+let CK=ld('stafly_ck',{phone:'',name:'',hall:'',note:'',mode:'solo'});window.__sfReset=function(){CART={shop:null,q:{}};MINE.length=0;CK={phone:'',name:'',hall:'',note:'',mode:'solo'};};Object.defineProperty(window,'CK',{get:()=>CK,configurable:true});/* v124: later add-ons (my location, photo pick) use the same checkout details */
 let ERR='',BUSY=false;
 const price=i=>typeof i[1]==='string'?Number(i[1].replace('from ','')):Number(i[1])||0;
 const cartOf=id=>CART.shop===id?CART.q:{};
@@ -10399,6 +10399,26 @@ window.emVerify=function(code){var A=AUTH;if(!A.fresh)return oldVerify.apply(thi
   authApi('/api/search/email/verify',{vid:vidQ(),email:A.email,code:code,fresh:1})
     .then(function(d){A.proof=(d&&d.proof)||'';A.back=0;toPh(A);})
     .catch(function(e){A.busy=0;A.err=e.message;authRender();fx('aECode');});};
+})();
+</script>
+<style id="m224">
+/* m224: one menu only. The You tab holds everything about you; the side menu button is gone. */
+html body.m2on [data-mdrw]{display:none!important}
+</style>
+<script id="m224s">
+(function(){
+/* everything that belongs to one person on this phone */
+var KEYS=['stafly_follow','stafly_spots','stafly_ck','stafly_orders','stafly_cart','stafly_since','stafly_has_asks','stafly_ask_seen','stafly_mute','stafly_block','stafly_reports','stafly_owner','stafly_user'];
+function wipe(){try{FOLLOW.clear();SAVED.clear();}catch(e){}try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(function(x){x.reset();});}catch(e){}
+  try{window.__sfReset&&window.__sfReset();}catch(e){}KEYS.forEach(function(k){try{localStorage.removeItem(k);}catch(e){}});}
+window.staflyWipe=wipe;
+/* sign out from anywhere = the same clean sign out */
+window.staflySignOut=function(){try{authClose();}catch(_){}try{document.body.classList.remove('m-drw');}catch(_){}
+  try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(function(){});}catch(_){}
+  USER=null;wipe();try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}try{m2Nav({t:CUR.t});}catch(_){}};
+/* a different account signs in on this phone: start clean before anything is saved to it */
+var W=window.authWelcome;if(typeof W==='function')window.authWelcome=function(p){try{var who=p&&p.phone,was=localStorage.getItem('stafly_owner');
+    if(who&&was&&was!==who)wipe();if(who)localStorage.setItem('stafly_owner',who);}catch(e){}return W.apply(this,arguments);};
 })();
 </script>
 </body>
