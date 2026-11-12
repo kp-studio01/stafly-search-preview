@@ -10236,7 +10236,9 @@ map.on('click',function(e){if(document.body.classList.contains('m-walk'))return;
   if(!nm&&typeof LM!=='undefined'){var best=null,bd=80;for(var k in LM){var l=LM[k];var d=Math.hypot((l.ll[1]-e.lngLat.lng)/MLNG,(l.ll[0]-e.lngLat.lat)/MLAT);if(d<bd){bd=d;best=l;}}if(best)nm=best.n;}
   lift(f);
   var shops=(typeof V!=='undefined'?V:[]).filter(function(v){return v.ll&&Math.hypot((v.ll[1]-e.lngLat.lng)/MLNG,(v.ll[0]-e.lngLat.lat)/MLAT)<70;}).slice(0,6);
-  card.innerHTML='<b>'+esc(nm||'Campus building')+'</b><small>'+(shops.length?shops.length+(shops.length>1?' shops':' shop')+' here':'No shops here yet')+'</small>'+(shops.length?'<div class="row">'+shops.map(function(v){return '<button type="button" data-m220s="'+esc(v.id)+'">'+esc(v.name)+'</button>';}).join('')+'</div>':'');
+  if(!nm&&!shops.length){hide();return;}/* 2026-11-12: no card for plain unnamed buildings */
+  var sl=shops.length?shops.length+(shops.length>1?' shops':' shop')+' here':'';
+  card.innerHTML=(nm?'<b>'+esc(nm)+'</b>'+(sl?'<small>'+sl+'</small>':''):'<b>'+sl+'</b>')+(shops.length?'<div class="row">'+shops.map(function(v){return '<button type="button" data-m220s="'+esc(v.id)+'">'+esc(v.name)+'</button>';}).join('')+'</div>':'');
   card.classList.add('in');clearTimeout(ht);ht=setTimeout(hide,6000);});
 card.addEventListener('click',function(e){var b=e.target.closest('[data-m220s]');if(!b)return;hide();try{m2Open(b.dataset.m220s);}catch(_){}});
 map.on('movestart',function(e){if(e.originalEvent)hide();});
