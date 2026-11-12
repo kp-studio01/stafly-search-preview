@@ -9541,6 +9541,8 @@ window.authPhSend=function(){var A=AUTH;A.busy=1;A.err='';authRender();
     A.step='code';authRender();if(!A.viaWa)fx('aCode');})
   .catch(function(e){A.busy=0;A.err=e.message;authRender();});};
 function openWa(){var A=AUTH;window.open('https://wa.me/'+A.waNum+'?text='+encodeURIComponent(A.waText),'_blank');A.asked=1;authRender();fx('aCode');}
+/* catch the tap before the sheet's own click handler (it stops every click inside the sheet) */
+window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#mAuth .a-wa2');if(!b)return;e.stopImmediatePropagation();e.preventDefault();openWa();},true);
 var R=window.authRender;
 window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
   if(A&&A.step==='code'&&A.viaWa){var el=document.getElementById('mAuth');var pg=el&&el.querySelector('.a-pg');if(pg&&!pg.querySelector('.a-wa2')){
@@ -9548,7 +9550,6 @@ window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
     if(h)h.textContent='Get your code';
     if(sub)sub.innerHTML='Send the message on WhatsApp and we’ll reply with your code. <span class="lnk" data-aphchg="1">Change number</span>';
     var b=document.createElement('button');b.type='button';b.className='m-cta a-wa2';b.innerHTML=(typeof mS==='function'?mS('wa'):'')+(A.asked?'Open WhatsApp again':'Open WhatsApp');
-    b.addEventListener('click',function(e){e.stopPropagation();openWa();});
     if(inp)inp.parentNode.insertBefore(b,inp);
     var alt=pg.querySelector('.a-alt');if(alt)alt.style.display='none';}}
   return r;};
