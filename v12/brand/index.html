@@ -10419,7 +10419,7 @@ window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
   if(A&&A.step===3&&!A.edit){var pg=document.querySelector('#mAuth .a-pg');if(pg&&!pg.querySelector('.ob-ph')){
     var h=pg.querySelector('h2');if(h){h.textContent='Set up your profile';h.insertAdjacentHTML('afterend',ph());}
     var hl=[].slice.call(pg.querySelectorAll('.lbl')).find(function(x){return /hall/i.test(x.textContent);});if(hl)hl.textContent='Where you stay';
-    var hs=pg.querySelector('.halls');if(hs)hs.insertAdjacentHTML('afterend','<label class="lbl ob-room" for="aRoom">Room or block</label><input class="nm" id="aRoom" type="text" placeholder="e.g. Block C, Room 12 (optional)" value="'+E(A.room)+'" maxlength="60">');}}
+    var hs=pg.querySelector('.halls');if(hs)hs.insertAdjacentHTML('afterend','<div class="ob-adr"><label class="lbl ob-room" for="aRoom">Address</label><span class="lnk ob-loc" data-obloc="1">Use my location</span></div><input class="nm" id="aRoom" type="text" placeholder="Room, block or street (optional)" value="'+E(A.room)+'" maxlength="120" autocomplete="street-address">');}}
   return r;};
 var D=window.authDone;
 window.authDone=function(){var A=AUTH,photo=A&&A.photo,room=A&&String(A.room||'').trim(),hk=A&&A.hall;var r=D.apply(this,arguments);
@@ -10575,6 +10575,35 @@ function go(){var b=m.querySelector('.go');b.disabled=true;b.textContent='Deleti
     close();try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(e){}try{m2Nav({t:'explore'});}catch(e){}
   }).catch(function(e){b.disabled=false;b.textContent='Delete account';var p=m.querySelector('p');if(p){p.textContent=e.message;p.className='er';}});}
 document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-pfdel]')){e.preventDefault();e.stopPropagation();open();}},true);
+})();
+</script>
+<style id="m232">
+#mAuth .ob-adr{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:12px}
+#mAuth .ob-adr .ob-room{margin-top:0}
+#mAuth .ob-loc{font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+</style>
+<script id="m232s">
+/* m232: address field with "Use my location"; closing the sign-up sheet by mistake keeps your progress */
+(function(){
+function setAdr(v,ph){var i=document.getElementById('aRoom');if(!i)return;if(v){i.value=v;AUTH.room=v;}if(ph)i.placeholder=ph;}
+function locate(btn){if(!navigator.geolocation){setAdr('','Type your address');return;}
+  btn.textContent='Finding you…';
+  navigator.geolocation.getCurrentPosition(function(p){var la=p.coords.latitude,lo=p.coords.longitude;
+    fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&lat='+la+'&lon='+lo,{headers:{'Accept-Language':'en'}}).then(function(r){return r.json();}).then(function(d){
+      var a=d&&d.address||{};var parts=[a.house_number&&a.road?a.house_number+' '+a.road:(a.road||a.building||a.amenity||''),a.neighbourhood||a.suburb||a.quarter||'',a.city||a.town||a.village||''].filter(Boolean);
+      var v=parts.join(', ')||(d&&d.display_name||'').split(',').slice(0,3).join(',');
+      AUTH.pin=la.toFixed(5)+','+lo.toFixed(5);setAdr(v,v?'':'Type your address');btn.textContent='Use my location';
+    }).catch(function(){setAdr('','Type your address');btn.textContent='Use my location';});
+  },function(){setAdr('','Type your address');btn.textContent='Use my location';},{enableHighAccuracy:true,timeout:10000});}
+window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#mAuth [data-obloc]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();locate(b);},true);
+/* keep progress: if the sheet is closed in the middle of signing up, opening it again picks up where you were */
+var C=window.authClose,O=window.authOpen,DN=window.authDone;
+window.authClose=function(){try{if(AUTH)AUTH._closed=Date.now();}catch(e){}return C.apply(this,arguments);};
+window.authDone=function(){try{if(AUTH&&(AUTH.step===3||AUTH.edit))AUTH._fin=1;}catch(e){}return DN.apply(this,arguments);};
+window.authOpen=function(why,pend){var A=window.AUTH;
+  if(A&&A._closed&&!A._fin&&!A.edit&&A.step&&A.step!=='em'&&A.step!==1&&A.step!=='prof'&&Date.now()-A._closed<30*60*1000&&!(window.USER&&USER.wa&&A.step!==3&&A.step!=='ok')){
+    if(pend!==undefined)window.PEND=pend||null;A._closed=0;A.busy=0;A.err='';document.body.classList.remove('m-drw');authRender();document.body.classList.add('m-authon');return;}
+  return O.apply(this,arguments);};
 })();
 </script>
 </body>
