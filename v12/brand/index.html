@@ -10675,6 +10675,8 @@ html body.m-light .cx-pat::after{background:linear-gradient(180deg,rgba(248,248,
 html body #mSub .cx-id .logo.mlg{width:58px!important;height:58px!important;border-radius:50%!important;margin-bottom:14px;box-shadow:0 0 0 3px rgba(255,255,255,.14)!important}
 html body #mSub .cx-id .logo.mlg svg{width:28px!important;height:28px!important}
 .cx-id h1{margin:0;font-size:clamp(30px,8.2vw,40px);line-height:1.02;font-weight:800;letter-spacing:-.035em;color:#fff}
+.cx-id .cx-lw{white-space:nowrap}
+.cx-id h1.cx-lg{font-size:clamp(28px,7.4vw,36px)}.cx-id h1.cx-xl{font-size:clamp(24px,6.4vw,30px)}
 .cx-id h1 .vtick{width:26px;height:26px;margin-left:8px;vertical-align:-2px;display:inline-block}
 .cx-id p{margin:8px 0 0;font-size:14.5px;color:rgba(255,255,255,.72);display:flex;align-items:center;gap:8px}
 .cx-id p i{width:8px;height:8px;border-radius:50%;background:#22C55E;flex:none}
@@ -10693,7 +10695,10 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread 
 window.mTalk=function(id){var h=T.apply(this,arguments);try{
   var lg=(h.match(/<span class="logo mlg"[^>]*>[\s\S]*?<\/span>(?=<span><b>)/)||[''])[0],nm=(h.match(/<span><b>([\s\S]*?)<\/b>/)||['',''])[1],st=(h.match(/<b>[\s\S]*?<\/b><small>([\s\S]*?)<\/small>/)||['',''])[1];
   var open=/open/i.test(st)&&!/opens/i.test(st);
-  var hero='<div class="cx-hero"><div class="cx-pat"></div><div class="cx-id">'+lg+'<h1>'+nm+'</h1><p>'+(open?'<i></i>':'')+st+'</p></div></div>';
+  var k=nm.indexOf('<svg'),tx=k<0?nm:nm.slice(0,k),tk=k<0?'':nm.slice(k),sp=tx.lastIndexOf(' '),plain=tx.replace(/<[^>]*>/g,'');
+  var nmH=tk?(sp<0?'<span class="cx-lw">'+tx+tk+'</span>':tx.slice(0,sp+1)+'<span class="cx-lw">'+tx.slice(sp+1)+tk+'</span>'):tx;
+  var fz=plain.length>24?' cx-xl':plain.length>16?' cx-lg':'';
+  var hero='<div class="cx-hero"><div class="cx-pat"></div><div class="cx-id">'+lg+'<h1 class="'+fz.trim()+'">'+nmH+'</h1><p>'+(open?'<i></i>':'')+st+'</p></div></div>';
   h=h.replace(/(<\/div>\s*)(<div class="m-thread")/,'$1'+hero+'$2');}catch(e){}
   return h;};
 var sub=document.getElementById('mSub');
@@ -10702,5 +10707,11 @@ document.addEventListener('scroll',function(e){if(e.target&&e.target.id==='mSub'
 var mo=new MutationObserver(function(){requestAnimationFrame(sc);});(function w(){var m=document.getElementById('mSub');if(m)mo.observe(m,{childList:true});else setTimeout(w,500);})();
 })();
 </script>
+<style id="m236">
+/* m236: every shop profile uses one colour, the soft rose (group orders keep their own colours) */
+html body #mSub .sp-cover,html body #mSub .sp-cover *,html body #mSub .sp-info,html body #mSub .sp-info *{--tt:#FF7AA8!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk{--ph:#3A2A31!important}
+html[data-spv] body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(#mSub,#mPage,#mSheet,#mDir) .sp-info.sptk{--ph:#EEDDE3!important}
+</style>
 </body>
 </html>
