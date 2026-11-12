@@ -3428,7 +3428,7 @@ function m2Apply(){const b=document.body;b.classList.remove('m-drw');
 function m2Hide(){document.body.classList.remove('m-sheeton');if(st.sel){st.sel=null;setRoute([]);for(const k in markers)markers[k].getElement().classList.remove('sel');}}
 function m2Top(){const d=document.querySelector('.m-top .dot');if(d)d.style.display=UNSEEN?'':'none';}
 function m2Tabs(){const fresh=DROPS.some(d=>d.m<2),un=CHATS.filter(c=>c.n).length;
-  $('#mTabs').innerHTML=[['explore','Explore','compass'],['places','Places','list'],['live','Live','radio'],['groups','Groups','users'],['you','You','user']].map(([k,l,ic])=>`<button class="m-tab${CUR.t===k?' on':''}" type="button" data-mtab="${k}" aria-label="${l}">${CUR.t===k&&MIF[ic]?S(MIF[ic]):mS(ic)}<span>${l}</span>${(k==='live'&&fresh)||(k==='you'&&un&&USER&&USER.wa)?'<i></i>':''}</button>`).join('');}
+  $('#mTabs').innerHTML=[['explore','Explore','compass'],['places','Places','list'],['live','Live','radio'],['groups','Groups','users'],(USER&&USER.wa?['chats','Chats','chat']:['you','You','user'])].map(([k,l,ic])=>`<button class="m-tab${CUR.t===k?' on':''}" type="button" data-mtab="${k}" aria-label="${l}">${CUR.t===k&&MIF[ic]?S(MIF[ic]):mS(ic)}<span>${l}</span>${(k==='live'&&fresh)||(k==='you'&&un&&USER&&USER.wa)||(k==='chats'&&un)?'<i></i>':''}</button>`).join('');}
 function m2Chips(){return (st.type?`<button class="mc on mc-type" type="button" data-typex="1">${S(ICON[st.cat])}${typeL(st.type)}<b aria-label="Clear">×</b></button>`:'')+CATS.filter(([k])=>k!=='all'||!st.type).map(([k,l])=>`<button class="mc${st.cat===k?' on':''}" type="button" data-cat="${k}">${k==='all'?mS('grid'):S(ICON[k])}${k==='all'?'All':catL(k)}</button>`).join('')+`<button class="mc mc-more" type="button" data-catall="1">${mS('grid')}More</button>`;}
 function m2Refresh(){if(!$('#mChips'))return;$('#mChips').innerHTML=m2Chips();
   const op=results.filter(r=>isOpen(r.v)),nr=op.slice().sort((a,b)=>dist(a.v)-dist(b.v))[0];
@@ -3974,11 +3974,11 @@ document.addEventListener('input',e=>{if(e.target.id==='aPh'){AUTH.ph=e.target.v
 document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=q=>t.closest(q);let el;
   const halt=()=>{e.stopImmediatePropagation();e.preventDefault();};
   if(a('#mAScrim')){halt();return authClose();}
-  if(a('#mAuth')){halt();if(a('[data-aem]')&&!a('[data-aem]').disabled)return authEm();if(a('[data-aphs]')&&!a('[data-aphs]').disabled&&!AUTH.sent)return authPhSend();if(a('[data-aphchg]')){AUTH.step='ph';AUTH.err='';authRender();return;}if(a('[data-aback]')){clearTimeout(AUTH.pt);AUTH.ref='';AUTH.err='';AUTH.back=0;AUTH.step='em';authRender();return;}if(a('[data-aedit]')){AUTH.edit=1;AUTH.step=3;AUTH.err='';authRender();return;}if(a('[data-mout]')){authClose();try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return;}if(a('[data-atap]'))return authTap();if(a('[data-awa]'))return authWaOpen();if(a('[data-acopy]'))return authCopy();if(a('[data-aemail]')){AUTH.step='e1';AUTH.err='';authRender();setTimeout(()=>{const i=$('#aEm');i&&i.focus();},60);return;}if(a('[data-aemsend]')&&!a('[data-aemsend]').disabled)return emSend();if(a('[data-asend]')&&!a('[data-asend]').disabled)return authSend();if(a('[data-aresend]')&&!AUTH.sent)return authResend();if(a('[data-awa]'))return authWa();if(el=a('[data-astep]')){AUTH.err='';AUTH.step=+el.dataset.astep;authRender();setTimeout(()=>{const i=$('#mAuth input');i&&i.focus();},60);}
+  if(a('#mAuth')){halt();if(a('[data-aem]')&&!a('[data-aem]').disabled)return authEm();if(a('[data-aphs]')&&!a('[data-aphs]').disabled&&!AUTH.sent)return authPhSend();if(a('[data-aphchg]')){AUTH.step='ph';AUTH.err='';authRender();return;}if(a('[data-aback]')){clearTimeout(AUTH.pt);AUTH.ref='';AUTH.err='';AUTH.back=0;AUTH.step='em';authRender();return;}if(a('[data-aedit]')){AUTH.edit=1;AUTH.step=3;AUTH.err='';authRender();return;}if(a('[data-mout]')){if(window.staflySignOut){return window.staflySignOut();}authClose();try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return;}if(a('[data-atap]'))return authTap();if(a('[data-awa]'))return authWaOpen();if(a('[data-acopy]'))return authCopy();if(a('[data-aemail]')){AUTH.step='e1';AUTH.err='';authRender();setTimeout(()=>{const i=$('#aEm');i&&i.focus();},60);return;}if(a('[data-aemsend]')&&!a('[data-aemsend]').disabled)return emSend();if(a('[data-asend]')&&!a('[data-asend]').disabled)return authSend();if(a('[data-aresend]')&&!AUTH.sent)return authResend();if(a('[data-awa]'))return authWa();if(el=a('[data-astep]')){AUTH.err='';AUTH.step=+el.dataset.astep;authRender();setTimeout(()=>{const i=$('#mAuth input');i&&i.focus();},60);}
     if(el=a('[data-ahall]')){AUTH.hall=el.dataset.ahall;AUTH.name=($('#aNm')||{}).value||AUTH.name;AUTH.email=($('#aEmail')||{}).value||AUTH.email||'';authRender();}
     if(a('[data-adone]')&&!a('[data-adone]').disabled)authFinish();return;}
   if(a('[data-msign]')){halt();return authOpen('');}if(a('[data-mprof]')){halt();return profOpen();}
-  if(a('[data-mout]')){halt();try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return m2Drawer();}
+  if(a('[data-mout]')){halt();if(window.staflySignOut){window.staflySignOut();return m2Drawer();}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return m2Drawer();}
   if(USER)return;
   if(el=a('[data-msave]')){halt();if(a('#mBan'))m2BanHide();return authOpen('Sign in to save shops and find them again in one tap.',{k:'save',id:el.dataset.msave});}
   if(el=a('[data-mjoin]')||a('[data-mbjoin]')){halt();const id=el.dataset.mjoin||el.dataset.mbjoin;if(a('#mBan'))m2BanHide();if(joined.has(id))return;return authOpen('Sign in to join the group order, so the vendor knows who to deliver to.',{k:'join',id,go:!!el.dataset.mbjoin});}
@@ -4152,7 +4152,7 @@ const _dr=m2Drawer;m2Drawer=function(){_dr();const h=document.querySelector('#mD
 document.addEventListener('click',e=>{const t=e.target;let el;
   if(el=t.closest('[data-pfhall]')){e.stopImmediatePropagation();const h=HALLS.find(x=>x[0]===el.dataset.pfhall);if(USER&&h){USER.hall=h[0]==='off'?'Off campus':h[1]+(h[0]==='pg'?'':' Hall');USER.hk=h[0];try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}}
     document.querySelectorAll('.pf-h').forEach(b=>b.classList.toggle('on',b===el));return;}
-  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();try{FOLLOW.clear();SAVED.clear();localStorage.removeItem('stafly_follow');}catch(_){}try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}catch(_){}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
+  if(t.closest('[data-pfout]')){e.stopImmediatePropagation();if(window.staflySignOut)return window.staflySignOut();try{FOLLOW.clear();SAVED.clear();localStorage.removeItem('stafly_follow');}catch(_){}try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(x=>x.reset());}catch(_){}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}return m2Nav({t:CUR.t});}
   if(el=t.closest('#mSub [data-mtheme]')){setTimeout(()=>{if(CUR.s==='me'){const m=document.getElementById('mSub');if(m)m.innerHTML=m2Sub('me');}},30);}
 },true);
 })();
@@ -4692,7 +4692,7 @@ const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catc
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}};
 let CART=ld('stafly_cart',{shop:null,q:{}});
 let MINE=ld('stafly_orders',[]);
-let CK=ld('stafly_ck',{phone:'',name:'',hall:'',note:'',mode:'solo'});Object.defineProperty(window,'CK',{get:()=>CK,configurable:true});/* v124: later add-ons (my location, photo pick) use the same checkout details */
+let CK=ld('stafly_ck',{phone:'',name:'',hall:'',note:'',mode:'solo'});window.__sfReset=function(){CART={shop:null,q:{}};MINE.length=0;CK={phone:'',name:'',hall:'',note:'',mode:'solo'};};Object.defineProperty(window,'CK',{get:()=>CK,configurable:true});/* v124: later add-ons (my location, photo pick) use the same checkout details */
 let ERR='',BUSY=false;
 const price=i=>typeof i[1]==='string'?Number(i[1].replace('from ','')):Number(i[1])||0;
 const cartOf=id=>CART.shop===id?CART.q:{};
@@ -9063,7 +9063,7 @@ const _sb=m2Sub;m2Sub=function(k,id){
   let x=_sb.apply(this,arguments);if(k==='me'&&typeof x==='string'&&USER)x=x.replace('data-mtab="chats"','data-msub="chats"');return x;};
 const _nv=m2Nav;m2Nav=function(o){
   if(o&&o.s==='talk'&&!(USER&&USER.wa)){authOpen('',{k:'talk',id:o.id});return;}
-  if(o&&o.t==='chats'&&!o.s)o=Object.assign({},o,{t:'you',s:'chats'});
+  if(o&&o.t==='chats'&&!o.s&&!(USER&&USER.wa))o=Object.assign({},o,{t:'you',s:'chats'});
   return _nv.call(this,o);};
 // a signed-in buyer's details are fresh on the You tab
 try{m2Tabs();}catch(_){}
@@ -9527,6 +9527,117 @@ body.lv-on #lvBk{display:block}
   document.body.appendChild(b);}
 if(document.body)mk();else document.addEventListener('DOMContentLoaded',mk);})();
 </script>
+<style id="m225">
+#mAuth .a-wa2{margin:4px 0 14px}
+</style>
+<script id="m225s">
+/* m225: WhatsApp code the standard way, for free: tap Open WhatsApp, send "Hi Stafly, please send my sign-in code",
+   Stafly replies with a 6-digit code, type it here. (Works without the paid template.) */
+(function(){
+function fx(id){setTimeout(function(){var i=document.getElementById(id);i&&i.focus();},80);}
+window.authPhSend=function(){var A=AUTH;A.busy=1;A.err='';authRender();
+  authApi('/api/search/signin/start',{vid:vidQ(),phone:authPh()}).then(function(d){A.busy=0;
+    A.viaWa=!!(d&&d.wa);A.waNum=(d&&d.wa)||'';A.waText=(d&&d.text)||'Hi Stafly, please send my sign-in code.';
+    A.step='code';authRender();if(!A.viaWa)fx('aCode');})
+  .catch(function(e){A.busy=0;A.err=e.message;authRender();});};
+function openWa(){var A=AUTH;window.open('https://wa.me/'+A.waNum+'?text='+encodeURIComponent(A.waText),'_blank');A.asked=1;authRender();fx('aCode');}
+var R=window.authRender;
+window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
+  if(A&&A.step==='code'&&A.viaWa){var el=document.getElementById('mAuth');var pg=el&&el.querySelector('.a-pg');if(pg&&!pg.querySelector('.a-wa2')){
+    var h=pg.querySelector('h2'),sub=pg.querySelector('.sub'),inp=pg.querySelector('#aCode');
+    if(h)h.textContent='Get your code';
+    if(sub)sub.innerHTML='Send the message on WhatsApp and we’ll reply with your code. <span class="lnk" data-aphchg="1">Change number</span>';
+    var b=document.createElement('button');b.type='button';b.className='m-cta a-wa2';b.innerHTML=(typeof mS==='function'?mS('wa'):'')+(A.asked?'Open WhatsApp again':'Open WhatsApp');
+    b.addEventListener('click',function(e){e.stopPropagation();openWa();});
+    if(inp)inp.parentNode.insertBefore(b,inp);
+    var alt=pg.querySelector('.a-alt');if(alt)alt.style.display='none';}}
+  return r;};
+})();
+</script>
+<style id="m227">
+/* m227: sign-up profile setup: photo, name, where you stay */
+#mAuth .ob-ph{display:flex;align-items:center;gap:14px;margin:6px 0 18px;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+#mAuth .ob-ph .av{position:relative;width:64px;height:64px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);border:1.5px dashed rgba(255,255,255,.28)}
+body.m-light #mAuth .ob-ph .av{background:#F1F1F3;border-color:#C9C9D1}
+#mAuth .ob-ph .av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+#mAuth .ob-ph .av.has{border:0}
+#mAuth .ob-ph .av svg{width:24px;height:24px;opacity:.75}
+#mAuth .ob-ph b{display:block;font-weight:600;font-size:15px}
+#mAuth .ob-ph small{display:block;opacity:.6;font-size:13px;margin-top:2px}
+#mAuth .ob-room{margin-top:12px}
+html body.m2on #mAuth .halls button.on{background:#fff!important;color:#121215!important;border-color:#fff!important}
+html body.m2on.m-light #mAuth .halls button.on{background:#121215!important;color:#fff!important;border-color:#121215!important}
+</style>
+<script id="m227s">
+(function(){
+var CAMI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>';
+function E(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+var fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.style.display='none';document.body.appendChild(fi);
+fi.addEventListener('change',function(){var f=fi.files&&fi.files[0];fi.value='';if(!f||!/^image\//.test(f.type))return;
+  var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var n=256,c=document.createElement('canvas');c.width=c.height=n;var x=c.getContext('2d'),m=Math.min(im.width,im.height);
+    x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);URL.revokeObjectURL(u);AUTH.photo=c.toDataURL('image/jpeg',.82);var a=document.querySelector('#mAuth .ob-ph');if(a)a.outerHTML=ph();};
+  im.onerror=function(){URL.revokeObjectURL(u);};im.src=u;});
+function ph(){var p=AUTH.photo;return '<button type="button" class="ob-ph" data-obph="1"><span class="av'+(p?' has':'')+'">'+(p?'<img src="'+p+'" alt="">':CAMI)+'</span><span><b>'+(p?'Change photo':'Add a photo')+'</b><small>Optional</small></span></button>';}
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-obph]')){e.preventDefault();e.stopPropagation();fi.click();}},true);
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='aRoom')AUTH.room=e.target.value;});
+var R=window.authRender;
+window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
+  if(A&&A.step===3&&!A.edit){var pg=document.querySelector('#mAuth .a-pg');if(pg&&!pg.querySelector('.ob-ph')){
+    var h=pg.querySelector('h2');if(h){h.textContent='Set up your profile';h.insertAdjacentHTML('afterend',ph());}
+    var hl=[].slice.call(pg.querySelectorAll('.lbl')).find(function(x){return /hall/i.test(x.textContent);});if(hl)hl.textContent='Where you stay';
+    var hs=pg.querySelector('.halls');if(hs)hs.insertAdjacentHTML('afterend','<label class="lbl ob-room" for="aRoom">Room or block</label><input class="nm" id="aRoom" type="text" placeholder="e.g. Block C, Room 12 (optional)" value="'+E(A.room)+'" maxlength="60">');}}
+  return r;};
+var D=window.authDone;
+window.authDone=function(){var A=AUTH,photo=A&&A.photo,room=A&&String(A.room||'').trim(),hk=A&&A.hall;var r=D.apply(this,arguments);
+  try{if(photo&&USER){USER.photo=photo;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(e){}
+  try{if(hk&&hk!=='off'){var h=HALLS.find(function(x){return x[0]===hk;}),lab=h?h[1]+(hk==='pg'?'':' Hall'):'';
+    var a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');if(!Array.isArray(a))a=[];
+    a=a.filter(function(p){return !(p.hall===lab&&(p.spot||'')===room);});a.unshift({hall:lab,spot:room,pin:''});localStorage.setItem('stafly_spots',JSON.stringify(a.slice(0,6)));
+    try{var ck=window.CK;if(ck&&!ck.hall){ck.hall=lab;if(room)ck.spot=room;localStorage.setItem('stafly_ck',JSON.stringify(ck));}}catch(_){}}}catch(e){}
+  try{m2Apply&&m2Apply();}catch(e){}
+  return r;};
+})();
+</script>
+<style id="m228">
+/* m228: "account created" moment after the profile setup */
+#mAuth .ob-done{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px 0 34px;overflow:hidden}
+#mAuth .ob-done .ring{position:relative;width:96px;height:96px;margin-bottom:18px}
+#mAuth .ob-done .ring svg.r{position:absolute;inset:0;width:96px;height:96px;transform:rotate(-90deg)}
+#mAuth .ob-done .ring svg.r circle{fill:none;stroke:#4ADE80;stroke-width:3;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289;animation:obDraw .7s .1s cubic-bezier(.4,0,.2,1) forwards}
+body.m-light #mAuth .ob-done .ring svg.r circle{stroke:#16A34A}
+#mAuth .ob-done .av{position:absolute;inset:8px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 32px/1 "DM Sans",sans-serif;background:#7551DC;color:#fff;overflow:hidden;animation:obPop .45s cubic-bezier(.2,.9,.3,1.3) both}
+#mAuth .ob-done .av img{width:100%;height:100%;object-fit:cover}
+#mAuth .ob-done .ck{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#4ADE80;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--wh,#141418);animation:obPop .4s .75s cubic-bezier(.2,.9,.3,1.4) both}
+body.m-light #mAuth .ob-done .ck{background:#16A34A;box-shadow:0 0 0 4px #fff}
+#mAuth .ob-done .ck svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+#mAuth .ob-done h2{margin:0;animation:obUp .45s .55s both}
+#mAuth .ob-done p{margin:6px 0 0;opacity:.62;font-size:15px;animation:obUp .45s .68s both}
+#mAuth .ob-done i.cf{position:absolute;top:58px;left:50%;width:7px;height:11px;border-radius:2px;opacity:0;animation:obCf 1.3s .8s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes obDraw{to{stroke-dashoffset:0}}
+@keyframes obPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes obUp{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+@keyframes obCf{0%{opacity:0;transform:translate(0,0) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){#mAuth .ob-done *{animation-duration:.01s!important;animation-delay:0s!important}}
+</style>
+<script id="m228s">
+(function(){
+var D=window.authDone;if(typeof D!=='function')return;
+function E(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+window.authDone=function(){var A=AUTH,self=this,args=arguments;
+  if(!A||A.step!==3||A.edit||A._celebrated)return D.apply(self,args);
+  A._celebrated=1;var el=document.getElementById('mAuth'),pg=el&&el.querySelector('.a-pg');if(!pg)return D.apply(self,args);
+  var nm=String(A.name||'').trim().split(' ')[0],cols=['#7551DC','#4ADE80','#F5B83D','#FF7A59','#5AB0FF'],cf='';
+  for(var i=0;i<14;i++){var ang=(i/14)*Math.PI*2+Math.random()*.4,d=70+Math.random()*60;
+    cf+='<i class="cf" style="background:'+cols[i%5]+';--x:'+Math.round(Math.cos(ang)*d*1.6)+'px;--y:'+Math.round(Math.sin(ang)*d-20)+'px;--r:'+Math.round(Math.random()*540-270)+'deg;animation-delay:'+(0.8+Math.random()*.15).toFixed(2)+'s"></i>';}
+  var h0=el.offsetHeight;
+  pg.className='a-pg a-in';
+  pg.innerHTML='<div class="ob-done">'+cf+'<div class="ring"><svg class="r" viewBox="0 0 96 96"><circle cx="48" cy="48" r="46"/></svg><span class="av">'+(A.photo?'<img src="'+A.photo+'" alt="">':E((nm[0]||'').toUpperCase()))+'</span><span class="ck"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div><h2>You’re all set'+(nm?', '+E(nm):'')+'</h2><p>Your Stafly account is ready.</p></div>';
+  var bar=el.querySelector('.steps');if(bar)bar.style.visibility='hidden';
+  try{var h1=el.offsetHeight;if(Math.abs(h1-h0)>2){el.style.overflow='hidden';el.style.height=h0+'px';void el.offsetHeight;el.style.transition='transform .4s cubic-bezier(.2,.9,.2,1),height .44s cubic-bezier(.2,.8,.2,1)';el.style.height=h1+'px';setTimeout(function(){el.style.height='';el.style.overflow='';},480);}}catch(e){}
+  try{navigator.vibrate&&navigator.vibrate(18);}catch(e){}
+  setTimeout(function(){if(AUTH===A)D.apply(self,args);},2300);};
+})();
+</script>
 <style id="m222">
 /* m222: smoother sign-in step changes */
 #mAuth .a-pg.a-in{animation:aIn2 .46s cubic-bezier(.2,.8,.2,1) both}
@@ -9566,6 +9677,67 @@ window.emVerify=function(code){var A=AUTH;if(!A.fresh)return oldVerify.apply(thi
   authApi('/api/search/email/verify',{vid:vidQ(),email:A.email,code:code,fresh:1})
     .then(function(d){A.proof=(d&&d.proof)||'';A.back=0;toPh(A);})
     .catch(function(e){A.busy=0;A.err=e.message;authRender();fx('aECode');});};
+})();
+</script>
+<style id="m224">
+/* m224: clean sign out (side menu kept, 2026-11-12 Danny) */
+</style>
+<script id="m224s">
+(function(){
+/* everything that belongs to one person on this phone */
+var KEYS=['stafly_follow','stafly_spots','stafly_ck','stafly_orders','stafly_cart','stafly_since','stafly_has_asks','stafly_ask_seen','stafly_mute','stafly_block','stafly_reports','stafly_owner','stafly_user'];
+function wipe(){try{FOLLOW.clear();SAVED.clear();}catch(e){}try{CHATS.length=0;Object.values(window.SLCH||{}).forEach(function(x){x.reset();});}catch(e){}
+  try{window.__sfReset&&window.__sfReset();}catch(e){}KEYS.forEach(function(k){try{localStorage.removeItem(k);}catch(e){}});}
+window.staflyWipe=wipe;
+/* sign out from anywhere = the same clean sign out */
+window.staflySignOut=function(){try{authClose();}catch(_){}try{document.body.classList.remove('m-drw');}catch(_){}
+  try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(function(){});}catch(_){}
+  USER=null;wipe();try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(_){}try{m2Nav({t:CUR.t});}catch(_){}};
+/* a different account signs in on this phone: start clean before anything is saved to it */
+var W=window.authWelcome;if(typeof W==='function')window.authWelcome=function(p){try{var who=p&&p.phone,was=localStorage.getItem('stafly_owner');
+    if(who&&was&&was!==who)wipe();if(who)localStorage.setItem('stafly_owner',who);}catch(e){}return W.apply(this,arguments);};
+})();
+</script>
+<script id="m226s">
+/* the side menu's Profile opens the full You page (with a back button), so there is one profile only */
+(function(){var S=window.m2Sub,busy=0,P=window.m2Page;if(typeof S!=='function')return;
+if(typeof P==='function')window.m2Page=function(t){if(t!=='you')return P.apply(this,arguments);busy++;try{return P.apply(this,arguments);}finally{busy--;}};
+window.m2Sub=function(k,id){if(k==='me'&&!busy&&USER&&USER.wa){try{var x=m2Page('you');if(typeof x==='string'&&x)return x.replace('<div class="m-h"><h1>You</h1></div>','<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button><h1>Profile</h1><span style="width:46px"></span></div>');}catch(e){}}
+  return S.apply(this,arguments);};})();
+</script>
+<style id="m229">
+/* m229: delete account (standard: under Sign out, with a confirm) */
+.pf-del{display:block;margin:14px auto 4px;background:none;border:0;padding:8px 12px;font:500 14px/1 inherit;color:inherit;opacity:.55;cursor:pointer}
+#m229{position:fixed;inset:0;z-index:3000;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s;pointer-events:none}
+#m229.in{opacity:1;pointer-events:auto}
+#m229 .bx{width:100%;max-width:440px;margin:0 12px max(12px,env(safe-area-inset-bottom));padding:22px 20px 16px;border-radius:24px;background:#1A1A1F;color:#fff;transform:translateY(20px);transition:transform .3s cubic-bezier(.2,.9,.2,1)}
+#m229.in .bx{transform:none}
+body.m-light #m229 .bx{background:#fff;color:#121215}
+#m229 h3{margin:0 0 6px;font:700 19px/1.25 inherit}
+#m229 p{margin:0 0 18px;opacity:.65;font-size:14.5px;line-height:1.45}
+#m229 .er{color:#FF6B78;opacity:1}
+#m229 button{display:block;width:100%;height:50px;border:0;border-radius:14px;font:600 15.5px/1 inherit;cursor:pointer}
+#m229 .go{background:#E5484D;color:#fff;margin-bottom:8px}
+#m229 .go:disabled{opacity:.6}
+#m229 .no{background:rgba(255,255,255,.07);color:inherit}
+body.m-light #m229 .no{background:#F1F1F3}
+@media (min-width:821px){#m229{align-items:center}}
+</style>
+<script id="m229s">
+(function(){
+function addBtn(root){try{var so=(root||document).querySelectorAll('[data-pfout]');so.forEach(function(b){if(b.nextElementSibling&&b.nextElementSibling.classList.contains('pf-del'))return;b.insertAdjacentHTML('afterend','<button type="button" class="pf-del" data-pfdel="1">Delete account</button>');});}catch(e){}}
+var q=0;new MutationObserver(function(){if(q)return;q=requestAnimationFrame(function(){q=0;addBtn();});}).observe(document.body,{childList:true,subtree:true});
+var m=null;
+function open(){if(!m){m=document.createElement('div');m.id='m229';document.body.appendChild(m);m.addEventListener('click',function(e){if(e.target===m||e.target.closest('.no'))close();if(e.target.closest('.go'))go();});}
+  m.innerHTML='<div class="bx" role="dialog" aria-modal="true"><h3>Delete your account?</h3><p>Your profile, email and posts will be removed from Stafly. This can’t be undone.</p><button type="button" class="go">Delete account</button><button type="button" class="no">Cancel</button></div>';
+  void m.offsetHeight;m.classList.add('in');}
+function close(){if(m)m.classList.remove('in');}
+function go(){var b=m.querySelector('.go');b.disabled=true;b.textContent='Deleting…';
+  authApi('/api/search/account/delete',{vid:vidQ(),confirm:'delete'}).then(function(){
+    try{USER=null;window.staflyWipe&&staflyWipe();localStorage.removeItem('stafly_key');}catch(e){}
+    close();try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(e){}try{m2Nav({t:'explore'});}catch(e){}
+  }).catch(function(e){b.disabled=false;b.textContent='Delete account';var p=m.querySelector('p');if(p){p.textContent=e.message;p.className='er';}});}
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-pfdel]')){e.preventDefault();e.stopPropagation();open();}},true);
 })();
 </script>
 </body>
