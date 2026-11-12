@@ -10872,5 +10872,14 @@ html body.m2on.m2on.m2on.sub-out .m-tabs{transition:none!important}
 <script id="m250js">
 (function(){var was=document.body.classList.contains('m-subon'),t=0;new MutationObserver(function(){var on=document.body.classList.contains('m-subon');if(was&&!on){document.body.classList.add('sub-out');clearTimeout(t);t=setTimeout(function(){document.body.classList.remove('sub-out');},450);}was=on;}).observe(document.body,{attributes:true,attributeFilter:['class']});})();
 </script>
+<style id="m251">
+/* m251: lighter work for the phone while pages slide: the tab bar under a page is solid (no live blur), the sliding page keeps its own layer, and a chat row answers your tap at once */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-pgon .m-tabs,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-subon .m-tabs,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.sub-out .m-tabs{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light).m-pgon .m-tabs,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light).m-subon .m-tabs,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light).sub-out .m-tabs{background:#0E0E11!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage{will-change:transform}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .m-chat{transition:background-color .12s ease,transform .12s ease}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .m-chat:active{transform:scale(.985);background-color:rgba(255,255,255,.04)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .m-chat:active{background-color:rgba(18,18,21,.04)!important}
+</style>
 </body>
 </html>
