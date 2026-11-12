@@ -10072,73 +10072,83 @@ body.m-light #mWalk .wk-card .lg{background-color:#F1F1F3}
 @keyframes wkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 </style>
 <script id="m219s">
+/* m219: Walk mode follows your real steps (GPS). Tap a nearby shop to get a glowing path there. */
 (function(){
 if(typeof map==='undefined'||!map.on)return;
 var X='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>';
-var ui=document.createElement('div');ui.id='mWalk';ui.innerHTML='<div class="wk-top"><i class="wk-dot"></i><span class="wk-t">Walking</span><button class="wk-x" type="button" aria-label="Stop walking">'+X+'</button></div><div class="wk-card" role="button"></div><div class="wk-hint"></div><div class="wk-pad"><i class="wk-knob"></i></div>';
+var ui=document.createElement('div');ui.id='mWalk';ui.innerHTML='<div class="wk-top"><i class="wk-dot"></i><span class="wk-t">Finding you…</span><button class="wk-x" type="button" aria-label="Stop walking">'+X+'</button></div><div class="wk-card" role="button"></div><div class="wk-hint"></div>';
 (document.getElementById('m2')||document.body).appendChild(ui);
-var card=ui.querySelector('.wk-card'),hint=ui.querySelector('.wk-hint'),pad=ui.querySelector('.wk-pad'),knob=ui.querySelector('.wk-knob');
-var on=false,pos=null,head=0,camB=0,keys={},joy=null,raf=0,saved=null,me=null,lastT=0,gpsId=null,moved=0,shopNear=null;
-var SPD=5.2,MLAT=1/111320,MLNG=1/(111320*Math.cos(7.52*Math.PI/180));
-var BL=['bld','lmk','lmk2','lmk3','pop3'];
-function blocked(lng,lat){try{var p=map.project([lng,lat]);var f=map.queryRenderedFeatures([[p.x-3,p.y-3],[p.x+3,p.y+3]],{layers:BL.filter(function(id){return map.getLayer(id);})});
-  return f.some(function(x){var h=(x.properties&&(x.properties.render_height||x.properties.b))||6;var a=(x.properties&&x.properties.a)||0;return a<2&&h>1.5;});}catch(e){return false;}}
+var card=ui.querySelector('.wk-card'),hint=ui.querySelector('.wk-hint'),tt=ui.querySelector('.wk-t'),dot=ui.querySelector('.wk-dot');
+var on=false,pos=null,camB=0,saved=null,me=null,gpsId=null,walked=0,shopNear=null,tgt=null,lastRoute=null,cmp=null,keys={},raf=0,lastT=0;
+var MLAT=1/111320,MLNG=1/(111320*Math.cos(7.52*Math.PI/180));
+function M(a,b){return Math.hypot((a[0]-b[0])/MLNG,(a[1]-b[1])/MLAT);}
+function fmt(m){return m<1000?Math.round(m)+' m':(m/1000).toFixed(1)+' km';}
+function mins(m){return Math.max(1,Math.round(m/80))+' min';}
+function esc(t){return String(t||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function top(){if(!pos){tt.textContent='Finding you…';return;}tt.textContent=walked>=5?'Walked '+fmt(walked):'Walking';}
 function mkMe(){var el=document.createElement('div');el.className='wk-me';el.innerHTML='<div class="wk-av"><i class="wk-sh"></i><div class="wk-in"><i class="wk-body"></i><i class="wk-head"></i></div></div>';
   me=new maplibregl.Marker({element:el,anchor:'bottom'}).setLngLat(pos).addTo(map);}
-function cam(inst){var o={center:pos,zoom:18.4,pitch:60,bearing:camB};if(inst)map.jumpTo(o);else map.easeTo(Object.assign(o,{duration:1100}));}
-function near(){if(typeof V==='undefined'||typeof meters!=='function')return;var here=[pos[1],pos[0]],best=null,bd=1e9;
-  V.forEach(function(v){if(!v.ll)return;var d=meters(here,v.ll);if(d<bd){bd=d;best=v;}});
-  if(best&&bd<45){if(shopNear!==best.id){shopNear=best.id;var img=best.img||'';
-      card.innerHTML='<i class="lg"'+(img?' style="background-image:url(\''+String(img).replace(/'/g,'')+'\')"':'')+'></i><div><b></b><span></span></div>';
-      card.querySelector('b').textContent=best.name||'';card.querySelector('span').textContent=Math.max(5,Math.round(bd/5)*5)+' m away';card.dataset.id=best.id;card.classList.add('in');}
-    else card.querySelector('span').textContent=Math.max(5,Math.round(bd/5)*5)+' m away';}
-  else if(shopNear){shopNear=null;card.classList.remove('in');}}
+function shopCard(v,d,go){var img=v.img||'';
+  card.innerHTML='<i class="lg"'+(img?' style="background-image:url(\''+String(img).replace(/'/g,'')+'\')"':'')+'></i><div><b>'+esc(v.name)+'</b><span></span></div>';
+  card.querySelector('span').textContent=go?(d<15?'You’re here':fmt(d)+' · '+mins(d)+' · tap to open'):fmt(d)+' away · tap to go';
+  card.dataset.id=v.id;card.classList.add('in');}
+function routeTo(v){if(!pos||typeof setRoute!=='function')return;lastRoute=pos.slice();
+  var a=[pos[1],pos[0]],b=v.ll;setRoute([a,b]);
+  fetch('https://routing.openstreetmap.de/routed-foot/route/v1/foot/'+pos[0]+','+pos[1]+';'+b[1]+','+b[0]+'?overview=full&geometries=geojson').then(function(r){return r.json();}).then(function(j){
+    if(on&&tgt===v&&j.routes&&j.routes[0])setRoute(j.routes[0].geometry.coordinates.map(function(c){return[c[1],c[0]];}));}).catch(function(){});}
+function update(){if(!pos||typeof V==='undefined')return;
+  if(tgt){var d=M(pos,[tgt.ll[1],tgt.ll[0]]);shopCard(tgt,d,true);if(lastRoute&&M(pos,lastRoute)>40&&d>=15)routeTo(tgt);return;}
+  var best=null,bd=1e9;V.forEach(function(v){if(!v.ll)return;var d=M(pos,[v.ll[1],v.ll[0]]);if(d<bd){bd=d;best=v;}});
+  if(best&&bd<120){if(shopNear!==best.id)shopNear=best.id;shopCard(best,bd,false);}else if(shopNear){shopNear=null;card.classList.remove('in');}}
+function place(ll,fromGps){var moved=pos?M(ll,pos):0;
+  if(pos&&moved>1.2){var h=Math.atan2((ll[0]-pos[0])/MLNG,(ll[1]-pos[1])/MLAT)*180/Math.PI;if(cmp===null)camB=h;}
+  if(pos&&fromGps&&moved>2&&moved<60)walked+=moved;
+  pos=ll;if(!me)mkMe();else me.setLngLat(pos);
+  var el=me.getElement();el.classList.add('moving');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('moving');},1400);
+  try{YOU=[pos[1],pos[0]];}catch(e){}
+  map.easeTo({center:pos,zoom:18.2,pitch:58,bearing:camB,duration:fromGps?900:0});top();update();}
+function onCampus(ll){return ll[1]>=7.47&&ll[1]<=7.56&&ll[0]>=4.47&&ll[0]<=4.58;}
+function gps(){if(!navigator.geolocation){off('Location isn’t available here');return;}
+  gpsId=navigator.geolocation.watchPosition(function(p){var ll=[p.coords.longitude,p.coords.latitude];
+    if(!onCampus(ll)){off('Walk mode works on campus');return;}
+    hint.style.opacity=0;dot.style.background='#34C759';if(p.coords.accuracy>60&&pos)return;place(ll,true);},
+    function(){off('Turn on location to walk');},{enableHighAccuracy:true,maximumAge:1500,timeout:20000});}
+function off(msg){dot.style.background='#FF9F0A';hint.textContent=msg;hint.style.opacity=1;
+  if(!pos){var y=(typeof YOU!=='undefined'&&YOU)?YOU:[7.5196,4.5186];place([y[1],y[0]],false);}tt.textContent='Not walking';}
+function compass(e){var h=(typeof e.webkitCompassHeading==='number')?e.webkitCompassHeading:(e.absolute&&e.alpha!=null?360-e.alpha:null);if(h==null||!on)return;
+  if(cmp===null||Math.abs(((h-cmp+540)%360)-180)>4){cmp=h;camB=h;map.easeTo({bearing:camB,duration:400});}}
+function startCompass(){try{var D=window.DeviceOrientationEvent;if(D&&typeof D.requestPermission==='function'){D.requestPermission().then(function(r){if(r==='granted')addEventListener('deviceorientation',compass);}).catch(function(){});}
+  else{addEventListener('deviceorientationabsolute',compass);addEventListener('deviceorientation',compass);}}catch(e){}}
 function step(t){if(!on)return;raf=requestAnimationFrame(step);var dt=Math.min(.05,(t-(lastT||t))/1000);lastT=t;
-  var f=0,turn=0;if(keys.up)f+=1;if(keys.down)f-=.6;if(keys.left)turn-=1;if(keys.right)turn+=1;
-  var dir=null;
-  if(joy&&(Math.abs(joy.x)>.12||Math.abs(joy.y)>.12)){var ang=Math.atan2(joy.x,-joy.y)*180/Math.PI;dir=camB+ang;f=Math.min(1,Math.hypot(joy.x,joy.y));}
-  if(turn)camB+=turn*110*dt;
-  if(dir===null&&f)dir=camB+(f<0?180:0);
-  var mv=false;
-  if(dir!==null&&f){var d=Math.abs(f)*SPD*dt,r=dir*Math.PI/180;var nl=pos[0]+Math.sin(r)*d*MLNG,nt=pos[1]+Math.cos(r)*d*MLAT;
-    if(!blocked(nl,nt)){pos=[nl,nt];mv=true;}else if(!blocked(nl,pos[1])){pos=[nl,pos[1]];mv=true;}else if(!blocked(pos[0],nt)){pos=[pos[0],nt];mv=true;}
-    head=dir;if(joy){var diff=((dir-camB+540)%360)-180;camB+=diff*Math.min(1,dt*1.6);}}
-  if(mv){me.setLngLat(pos);moved+=1;if(moved===30)hint.style.opacity=0;}
-  me.getElement().classList.toggle('moving',mv);
-  if(mv||turn||joy)map.jumpTo({center:pos,bearing:camB});
-  if(mv&&moved%10===0)near();}
-function gps(){if(!navigator.geolocation)return false;try{gpsId=navigator.geolocation.watchPosition(function(p){var ll=[p.coords.longitude,p.coords.latitude];
-  if(ll[1]<7.47||ll[1]>7.56||ll[0]<4.47||ll[0]>4.58){stopGps();return;}
-  ui.classList.add('gps');ui.querySelector('.wk-t').textContent='Walking live';
-  if(pos){var dl=(ll[0]-pos[0])/MLNG,dt=(ll[1]-pos[1])/MLAT;if(Math.hypot(dl,dt)>1.5){head=Math.atan2(dl,dt)*180/Math.PI;camB=head;}}
-  pos=ll;me.setLngLat(pos);map.easeTo({center:pos,bearing:camB,duration:900});near();},function(){stopGps();},{enableHighAccuracy:true,maximumAge:2000});}catch(e){}return true;}
-function stopGps(){if(gpsId!==null){try{navigator.geolocation.clearWatch(gpsId);}catch(e){}gpsId=null;}ui.classList.remove('gps');ui.querySelector('.wk-t').textContent='Walking';}
+  if(!pos||!(keys.up||keys.left||keys.right))return;if(keys.left)camB-=100*dt;if(keys.right)camB+=100*dt;
+  var ll=pos;if(keys.up){var r=camB*Math.PI/180;ll=[pos[0]+Math.sin(r)*5*dt*MLNG,pos[1]+Math.cos(r)*5*dt*MLAT];walked+=5*dt;}
+  pos=ll;me.setLngLat(pos);me.getElement().classList.toggle('moving',!!keys.up);map.jumpTo({center:pos,bearing:camB});top();if(Math.random()<.1)update();}
 function start(){if(on)return;on=true;saved={center:map.getCenter(),zoom:map.getZoom(),pitch:map.getPitch(),bearing:map.getBearing()};
   try{saved.mp=map.getMaxPitch();map.setMaxPitch(62);}catch(e){}
-  var y=(typeof YOU!=='undefined'&&YOU)?YOU:[7.5196,4.5186];pos=[y[1],y[0]];camB=map.getBearing();moved=0;
+  pos=null;walked=0;tgt=null;cmp=null;camB=map.getBearing();hint.style.opacity=0;
+  try{if(typeof CUR!=='undefined'&&CUR.sel&&typeof V!=='undefined'){var v=V.find(function(x){return x.id===CUR.sel;});if(v&&v.ll)tgt=v;}}catch(e){}
   if(typeof SAT!=='undefined'&&SAT&&typeof setSat==='function'){saved.sat=true;setSat(false);}
-  document.body.classList.add('m-walk');mkMe();cam(false);
-  var touch=matchMedia('(pointer:coarse)').matches;hint.style.opacity=1;hint.textContent=touch?'Drag the circle to walk':'Use the arrow keys to walk';
-  if(touch)gps();
-  setTimeout(function(){lastT=0;raf=requestAnimationFrame(step);near();},1150);}
-function stop(){if(!on)return;on=false;cancelAnimationFrame(raf);stopGps();keys={};joy=null;card.classList.remove('in');shopNear=null;
+  document.body.classList.add('m-walk');top();
+  var y=(typeof YOU!=='undefined'&&YOU)?YOU:[7.5196,4.5186];place([y[1],y[0]],false);map.easeTo({center:pos,zoom:18.2,pitch:58,bearing:camB,duration:1100});
+  if(tgt)routeTo(tgt);gps();startCompass();lastT=0;raf=requestAnimationFrame(step);}
+function stop(){if(!on)return;on=false;cancelAnimationFrame(raf);keys={};
+  if(gpsId!==null){try{navigator.geolocation.clearWatch(gpsId);}catch(e){}gpsId=null;}
+  removeEventListener('deviceorientation',compass);removeEventListener('deviceorientationabsolute',compass);
+  card.classList.remove('in');shopNear=null;if(tgt&&typeof setRoute==='function')setRoute([]);tgt=null;
   document.body.classList.remove('m-walk');if(me){me.remove();me=null;}
   try{if(saved.mp)map.setMaxPitch(saved.mp);}catch(e){}
   map.easeTo({center:saved.center,zoom:saved.zoom,pitch:Math.min(saved.pitch,map.getMaxPitch()),bearing:saved.bearing,duration:900});
   if(saved.sat&&typeof setSat==='function')setSat(true);}
 window.staflyWalk={start:start,stop:stop};
 ui.querySelector('.wk-x').addEventListener('click',stop);
-card.addEventListener('click',function(){var id=card.dataset.id;if(!id)return;stop();setTimeout(function(){try{if(typeof m2Open==='function')m2Open(id);}catch(e){}},300);});
+card.addEventListener('click',function(){var id=card.dataset.id;if(!id||typeof V==='undefined')return;var v=V.find(function(x){return x.id===id;});if(!v)return;
+  if(tgt&&tgt.id===id){stop();setTimeout(function(){try{m2Open(id);}catch(e){}},300);return;}
+  tgt=v;routeTo(v);update();});
 document.addEventListener('click',function(e){if(on)return;var y=e.target.closest&&e.target.closest('.youwrap');if(!y)return;e.stopPropagation();e.preventDefault();start();},true);
 map.on('click',function(e){if(on||typeof YOU==='undefined'||!YOU)return;try{var p=map.project([YOU[1],YOU[0]]);if(Math.hypot(p.x-e.point.x,p.y-e.point.y)<34)start();}catch(_){}});
-var KM={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right'};
+var KM={ArrowUp:'up',ArrowLeft:'left',ArrowRight:'right'};
 addEventListener('keydown',function(e){if(!on)return;if(e.key==='Escape'){stop();return;}var k=KM[e.code];if(k){keys[k]=true;e.preventDefault();e.stopPropagation();}},true);
 addEventListener('keyup',function(e){var k=KM[e.code];if(k)keys[k]=false;},true);
-function jm(e){var r=pad.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,R=r.width/2-20;var dx=e.clientX-cx,dy=e.clientY-cy,l=Math.hypot(dx,dy);if(l>R){dx*=R/l;dy*=R/l;}
-  knob.style.transform='translate('+dx+'px,'+dy+'px)';joy={x:dx/R,y:dy/R};}
-pad.addEventListener('pointerdown',function(e){pad.setPointerCapture(e.pointerId);jm(e);});
-pad.addEventListener('pointermove',function(e){if(joy)jm(e);});
-['pointerup','pointercancel'].forEach(function(t){pad.addEventListener(t,function(){joy=null;knob.style.transform='';});});
 })();
 </script>
 </body>
