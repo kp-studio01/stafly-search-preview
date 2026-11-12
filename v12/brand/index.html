@@ -10387,6 +10387,50 @@ window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
   return r;};
 })();
 </script>
+<style id="m227">
+/* m227: sign-up profile setup: photo, name, where you stay */
+#mAuth .ob-ph{display:flex;align-items:center;gap:14px;margin:6px 0 18px;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+#mAuth .ob-ph .av{position:relative;width:64px;height:64px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);border:1.5px dashed rgba(255,255,255,.28)}
+body.m-light #mAuth .ob-ph .av{background:#F1F1F3;border-color:#C9C9D1}
+#mAuth .ob-ph .av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+#mAuth .ob-ph .av.has{border:0}
+#mAuth .ob-ph .av svg{width:24px;height:24px;opacity:.75}
+#mAuth .ob-ph b{display:block;font-weight:600;font-size:15px}
+#mAuth .ob-ph small{display:block;opacity:.6;font-size:13px;margin-top:2px}
+#mAuth .ob-room{margin-top:12px}
+html body.m2on #mAuth .halls button.on{background:#fff!important;color:#121215!important;border-color:#fff!important}
+html body.m2on.m-light #mAuth .halls button.on{background:#121215!important;color:#fff!important;border-color:#121215!important}
+</style>
+<script id="m227s">
+(function(){
+var CAMI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>';
+function E(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+var fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.style.display='none';document.body.appendChild(fi);
+fi.addEventListener('change',function(){var f=fi.files&&fi.files[0];fi.value='';if(!f||!/^image\//.test(f.type))return;
+  var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var n=256,c=document.createElement('canvas');c.width=c.height=n;var x=c.getContext('2d'),m=Math.min(im.width,im.height);
+    x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);URL.revokeObjectURL(u);AUTH.photo=c.toDataURL('image/jpeg',.82);var a=document.querySelector('#mAuth .ob-ph');if(a)a.outerHTML=ph();};
+  im.onerror=function(){URL.revokeObjectURL(u);};im.src=u;});
+function ph(){var p=AUTH.photo;return '<button type="button" class="ob-ph" data-obph="1"><span class="av'+(p?' has':'')+'">'+(p?'<img src="'+p+'" alt="">':CAMI)+'</span><span><b>'+(p?'Change photo':'Add a photo')+'</b><small>Optional</small></span></button>';}
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-obph]')){e.preventDefault();e.stopPropagation();fi.click();}},true);
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='aRoom')AUTH.room=e.target.value;});
+var R=window.authRender;
+window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
+  if(A&&A.step===3&&!A.edit){var pg=document.querySelector('#mAuth .a-pg');if(pg&&!pg.querySelector('.ob-ph')){
+    var h=pg.querySelector('h2');if(h){h.textContent='Set up your profile';h.insertAdjacentHTML('afterend',ph());}
+    var hl=[].slice.call(pg.querySelectorAll('.lbl')).find(function(x){return /hall/i.test(x.textContent);});if(hl)hl.textContent='Where you stay';
+    var hs=pg.querySelector('.halls');if(hs)hs.insertAdjacentHTML('afterend','<label class="lbl ob-room" for="aRoom">Room or block</label><input class="nm" id="aRoom" type="text" placeholder="e.g. Block C, Room 12 (optional)" value="'+E(A.room)+'" maxlength="60">');}}
+  return r;};
+var D=window.authDone;
+window.authDone=function(){var A=AUTH,photo=A&&A.photo,room=A&&String(A.room||'').trim(),hk=A&&A.hall;var r=D.apply(this,arguments);
+  try{if(photo&&USER){USER.photo=photo;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(e){}
+  try{if(hk&&hk!=='off'){var h=HALLS.find(function(x){return x[0]===hk;}),lab=h?h[1]+(hk==='pg'?'':' Hall'):'';
+    var a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');if(!Array.isArray(a))a=[];
+    a=a.filter(function(p){return !(p.hall===lab&&(p.spot||'')===room);});a.unshift({hall:lab,spot:room,pin:''});localStorage.setItem('stafly_spots',JSON.stringify(a.slice(0,6)));
+    try{var ck=window.CK;if(ck&&!ck.hall){ck.hall=lab;if(room)ck.spot=room;localStorage.setItem('stafly_ck',JSON.stringify(ck));}}catch(_){}}}catch(e){}
+  try{m2Apply&&m2Apply();}catch(e){}
+  return r;};
+})();
+</script>
 <style id="m222">
 /* m222: smoother sign-in step changes */
 #mAuth .a-pg.a-in{animation:aIn2 .46s cubic-bezier(.2,.8,.2,1) both}
