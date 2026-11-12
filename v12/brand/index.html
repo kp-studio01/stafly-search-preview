@@ -10759,14 +10759,17 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-h .wa-who small{font-size:13px!important;opacity:.75;margin-top:1px}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub:has(.cx-hero) .wa-h .wa-who .mlg{box-shadow:0 0 0 2px rgba(200,80,130,.28)!important}
 </style>
-<style id="m240">
-/* m240: small top bar = solid page colour, no pattern, no light edge line */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.cx-sc:has(.cx-hero) .wa-h{background:var(--cxbg,#17161B)!important;border-bottom:0!important;box-shadow:0 8px 18px -12px rgba(0,0,0,.7)!important;transition:none!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.cx-sc:has(.cx-hero) .wa-h::before{display:none!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub.cx-sc:has(.cx-hero) .wa-h{background:var(--cxbg,#FFFFFF)!important;box-shadow:0 8px 18px -14px rgba(0,0,0,.18)!important}
+<style id="m241">
+/* m241: chat page uses the same background as the other buyer pages; no flash line under the top bar */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero){background-color:var(--pgc)!important;background-image:var(--pgi)!important;background-size:var(--pgs)!important;background-position:var(--pgp)!important;background-repeat:var(--pgr)!important;background-attachment:var(--pga)!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-h{border-bottom:0!important;transition:none!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .wa-h .wa-who .mlg{box-shadow:none!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub:has(.cx-hero) .wa-h .wa-who .mlg{box-shadow:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub.cx-sc:has(.cx-hero) .wa-h{box-shadow:0 10px 24px -12px rgba(0,0,0,.6)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub.cx-sc:has(.cx-hero) .wa-h{box-shadow:0 10px 24px -14px rgba(120,40,80,.18)!important}
 </style>
+<script id="m241js">
+(function(){var T=window.mTalk;if(!T)return;window.mTalk=function(){var h=T.apply(this,arguments);try{var m=document.getElementById('mSub'),pg=document.getElementById('mPage');if(m&&pg){var c=getComputedStyle(pg);
+m.style.setProperty('--pgc',c.backgroundColor);m.style.setProperty('--pgi',c.backgroundImage);m.style.setProperty('--pgs',c.backgroundSize);m.style.setProperty('--pgp',c.backgroundPosition);m.style.setProperty('--pgr',c.backgroundRepeat);m.style.setProperty('--pga',c.backgroundAttachment);
+var lt=document.body.classList.contains('m-light');m.style.setProperty('--cxbg',lt?c.backgroundColor:'#0F0F12');}}catch(e){}return h;};})();
+</script>
 </body>
 </html>
