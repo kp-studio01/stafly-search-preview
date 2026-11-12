@@ -9529,8 +9529,6 @@ if(document.body)mk();else document.addEventListener('DOMContentLoaded',mk);})()
 </script>
 <style id="m225">
 #mAuth .a-wa2{margin:4px 0 14px}
-#mAuth .a-wa2w{display:flex;flex-direction:column;gap:8px;margin:4px 0 14px}#mAuth .a-wa2w .a-wa2{margin:0}
-#mAuth .a-wab{background:transparent!important;color:var(--ink,#121215)!important;box-shadow:inset 0 0 0 1px var(--line,#E9E7E3)!important}
 </style>
 <script id="m225s">
 /* m225: WhatsApp code the standard way, for free: tap Open WhatsApp, send "Hi Stafly, please send my sign-in code",
@@ -9542,9 +9540,9 @@ window.authPhSend=function(){var A=AUTH;A.busy=1;A.err='';authRender();
     A.viaWa=!!(d&&d.wa);A.waNum=(d&&d.wa)||'';A.waText=(d&&d.text)||'Hi Stafly, please send my sign-in code.';
     A.step='code';authRender();if(!A.viaWa)fx('aCode');})
   .catch(function(e){A.busy=0;A.err=e.message;authRender();});};
-var ANDR=/Android/i.test(navigator.userAgent);function openWa(pkg){var A=AUTH;var web='https://wa.me/'+A.waNum+'?text='+encodeURIComponent(A.waText);if(ANDR&&pkg){location.href='intent://send/?phone='+A.waNum+'&text='+encodeURIComponent(A.waText)+'#Intent;scheme=whatsapp;package='+pkg+';S.browser_fallback_url='+encodeURIComponent(web)+';end';}else window.open(web,'_blank');A.asked=1;authRender();fx('aCode');}
+function openWa(){var A=AUTH;var web='https://wa.me/'+A.waNum+'?text='+encodeURIComponent(A.waText);if(/Android/i.test(navigator.userAgent)){location.href='intent://send/?phone='+A.waNum+'&text='+encodeURIComponent(A.waText)+'#Intent;scheme=whatsapp;S.browser_fallback_url='+encodeURIComponent(web)+';end';}else window.open(web,'_blank');A.asked=1;authRender();fx('aCode');}
 /* catch the tap before the sheet's own click handler (it stops every click inside the sheet) */
-window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#mAuth .a-wa2');if(!b)return;e.stopImmediatePropagation();e.preventDefault();openWa(b.getAttribute('data-pkg'));},true);
+window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#mAuth .a-wa2');if(!b)return;e.stopImmediatePropagation();e.preventDefault();openWa();},true);
 var R=window.authRender;
 window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
   if(A&&A.step==='code'&&A.viaWa){var el=document.getElementById('mAuth');var pg=el&&el.querySelector('.a-pg');if(pg&&!pg.querySelector('.a-wa2')){
@@ -9552,7 +9550,7 @@ window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
     if(h)h.textContent='Get your code';
     if(sub)sub.innerHTML='Send the message on WhatsApp and we’ll reply with your code. <span class="lnk" data-aphchg="1">Change number</span>';
     var b=document.createElement('button');b.type='button';b.className='m-cta a-wa2';b.innerHTML=(typeof mS==='function'?mS('wa'):'')+(A.asked?'Open WhatsApp again':'Open WhatsApp');
-    if(ANDR){b.setAttribute('data-pkg','com.whatsapp');b.innerHTML=(typeof mS==='function'?mS('wa'):'')+'WhatsApp';var b2=document.createElement('button');b2.type='button';b2.className='m-cta a-wa2 a-wab';b2.setAttribute('data-pkg','com.whatsapp.w4b');b2.innerHTML=(typeof mS==='function'?mS('wa'):'')+'WhatsApp Business';var w=document.createElement('div');w.className='a-wa2w';w.appendChild(b);w.appendChild(b2);b=w;}if(inp)inp.parentNode.insertBefore(b,inp);
+    if(inp)inp.parentNode.insertBefore(b,inp);
     var alt=pg.querySelector('.a-alt');if(alt)alt.style.display='none';}}
   return r;};
 })();
@@ -9581,7 +9579,7 @@ fi.addEventListener('change',function(){var f=fi.files&&fi.files[0];fi.value='';
     x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);URL.revokeObjectURL(u);AUTH.photo=c.toDataURL('image/jpeg',.82);var a=document.querySelector('#mAuth .ob-ph');if(a)a.outerHTML=ph();};
   im.onerror=function(){URL.revokeObjectURL(u);};im.src=u;});
 function ph(){var p=AUTH.photo;return '<button type="button" class="ob-ph" data-obph="1"><span class="av'+(p?' has':'')+'">'+(p?'<img src="'+p+'" alt="">':CAMI)+'</span><span><b>'+(p?'Change photo':'Add a photo')+'</b><small>Optional</small></span></button>';}
-document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-obph]')){e.preventDefault();e.stopPropagation();fi.click();}},true);
+window.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#mAuth [data-obph]')){e.preventDefault();e.stopImmediatePropagation();fi.click();}},true);
 document.addEventListener('input',function(e){if(e.target&&e.target.id==='aRoom')AUTH.room=e.target.value;});
 var R=window.authRender;
 window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
