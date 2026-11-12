@@ -4365,7 +4365,7 @@ const fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.s
 fi.addEventListener('change',()=>{const f=fi.files&&fi.files[0];fi.value='';if(!f||!USER||!/^image\//.test(f.type))return;
   const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const n=256,c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');
     const m=Math.min(im.width,im.height);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);URL.revokeObjectURL(u);
-    USER.photo=c.toDataURL('image/jpeg',.82);save();reSub();};im.onerror=()=>URL.revokeObjectURL(u);im.src=u;});
+    USER.photo=c.toDataURL('image/jpeg',.82);save();reSub();try{profPush({photo:USER.photo});}catch(_){}};im.onerror=()=>URL.revokeObjectURL(u);im.src=u;});
 document.addEventListener('click',e=>{if(e.target.closest('[data-pfpic]')&&USER){e.preventDefault();fi.click();}});
 
 /* 2) trusted buyer: earned after 5 paid orders with no cancellations; sellers see it */
@@ -5120,7 +5120,7 @@ document.addEventListener('click',e=>{
   const r=t.closest('#mSub [data-mitem]');
   if(r&&!t.closest('button')){e.preventDefault();e.stopImmediatePropagation();IT={id:CUR.id,k:Number(r.dataset.mitem),q:Math.max(1,miIn(CUR.id,Number(r.dataset.mitem)))};draw();requestAnimationFrame(()=>sh.classList.add('on'));miPush();return;}
   const mc=t.closest('#mSub [data-micat]');if(mc){e.preventDefault();e.stopImmediatePropagation();window.MCAT=window.MCAT||{};MCAT[CUR.id]=mc.dataset.micat;const p=$('#mSub');if(p){const y=p.scrollTop;p.innerHTML=m2Sub(CUR.s,CUR.id);p.scrollTop=y;}return;}
-  const ct=t.closest('[data-chtab]');if(ct){e.preventDefault();e.stopImmediatePropagation();CHTAB=ct.dataset.chtab;try{$('#mPage').innerHTML=m2Page('chats');}catch(_){}return;}
+  const ct=t.closest('[data-chtab]');if(ct){e.preventDefault();e.stopImmediatePropagation();CHTAB=ct.dataset.chtab;try{$('#mPage').innerHTML=m2Page('chats');}catch(_){}try{const sp=$('#mSub');if(sp&&CUR.s&&sp.contains(ct)){const y=sp.scrollTop;sp.innerHTML=m2Sub(CUR.s,CUR.id);sp.scrollTop=y;}}catch(_){}return;}
 },true);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&IT)close();});
 })();
@@ -9591,9 +9591,9 @@ window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
 var D=window.authDone;
 window.authDone=function(){var A=AUTH,photo=A&&A.photo,room=A&&String(A.room||'').trim(),hk=A&&A.hall;var r=D.apply(this,arguments);
   try{if(photo&&USER){USER.photo=photo;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(e){}
-  try{if(hk&&hk!=='off'){var h=HALLS.find(function(x){return x[0]===hk;}),lab=h?h[1]+(hk==='pg'?'':' Hall'):'';
+  try{if(hk){var lab=profHall(hk),pin=(A&&A.pin)||'';
     var a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');if(!Array.isArray(a))a=[];
-    a=a.filter(function(p){return !(p.hall===lab&&(p.spot||'')===room);});a.unshift({hall:lab,spot:room,pin:''});localStorage.setItem('stafly_spots',JSON.stringify(a.slice(0,6)));
+    a=a.filter(function(p){return !(p.hall===lab&&(p.spot||'')===room);});if(room||!a.some(function(p){return p.hall===lab;}))a.unshift({hall:lab,spot:room,pin:pin});localStorage.setItem('stafly_spots',JSON.stringify(a.slice(0,6)));
     try{var ck=window.CK;if(ck&&!ck.hall){ck.hall=lab;if(room)ck.spot=room;localStorage.setItem('stafly_ck',JSON.stringify(ck));}}catch(_){}}}catch(e){}
   try{m2Apply&&m2Apply();}catch(e){}
   return r;};
@@ -9771,6 +9771,26 @@ window.authOpen=function(why,pend){var A=window.AUTH;
   if(A&&A._closed&&!A._fin&&!A.edit&&A.step&&A.step!=='em'&&A.step!==1&&A.step!=='prof'&&Date.now()-A._closed<30*60*1000&&!(window.USER&&USER.wa&&A.step!==3&&A.step!=='ok')){
     if(pend!==undefined)window.PEND=pend||null;A._closed=0;A.busy=0;A.err='';document.body.classList.remove('m-drw');authRender();document.body.classList.add('m-authon');return;}
   return O.apply(this,arguments);};
+})();
+</script>
+<script id="m233s">
+/* m233: photo + address live on the account, so they come back after signing out or on another phone */
+(function(){
+var D=window.authDone;
+window.authDone=function(){var A=AUTH,st=A&&A.step,ed=A&&A.edit,photo=A&&A.photo,room=A&&String(A.room||'').trim(),hk=A&&A.hall,pin=A&&A.pin;var r=D.apply(this,arguments);
+  if(st===3&&!ed)setTimeout(function(){var x={};if(photo)x.photo=photo;if(hk)x.spot={hall:profHall(hk),spot:room||'',pin:pin||''};if(x.photo||x.spot)profPush(x).catch(function(){});},2600);
+  return r;};
+var C=window.authClose;window.authClose=function(){try{if(AUTH&&window.USER&&USER.wa&&AUTH.step!==3)AUTH._fin=1;}catch(e){}return C.apply(this,arguments);};
+var SO=window.staflySignOut;if(SO)window.staflySignOut=function(){try{if(AUTH)AUTH._fin=1;}catch(e){}return SO.apply(this,arguments);};
+var P=window.profApply;
+window.profApply=function(p){var r=P.apply(this,arguments);
+  try{if(p&&USER){var ch=0;
+    if(p.photo&&/^data:image\/jpeg;base64,/.test(p.photo)&&USER.photo!==p.photo){USER.photo=p.photo;ch=1;}
+    if(ch)localStorage.setItem('stafly_user',JSON.stringify(USER));
+    if(p.spot&&(p.spot.hall||p.spot.spot)){var a=[];try{a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');}catch(_){}if(!Array.isArray(a))a=[];
+      a=a.filter(function(x){return !(x.hall===p.spot.hall&&!x.spot&&p.spot.spot);});if(!a.some(function(x){return x.hall===p.spot.hall&&(x.spot||'')===(p.spot.spot||'');})){a.unshift({hall:p.spot.hall,spot:p.spot.spot||'',pin:p.spot.pin||''});ch=1;}localStorage.setItem('stafly_spots',JSON.stringify(a.slice(0,6)));}
+    if(ch){try{m2Apply();}catch(_){}}}}catch(e){}
+  return r;};
 })();
 </script>
 </body>
