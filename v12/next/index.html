@@ -9664,6 +9664,9 @@ document.addEventListener('transitionend',function(e){var el=e.target;if(el&&el.
 (function(){var oldVerify=window.emVerify;
 function fx(id){setTimeout(function(){var i=document.getElementById(id);i&&i.focus();},80);}
 function toPh(A){A.busy=0;A.step='ph';authRender();fx('aPh');}
+/* the number box already shows +234: accept 0803..., 803..., 234803... or +234 0803... */
+window.authPh=function(){return '0'+String(AUTH.ph||'').replace(/\D/g,'').replace(/^234/,'').replace(/^0/,'');};
+var R0=window.authRender;window.authRender=function(){var r=R0.apply(this,arguments);var A=AUTH;if(A&&A.step==='ok'&&A.okText){var h=document.querySelector('#mAuth .a-ok h2');if(h)h.textContent=A.okText;}return r;};
 window.authEm=function(){var A=AUTH;A.email=String(A.email||'').trim();A.em=A.email;A.fresh=0;A.proof='';A.busy=1;A.err='';authRender();
   authApi('/api/search/account/check',{vid:vidQ(),email:A.email}).then(function(d){A.busy=0;
     if(d.exists&&d.mail)return emSend();
@@ -9676,7 +9679,7 @@ window.emSend=function(){var A=AUTH;A.em=A.email;A.busy=1;A.err='';var again=A.s
     .catch(function(e){A.busy=0;if(A.fresh&&/couldn.t find/i.test(e.message)){A.fresh=0;return toPh(A);}A.err=e.message;authRender();});};
 window.emVerify=function(code){var A=AUTH;if(!A.fresh)return oldVerify.apply(this,arguments);A.busy=1;A.err='';
   authApi('/api/search/email/verify',{vid:vidQ(),email:A.email,code:code,fresh:1})
-    .then(function(d){A.proof=(d&&d.proof)||'';A.back=0;toPh(A);})
+    .then(function(d){A.proof=(d&&d.proof)||'';A.back=0;A.busy=0;A.okText='Email verified';A.step='ok';authRender();try{navigator.vibrate&&navigator.vibrate(12);}catch(_){}setTimeout(function(){if(AUTH!==A||A.step!=='ok')return;A.okText='';toPh(A);},1400);})
     .catch(function(e){A.busy=0;A.err=e.message;authRender();fx('aECode');});};
 })();
 </script>
