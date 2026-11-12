@@ -3428,7 +3428,7 @@ function m2Apply(){const b=document.body;b.classList.remove('m-drw');
 function m2Hide(){document.body.classList.remove('m-sheeton');if(st.sel){st.sel=null;setRoute([]);for(const k in markers)markers[k].getElement().classList.remove('sel');}}
 function m2Top(){const d=document.querySelector('.m-top .dot');if(d)d.style.display=UNSEEN?'':'none';}
 function m2Tabs(){const fresh=DROPS.some(d=>d.m<2),un=CHATS.filter(c=>c.n).length;
-  $('#mTabs').innerHTML=[['explore','Explore','compass'],['places','Places','list'],['live','Live','radio'],['groups','Groups','users'],['you','You','user']].map(([k,l,ic])=>`<button class="m-tab${CUR.t===k?' on':''}" type="button" data-mtab="${k}" aria-label="${l}">${CUR.t===k&&MIF[ic]?S(MIF[ic]):mS(ic)}<span>${l}</span>${(k==='live'&&fresh)||(k==='you'&&un&&USER&&USER.wa)?'<i></i>':''}</button>`).join('');}
+  $('#mTabs').innerHTML=[['explore','Explore','compass'],['places','Places','list'],['live','Live','radio'],['groups','Groups','users'],(USER&&USER.wa?['chats','Chats','chat']:['you','You','user'])].map(([k,l,ic])=>`<button class="m-tab${CUR.t===k?' on':''}" type="button" data-mtab="${k}" aria-label="${l}">${CUR.t===k&&MIF[ic]?S(MIF[ic]):mS(ic)}<span>${l}</span>${(k==='live'&&fresh)||(k==='you'&&un&&USER&&USER.wa)||(k==='chats'&&un)?'<i></i>':''}</button>`).join('');}
 function m2Chips(){return (st.type?`<button class="mc on mc-type" type="button" data-typex="1">${S(ICON[st.cat])}${typeL(st.type)}<b aria-label="Clear">×</b></button>`:'')+CATS.filter(([k])=>k!=='all'||!st.type).map(([k,l])=>`<button class="mc${st.cat===k?' on':''}" type="button" data-cat="${k}">${k==='all'?mS('grid'):S(ICON[k])}${k==='all'?'All':catL(k)}</button>`).join('')+`<button class="mc mc-more" type="button" data-catall="1">${mS('grid')}More</button>`;}
 function m2Refresh(){if(!$('#mChips'))return;$('#mChips').innerHTML=m2Chips();
   const op=results.filter(r=>isOpen(r.v)),nr=op.slice().sort((a,b)=>dist(a.v)-dist(b.v))[0];
@@ -3978,7 +3978,7 @@ document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=
     if(el=a('[data-ahall]')){AUTH.hall=el.dataset.ahall;AUTH.name=($('#aNm')||{}).value||AUTH.name;AUTH.email=($('#aEmail')||{}).value||AUTH.email||'';authRender();}
     if(a('[data-adone]')&&!a('[data-adone]').disabled)authFinish();return;}
   if(a('[data-msign]')){halt();return authOpen('');}if(a('[data-mprof]')){halt();return profOpen();}
-  if(a('[data-mout]')){halt();try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return m2Drawer();}
+  if(a('[data-mout]')){halt();if(window.staflySignOut){window.staflySignOut();return m2Drawer();}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return m2Drawer();}
   if(USER)return;
   if(el=a('[data-msave]')){halt();if(a('#mBan'))m2BanHide();return authOpen('Sign in to save shops and find them again in one tap.',{k:'save',id:el.dataset.msave});}
   if(el=a('[data-mjoin]')||a('[data-mbjoin]')){halt();const id=el.dataset.mjoin||el.dataset.mbjoin;if(a('#mBan'))m2BanHide();if(joined.has(id))return;return authOpen('Sign in to join the group order, so the vendor knows who to deliver to.',{k:'join',id,go:!!el.dataset.mbjoin});}
@@ -9063,7 +9063,7 @@ const _sb=m2Sub;m2Sub=function(k,id){
   let x=_sb.apply(this,arguments);if(k==='me'&&typeof x==='string'&&USER)x=x.replace('data-mtab="chats"','data-msub="chats"');return x;};
 const _nv=m2Nav;m2Nav=function(o){
   if(o&&o.s==='talk'&&!(USER&&USER.wa)){authOpen('',{k:'talk',id:o.id});return;}
-  if(o&&o.t==='chats'&&!o.s)o=Object.assign({},o,{t:'you',s:'chats'});
+  if(o&&o.t==='chats'&&!o.s&&!(USER&&USER.wa))o=Object.assign({},o,{t:'you',s:'chats'});
   return _nv.call(this,o);};
 // a signed-in buyer's details are fresh on the You tab
 try{m2Tabs();}catch(_){}
@@ -10429,8 +10429,7 @@ window.emVerify=function(code){var A=AUTH;if(!A.fresh)return oldVerify.apply(thi
 })();
 </script>
 <style id="m224">
-/* m224: one menu only. The You tab holds everything about you; the side menu button is gone. */
-html body.m2on [data-mdrw]{display:none!important}
+/* m224: clean sign out (side menu kept, 2026-11-12 Danny) */
 </style>
 <script id="m224s">
 (function(){
@@ -10447,6 +10446,12 @@ window.staflySignOut=function(){try{authClose();}catch(_){}try{document.body.cla
 var W=window.authWelcome;if(typeof W==='function')window.authWelcome=function(p){try{var who=p&&p.phone,was=localStorage.getItem('stafly_owner');
     if(who&&was&&was!==who)wipe();if(who)localStorage.setItem('stafly_owner',who);}catch(e){}return W.apply(this,arguments);};
 })();
+</script>
+<script id="m226s">
+/* the side menu's Profile opens the full You page (with a back button), so there is one profile only */
+(function(){var S=window.m2Sub,busy=0;if(typeof S!=='function')return;
+window.m2Sub=function(k,id){if(k==='me'&&!busy&&USER&&USER.wa){busy=1;try{var x=m2Page('you');if(typeof x==='string'&&x)return x.replace('<div class="m-h"><h1>You</h1></div>','<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button><h1>Profile</h1><span style="width:46px"></span></div>');}finally{busy=0;}}
+  return S.apply(this,arguments);};})();
 </script>
 </body>
 </html>
