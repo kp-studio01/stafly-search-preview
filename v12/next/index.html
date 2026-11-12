@@ -4372,7 +4372,7 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-pfpic]')&&USER)
 const NEED=5;
 const _ms=m2Sub;m2Sub=function(k){const h=_ms.apply(this,arguments);if(k!=='me'||!USER||typeof h!=='string')return h;
   const n=Math.min(NEED,Number(USER.paid)||0),got=n>=NEED;
-  const card=`<div class="pf-card tb2${got?' got':''}"><div class="tb2-h"><span class="tb2-ic">${SH}</span><div class="tb2-t"><b>Trusted buyer</b><small>${got?'Earned. Shops can offer you pay on delivery.':n+' of '+NEED+' paid orders'}</small></div></div>`+`<div class="tb3-steps">${Array.from({length:NEED},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</div></div>`;
+  const card=`<div class="pf-card tbx${got?' got':''}"><div class="tbx-top"><div class="tbx-t"><span class="tbx-k">Stafly</span><b>Trusted buyer</b></div><span class="tbx-seal" style="--p:${n/NEED*360}deg"><span class="tbx-sin">${SH}</span></span></div><div class="tbx-cut"></div><div class="tbx-st">${Array.from({length:NEED},(_,i)=>`<i class="${i<n?'on':''}" style="--r:${[-8,5,-4,7,-6][i]}deg">${i<n?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg>':i+1}</i>`).join('')}</div><div class="tbx-ft">${got?'Earned':n+' of '+NEED+' paid orders'}</div></div>`;
   return h.replace('<div class="m-dl">Your activity</div>',card+'<div class="m-dl">Your activity</div>');};
 
 /* 3) filters */
@@ -10881,5 +10881,57 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .m-
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .m-chat:active{transform:scale(.985);background-color:rgba(255,255,255,.04)!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .m-chat:active{background-color:rgba(18,18,21,.04)!important}
 </style>
+<style id="m252">
+/* m252: trusted buyer as a stamp card: ticket shape with cut-outs, five stamps that fill with a tick per paid order */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .pf-card.tbx,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .pf-card.tbx{display:block!important;grid-template-columns:none!important;position:relative;padding:0!important;overflow:hidden;background:#0E0E11!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)!important;border-radius:24px!important;
+ -webkit-mask:radial-gradient(circle 11px at 0 88px,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 88px,#0000 97%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 11px at 0 88px,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 88px,#0000 97%,#000) right/51% 100% no-repeat}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-top{position:relative;height:88px;display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-top::before{content:'';position:absolute;inset:0;background:#1A1317 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%233A2530' stroke-width='26' stroke-linejoin='round'%3E%3Crect x='62' y='62' width='116' height='116' rx='26' transform='rotate%2845 120 120%29'/%3E%3Ccircle cx='0' cy='0' r='58'/%3E%3Ccircle cx='240' cy='0' r='58'/%3E%3Ccircle cx='0' cy='240' r='58'/%3E%3Ccircle cx='240' cy='240' r='58'/%3E%3C/g%3E%3Crect x='106' y='106' width='28' height='28' rx='6' transform='rotate%2845 120 120%29' fill='%233A2530'/%3E%3C/svg%3E") -30px -60px/170px 170px repeat;-webkit-mask:linear-gradient(100deg,rgba(0,0,0,.55) 0%,#000 50%,#000 100%),linear-gradient(180deg,#000 25%,transparent 100%);-webkit-mask-composite:source-in;mask:linear-gradient(100deg,rgba(0,0,0,.55) 0%,#000 50%,#000 100%),linear-gradient(180deg,#000 25%,transparent 100%);mask-composite:intersect}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-top>*{position:relative}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-t{display:flex;flex-direction:column;gap:2px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-k{font:600 12px/1 'DM Sans',sans-serif;color:#FF7AA8;opacity:.9}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-t b{font:700 20px/1.2 'DM Sans',sans-serif;color:#F4F3F7;letter-spacing:-.01em}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-seal{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#7551DC var(--p),rgba(255,255,255,.1) 0)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-sin{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0E0E11;color:#F4F3F7}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-seal svg{width:22px;height:22px;fill:none!important;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-cut{height:0;margin:0 18px;border-top:1.5px dashed rgba(255,255,255,.14)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-st{display:flex;justify-content:space-between;padding:20px 22px 8px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-st i{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:600 15px 'DM Sans',sans-serif;font-style:normal;color:rgba(244,243,247,.38);border:1.5px dashed rgba(255,255,255,.2)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-st i.on{border:0;background:#7551DC;color:#fff;transform:rotate(var(--r));box-shadow:inset 0 0 0 3px rgba(255,255,255,.14)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-st i svg{width:20px;height:20px;fill:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-top>*,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-st,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-ft,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-cut{grid-column:auto!important;grid-row:auto!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx-ft{padding:6px 22px 18px;font:500 14px 'DM Sans',sans-serif;color:rgba(244,243,247,.6)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx.got .tbx-sin{background:#7551DC;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on .tbx.got .tbx-ft{color:#F4F3F7;font-weight:600}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .pf-card.tbx,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .pf-card.tbx{background:#FFFFFF!important;box-shadow:inset 0 0 0 1px rgba(18,18,21,.06)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-top::before{background:#FBF3F6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%23F1DDE5' stroke-width='26' stroke-linejoin='round'%3E%3Crect x='62' y='62' width='116' height='116' rx='26' transform='rotate%2845 120 120%29'/%3E%3Ccircle cx='0' cy='0' r='58'/%3E%3Ccircle cx='240' cy='0' r='58'/%3E%3Ccircle cx='0' cy='240' r='58'/%3E%3Ccircle cx='240' cy='240' r='58'/%3E%3C/g%3E%3Crect x='106' y='106' width='28' height='28' rx='6' transform='rotate%2845 120 120%29' fill='%23F1DDE5'/%3E%3C/svg%3E") -30px -60px/170px 170px repeat}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-k{color:#C23F72}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-t b{color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-seal{background:conic-gradient(#7551DC var(--p),rgba(18,18,21,.1) 0)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-sin{background:#fff;color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx.got .tbx-sin{background:#7551DC;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-cut{border-top-color:rgba(18,18,21,.14)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-st i{color:rgba(18,18,21,.38);border-color:rgba(18,18,21,.2)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-st i.on{color:#fff;border:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx-ft{color:#6B6B75}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .tbx.got .tbx-ft{color:#121215}
+</style>
+<style id="m253">
+/* m253: WhatsApp and Email rows: same ink icons as the other rows, number/email on its own line under the label with a small green tick, so nothing overlaps */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em),html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em){display:grid!important;grid-template-columns:20px minmax(0,1fr) auto;column-gap:14px;row-gap:3px;align-items:center;height:auto!important;min-height:72px;padding-top:14px!important;padding-bottom:14px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em)>svg:first-child,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em)>svg:first-child{grid-row:1/3;color:inherit!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em)>span,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em)>span{grid-column:2;line-height:1.25}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em)>small,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em)>small{grid-column:2;margin:0!important;text-align:left!important;justify-self:start;max-width:100%;display:flex!important;align-items:center;gap:6px;min-width:0;font-size:14px!important;white-space:nowrap}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em)>small,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em)>small{overflow:hidden;padding:0!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em)>svg:not(:first-child),html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em)>svg:not(:first-child){grid-column:3;grid-row:1/3}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em)>small>*:not(.a-vf):not(.cx-v),html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em)>small>*:not(.a-vf):not(.cx-v){flex:none;margin-left:4px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em) .a-vf,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em) .a-vf{flex:none;display:inline-flex!important;align-items:center;gap:3px;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important;color:#3DD68C!important;font-size:13px!important;font-weight:600;font-style:normal}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub :is(.m-li.pf-ro,.m-li.pf-em) .a-vf svg,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage :is(.m-li.pf-ro,.m-li.pf-em) .a-vf svg{width:14px!important;height:14px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub :is(.m-li.pf-ro,.m-li.pf-em) .a-vf,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage :is(.m-li.pf-ro,.m-li.pf-em) .a-vf{color:#1A9E5C!important}
+</style>
+<script id="m253js">
+/* long emails shorten in the middle-free way: the text part ellipsizes, the tick always stays visible */
+(function(){new MutationObserver(function(){document.querySelectorAll(':is(#mSub,#mPage) :is(.m-li.pf-ro,.m-li.pf-em)>small').forEach(function(sm){if(sm.dataset.cx)return;sm.dataset.cx=1;var vf=sm.querySelector('.a-vf');var t=document.createElement('span');t.className='cx-v';t.style.cssText='overflow:hidden;text-overflow:ellipsis;min-width:0';[].slice.call(sm.childNodes).forEach(function(n){if(n!==vf)t.appendChild(n);});sm.insertBefore(t,vf||null);});}).observe(document.body,{childList:true,subtree:true});})();
+</script>
 </body>
 </html>
