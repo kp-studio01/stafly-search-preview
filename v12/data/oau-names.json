@@ -1,0 +1,4527 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-12T03:19:49Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 501525526,
+  "lat": 7.5166670,
+  "lon": 4.5000000,
+  "tags": {
+    "GNS:dsg_code": "PPL",
+    "GNS:dsg_string": "populated place",
+    "GNS:id": "-2014304",
+    "fixme": "no population estimate available, defaulted to village",
+    "name": "Kajola",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 3152152695,
+  "lat": 7.4976094,
+  "lon": 4.5226175,
+  "tags": {
+    "barrier": "gate",
+    "name": "OAU Main Gate"
+  }
+},
+{
+  "type": "node",
+  "id": 5688128327,
+  "lat": 7.5055381,
+  "lon": 4.5244611,
+  "tags": {
+    "addr:city": "Ile-Ife",
+    "amenity": "university",
+    "internet_access": "wlan",
+    "name": "AFRIGIST (Ex. RECTAS) O.A.U Campus Ile-Ife",
+    "operator": "African Regional Institute For Geospatial Information Science and Technology",
+    "operator:type": "public",
+    "website": "https://afrigist.org/"
+  }
+},
+{
+  "type": "node",
+  "id": 6154104338,
+  "lat": 7.5169102,
+  "lon": 4.5139105,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "New Buka"
+  }
+},
+{
+  "type": "node",
+  "id": 9576385315,
+  "lat": 7.4968534,
+  "lon": 4.5157940,
+  "tags": {
+    "addr:city": "Ile-Ife",
+    "addr:housenumber": "1",
+    "addr:postcode": "220282",
+    "addr:street": "Falaju",
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "bar": "yes",
+    "capacity": "50",
+    "cuisine": "regional;international",
+    "delivery": "yes",
+    "email": "indeegorestaurant@gmail.com",
+    "level": "0",
+    "name": "Indeego Restaurant & Lounge",
+    "not:name": "indigo_restaurant_&_lounge",
+    "opening_hours": "Mo-Su 10:00-22:00",
+    "payment:cash": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+2348083935761",
+    "reservation": "recommended",
+    "smoking": "no",
+    "start_date": "2022-02-14",
+    "takeaway": "yes",
+    "website": "https://www.indeegorestaurant.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 10215240617,
+  "lat": 7.4980228,
+  "lon": 4.5199071,
+  "tags": {
+    "amenity": "bus_station",
+    "name": "Cars to Osogbo"
+  }
+},
+{
+  "type": "node",
+  "id": 10675652400,
+  "lat": 7.4954016,
+  "lon": 4.5432845,
+  "tags": {
+    "addr:street": "FGWV+466, Eleyele 220101, Ife, Osun",
+    "amenity": "place_of_worship",
+    "check_date": "2025-11-14",
+    "denomination": "baptist",
+    "name": "EBENEZER BAPTIST CHURCH",
+    "religion": "christian"
+  }
+},
+{
+  "type": "node",
+  "id": 10740221463,
+  "lat": 7.5040551,
+  "lon": 4.5214470,
+  "tags": {
+    "addr:door": "No1",
+    "check_date": "2023-03-15",
+    "description": "Department of Cartography",
+    "disused:amenity": "fixme",
+    "fixme": "type",
+    "fixme:type": "MGIT Laboratory",
+    "name": "MGIT Laboratory",
+    "name:en": "MGIT Laboratory",
+    "opening_hours": "Mo-Fr 07:00-24:00",
+    "operator": "Afrigist",
+    "website": "https://afrigist.org",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12093086827,
+  "lat": 7.5052070,
+  "lon": 4.5216309,
+  "tags": {
+    "addr:city": "Ile-Ife",
+    "addr:postcode": "220282",
+    "addr:street": "Off Road 1, OAU Campus",
+    "amenity": "hospital",
+    "healthcare": "hospital",
+    "name": "Akingbade Health Bay"
+  }
+},
+{
+  "type": "node",
+  "id": 14002358099,
+  "lat": 7.4954955,
+  "lon": 4.5251534,
+  "tags": {
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "bar": "no",
+    "check_date": "2026-07-10",
+    "cuisine": "chicken;juice;salad;grill",
+    "diet:chicken": "yes",
+    "diet:fish": "yes",
+    "diet:healthy": "yes",
+    "diet:local": "yes",
+    "diet:meat": "yes",
+    "diet:non-vegetarian": "yes",
+    "diet:vegetarian": "yes",
+    "name": "Spectra",
+    "name:en": "English",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "09069483275",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002366873,
+  "lat": 7.5172536,
+  "lon": 4.5274430,
+  "tags": {
+    "addr:housename": "Faculty Of Pharmacy",
+    "addr:street": "Along Road 2",
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "bar": "no",
+    "check_date": "2026-07-10",
+    "cuisine": "pizza;burger;sandwich;chicken",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "internet_access": "no",
+    "internet_access:fee": "no",
+    "name": "Spectra",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "09069483275",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002380290,
+  "lat": 7.5165315,
+  "lon": 4.5259378,
+  "tags": {
+    "addr:housename": "HSLT C",
+    "addr:place": "College of Health Sciences",
+    "amenity": "restaurant",
+    "check_date": "2026-07-10",
+    "name": "Spectra",
+    "payment:account_cards": "yes",
+    "payment:app": "yes",
+    "payment:cards": "yes",
+    "toilets:wheelchair": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002385621,
+  "lat": 7.5161287,
+  "lon": 4.5251751,
+  "tags": {
+    "amenity": "fixme",
+    "check_date": "2026-07-10",
+    "fixme": "type",
+    "fixme:type": "walkway",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Walkway",
+    "name:en": "English",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 14002398478,
+  "lat": 7.5160924,
+  "lon": 4.5268934,
+  "tags": {
+    "addr:housename": "HSLT C",
+    "addr:place": "College of Health Sciences",
+    "amenity": "restaurant",
+    "check_date": "2026-07-10",
+    "cuisine": "local",
+    "diet:local": "yes",
+    "internet_access": "no",
+    "name": "White Hands",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+234 703 123 0763",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 14002401606,
+  "lat": 7.5161665,
+  "lon": 4.5258917,
+  "tags": {
+    "addr:housename": "HSLT C",
+    "addr:place": "College of Health Sciences",
+    "amenity": "restaurant",
+    "check_date": "2026-07-10",
+    "cuisine": "fish;regional",
+    "name": "Spectra",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002430036,
+  "lat": 7.5197662,
+  "lon": 4.5241364,
+  "tags": {
+    "addr:street": "OAU Farm Road",
+    "building": "construction",
+    "building:material": "cement_block",
+    "construction": "house",
+    "name": "Faculty Of Arts Main Building",
+    "name:en": "English",
+    "roof:levels": "1",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "node",
+  "id": 14002430934,
+  "lat": 7.5135135,
+  "lon": 4.5253408,
+  "tags": {
+    "amenity": "school",
+    "check_date": "2026-07-10",
+    "education": "school",
+    "grades": "15-17",
+    "name": "Faculty of Arts",
+    "name:en": "English",
+    "operator:type": "public",
+    "religion": "multifaith",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 14002436331,
+  "lat": 7.5135135,
+  "lon": 4.5253408,
+  "tags": {
+    "amenity": "school",
+    "check_date": "2026-07-10",
+    "education": "school",
+    "grades": "12-17",
+    "internet_access": "yes",
+    "internet_access:fee": "yes",
+    "name": "Faculty of Education",
+    "name:en": "English",
+    "opening_hours": "Mo-Fr 06:00-18:00",
+    "operator:type": "public",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 14002459514,
+  "lat": 7.5135135,
+  "lon": 4.5253408,
+  "tags": {
+    "amenity": "fixme",
+    "check_date": "2026-07-10",
+    "description": "Academic building",
+    "fixme": "type",
+    "fixme:type": "building",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "Faculty of Education",
+    "name:en": "English",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 14002480131,
+  "lat": 7.5213151,
+  "lon": 4.5231275,
+  "tags": {
+    "addr:street": "Road 5",
+    "building": "university",
+    "building:levels": "2",
+    "building:material": "concrete",
+    "name": "Social Science Walkway",
+    "name:en": "English",
+    "roof:levels": "2",
+    "roof:shape": "flat",
+    "smoking": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 135184347,
+  "center": {
+    "lat": 7.4968517,
+    "lon": 4.4819009
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "primary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Ile-Ife Expressway",
+    "oneway": "yes",
+    "ref": "F207",
+    "sidewalk": "no",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 150366416,
+  "center": {
+    "lat": 7.5088165,
+    "lon": 4.5246533
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 1",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 387309098,
+  "center": {
+    "lat": 7.4970627,
+    "lon": 4.4820252
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "primary",
+    "lanes": "1",
+    "lit": "no",
+    "name": "Ile-Ife Expressway",
+    "oneway": "yes",
+    "ref": "F207",
+    "sidewalk": "no",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 387309888,
+  "center": {
+    "lat": 7.5182042,
+    "lon": 4.5180479
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "no",
+    "parking:both": "half_on_kerb",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 387309892,
+  "center": {
+    "lat": 7.5090024,
+    "lon": 4.5243220
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 1",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 387309893,
+  "center": {
+    "lat": 7.5014576,
+    "lon": 4.5518270
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Road 7",
+    "oneway": "no",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498384,
+  "center": {
+    "lat": 7.4976196,
+    "lon": 4.5481303
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Akindoyin Street",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498391,
+  "center": {
+    "lat": 7.5053585,
+    "lon": 4.5507380
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Awotile Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498395,
+  "center": {
+    "lat": 7.4984652,
+    "lon": 4.5406404
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Opeloye Close",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498399,
+  "center": {
+    "lat": 7.4970461,
+    "lon": 4.5451304
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Fadehan Close",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498400,
+  "center": {
+    "lat": 7.5088926,
+    "lon": 4.5478257
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Olaniyan Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498403,
+  "center": {
+    "lat": 7.4982551,
+    "lon": 4.5463677
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lit": "no",
+    "name": "Akindoyin Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498405,
+  "center": {
+    "lat": 7.4947263,
+    "lon": 4.5574287
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Ooni Ilare Street",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498408,
+  "center": {
+    "lat": 7.4980572,
+    "lon": 4.5566313
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lit": "no",
+    "name": "Igboya Community",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498409,
+  "center": {
+    "lat": 7.5041332,
+    "lon": 4.5472273
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Ade-Ojo Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498413,
+  "center": {
+    "lat": 7.4950210,
+    "lon": 4.5510744
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Baale Eleyele Street",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498414,
+  "center": {
+    "lat": 7.4959531,
+    "lon": 4.5438897
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Mercy Street",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498416,
+  "center": {
+    "lat": 7.4951813,
+    "lon": 4.5491775
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Akindoyin Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498421,
+  "center": {
+    "lat": 7.5051958,
+    "lon": 4.5469451
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Olonade Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498423,
+  "center": {
+    "lat": 7.4954276,
+    "lon": 4.5467733
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Green Top Road",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498426,
+  "center": {
+    "lat": 7.4997661,
+    "lon": 4.5456795
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Akindoyin Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498427,
+  "center": {
+    "lat": 7.4950728,
+    "lon": 4.5382476
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Chief Afolabi Street",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498428,
+  "center": {
+    "lat": 7.4966246,
+    "lon": 4.5598395
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Igboya Street",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498429,
+  "center": {
+    "lat": 7.4978678,
+    "lon": 4.5404492
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Victor Adegbade Drive Way",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 389498433,
+  "center": {
+    "lat": 7.5081565,
+    "lon": 4.5473279
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Olatunbosun Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 389498435,
+  "center": {
+    "lat": 7.5088310,
+    "lon": 4.5457669
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Wasca Lane",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 478744032,
+  "center": {
+    "lat": 7.4932103,
+    "lon": 4.5371463
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Ramon Adedoyin Street",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645203,
+  "center": {
+    "lat": 7.5059564,
+    "lon": 4.5245748
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "RECTAS Road",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645208,
+  "center": {
+    "lat": 7.5075142,
+    "lon": 4.5236643
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "AFRIGIST Road",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645209,
+  "center": {
+    "lat": 7.5093794,
+    "lon": 4.5174515
+  },
+  "tags": {
+    "highway": "service",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Religious Ground Road",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645210,
+  "center": {
+    "lat": 7.5178934,
+    "lon": 4.5231788
+  },
+  "tags": {
+    "foot": "no",
+    "highway": "unclassified",
+    "lanes": "1",
+    "name": "Road link",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645211,
+  "center": {
+    "lat": 7.5170169,
+    "lon": 4.5226865
+  },
+  "tags": {
+    "foot": "no",
+    "highway": "unclassified",
+    "lanes": "1",
+    "lit": "no",
+    "name": "Link",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 538645212,
+  "center": {
+    "lat": 7.5357050,
+    "lon": 4.5421117
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 23",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645213,
+  "center": {
+    "lat": 7.5178272,
+    "lon": 4.5224302
+  },
+  "tags": {
+    "foot": "no",
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road link",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645214,
+  "center": {
+    "lat": 7.5176368,
+    "lon": 4.5233088
+  },
+  "tags": {
+    "foot": "no",
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road link",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538645215,
+  "center": {
+    "lat": 7.5180497,
+    "lon": 4.5228791
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 538645216,
+  "center": {
+    "lat": 7.5179789,
+    "lon": 4.5228708
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 538645263,
+  "center": {
+    "lat": 7.5079786,
+    "lon": 4.4941228
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Modomo Quarters",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 538665278,
+  "center": {
+    "lat": 7.4976195,
+    "lon": 4.5225175
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Road 1 link",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538665357,
+  "center": {
+    "lat": 7.5183342,
+    "lon": 4.5264913
+  },
+  "tags": {
+    "highway": "service",
+    "lit": "yes",
+    "name": "Road 6",
+    "oneway": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538665362,
+  "center": {
+    "lat": 7.5219979,
+    "lon": 4.5147126
+  },
+  "tags": {
+    "highway": "service",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "no",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538665364,
+  "center": {
+    "lat": 7.5214533,
+    "lon": 4.5162256
+  },
+  "tags": {
+    "highway": "service",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "no",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538665367,
+  "center": {
+    "lat": 7.5291723,
+    "lon": 4.5264461
+  },
+  "tags": {
+    "highway": "service",
+    "name": "OAU Farm Road",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 538665374,
+  "center": {
+    "lat": 7.5210817,
+    "lon": 4.5255904
+  },
+  "tags": {
+    "highway": "service",
+    "lit": "yes",
+    "name": "Road 5",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186793,
+  "center": {
+    "lat": 7.5361834,
+    "lon": 4.5336343
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 18",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186794,
+  "center": {
+    "lat": 7.5354656,
+    "lon": 4.5341996
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 15",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186795,
+  "center": {
+    "lat": 7.5318009,
+    "lon": 4.5308931
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "name": "Road 18",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186797,
+  "center": {
+    "lat": 7.5222058,
+    "lon": 4.5326673
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "name": "Road 2",
+    "oneway": "no",
+    "sidewalk": "left",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186798,
+  "center": {
+    "lat": 7.5186981,
+    "lon": 4.5285658
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186799,
+  "center": {
+    "lat": 7.5138799,
+    "lon": 4.5448892
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Road 7",
+    "oneway": "no",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186812,
+  "center": {
+    "lat": 7.5183405,
+    "lon": 4.5370710
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Road 7",
+    "oneway": "no",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539186815,
+  "center": {
+    "lat": 7.5225172,
+    "lon": 4.5294831
+  },
+  "tags": {
+    "highway": "service",
+    "name": "Spider Road",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337720,
+  "center": {
+    "lat": 7.5325760,
+    "lon": 4.5351794
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 13",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337724,
+  "center": {
+    "lat": 7.5194430,
+    "lon": 4.5342572
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "OAU International Staff School",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539337732,
+  "center": {
+    "lat": 7.5176029,
+    "lon": 4.5381615
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Obafemi Awolowo University Primary School",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539337754,
+  "center": {
+    "lat": 7.5272861,
+    "lon": 4.5448811
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20A",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337756,
+  "center": {
+    "lat": 7.5375538,
+    "lon": 4.5392002
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road link",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337763,
+  "center": {
+    "lat": 7.5289573,
+    "lon": 4.5451296
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337766,
+  "center": {
+    "lat": 7.5216086,
+    "lon": 4.5373980
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "name": "Road 7B",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337775,
+  "center": {
+    "lat": 7.5336601,
+    "lon": 4.5356757
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 14",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337778,
+  "center": {
+    "lat": 7.5282480,
+    "lon": 4.5348134
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "name": "Road 9A",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337782,
+  "center": {
+    "lat": 7.5224737,
+    "lon": 4.5398902
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 7C",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337783,
+  "center": {
+    "lat": 7.5216152,
+    "lon": 4.5364721
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Road 7B Quadrangle",
+    "oneway": "no",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337784,
+  "center": {
+    "lat": 7.5219775,
+    "lon": 4.5360492
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "name": "Road 7B Quadrangle",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337785,
+  "center": {
+    "lat": 7.5235513,
+    "lon": 4.5369345
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "name": "Road 9D",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337786,
+  "center": {
+    "lat": 7.5239478,
+    "lon": 4.5372932
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 9D",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337788,
+  "center": {
+    "lat": 7.5267543,
+    "lon": 4.5461358
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20AA",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337789,
+  "center": {
+    "lat": 7.5294327,
+    "lon": 4.5464073
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20C",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337790,
+  "center": {
+    "lat": 7.5290185,
+    "lon": 4.5468579
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337791,
+  "center": {
+    "lat": 7.5275240,
+    "lon": 4.5446557
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20A",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337792,
+  "center": {
+    "lat": 7.5274417,
+    "lon": 4.5445877
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20A",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337793,
+  "center": {
+    "lat": 7.5270102,
+    "lon": 4.5452185
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20A",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337794,
+  "center": {
+    "lat": 7.5293967,
+    "lon": 4.5454699
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20B",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337795,
+  "center": {
+    "lat": 7.5297683,
+    "lon": 4.5450115
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 20B",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337811,
+  "center": {
+    "lat": 7.5226926,
+    "lon": 4.5413758
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 7D",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337815,
+  "center": {
+    "lat": 7.5366341,
+    "lon": 4.5425087
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 24",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337820,
+  "center": {
+    "lat": 7.5300254,
+    "lon": 4.5322820
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 10",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337832,
+  "center": {
+    "lat": 7.5260855,
+    "lon": 4.5345157
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "name": "Road 9",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337833,
+  "center": {
+    "lat": 7.5261939,
+    "lon": 4.5345459
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "1",
+    "name": "Road link",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337834,
+  "center": {
+    "lat": 7.5262138,
+    "lon": 4.5344292
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "1",
+    "name": "Road link",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337840,
+  "center": {
+    "lat": 7.5293103,
+    "lon": 4.5366729
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 11",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337841,
+  "center": {
+    "lat": 7.5292851,
+    "lon": 4.5382782
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 12",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337843,
+  "center": {
+    "lat": 7.5317568,
+    "lon": 4.5399974
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 14 Extension",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337845,
+  "center": {
+    "lat": 7.5335945,
+    "lon": 4.5418712
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 21",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337846,
+  "center": {
+    "lat": 7.5343231,
+    "lon": 4.5420846
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 22",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337849,
+  "center": {
+    "lat": 7.5376802,
+    "lon": 4.5390211
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road link",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337850,
+  "center": {
+    "lat": 7.5386401,
+    "lon": 4.5380004
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 23",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539337852,
+  "center": {
+    "lat": 7.5307249,
+    "lon": 4.5340552
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "name": "Road 2",
+    "oneway": "no",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539347879,
+  "center": {
+    "lat": 7.5004643,
+    "lon": 4.5514378
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Olasehinde Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539347887,
+  "center": {
+    "lat": 7.5021180,
+    "lon": 4.5492927
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Plank Market street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539347890,
+  "center": {
+    "lat": 7.5060402,
+    "lon": 4.5487715
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "name": "Olufunke Awope Estate",
+    "surface": "concrete"
+  }
+},
+{
+  "type": "way",
+  "id": 539347915,
+  "center": {
+    "lat": 7.4990568,
+    "lon": 4.5592840
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Stadium Road"
+  }
+},
+{
+  "type": "way",
+  "id": 539347943,
+  "center": {
+    "lat": 7.5008376,
+    "lon": 4.5511522
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Olasehinde Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539347966,
+  "center": {
+    "lat": 7.5075366,
+    "lon": 4.5489863
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Ilori Close",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539348009,
+  "center": {
+    "lat": 7.5068325,
+    "lon": 4.5493666
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Oluwalose Quarter",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539348026,
+  "center": {
+    "lat": 7.5104641,
+    "lon": 4.5498072
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Chief Oduwole Fawole Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350284,
+  "center": {
+    "lat": 7.5003223,
+    "lon": 4.5497083
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Aworeni Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350290,
+  "center": {
+    "lat": 7.4963475,
+    "lon": 4.5498245
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Akindoyin Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350292,
+  "center": {
+    "lat": 7.4950260,
+    "lon": 4.5465146
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Agbowoerin Street",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350296,
+  "center": {
+    "lat": 7.5083645,
+    "lon": 4.5479646
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Olaniyan Street",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350301,
+  "center": {
+    "lat": 7.4988271,
+    "lon": 4.5469263
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Olasoji Awodapo Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350316,
+  "center": {
+    "lat": 7.5014064,
+    "lon": 4.5464107
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Mbabi Mbayo Line 1",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350317,
+  "center": {
+    "lat": 7.5023524,
+    "lon": 4.5474923
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Mbabi Mbayo Line 1",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539350318,
+  "center": {
+    "lat": 7.5028438,
+    "lon": 4.5472343
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Mbabi Mbayo Community",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539384698,
+  "center": {
+    "lat": 7.5008585,
+    "lon": 4.5489217
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Oluorogbo High School",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539384699,
+  "center": {
+    "lat": 7.5016151,
+    "lon": 4.5488706
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Oluorogbo High School",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539384755,
+  "center": {
+    "lat": 7.4972238,
+    "lon": 4.5411608
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "name": "St. Patrick Church",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539384759,
+  "center": {
+    "lat": 7.4950357,
+    "lon": 4.5408874
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Layi Adesiyan Street",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539544198,
+  "center": {
+    "lat": 7.5030729,
+    "lon": 4.5462153
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Mbabi Mbayo Community",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 539544199,
+  "center": {
+    "lat": 7.4985886,
+    "lon": 4.5462833
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lit": "no",
+    "name": "Akindoyin Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539544200,
+  "center": {
+    "lat": 7.5018200,
+    "lon": 4.5457282
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Mbabi Mbayo Line 2",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539544205,
+  "center": {
+    "lat": 7.4959200,
+    "lon": 4.5461720
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lit": "no",
+    "name": "Okintigu Street",
+    "parking:both": "lane",
+    "parking:both:orientation": "parallel",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539544210,
+  "center": {
+    "lat": 7.4967671,
+    "lon": 4.5492760
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Akindoyin Street",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 539544212,
+  "center": {
+    "lat": 7.4981281,
+    "lon": 4.5502633
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Awoyeku Road",
+    "oneway": "no",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 540583722,
+  "center": {
+    "lat": 7.5373154,
+    "lon": 4.5426716
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 25",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 540583723,
+  "center": {
+    "lat": 7.5386403,
+    "lon": 4.5418187
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 25",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 540583724,
+  "center": {
+    "lat": 7.5398262,
+    "lon": 4.5401269
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 25",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 540583725,
+  "center": {
+    "lat": 7.5395670,
+    "lon": 4.5385457
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 25",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 540583726,
+  "center": {
+    "lat": 7.5375966,
+    "lon": 4.5411675
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 24",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 540583727,
+  "center": {
+    "lat": 7.5383800,
+    "lon": 4.5399931
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 24",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 595564740,
+  "center": {
+    "lat": 7.5188745,
+    "lon": 4.5253945
+  },
+  "tags": {
+    "building": "yes",
+    "name": "BOOC"
+  }
+},
+{
+  "type": "way",
+  "id": 595564741,
+  "center": {
+    "lat": 7.5230790,
+    "lon": 4.5291466
+  },
+  "tags": {
+    "building": "university",
+    "name": "Civil Engineering Building"
+  }
+},
+{
+  "type": "way",
+  "id": 595564742,
+  "center": {
+    "lat": 7.5214454,
+    "lon": 4.5266969
+  },
+  "tags": {
+    "building": "university",
+    "name": "Ajose"
+  }
+},
+{
+  "type": "way",
+  "id": 597394081,
+  "center": {
+    "lat": 7.5040872,
+    "lon": 4.5214592
+  },
+  "tags": {
+    "addr:city": "Ile-Ife",
+    "building": "apartments",
+    "building:levels": "2",
+    "name": "Coker A"
+  }
+},
+{
+  "type": "way",
+  "id": 598203714,
+  "center": {
+    "lat": 7.5210220,
+    "lon": 4.5438184
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 7F",
+    "oneway": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 598414202,
+  "center": {
+    "lat": 7.5266334,
+    "lon": 4.5297437
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "2",
+    "name": "Road 8",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 598414203,
+  "center": {
+    "lat": 7.5374181,
+    "lon": 4.5338529
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 18",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 598414204,
+  "center": {
+    "lat": 7.5361834,
+    "lon": 4.5336239
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "Road 18",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 598416497,
+  "center": {
+    "lat": 7.5234057,
+    "lon": 4.5339612
+  },
+  "tags": {
+    "amenity": "school",
+    "name": "Obafemi Awolowo University Staff School"
+  }
+},
+{
+  "type": "way",
+  "id": 598416515,
+  "center": {
+    "lat": 7.5236118,
+    "lon": 4.5356924
+  },
+  "tags": {
+    "amenity": "childcare",
+    "building": "yes",
+    "name": "OAU Women's Group Day Care Centre"
+  }
+},
+{
+  "type": "way",
+  "id": 599038653,
+  "center": {
+    "lat": 7.5202217,
+    "lon": 4.5275283
+  },
+  "tags": {
+    "building": "university",
+    "name": "Central Science Laboratory"
+  }
+},
+{
+  "type": "way",
+  "id": 599038660,
+  "center": {
+    "lat": 7.5192148,
+    "lon": 4.5276258
+  },
+  "tags": {
+    "building": "university",
+    "name": "Chemical Engineering LAB"
+  }
+},
+{
+  "type": "way",
+  "id": 599038661,
+  "center": {
+    "lat": 7.5193798,
+    "lon": 4.5286836
+  },
+  "tags": {
+    "building": "university",
+    "name": "Chemical Engineering Lecture Theatre"
+  }
+},
+{
+  "type": "way",
+  "id": 599038666,
+  "center": {
+    "lat": 7.5178555,
+    "lon": 4.5283083
+  },
+  "tags": {
+    "building": "university",
+    "name": "Faculty of Technology"
+  }
+},
+{
+  "type": "way",
+  "id": 599038674,
+  "center": {
+    "lat": 7.5162692,
+    "lon": 4.5300389
+  },
+  "tags": {
+    "building": "university",
+    "name": "PG LT"
+  }
+},
+{
+  "type": "way",
+  "id": 599038677,
+  "center": {
+    "lat": 7.5165687,
+    "lon": 4.5285709
+  },
+  "tags": {
+    "building": "yes",
+    "fee": "yes",
+    "name": "Museum of Natural History",
+    "opening_hours": "Mo-Sa 08:00-16:00",
+    "tourism": "museum"
+  }
+},
+{
+  "type": "way",
+  "id": 609011287,
+  "center": {
+    "lat": 7.5127556,
+    "lon": 4.5241959
+  },
+  "tags": {
+    "highway": "service",
+    "lit": "no",
+    "name": "Awoversity Road",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 615629090,
+  "center": {
+    "lat": 7.5230363,
+    "lon": 4.5368023
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Daily Needs",
+    "payment:cash": "yes",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "way",
+  "id": 615629105,
+  "center": {
+    "lat": 7.5219136,
+    "lon": 4.5370233
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Mama Razaki's",
+    "payment:cash": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 616403534,
+  "center": {
+    "lat": 7.5094759,
+    "lon": 4.5161622
+  },
+  "tags": {
+    "addr:city": "Ile Ife",
+    "addr:street": "Religious Ground Road",
+    "building": "church",
+    "building:levels": "2",
+    "name": "Redeemed Christian Church of God"
+  }
+},
+{
+  "type": "way",
+  "id": 616403544,
+  "center": {
+    "lat": 7.5081463,
+    "lon": 4.5120319
+  },
+  "tags": {
+    "fixme": "*",
+    "name": "Oxidation Pond",
+    "natural": "water",
+    "water": "pond"
+  }
+},
+{
+  "type": "way",
+  "id": 616403545,
+  "center": {
+    "lat": 7.5066702,
+    "lon": 4.5118520
+  },
+  "tags": {
+    "fixme": "*",
+    "name": "Oxidation Pond",
+    "natural": "water",
+    "water": "pond"
+  }
+},
+{
+  "type": "way",
+  "id": 616403547,
+  "center": {
+    "lat": 7.5119515,
+    "lon": 4.5221881
+  },
+  "tags": {
+    "building": "yes",
+    "name": "ARCSSTE-E"
+  }
+},
+{
+  "type": "way",
+  "id": 616403550,
+  "center": {
+    "lat": 7.5154073,
+    "lon": 4.5204292
+  },
+  "tags": {
+    "building": "yes",
+    "leisure": "sports_centre",
+    "name": "Squash Court",
+    "sport": "squash"
+  }
+},
+{
+  "type": "way",
+  "id": 616403563,
+  "center": {
+    "lat": 7.5178481,
+    "lon": 4.5213695
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Student Union Building"
+  }
+},
+{
+  "type": "way",
+  "id": 616403572,
+  "center": {
+    "lat": 7.5187800,
+    "lon": 4.5146904
+  },
+  "tags": {
+    "building": "mosque",
+    "name": "ETF Hall Mosque"
+  }
+},
+{
+  "type": "way",
+  "id": 617712365,
+  "center": {
+    "lat": 7.5209402,
+    "lon": 4.5223661
+  },
+  "tags": {
+    "building": "university",
+    "name": "Faculty of Law",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617712366,
+  "center": {
+    "lat": 7.5213033,
+    "lon": 4.5226882
+  },
+  "tags": {
+    "addr:housename": "Faculty of Social Sciences",
+    "building": "university",
+    "name": "Faculty of Social Sciences"
+  }
+},
+{
+  "type": "way",
+  "id": 617712367,
+  "center": {
+    "lat": 7.5207376,
+    "lon": 4.5235970
+  },
+  "tags": {
+    "addr:street": "Road 5",
+    "building": "university",
+    "building:levels": "3",
+    "building:material": "concrete",
+    "name": "Faculty of Education",
+    "name:en": "English",
+    "polling_station": "yes",
+    "roof:levels": "1",
+    "roof:shape": "flat",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "way",
+  "id": 617712368,
+  "center": {
+    "lat": 7.5205331,
+    "lon": 4.5223121
+  },
+  "tags": {
+    "building": "university",
+    "name": "Faculty of Administration",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617712369,
+  "center": {
+    "lat": 7.5198423,
+    "lon": 4.5230479
+  },
+  "tags": {
+    "amenity": "library",
+    "building": "yes",
+    "name": "Hezekiah Oluwasanmi Library"
+  }
+},
+{
+  "type": "way",
+  "id": 617712370,
+  "center": {
+    "lat": 7.5203193,
+    "lon": 4.5241985
+  },
+  "tags": {
+    "building": "university",
+    "name": "Faculty of Arts (Block 1)"
+  }
+},
+{
+  "type": "way",
+  "id": 617712371,
+  "center": {
+    "lat": 7.5200012,
+    "lon": 4.5243765
+  },
+  "tags": {
+    "building": "university",
+    "name": "AUD I"
+  }
+},
+{
+  "type": "way",
+  "id": 617712372,
+  "center": {
+    "lat": 7.5197397,
+    "lon": 4.5241046
+  },
+  "tags": {
+    "building": "university",
+    "name": "Faculty of Arts (Block 2)"
+  }
+},
+{
+  "type": "way",
+  "id": 617712373,
+  "center": {
+    "lat": 7.5191651,
+    "lon": 4.5240151
+  },
+  "tags": {
+    "building": "university",
+    "name": "Faculty of Arts (Block 3)"
+  }
+},
+{
+  "type": "way",
+  "id": 617712374,
+  "center": {
+    "lat": 7.5194318,
+    "lon": 4.5242740
+  },
+  "tags": {
+    "building": "university",
+    "name": "AUD II"
+  }
+},
+{
+  "type": "way",
+  "id": 617712375,
+  "center": {
+    "lat": 7.5192438,
+    "lon": 4.5221308
+  },
+  "tags": {
+    "building": "university",
+    "name": "Amphi Theatre",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617712376,
+  "center": {
+    "lat": 7.5187970,
+    "lon": 4.5220266
+  },
+  "tags": {
+    "building": "university",
+    "name": "Oduduwa Hall",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617712377,
+  "center": {
+    "lat": 7.5186532,
+    "lon": 4.5234873
+  },
+  "tags": {
+    "building": "university",
+    "name": "University Senate Building"
+  }
+},
+{
+  "type": "way",
+  "id": 617712378,
+  "center": {
+    "lat": 7.5186118,
+    "lon": 4.5240925
+  },
+  "tags": {
+    "building": "university",
+    "name": "Senate Building"
+  }
+},
+{
+  "type": "way",
+  "id": 617712402,
+  "center": {
+    "lat": 7.5198309,
+    "lon": 4.5246860
+  },
+  "tags": {
+    "access": "private",
+    "amenity": "parking",
+    "fee": "no",
+    "name": "Humanities Car Park",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 617712410,
+  "center": {
+    "lat": 7.5206284,
+    "lon": 4.5212234
+  },
+  "tags": {
+    "building": "university",
+    "name": "Geology",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617712411,
+  "center": {
+    "lat": 7.5198922,
+    "lon": 4.5208933
+  },
+  "tags": {
+    "building": "university",
+    "name": "White House",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617712417,
+  "center": {
+    "lat": 7.5180533,
+    "lon": 4.5201304
+  },
+  "tags": {
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Ecobank"
+  }
+},
+{
+  "type": "way",
+  "id": 617712420,
+  "center": {
+    "lat": 7.5178749,
+    "lon": 4.5207935
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "name": "SUB Car Park",
+    "parking": "surface",
+    "supervised": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 617712421,
+  "center": {
+    "lat": 7.5208416,
+    "lon": 4.5196491
+  },
+  "tags": {
+    "building": "university",
+    "name": "1000 Seater Lecture Theatre",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617712423,
+  "center": {
+    "lat": 7.5212302,
+    "lon": 4.5184761
+  },
+  "tags": {
+    "building": "university",
+    "name": "Department of Architecture",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617713665,
+  "center": {
+    "lat": 7.5247712,
+    "lon": 4.5266443
+  },
+  "tags": {
+    "building": "university",
+    "name": "Faculty of Estate Design and Management",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 617970605,
+  "center": {
+    "lat": 7.5229644,
+    "lon": 4.5131479
+  },
+  "tags": {
+    "highway": "service",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 617970610,
+  "center": {
+    "lat": 7.5218001,
+    "lon": 4.5124735
+  },
+  "tags": {
+    "check_date": "2024-03-24",
+    "name": "Angola Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 617970611,
+  "center": {
+    "lat": 7.5220388,
+    "lon": 4.5135169
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "name": "Anglo-Moz Car Park",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 617970630,
+  "center": {
+    "lat": 7.5228618,
+    "lon": 4.5141326
+  },
+  "tags": {
+    "check_date": "2024-03-24",
+    "name": "Mozambique Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 618049259,
+  "center": {
+    "lat": 7.5200516,
+    "lon": 4.5170738
+  },
+  "tags": {
+    "highway": "service",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "no",
+    "sidewalk": "left",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 618049262,
+  "center": {
+    "lat": 7.5268986,
+    "lon": 4.5324950
+  },
+  "tags": {
+    "amenity": "community_centre",
+    "building": "yes",
+    "name": "Ogunbanjo Hall"
+  }
+},
+{
+  "type": "way",
+  "id": 618217519,
+  "center": {
+    "lat": 7.5205762,
+    "lon": 4.5147168
+  },
+  "tags": {
+    "check_date": "2024-03-06",
+    "name": "Awolowo Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 618241274,
+  "center": {
+    "lat": 7.5191116,
+    "lon": 4.5252876
+  },
+  "tags": {
+    "building": "university",
+    "name": "BOOA",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 618241275,
+  "center": {
+    "lat": 7.5190869,
+    "lon": 4.5254459
+  },
+  "tags": {
+    "building": "university",
+    "name": "BOOB",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 618243403,
+  "center": {
+    "lat": 7.5168226,
+    "lon": 4.5250868
+  },
+  "tags": {
+    "building": "university",
+    "name": "HSLTA",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 618243404,
+  "center": {
+    "lat": 7.5167180,
+    "lon": 4.5249060
+  },
+  "tags": {
+    "building": "university",
+    "name": "HSLTB",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 618243405,
+  "center": {
+    "lat": 7.5165247,
+    "lon": 4.5250136
+  },
+  "tags": {
+    "addr:housename": "HSLT C",
+    "addr:place": "College of Health Sciences",
+    "building": "university",
+    "name": "HSLTC"
+  }
+},
+{
+  "type": "way",
+  "id": 618243408,
+  "center": {
+    "lat": 7.5167599,
+    "lon": 4.5271251
+  },
+  "tags": {
+    "addr:housename": "Faculty Of Pharmacy",
+    "addr:street": "Along Road 2",
+    "building": "university",
+    "name": "Faculty of Pharmacy"
+  }
+},
+{
+  "type": "way",
+  "id": 618642095,
+  "center": {
+    "lat": 7.5161585,
+    "lon": 4.5298177
+  },
+  "tags": {
+    "highway": "service",
+    "name": "PG close",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 618642097,
+  "center": {
+    "lat": 7.5162338,
+    "lon": 4.5299963
+  },
+  "tags": {
+    "amenity": "college",
+    "name": "Postgraduate College"
+  }
+},
+{
+  "type": "way",
+  "id": 618664723,
+  "center": {
+    "lat": 7.5181118,
+    "lon": 4.5186205
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "name": "Fajuyi Hall Car Park",
+    "parking": "surface",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 618664731,
+  "center": {
+    "lat": 7.4982977,
+    "lon": 4.5237432
+  },
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Almoner",
+    "compressed_air": "yes",
+    "fuel:gasoline": "yes",
+    "name": "Obafemi Awolowo University Service Station",
+    "opening_hours": "Mo-Su 19:00-19:00",
+    "payment:cash": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 618765170,
+  "center": {
+    "lat": 7.5148265,
+    "lon": 4.5233639
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Polaris Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765171,
+  "center": {
+    "lat": 7.5146200,
+    "lon": 4.5233497
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "OAU Microfinance Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765172,
+  "center": {
+    "lat": 7.5143881,
+    "lon": 4.5232997
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "UBA",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765173,
+  "center": {
+    "lat": 7.5141912,
+    "lon": 4.5232573
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Guarantee Trust Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765174,
+  "center": {
+    "lat": 7.5140300,
+    "lon": 4.5232424
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Zenith Bank",
+    "opening_hours": "Mo-Sa 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765175,
+  "center": {
+    "lat": 7.5152827,
+    "lon": 4.5234309
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "First Bank",
+    "opening_hours": "Mo-Fr 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765176,
+  "center": {
+    "lat": 7.5135598,
+    "lon": 4.5232880
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Access Bank",
+    "opening_hours": "Mo-Sa 08:00-16:00"
+  }
+},
+{
+  "type": "way",
+  "id": 618765180,
+  "center": {
+    "lat": 7.5113670,
+    "lon": 4.5250761
+  },
+  "tags": {
+    "building": "university",
+    "name": "CTLW"
+  }
+},
+{
+  "type": "way",
+  "id": 618765182,
+  "center": {
+    "lat": 7.5110184,
+    "lon": 4.5255010
+  },
+  "tags": {
+    "building": "university",
+    "name": "CTLW"
+  }
+},
+{
+  "type": "way",
+  "id": 619270909,
+  "center": {
+    "lat": 7.5162037,
+    "lon": 4.5217488
+  },
+  "tags": {
+    "leisure": "pitch",
+    "lit": "yes",
+    "name": "Main bowl",
+    "sport": "soccer",
+    "surface": "grass"
+  }
+},
+{
+  "type": "way",
+  "id": 619270923,
+  "center": {
+    "lat": 7.5202899,
+    "lon": 4.5183560
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "no",
+    "name": "Moremi Car Park",
+    "parking": "surface"
+  }
+},
+{
+  "type": "way",
+  "id": 619270924,
+  "center": {
+    "lat": 7.5196478,
+    "lon": 4.5185962
+  },
+  "tags": {
+    "check_date": "2024-03-07",
+    "name": "Moremi Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 619274776,
+  "center": {
+    "lat": 7.5051379,
+    "lon": 4.5271155
+  },
+  "tags": {
+    "highway": "service",
+    "name": "Opa dam Road",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 619274779,
+  "center": {
+    "lat": 7.5048800,
+    "lon": 4.5270550
+  },
+  "tags": {
+    "highway": "service",
+    "name": "Opa dam Road",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 619274780,
+  "center": {
+    "lat": 7.5042579,
+    "lon": 4.5279349
+  },
+  "tags": {
+    "highway": "service",
+    "name": "Opa dam Road",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 619368836,
+  "center": {
+    "lat": 7.5173486,
+    "lon": 4.5177439
+  },
+  "tags": {
+    "check_date": "2024-03-06",
+    "name": "Adekunle Fajuyi Hall of Residence",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 619368837,
+  "center": {
+    "lat": 7.5182825,
+    "lon": 4.5146602
+  },
+  "tags": {
+    "check_date": "2024-06-03",
+    "name": "ETF Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 619971213,
+  "center": {
+    "lat": 7.5202674,
+    "lon": 4.5163629
+  },
+  "tags": {
+    "amenity": "hospital",
+    "check_date": "2024-03-20",
+    "healthcare": "hospital",
+    "healthcare:speciality": "general",
+    "name": "OAU Health Centre"
+  }
+},
+{
+  "type": "way",
+  "id": 620253753,
+  "center": {
+    "lat": 7.5216133,
+    "lon": 4.5171767
+  },
+  "tags": {
+    "check_date": "2024-03-20",
+    "name": "Alumni Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 620256439,
+  "center": {
+    "lat": 7.5227072,
+    "lon": 4.5164715
+  },
+  "tags": {
+    "check_date": "2024-03-20",
+    "name": "Postgraduate Hall",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 621670094,
+  "center": {
+    "lat": 7.5210178,
+    "lon": 4.5417362
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "name": "Road 7C",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 621683717,
+  "center": {
+    "lat": 7.5114605,
+    "lon": 4.5451330
+  },
+  "tags": {
+    "amenity": "school",
+    "name": "Moremi High School"
+  }
+},
+{
+  "type": "way",
+  "id": 624049353,
+  "center": {
+    "lat": 7.5064255,
+    "lon": 4.5679431
+  },
+  "tags": {
+    "amenity": "fire_station",
+    "building": "yes",
+    "name": "OAUTHC Fire Station"
+  }
+},
+{
+  "type": "way",
+  "id": 624049354,
+  "center": {
+    "lat": 7.5062658,
+    "lon": 4.5684750
+  },
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "building": "yes",
+    "drive_through": "no",
+    "name": "Skye Bank"
+  }
+},
+{
+  "type": "way",
+  "id": 624049356,
+  "center": {
+    "lat": 7.5055006,
+    "lon": 4.5728994
+  },
+  "tags": {
+    "building": "mosque",
+    "name": "OAUTHC Mosque"
+  }
+},
+{
+  "type": "way",
+  "id": 624216817,
+  "center": {
+    "lat": 7.5306120,
+    "lon": 4.5394476
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Road 13",
+    "oneway": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 625664968,
+  "center": {
+    "lat": 7.5152493,
+    "lon": 4.5209525
+  },
+  "tags": {
+    "leisure": "sports_centre",
+    "name": "OAU Sports Centre",
+    "sport": "soccer;tennis;swimming;squash;basketball;cricket;table_tennis"
+  }
+},
+{
+  "type": "way",
+  "id": 652826031,
+  "center": {
+    "lat": 7.5158266,
+    "lon": 4.5273079
+  },
+  "tags": {
+    "building": "university",
+    "name": "New Faculty of Environmental Design and Management",
+    "nohousenumber": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 652826036,
+  "center": {
+    "lat": 7.5155506,
+    "lon": 4.5231480
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Wema Bank"
+  }
+},
+{
+  "type": "way",
+  "id": 653145026,
+  "center": {
+    "lat": 7.4974432,
+    "lon": 4.5190702
+  },
+  "tags": {
+    "addr:city": "ileife",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "rccg",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 653169051,
+  "center": {
+    "lat": 7.4961669,
+    "lon": 4.5253343
+  },
+  "tags": {
+    "addr:housename": "Poplat Filling Station",
+    "addr:street": "Along Mayfair road",
+    "building": "retail",
+    "layer": "-1",
+    "location": "surface",
+    "name": "Petrol station"
+  }
+},
+{
+  "type": "way",
+  "id": 765324101,
+  "center": {
+    "lat": 7.5158516,
+    "lon": 4.5230140
+  },
+  "tags": {
+    "highway": "footway",
+    "lit": "no",
+    "name": "Power House WAlkway",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 765324102,
+  "center": {
+    "lat": 7.5118448,
+    "lon": 4.5226425
+  },
+  "tags": {
+    "highway": "footway",
+    "lit": "no",
+    "name": "ARCSSTE-E Walkway",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 765324104,
+  "center": {
+    "lat": 7.5176296,
+    "lon": 4.5273130
+  },
+  "tags": {
+    "highway": "footway",
+    "name": "Faculty of Tech Walkway",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 765715517,
+  "center": {
+    "lat": 7.5112525,
+    "lon": 4.5245815
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "1",
+    "layer": "-1",
+    "lit": "no",
+    "maxspeed": "30",
+    "name": "CTLW Road",
+    "sidewalk": "no",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 957457109,
+  "center": {
+    "lat": 7.5177649,
+    "lon": 4.5246176
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 957457110,
+  "center": {
+    "lat": 7.5177153,
+    "lon": 4.5246084
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 957457111,
+  "center": {
+    "lat": 7.5183023,
+    "lon": 4.5211686
+  },
+  "tags": {
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 957457112,
+  "center": {
+    "lat": 7.5182782,
+    "lon": 4.5211695
+  },
+  "tags": {
+    "foot": "no",
+    "highway": "tertiary",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 2",
+    "oneway": "yes",
+    "sidewalk": "right",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1108031435,
+  "center": {
+    "lat": 7.4762075,
+    "lon": 4.5573851
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Oranmiyan Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Oranmiyan Holy Temple",
+    "religion": "yoruba",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1108272294,
+  "center": {
+    "lat": 7.4957853,
+    "lon": 4.5568646
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lit": "no",
+    "name": "Stadium Road",
+    "sidewalk": "no",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 1108295809,
+  "center": {
+    "lat": 7.4809510,
+    "lon": 4.5567333
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Itakogun Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "name": "Itakogun Mosque",
+    "religion": "muslim",
+    "start_date": "1903"
+  }
+},
+{
+  "type": "way",
+  "id": 1109946862,
+  "center": {
+    "lat": 7.4880503,
+    "lon": 4.5588687
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Ilare Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "baptist",
+    "name": "First Baptist Church of Ile Ife",
+    "operator": "Nigerian Baptist Convention",
+    "operator:wikidata": "Q1989654",
+    "operator:wikipedia": "Nigerian Baptist Convention",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 1110496927,
+  "center": {
+    "lat": 7.4836112,
+    "lon": 4.5608949
+  },
+  "tags": {
+    "addr:city": "Ifẹ̀",
+    "addr:street": "Enuwa Square Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "name": "Ile Ife Central Mosque",
+    "religion": "muslim",
+    "start_date": "1928"
+  }
+},
+{
+  "type": "way",
+  "id": 1110567738,
+  "center": {
+    "lat": 7.4874974,
+    "lon": 4.5339822
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Country kitchen",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1110567789,
+  "center": {
+    "lat": 7.4875033,
+    "lon": 4.5338317
+  },
+  "tags": {
+    "building": "yes",
+    "name": "filling station",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1111137395,
+  "center": {
+    "lat": 7.4778053,
+    "lon": 4.5467056
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Famia Road",
+    "addr:suburb": "Modakeke",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "anglican",
+    "diocese": "Anglican Diocese of Ife",
+    "name": "Cathedral of St. Stephen",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 1111662124,
+  "center": {
+    "lat": 7.4823972,
+    "lon": 4.5666294
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Ayegbaju Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Oluorogbo Temple",
+    "religion": "yoruba",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1111934380,
+  "center": {
+    "lat": 7.4946498,
+    "lon": 4.5551275
+  },
+  "tags": {
+    "highway": "unclassified",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Stadium Road",
+    "sidewalk": "no",
+    "surface": "paved"
+  }
+},
+{
+  "type": "way",
+  "id": 1112089028,
+  "center": {
+    "lat": 7.4866264,
+    "lon": 4.5650050
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Moore Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Osara Shrine",
+    "operator": "Ooni of Ife",
+    "operator:wikidata": "Q20819805",
+    "religion": "yoruba"
+  }
+},
+{
+  "type": "way",
+  "id": 1112569731,
+  "center": {
+    "lat": 7.4959411,
+    "lon": 4.5351806
+  },
+  "tags": {
+    "highway": "residential",
+    "name": "Prince Adekunle Crescent",
+    "source": "maxar",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 1112570751,
+  "center": {
+    "lat": 7.4954633,
+    "lon": 4.5313114
+  },
+  "tags": {
+    "highway": "unclassified",
+    "name": "King Temitope Crescent",
+    "source": "maxar",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 1112797100,
+  "center": {
+    "lat": 7.4888975,
+    "lon": 4.5317918
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Urban day Grammar School",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1114716575,
+  "center": {
+    "lat": 7.4997197,
+    "lon": 4.5236659
+  },
+  "tags": {
+    "bridge": "yes",
+    "highway": "unclassified",
+    "layer": "1",
+    "lit": "yes",
+    "name": "Road 1",
+    "oneway": "yes",
+    "surface": "paved"
+  }
+},
+{
+  "type": "way",
+  "id": 1114716576,
+  "center": {
+    "lat": 7.4976097,
+    "lon": 4.5227806
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "unclassified",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 1",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1114716577,
+  "center": {
+    "lat": 7.4977865,
+    "lon": 4.5224524
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "unclassified",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Road 1",
+    "oneway": "yes",
+    "sidewalk": "no",
+    "surface": "asphalt",
+    "width": "7"
+  }
+},
+{
+  "type": "way",
+  "id": 1114716578,
+  "center": {
+    "lat": 7.4998145,
+    "lon": 4.5234808
+  },
+  "tags": {
+    "bridge": "yes",
+    "highway": "unclassified",
+    "layer": "1",
+    "lit": "yes",
+    "name": "Road 1",
+    "oneway": "yes",
+    "surface": "paved"
+  }
+},
+{
+  "type": "way",
+  "id": 1114722091,
+  "center": {
+    "lat": 7.5010493,
+    "lon": 4.5484403
+  },
+  "tags": {
+    "highway": "residential",
+    "lit": "no",
+    "name": "Oluorogbo High School",
+    "source": "maxar",
+    "surface": "sand"
+  }
+},
+{
+  "type": "way",
+  "id": 1114926201,
+  "center": {
+    "lat": 7.5160399,
+    "lon": 4.5274434
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Behind Pharmacy",
+    "sidewalk": "no",
+    "source": "maxar",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 1114926210,
+  "center": {
+    "lat": 7.5157207,
+    "lon": 4.5284977
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "name": "New EDM",
+    "sidewalk": "right",
+    "source": "maxar",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1115506820,
+  "center": {
+    "lat": 7.4966857,
+    "lon": 4.5189871
+  },
+  "tags": {
+    "addr:city": "ileife",
+    "addr:street": "Ile-Ife Expressway",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "eruobodo",
+    "religion": "christian"
+  }
+},
+{
+  "type": "way",
+  "id": 1115590045,
+  "center": {
+    "lat": 7.5052900,
+    "lon": 4.5225089
+  },
+  "tags": {
+    "addr:city": "Ile-Ife",
+    "addr:postcode": "220282",
+    "addr:street": "Kufoniyi Guest House",
+    "building": "residential",
+    "building:levels": "1",
+    "building:material": "brick",
+    "name": "Kufoniyi",
+    "name:en": "Kufoniyi International Hostel",
+    "roof:levels": "2",
+    "roof:shape": "flat",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1115590046,
+  "center": {
+    "lat": 7.5049676,
+    "lon": 4.5220952
+  },
+  "tags": {
+    "addr:city": "Ile-Ife",
+    "addr:postcode": "220282",
+    "addr:street": "Off Road 1, OAU Campus,",
+    "building": "yes",
+    "building:levels": "2",
+    "name": "Kufoniyi Extention",
+    "source": "microsoft/BuildingFootprints"
+  }
+},
+{
+  "type": "way",
+  "id": 1164320845,
+  "center": {
+    "lat": 7.4844421,
+    "lon": 4.5622236
+  },
+  "tags": {
+    "addr:city": "Ifẹ̀",
+    "addr:street": "Enuwa Roundabout",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Oke Mogun Shrine",
+    "religion": "yoruba"
+  }
+},
+{
+  "type": "way",
+  "id": 1164436150,
+  "center": {
+    "lat": 7.4851300,
+    "lon": 4.5616080
+  },
+  "tags": {
+    "addr:city": "Ifẹ̀",
+    "addr:street": "Ilare Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Ifa Temple",
+    "religion": "yoruba",
+    "start_date": "1932"
+  }
+},
+{
+  "type": "way",
+  "id": 1164564374,
+  "center": {
+    "lat": 7.4749778,
+    "lon": 4.5604106
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Ayala Lane",
+    "building": "cathedral",
+    "denomination": "anglican",
+    "diocese": "Anglican Diocese of Ife",
+    "name": "Cathedral Church of St. Philip",
+    "website": "https://dioceseofife.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 1164749911,
+  "center": {
+    "lat": 7.4834424,
+    "lon": 4.5644377
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Ayegbaju Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "contact:facebook": "https://www.facebook.com/stpaulschurchayegbaju/",
+    "denomination": "anglican",
+    "diocese": "Diocese of Ife",
+    "name": "St Pauls Church",
+    "religion": "christian",
+    "start_date": "1932",
+    "website": "https://dioceseofife.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 1164848550,
+  "center": {
+    "lat": 7.4856644,
+    "lon": 4.5543932
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Iremo Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "anglican",
+    "diocese": "Diocese of Ife",
+    "name": "St Peters Anglican Church",
+    "religion": "christian",
+    "website": "https://dioceseofife.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 1164893014,
+  "center": {
+    "lat": 7.4803408,
+    "lon": 4.5640823
+  },
+  "tags": {
+    "addr:city": "Ife",
+    "addr:street": "Ajamopo Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Ita-Osun Temple",
+    "operator": "Ooni of Ile-Ife",
+    "operator:wikidata": "Q20819805",
+    "religion": "yoruba"
+  }
+},
+{
+  "type": "way",
+  "id": 1202065501,
+  "center": {
+    "lat": 7.4725765,
+    "lon": 4.5276995
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Mosque"
+  }
+},
+{
+  "type": "way",
+  "id": 1236663825,
+  "center": {
+    "lat": 7.5053636,
+    "lon": 4.5250155
+  },
+  "tags": {
+    "building": "university",
+    "name": "Njepuome Auditorium AFRIGIST, O.A.U Campus, Ile-Ife"
+  }
+},
+{
+  "type": "way",
+  "id": 1236664059,
+  "center": {
+    "lat": 7.5050501,
+    "lon": 4.5253434
+  },
+  "tags": {
+    "building": "university",
+    "name": "New Admin. Block AFRIGIST"
+  }
+},
+{
+  "type": "way",
+  "id": 1239472703,
+  "center": {
+    "lat": 7.4724420,
+    "lon": 4.5385061
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Modakeke New Town hall"
+  }
+},
+{
+  "type": "way",
+  "id": 1239472704,
+  "center": {
+    "lat": 7.4756563,
+    "lon": 4.5402864
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Modakeke Middle School"
+  }
+},
+{
+  "type": "way",
+  "id": 1241482542,
+  "center": {
+    "lat": 7.4719306,
+    "lon": 4.5258813
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Deck house"
+  }
+},
+{
+  "type": "way",
+  "id": 1241482543,
+  "center": {
+    "lat": 7.4720654,
+    "lon": 4.5253694
+  },
+  "tags": {
+    "building": "yes",
+    "name": "The Apostolic Olorunfemi"
+  }
+},
+{
+  "type": "way",
+  "id": 1241482544,
+  "center": {
+    "lat": 7.4717982,
+    "lon": 4.5258044
+  },
+  "tags": {
+    "building": "yes",
+    "name": "B1"
+  }
+},
+{
+  "type": "way",
+  "id": 1241482545,
+  "center": {
+    "lat": 7.4719495,
+    "lon": 4.5252005
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Mission house"
+  }
+},
+{
+  "type": "way",
+  "id": 1241482561,
+  "center": {
+    "lat": 7.4708239,
+    "lon": 4.5270728
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Zion Baptist church"
+  }
+},
+{
+  "type": "way",
+  "id": 1293937665,
+  "center": {
+    "lat": 7.4964339,
+    "lon": 4.5107272
+  },
+  "tags": {
+    "bridge": "yes",
+    "highway": "primary",
+    "layer": "1",
+    "lit": "no",
+    "name": "Ile-Ife Expressway",
+    "oneway": "yes",
+    "ref": "F207",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1293937666,
+  "center": {
+    "lat": 7.4942945,
+    "lon": 4.5186297
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "primary",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Ile-Ife Expressway",
+    "oneway": "yes",
+    "ref": "F207",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1293937667,
+  "center": {
+    "lat": 7.4965214,
+    "lon": 4.5107400
+  },
+  "tags": {
+    "bridge": "yes",
+    "highway": "primary",
+    "layer": "1",
+    "lit": "no",
+    "name": "Ile-Ife Expressway",
+    "oneway": "yes",
+    "ref": "F207",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1293937668,
+  "center": {
+    "lat": 7.4944170,
+    "lon": 4.5186727
+  },
+  "tags": {
+    "foot": "yes",
+    "highway": "primary",
+    "lanes": "2",
+    "lit": "no",
+    "name": "Ile-Ife Expressway",
+    "oneway": "yes",
+    "ref": "F207",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1305379478,
+  "center": {
+    "lat": 7.4741822,
+    "lon": 4.5209997
+  },
+  "tags": {
+    "building": "yes",
+    "name": "small building"
+  }
+},
+{
+  "type": "way",
+  "id": 1305382612,
+  "center": {
+    "lat": 7.4738881,
+    "lon": 4.5210974
+  },
+  "tags": {
+    "building": "yes",
+    "name": "bui/lding"
+  }
+},
+{
+  "type": "way",
+  "id": 1364752660,
+  "center": {
+    "lat": 7.4979552,
+    "lon": 4.5042483
+  },
+  "tags": {
+    "name": "132kv 33kv Transformer Station",
+    "power": "substation",
+    "voltage": "132000;33000"
+  }
+},
+{
+  "type": "way",
+  "id": 1552256471,
+  "center": {
+    "lat": 7.5273089,
+    "lon": 4.5340693
+  },
+  "tags": {
+    "amenity": "university",
+    "check_date": "2024-05-13",
+    "email": "info@oauife.edu.ng",
+    "internet_access": "yes",
+    "name": "Obafemi Awolowo University",
+    "website": "https://www.oauife.edu.ng/",
+    "wikidata": "Q2008672",
+    "wikipedia": "en:Obafemi Awolowo University"
+  }
+},
+{
+  "type": "way",
+  "id": 1552594254,
+  "center": {
+    "lat": 7.5252082,
+    "lon": 4.5257332
+  },
+  "tags": {
+    "highway": "service",
+    "name": "OAU Farm Road",
+    "sidewalk": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1552594255,
+  "center": {
+    "lat": 7.5291920,
+    "lon": 4.5264347
+  },
+  "tags": {
+    "highway": "service",
+    "name": "OAU Farm Road",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "relation",
+  "id": 3094282,
+  "center": {
+    "lat": 7.0363241,
+    "lon": 4.8439860
+  },
+  "tags": {
+    "name": "Trunk Road A122",
+    "ref": "A122",
+    "route": "road",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 3440239,
+  "center": {
+    "lat": 7.3019457,
+    "lon": 4.6380629
+  },
+  "tags": {
+    "name": "Federal Road F207",
+    "ref": "F207",
+    "route": "road",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 3718731,
+  "center": {
+    "lat": 7.5442984,
+    "lon": 4.5294655
+  },
+  "tags": {
+    "admin_level": "6",
+    "boundary": "administrative",
+    "name": "Ife Central",
+    "source": "ehealthafrica.org",
+    "source:date": "2013",
+    "type": "boundary",
+    "wikidata": "Q3509568",
+    "wikipedia": "en:Ife Central"
+  }
+},
+{
+  "type": "relation",
+  "id": 3718733,
+  "center": {
+    "lat": 7.2748930,
+    "lon": 4.4826191
+  },
+  "tags": {
+    "admin_level": "6",
+    "boundary": "administrative",
+    "name": "Ife North",
+    "source": "ehealthafrica.org",
+    "source:date": "2013",
+    "type": "boundary",
+    "wikidata": "Q11008758",
+    "wikipedia": "en:Ife North"
+  }
+},
+{
+  "type": "relation",
+  "id": 3754786,
+  "center": {
+    "lat": 7.5343115,
+    "lon": 4.3636520
+  },
+  "tags": {
+    "name": "Federal Road F205",
+    "ref": "F205",
+    "route": "road",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 14909933,
+  "center": {
+    "lat": 7.5217937,
+    "lon": 4.5238983
+  },
+  "tags": {
+    "building": "university",
+    "name": "First Bank Lecture Theare",
+    "nohousenumber": "yes",
+    "type": "multipolygon"
+  }
+},
+{
+  "type": "relation",
+  "id": 17567048,
+  "center": {
+    "lat": 7.4826094,
+    "lon": 4.5599272
+  },
+  "tags": {
+    "building": "yes",
+    "museum": "local",
+    "name": "Ife National Museum",
+    "operator": "National Commission for Museums and Monuments",
+    "operator:type": "government",
+    "start_date": "1954",
+    "tourism": "museum",
+    "type": "multipolygon",
+    "website": "https://museum.ng/",
+    "wikidata": "Q110818482",
+    "wikipedia": "en:Ife National Museum"
+  }
+}
+
+  ]
+}
