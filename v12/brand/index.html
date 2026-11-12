@@ -2860,6 +2860,18 @@ return maplibregl$1;
 //# sourceMappingURL=maplibre-gl.js.map
 </script>
 <script>
+/* m257: real shops show only what the seller really set */
+(function(){
+const NEAR=[[/moremi/i,'moremi'],[/awo(lowo)?\b/i,'awo'],[/fajuyi/i,'fajuyi'],[/angola/i,'angola'],[/mozambique/i,'mozambique'],[/\betf\b/i,'etf'],[/alumni/i,'alumni'],[/post\s*grad|\bpg\b/i,'pg'],[/\bsub\b|student union/i,'sub'],[/buka/i,'buka'],[/health/i,'health'],[/oduduwa/i,'oduduwa'],[/senate/i,'senate'],[/library/i,'library'],[/staff school/i,'staff'],[/gate/i,'gate']];
+/* a pin only when the shop's own address names a known campus place */
+window.staflyPin=function(v){let k='';for(const[re,x]of NEAR)if(re.test(v.place||'')&&LM[x]){k=x;break;}
+  if(k){v.near=k;v.noloc=0;}else v.noloc=1;};
+window.sPin=v=>!(v&&v.real&&v.noloc);
+const youKnown=()=>!!((window.USER&&USER.hk&&LM[USER.hk])||window.__gpsYou);
+/* walk time and distance only when both ends are real */
+window.sKnow=v=>sPin(v)&&!(v&&v.real&&!youKnown());
+})();
+</script><script>
 const NOW={min:13*60+20};
 /* Campus landmarks, exact positions from OpenStreetMap (pulled 6 Nov 2026). */
 const LM={
@@ -2911,7 +2923,7 @@ const PINI='<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C
 
 /* Sample vendors. "near" ties each shop to a landmark; off = metres east/north of it. */
 const V=[
- {id:'foodhunt',name:'Foodhunt',mono:'FH',sub:'kitchen',bg:'#FFD7B5',cat:'food',tier:'verified',rating:0,reviews:0,orders:0,near:'moremi',off:[30,-20],place:'Test shop · details coming',hours:[420,1320],deliv:{fee:300,eta:'25 to 35 min',to:'all halls'},wa:'15551669218',
+ {id:'foodhunt',name:'Foodhunt',mono:'FH',sub:'kitchen',bg:'#FFD7B5',cat:'food',tier:'listed',rating:0,reviews:0,orders:0,near:'moremi',off:[30,-20],place:'',hours:null,deliv:null,wa:'',real:1,noloc:1,
   tag:'Test shop on Stafly',about:['Message us and Amara, our assistant, replies right away','Menu and prices below are samples until the real ones are added'],
   items:[['Jollof rice and chicken',2500],['Fried rice and turkey',3000],['Spaghetti and egg',1800],['Chapman',800]],
   rev:[]},
@@ -2975,7 +2987,7 @@ const V=[
 const $=s=>document.querySelector(s);
 const naira=v=>typeof v==='string'?'from ₦'+Number(v.replace('from ','')).toLocaleString('en-NG'):'₦'+v.toLocaleString('en-NG');
 const tfmt=m=>{const h=Math.floor(m/60)%24,mm=m%60,ap=h>=12?'pm':'am';return (((h+11)%12)+1)+(mm?':'+String(mm).padStart(2,'0'):'')+ap;};
-function status(v){const[o,c]=v.hours,n=NOW.min;const wd=new Date(Date.now()+3600000).getUTCDay();if(v.closedToday||(v.days&&!v.days.includes(wd))){const nx=v.days&&v.days.length?v.days.map(x=>(x-wd+7)%7||7).sort((a,b)=>a-b)[0]:1;return{k:'shut',t:'Opens '+(nx===1?'tomorrow':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][(wd+nx)%7])+' '+tfmt(o)};}if(n>=o&&n<c)return c-n<=60?{k:'soon',t:'Closes '+tfmt(c)}:{k:'open',t:'Open \u2019til '+tfmt(c)};return{k:'shut',t:n<o?'Opens '+tfmt(o):'Opens '+tfmt(o)+' tomorrow'};}
+function status(v){if(!v||!v.hours)return{k:'na',t:'Hours not set'};const[o,c]=v.hours,n=NOW.min;const wd=new Date(Date.now()+3600000).getUTCDay();if(v.closedToday||(v.days&&!v.days.includes(wd))){const nx=v.days&&v.days.length?v.days.map(x=>(x-wd+7)%7||7).sort((a,b)=>a-b)[0]:1;return{k:'shut',t:'Opens '+(nx===1?'tomorrow':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][(wd+nx)%7])+' '+tfmt(o)};}if(n>=o&&n<c)return c-n<=60?{k:'soon',t:'Closes '+tfmt(c)}:{k:'open',t:'Open \u2019til '+tfmt(c)};return{k:'shut',t:n<o?'Opens '+tfmt(o):'Opens '+tfmt(o)+' tomorrow'};}
 const isOpen=v=>status(v).k!=='shut';
 const logo=(v,extra='')=>`<span class="logo ${extra}" style="background:${v.bg}">${v.mono}</span>`;
 let YOU=null;
@@ -3040,7 +3052,7 @@ function search(){
       const priced=v.items.map(i=>[i,typeof i[1]==='string'?Number(i[1].replace('from ','')):i[1]]);
       if(ASK.budget){const ok=priced.filter(p=>p[1]<=ASK.budget).sort((a,b)=>a[1]-b[1]);if(!ok.length)continue;hit=ok[ok.length-1][0];}
       for(const w of ASK.words){const it=v.items.find(i=>i[0].toLowerCase().includes(w));if(it){score+=2;hit=hit||it;}else if(v.name.toLowerCase().includes(w)||v.tag.toLowerCase().includes(w))score+=1;}
-      if(ASK.near){const d=meters(LM[ASK.near].ll,v.ll);if(d>900)continue;score+=(900-d)/300;}
+      if(ASK.near){if(!sPin(v))continue;const d=meters(LM[ASK.near].ll,v.ll);if(d>900)continue;score+=(900-d)/300;}
       if(ASK.cheap&&hit)score+=10-((typeof hit[1]==='string'?Number(hit[1].replace('from ','')):hit[1])/1000);
     }else{
       for(const w of words){let s=0;if(v.name.toLowerCase().includes(w))s=3;const it=v.items.find(i=>i[0].toLowerCase().includes(w));if(it){s=Math.max(s,2);hit=hit||it;}
@@ -3076,7 +3088,7 @@ function render(){
     <span class="side">${S(SHIELD,'i tb '+v.tier)}${v.reviews>=3?`<span class="rt num">${STAR}${v.rating.toFixed(1)}</span>`:`<span class="rt new">New</span>`}</span>
     <button class="rchat" type="button" data-chat="${v.id}" aria-label="Chat to ${v.name}">${S(CHAT)}</button>
   </div>`;};
-  const op=results.filter(r=>isOpen(r.v)),cl=results.filter(r=>!isOpen(r.v));
+  const op=results.filter(r=>isOpen(r.v)&&status(r.v).k!=='na'),cl=results.filter(r=>!isOpen(r.v)),na=results.filter(r=>status(r.v).k==='na');
   $('#list').innerHTML=n?(op.length?`<div class="sec">Open near you<span>${op.length} open</span></div>`:'')+op.map(rowH).join('')+(cl.length?`<div class="sec">Opening later<span>${cl.length}</span></div>`:'')+cl.map(rowH).join(''):`<div class="empty"><b>No match yet</b>Try a shorter word or clear a filter.</div>`;
   const ids=new Set(results.map(r=>r.v.id));
   for(const id in markers)markers[id].getElement().classList.toggle('fade',!ids.has(id));
@@ -3146,7 +3158,7 @@ map.on('load',()=>{ready=true;if(M2){applyTheme();setSat(SAT);}
 const markers={};let youM,hallM=[];
 function drawMarkers(){
   for(const id in markers)markers[id].remove();
-  V.forEach(v=>{
+  V.forEach(v=>{if(!sPin(v))return;
     const el=document.createElement('div');
     el.className='pin'+(isOpen(v)?'':' shut')+(st.sel===v.id?' sel':'');
     const d=dropOf(v.id),fresh=d&&DROPS.indexOf(d)<2||d===LATE,g=GROUPS[v.id];
@@ -3218,15 +3230,15 @@ function openDetail(id){if(window.__m2)return m2Nav({t:CUR.t,s:'shop',id});if(ph
       <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge ${v.tier}">${S(SHIELD)}${tierTxt}</span>${v.reviews>=3?`<span class="badge verified num">${STAR.replace('<svg','<svg style="fill:var(--star)"')}${v.rating.toFixed(1)} · ${v.reviews} reviews</span>`:`<span class="badge listed num">${v.orders} orders so far</span>`}</div></div>
     <p class="about">${v.about.join('. ')}.</p>
     <div class="facts">
-      <div class="fact">${S(CLOCK)}<div><b class="st ${s.k}">${s.t}</b><span>Every day, ${tfmt(v.hours[0])} to ${tfmt(v.hours[1])}</span></div></div>
+      <div class="fact">${S(CLOCK)}<div><b class="st ${s.k}">${s.t}</b><span>${v.hours?`Every day, ${tfmt(v.hours[0])} to ${tfmt(v.hours[1])}`:'Hours not set'}</span></div></div>
       <div class="fact">${S(PINI)}<div><b>${v.place}</b><span class="num">${dtxt(v)} from you · ${walk(v)} min walk</span></div></div>
-      <div class="fact">${S(BIKE)}<div>${v.deliv?`<b>${naira(v.deliv.fee)} delivery to ${v.deliv.to}</b><span>${v.deliv.eta[0].toUpperCase()+v.deliv.eta.slice(1)}</span>`:`<b>Pick up only</b><span>Chat first and they\u2019ll have it ready when you arrive</span>`}</div></div>
+      <div class="fact">${S(BIKE)}<div>${v.deliv?`<b>${naira(v.deliv.fee)} delivery to ${v.deliv.to}</b><span>${(v.deliv.eta||'').replace(/^./,c=>c.toUpperCase())}</span>`:`<b>Pick up only</b><span>Chat first and they\u2019ll have it ready when you arrive</span>`}</div></div>
     </div>
     <div class="sec"><h5>Prices <small>Set by the vendor</small></h5>${v.items.map(i=>`<div class="price"><span>${i[0]}</span><b class="num">${naira(i[1])}</b></div>`).join('')}</div>
     <div class="sec"><h5>Reviews ${v.reviews?`<small class="num">${v.reviews} from paid orders</small>`:''}</h5>
       ${v.reviews<3?`<div class="note">New on Stafly with ${v.orders} completed ${v.orders===1?'order':'orders'}. Stars show after 3 reviews from real buyers.</div>`:''}
       ${v.rev.map(r=>`<div class="rv"><div class="rvh">${stars(r[1])}<b>${r[0]}</b><span>${r[3]}</span><span class="conf">${S(CHECK)}Paid order</span></div><p>${r[2]}</p>${r[4]?`<div class="reply"><b>${v.name} replied</b>${r[4]}</div>`:''}</div>`).join('')}</div>
-    <div class="note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</div>`;
+    <div class="note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':v.real?'':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</div>`;
   $('#dfoot').innerHTML=`<button class="btn pri" type="button" data-chat="${id}">${S(CHAT)}Chat on WhatsApp to order</button>`;
   $('#dbody').scrollTop=0;$('#detail').classList.add('on');$('#detail').setAttribute('aria-hidden','false');
   if(phone())setSheet('full');
@@ -3409,7 +3421,7 @@ var CUR={t:'explore',s:null,id:null,sel:null};
 var SAVED=new Set();var ALSEEN=false;
 const mS=k=>S(MI[k]);
 const catL=k=>CATS.find(c=>c[0]===k)[1].replace(' and repairs','');
-const rateTxt=v=>v.reviews>=3?`${STAR}<b>${v.rating.toFixed(1)}</b> (${v.reviews})`:`New · ${v.orders} orders`;
+const rateTxt=v=>v.reviews>=3?`${STAR}<b>${v.rating.toFixed(1)}</b> (${v.reviews})`:v.real?'New':`New · ${v.orders} orders`;
 const tierTxt=v=>({trusted:'Trusted',verified:'Verified',listed:'New on Stafly'})[v.tier];
 const vOf=id=>V.find(x=>x.id===id);
 const share=(v,n)=>Math.ceil((v.deliv?v.deliv.fee:0)/n/10)*10;
@@ -3436,14 +3448,14 @@ function m2Refresh(){if(!$('#mChips'))return;$('#mChips').innerHTML=m2Chips();
   if(CUR.t==='places')m2PlacesList();m2Tabs();}
 function mLogo(v){return v.img?`<span class="logo mlg ph${isOpen(v)?'':' off'}" style="background:url(${v.img}) center/cover;--lg:url(${v.img})"></span>`:`<span class="logo mlg${isOpen(v)?'':' off'}">${S(ICON[v.cat])}</span>`;}
 function m2Shop(v,extra=''){const s=status(v),g=GROUPS[v.id];
-  return`<button class="m-row2${isOpen(v)?'':' closed'}" type="button" data-mshop="${v.id}">${mLogo(v)}<span class="tx"><b>${v.name}</b><span class="sb">${v.reviews>=3?`<span class="r">${v.rating.toFixed(1)}</span>${STAR}`:'<span class="r">New</span>'}<i></i>${catL(v.cat)}<i></i>${v.deliv?'Delivers':'Pick up'}</span>${extra}</span><span class="rt"><b>${walk(v)} min</b>${s.k!=='open'?`<small class="${s.k}">${s.k==='shut'?s.t:'Closes soon'}</small>`:g?`<small class="gq">${S(MI.users)}${g.n+(joined.has(v.id)?1:0)}/${g.need}</small>`:`<small>${dtxt(v)}</small>`}</span></button>`;}
+  return`<button class="m-row2${isOpen(v)?'':' closed'}" type="button" data-mshop="${v.id}">${mLogo(v)}<span class="tx"><b>${v.name}</b><span class="sb">${v.reviews>=3?`<span class="r">${v.rating.toFixed(1)}</span>${STAR}`:'<span class="r">New</span>'}<i></i>${catL(v.cat)}${v.deliv?'<i></i>Delivers':v.real?'':'<i></i>Pick up'}</span>${extra}</span><span class="rt">${sKnow(v)?`<b>${walk(v)} min</b>`:''}${s.k==='na'?'':s.k!=='open'?`<small class="${s.k}">${s.k==='shut'?s.t:'Closes soon'}</small>`:g?`<small class="gq">${S(MI.users)}${g.n+(joined.has(v.id)?1:0)}/${g.need}</small>`:sKnow(v)?`<small>${dtxt(v)}</small>`:''}</span></button>`;}
 function m2PlacesList(){const el=$('#mList');if(!el)return;
   const pc=$('#mPChips');if(pc)pc.innerHTML=m2Chips();
   const tg=$('#mTg');if(tg)tg.innerHTML=[['open','Open now','clock'],['delivers','Delivers','bike'],['verified','Verified','shield']].map(([k,l,ic])=>`<button class="${st.f.has(k)?'on':''}" type="button" data-f="${k}">${mS(ic)}${l}</button>`).join('')+`<button class="${st.sort==='near'?'on':''}" type="button" data-near="1">${mS('nav')}Nearest</button>`;
-  const op=results.filter(r=>isOpen(r.v)),cl=results.filter(r=>!isOpen(r.v));
+  const op=results.filter(r=>isOpen(r.v)&&status(r.v).k!=='na'),cl=results.filter(r=>!isOpen(r.v)),na=results.filter(r=>status(r.v).k==='na');
   const hit=r=>r.hit?`<span class="ht">${r.hit[0]} · <b>${naira(r.hit[1])}</b></span>`:'';
   const fb=$('#mFb');if(fb){const n=st.f.size+(st.sort==='near'?1:0);fb.innerHTML=mS('sliders')+(n?`<em>${n}</em>`:'');}
-  el.innerHTML=results.length?(op.length?`<div class="m-sh"><b>Open now</b><span>${op.length} ${op.length===1?'place':'places'}</span></div><div class="m-lst">`+op.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(cl.length?`<div class="m-sh"><b>Opening later</b><span>${cl.length}</span></div><div class="m-lst">`+cl.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':''):`<div class="m-empty"><span class="ei">${mS('search')}</span><b>No match yet</b>Try a shorter word, or clear a filter.</div>`;}
+  el.innerHTML=results.length?(op.length?`<div class="m-sh"><b>Open now</b><span>${op.length} ${op.length===1?'place':'places'}</span></div><div class="m-lst">`+op.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(cl.length?`<div class="m-sh"><b>Opening later</b><span>${cl.length}</span></div><div class="m-lst">`+cl.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(na.length?`<div class="m-sh"><b>Hours not set</b><span>${na.length}</span></div><div class="m-lst">`+na.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':''):`<div class="m-empty"><span class="ei">${mS('search')}</span><b>No match yet</b>Try a shorter word, or clear a filter.</div>`;}
 const back=()=>`<button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button>`;
 function m2Page(t){
   if(t==='places')return`<div class="m-h"><h1>Places</h1><button class="m-circ" type="button" data-mtab="explore" aria-label="Map">${mS('compass')}</button></div>
@@ -3454,11 +3466,11 @@ function m2Page(t){
     return`<div class="m-h"><h1>Live</h1><button class="m-circ" type="button" data-msub="alerts" aria-label="Alerts">${mS('bell')}</button></div>
     <div class="lv-row lv2">${ST.map(d=>{const v=vOf(d.id),sn=LVSEEN.has(d.id);return`<button type="button" class="lv-st${sn?'':' new'}" data-lvgo="${d.id}"><span class="rg">${mLogo(v)}</span>${d.m<=60&&!sn?'<i class="lv-dot">NEW</i>':''}<em>${v.name.split(' ').slice(0,2).join(' ')}</em></button>`;}).join('')}</div>
     <div class="lv-tabs">${[['foryou','For you'],['following','Following'],['near','Near you']].map(([k,l])=>`<button type="button" data-lvtab="${k}" class="${LVTAB===k?'on':''}">${l}</button>`).join('')}</div>
-    ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${fmtK(followers(v))} followers</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
+    ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${v.real?catL(v.cat):fmtK(followers(v))+' followers'}</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
     ${LL.map(d=>{const v=vOf(d.id);return`<div class="g-card lv-card" id="lv-${d.id}"><div class="g-media lv-media${(d.img||CV(v))?'':' g-poster'}">${(d.img||CV(v))?`<img class="g-photo" src="${d.img||CV(v)}" alt="">`:(window.gArt?gArt(v):lvPh(v))}<span class="g-shade"></span>
       ${d.slides&&d.slides.length>1?`<span class="lv-cnt"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="13" height="13" rx="3"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>${d.slides.length}</span>`:''}<span class="g-tag${d.m<=60?' hot':''}">${d.m<=60?'<i class="lvd"></i>New':mS('clock')+ago(d.m)}</span><span class="g-time">${catL(v.cat)}</span>
       <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
-      <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${v.place.split(',')[0]} · ${dtxt(v)}</span></div><span class="tm">${ago(d.m)}</span></div>
+      <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${[v.place.split(',')[0],sKnow(v)?dtxt(v):''].filter(Boolean).join(' · ')}</span></div><span class="tm">${ago(d.m)}</span></div>
       <div class="g-act"><button type="button" class="g-ghost" data-msel="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div></div>`;}).join('')}`;}
   if(t==='groups'){const ids=Object.keys(GROUPS);return`<div class="m-h"><h1>Group orders</h1></div>
     <div class="gx-hero"><span class="gx-k">Order with your hall</span><div class="gx-t"><b class="t1">Order together.</b><b class="t2">Pay less.</b></div><svg class="gx-sw" viewBox="0 0 120 40" aria-hidden="true"><path d="M3 30c14-18 30-22 34-10s-10 16-8 6 22-20 40-12 20 20 46 4"/></svg><p>One rider, one trip. The delivery fee is split between everyone.</p><span class="gx-live"><i></i>${ids.length} ${ids.length===1?'group':'groups'} filling now</span><span class="gx-st" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><defs><path id="gxc" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs><text><textPath href="#gxc" textLength="230">SPLIT THE FEE · SAVE MORE ·</textPath></text></svg><svg class="ic" viewBox="0 0 32 32"><circle cx="8" cy="23" r="4"/><circle cx="25" cy="23" r="4"/><path d="M12 23h9l3-8h-6l-2 4H9"/><path d="M20 9h4l2 6"/><path d="M5 15h8"/></svg></span></div>
@@ -3482,18 +3494,18 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
     return`<div class="sp-cover">${(v.cover!==undefined?v.cover:v.img)?`<img class="g-photo" src="${v.cover!==undefined?v.cover:v.img}" alt="">`:spNoCover(v)}<span class="g-shade"></span>
       <div class="sp-bar">${back()}<button class="m-circ" type="button" data-mshare="${id}" aria-label="Share">${mS('share')}</button><button class="m-circ" type="button" data-msave="${id}" aria-label="Save">${S(sv?MIF.heart:MI.heart,sv?'i sv':'i')}</button></div></div>
     <div class="sp-head"><span class="sp-logo${d?' live':''}"${d?` data-lvgo="${id}"`:''}>${mLogo(v)}${d?'<em class="sp-lt">Live</em>':''}</span><button type="button" class="sp-follow${fo?' on':''}" data-mfollow="${id}">${fo?mS('check')+'Following':'Follow'}</button></div>
-    <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)} · ${fmtK(followers(v)+(fo?1:0))} followers</div><p><b>${v.tag}.</b> ${v.about[0]}.</p></div>
-    <div class="sp-info"><div><b class="${s.k}"><i></i>${s.k==='open'?'Open':s.k==='soon'?'Soon':'Closed'}</b><span>${s.t.replace(/^Open(?!s)\s*/,'').replace(/^’til/,'till').replace(/^'til/,'till')||'today'}</span></div><div><b>${walk(v)} min</b><span>${dtxt(v)} walk</span></div><div><b>${v.deliv?naira(v.deliv.fee):'Pick up'}</b><span>${v.deliv?'delivery':'only'}</span></div></div>
+    <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)}${v.real?'':` · ${fmtK(followers(v)+(fo?1:0))} followers`}</div><p>${v.tag?`<b>${v.tag}.</b> `:''}${v.about[0]}.</p></div>
+    <div class="sp-info">${s.k==='na'?'':`<div><b class="${s.k}"><i></i>${s.k==='open'?'Open':s.k==='soon'?'Soon':'Closed'}</b><span>${s.t.replace(/^Open(?!s)\s*/,'').replace(/^’til/,'till').replace(/^'til/,'till')||'today'}</span></div>`}${sKnow(v)?`<div><b>${walk(v)} min</b><span>${dtxt(v)} walk</span></div>`:''}${v.deliv||!v.real?`<div><b>${v.deliv?naira(v.deliv.fee):'Pick up'}</b><span>${v.deliv?'delivery':'only'}</span></div>`:''}</div>
     
-    <div class="m-qa"><button type="button" data-mtalk="${id}">${mS('chat')}Chat</button><button type="button" data-mdir="${id}">${mS('nav')}Directions</button></div>
+    <div class="m-qa"><button type="button" data-mtalk="${id}">${mS('chat')}Chat</button>${sPin(v)?`<button type="button" data-mdir="${id}">${mS('nav')}Directions</button>`:''}</div>
     ${v.deliv?`<div class="m-sh"><b>How you want it</b>${g?`<span>Pick one</span>`:''}</div><div class="m-card od">
-      <button type="button" class="od-opt" data-mtalk="${id}"><span class="od-ic">${mS('user')}</span><div><b>Just me</b><span>Delivered to you, ${v.deliv.eta}</span></div><em>${naira(v.deliv.fee)}</em></button>
+      <button type="button" class="od-opt" data-mtalk="${id}"><span class="od-ic">${mS('user')}</span><div><b>Just me</b><span>Delivered to you${v.deliv.eta?', '+v.deliv.eta:''}</span></div><em>${naira(v.deliv.fee)}</em></button>
       ${g?`<button type="button" class="od-opt" data-mjoin="${id}"><span class="od-ic g">${mS('users')}</span><div><b>${joined.has(id)?'You’re in the group':'Group order'}</b><span>${g.n+(joined.has(id)?1:0)} of ${g.need} to ${g.hall} · ${g.closes} min left</span></div><em>${naira(share(v,g.n+1))}<s>${naira(v.deliv.fee)}</s></em></button>`:''}
     </div>`:''}
     <div class="m-sh"><b>Menu</b><span>Prices set by the shop</span></div><div class="m-card" style="padding:4px 16px">${v.items.map(i=>`<div class="m-price"><span>${i[0]}</span><b>${naira(i[1])}</b></div>`).join('')}</div>
-    <div class="m-sh"><b>Where</b><span>${s.k==='shut'?s.t:'Every day, '+tfmt(v.hours[0])+' to '+tfmt(v.hours[1])}</span></div><div class="m-card"><div class="m-where wh"><span class="wh-ic">${mS('pin')}</span><div><b style="font-size:16px">${v.place}</b><span>${v.deliv?'Delivers to '+v.deliv.to+', '+v.deliv.eta:'Pick up only. Chat first and it will be ready when you arrive'}</span></div></div></div>
-    <div class="m-sh"><b>Reviews</b><span>${v.reviews?'From paid orders':'None yet'}</span></div><div class="m-card rv2">${v.reviews?`<div class="rv-sum"><div class="rv-big"><b>${v.rating.toFixed(1)}</b>${stz(Math.round(v.rating))}<span>${v.reviews} reviews</span></div><div class="rv-bars">${(v.dist||rvDist(v.rating)).map((x,i)=>`<div><span>${5-i}</span><i><u style="width:${x}%"></u></i></div>`).join('')}</div></div>`:''}${v.rev.length?v.rev.map(r=>`<div class="rv-it"><div class="rv-h"><span class="rv-av">${r[0].split(' ').map(w=>w[0]).join('').slice(0,2)}</span><div><b>${r[0]}</b><div class="rv-s">${stz(r[1])}<span>${r[3]}</span></div></div></div><p>${r[2]}</p>${r[4]?`<div class="rv-rp"><b>${v.name}</b>${r[4]}</div>`:''}</div>`).join(''):`<div class="rv-it"><p>New on Stafly with ${v.orders} completed orders. Stars show after 3 reviews from real buyers.</p></div>`}</div>
-    <p class="m-note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</p>
+    <div class="m-sh"><b>Where</b><span>${s.k==='na'?'':s.k==='shut'?s.t:'Every day, '+tfmt(v.hours[0])+' to '+tfmt(v.hours[1])}</span></div><div class="m-card"><div class="m-where wh"><span class="wh-ic">${mS('pin')}</span><div><b style="font-size:16px">${v.place||'Location not added yet'}</b><span>${v.deliv?(v.deliv.to?'Delivers to '+v.deliv.to+', '+v.deliv.eta:'Delivers'):v.real?'Ask the shop about delivery':'Pick up only. Chat first and it will be ready when you arrive'}</span></div></div></div>
+    <div class="m-sh"><b>Reviews</b><span>${v.reviews?'From paid orders':'None yet'}</span></div><div class="m-card rv2">${v.reviews?`<div class="rv-sum"><div class="rv-big"><b>${v.rating.toFixed(1)}</b>${stz(Math.round(v.rating))}<span>${v.reviews} reviews</span></div><div class="rv-bars">${(v.dist||rvDist(v.rating)).map((x,i)=>`<div><span>${5-i}</span><i><u style="width:${x}%"></u></i></div>`).join('')}</div></div>`:''}${v.rev.length?v.rev.map(r=>`<div class="rv-it"><div class="rv-h"><span class="rv-av">${r[0].split(' ').map(w=>w[0]).join('').slice(0,2)}</span><div><b>${r[0]}</b><div class="rv-s">${stz(r[1])}<span>${r[3]}</span></div></div></div><p>${r[2]}</p>${r[4]?`<div class="rv-rp"><b>${v.name}</b>${r[4]}</div>`:''}</div>`).join(''):`<div class="rv-it"><p>${v.real?'Buyers who pay can leave a review.':`New on Stafly with ${v.orders} completed orders. Stars show after 3 reviews from real buyers.`}</p></div>`}</div>
+    <p class="m-note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':v.real?'':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</p>
     <div class="m-foot">${mFoot(v)}</div>`;}
   if(k==='alerts'){const g=GROUPS.mamatee,mt=vOf('mamatee'),kem=DROPS.includes(LATE);
     const al=(ic,bg,col,b,p,tm,a)=>`<button class="m-al" type="button" ${a}><span class="ai" style="background:${bg};color:${col}">${mS(ic)}</span><span><b>${b}</b><p>${p}</p><time>${tm}</time></span></button>`;
@@ -3514,8 +3526,8 @@ function m2Sheet(id){const v=vOf(id),s=status(v),d=dropOf(id),g=GROUPS[id],sv=SA
   $('#mSheet').innerHTML=`<div class="m-grab" data-mmin="1" role="button" aria-label="Show less"></div>
    <div class="m-who">${mLogo(v)}<div class="nm"><b>${v.name}${vt(v)}</b><span class="m-rate">${rateTxt(v)}</span></div><button class="m-cb" type="button" data-msave="${id}" aria-label="Save">${S(sv?MIF.heart:MI.heart,sv?'i sv':'i')}</button><button class="m-cb" type="button" data-mtalk="${id}" aria-label="Chat">${mS('chat')}</button></div>
    <div class="m-hr"></div>
-   <div class="m-where"><div><b>${walk(v)} min walk</b><span>${dtxt(v)} · ${v.place}</span></div><span class="pill ${s.k}"><i></i>${s.t}</span></div>
-   <div class="m-walk"><div class="tr"><span class="a"></span><span class="mid">${mS('walk')}${walk(v)} min</span><span class="b">${mS('store')}</span></div><div class="lb"><span>You</span><span>${v.place.split(',')[0]}</span></div></div>
+   <div class="m-where"><div>${sKnow(v)?`<b>${walk(v)} min walk</b><span>${dtxt(v)} · ${v.place}</span>`:`<b>${v.place||'Location not added yet'}</b>`}</div><span class="pill ${s.k}"><i></i>${s.t}</span></div>
+   ${sKnow(v)?`<div class="m-walk"><div class="tr"><span class="a"></span><span class="mid">${mS('walk')}${walk(v)} min</span><span class="b">${mS('store')}</span></div><div class="lb"><span>You</span><span>${v.place.split(',')[0]}</span></div></div>`:''}
    ${d?`<div class="m-live"><b>LIVE</b><span>${d.t}</span></div>`:''}
    <div class="m-list">
      <button class="m-li" type="button" data-mshop="${id}">${mS('tag')}<span>Prices</span><small>from ${naira(mn)}</small>${mS('chev')}</button>
@@ -3555,7 +3567,7 @@ mThread=function(id){const L=TALK[id]||[];
 mTalk=function(id){const v=vOf(id),L=TALK[id]||[],r=reach(v),s=status(v);const loc=(USER&&USER.hall)||'Moremi Hall';
   const qs=[ask(v).replace(/^Hi, I found you on Stafly\. /,''),v.deliv?`Do you deliver to ${loc.replace(' Hall','')}?`:'Where exactly are you?','Can I see your prices?'];
   return`<div class="m-th">${back()}<div class="who">${mLogo(v)}<div class="tt"><b>${v.name}</b><span><i></i>Online · replies in seconds</span></div></div>${r==='both'?`<button class="m-circ" type="button" data-chat="${id}" aria-label="Open in WhatsApp">${mS('wa')}</button>`:''}</div>
-  <div class="m-ctx"><span class="pill ${s.k}"><i></i>${s.t}</span><span class="dt">${walk(v)} min · ${v.deliv?naira(v.deliv.fee)+' delivery':'Pick up only'}</span><button type="button" data-mshop="${id}">View shop</button></div>
+  <div class="m-ctx"><span class="pill ${s.k}"><i></i>${s.t}</span><span class="dt">${[sKnow(v)?walk(v)+' min':'',v.deliv?naira(v.deliv.fee)+' delivery':v.real?'':'Pick up only'].filter(Boolean).join(' · ')}</span><button type="button" data-mshop="${id}">View shop</button></div>
   <div class="m-thread" id="mThread">${mThreadAll(id)}</div>
   <div class="m-comp">${L.length?'':`<div class="m-qs">${qs.map(q=>`<button type="button" data-mq="${q.replace(/"/g,'&quot;')}">${q}</button>`).join('')}</div>`}
    <form class="m-in" id="mIn" data-id="${id}"><button type="button" class="att" aria-label="Send a photo">${mS('plus')}</button><input id="mMsg" type="text" placeholder="Message…" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send">${mS('send')}</button></form></div>`;};
@@ -3736,7 +3748,7 @@ let LVS=0;function lvShow(){const LL=LVLIST||DROPS,d=LL[LVI],v=vOf(d.id),o=$('#l
   <div class="lv-hd">${mLogo(v)}<div><b>${v.name}</b><span>${ago(sd.m)} · ${v.place.split(',')[0]}</span></div><button type="button" class="lv-x" data-lvx aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
   ${(sd.img||CV(v))?'':`<span class="g-pin lv-pin">${mLogo(v)}</span>`}
   <button type="button" class="lv-prev" data-lvprev aria-label="Previous post"></button><button type="button" class="lv-next" data-lvnext aria-label="Next post"></button>
-  <div class="lv-ft"><span class="lv-cat">${catL(v.cat)} · ${dtxt(v)}</span><p>${sd.t}</p><div class="g-act"><button type="button" class="g-ghost" data-lvmap="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div>`;
+  <div class="lv-ft"><span class="lv-cat">${catL(v.cat)}${sKnow(v)?' · '+dtxt(v):''}</span><p>${sd.t}</p><div class="g-act"><button type="button" class="g-ghost" data-lvmap="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div>`;
   clearTimeout(LVT);LVT=setTimeout(()=>lvStep(1),5000);}
 function lvStep(k){const LL=LVLIST||DROPS,d=LL[LVI],c=d&&d.slides&&d.slides.length?d.slides.length:1;if(LVS+k>=0&&LVS+k<c){LVS+=k;return lvShow();}const n=LVI+k;if(n<0){LVI=0;LVS=0;return lvShow();}if(n>=LL.length)return lvClose();LVI=n;LVS=k>0?0:-1;lvShow();}
 function lvClose(){clearTimeout(LVT);document.body.classList.remove('lv-on');setTimeout(()=>{if(!document.body.classList.contains('lv-on')){const o=$('#lvView');if(o)o.innerHTML='';}},320);}
@@ -4005,7 +4017,7 @@ function m2SheetSave(id){const b=$('#mSheet [data-msave]');if(b)b.innerHTML=S(SA
 document.addEventListener('input',e=>{if(e.target.id==='mQ'){st.q=e.target.value;render();}});
 
 placeVendors();menus();drawMarkers();
-const fitAll=()=>{if(phone()){map.jumpTo({center:ll2(YOU),zoom:15.5,pitch:58,bearing:-18});const q=map.project(ll2(YOU)),w=map.getContainer().clientWidth;const h=map.getContainer().clientHeight;map.jumpTo({center:map.unproject([w/2+q.x-w*0.62,h/2+q.y-Math.min(h*0.33,260)])});return;}map.fitBounds(bounds(V.filter(v=>!['staff','gate'].includes(v.near)).map(v=>v.ll).concat([YOU])),{padding:phone()?{top:80,bottom:420,left:40,right:40}:{top:110,bottom:110,left:560,right:60},pitch:58,bearing:-18,duration:0,maxZoom:17.2});};
+const fitAll=()=>{if(phone()){map.jumpTo({center:ll2(YOU),zoom:15.5,pitch:58,bearing:-18});const q=map.project(ll2(YOU)),w=map.getContainer().clientWidth;const h=map.getContainer().clientHeight;map.jumpTo({center:map.unproject([w/2+q.x-w*0.62,h/2+q.y-Math.min(h*0.33,260)])});return;}map.fitBounds(bounds(V.filter(v=>sPin(v)&&!['staff','gate'].includes(v.near)).map(v=>v.ll).concat([YOU])),{padding:phone()?{top:80,bottom:420,left:40,right:40}:{top:110,bottom:110,left:560,right:60},pitch:58,bearing:-18,duration:0,maxZoom:17.2});};
 /* desktop: glass panels over satellite */
 function dRight(){const el=document.getElementById('dright');if(!el||M2)return;const op=V.filter(isOpen).length;
   const gids=Object.keys(GROUPS);
@@ -4255,14 +4267,14 @@ fetch(LIVE.base+'/api/w/'+LIVE.sid+'/config').then(r=>r.ok?r.json():null).then(c
 /* 1) real details: name, photo, tagline, menu, prices */
 return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).then(d=>{if(!d)return;
   if(clean(d.businessName))v.name=clean(d.businessName);
-  if(clean(d.headline))v.tag=clean(d.headline);
+  v.tag=clean(d.headline);
   v.about=['Message us and our assistant replies right away'];const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>clean(x).replace(/\.$/,'')).filter(Boolean).slice(0,2);if(ab.length)v.about=ab;
   if(safeUrl(d.avatar))v.img=SCDN(safeUrl(d.avatar),120);v.cover=SCDN(safeUrl(d.cover),640);
-  if(clean(d.location))v.place=clean(d.location);
+  v.place=clean(d.location);staflyPin(v);
   const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':SCDN(safeUrl(i.img),600),clean(i.desc||''),clean(i.cat||i.category||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3).map(function(u){return SCDN(u,600);})]);if(it.length)v.items=it.slice(0,30);
-  const w=waDigits(d.whatsapp);if(w)v.wa=w;
-  if(d.defaultFee&&v.deliv)v.deliv.fee=Math.max(0,Number(d.defaultFee)||0)||v.deliv.fee;
-  const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
+  v.wa=waDigits(d.whatsapp);try{REACH[v.id]=!v.wa?'stafly':(d.reach==='whatsapp'||d.reach==='stafly'?d.reach:'both');}catch(e){}
+  {const fee=Math.max(0,Number(d.defaultFee)||0);v.deliv=fee?{fee,eta:'',to:''}:null;}
+  const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}else{v.hours=null;v.days=null;v.closedToday=false;}
   const rv=d.reviews||{};const L=(rv.latest||[]).filter(r=>r&&r.rating>=1&&r.rating<=5);
   if(rv.count>0&&L.length){const ago=t=>{const s=(Date.now()-Date.parse(t))/1000;if(!(s>=0))return '';const d=Math.floor(s/86400);return d<1?'Today':d<2?'Yesterday':d<7?d+' days ago':d<14?'1 week ago':d<60?Math.floor(d/7)+' weeks ago':Math.floor(d/30)+' months ago';};
     const long=t=>String(t==null?'':t).replace(/[<>"'`&\\]/g,'').replace(/\s+/g,' ').trim().slice(0,400);
@@ -4274,7 +4286,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
      const SL=[];P.slice().reverse().forEach(p=>{const im=(Array.isArray(p.imgs)&&p.imgs.length?p.imgs:[p.img]).map(safeUrl).filter(Boolean).slice(0,10).map(function(u){return SCDN(back0(u),640);});im.forEach(u=>SL.push({img:u,t:p.t||(v.tag||'Fresh from '+v.name),m:mins(p.at)}));});
      DROPS.unshift({id:v.id,t:P[0].t||(v.tag||'Fresh from '+v.name),m:mins(P[0].at),img:P[0].img,slides:SL,real:1});
      try{if(CUR.t==='live'&&!CUR.s){LVLIST=null;$('#mPage').innerHTML=m2Page('live');}}catch(_){}}}
-  v.live=1;redraw();});}).catch(()=>{});
+  v.live=1;v.real=1;v.tier='listed';try{placeVendors();}catch(e){}redraw();});}).catch(()=>{});
 const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Thanks for messaging ${vv.name}. What would you like today?`;};
 /* 2) real chat with Amara through Stafly's website-chat line */
 let vid='';try{vid=localStorage.getItem('stafly_vid')||'';}catch(e){}
@@ -4323,10 +4335,10 @@ function mono(n){const w=n.split(/\s+/).filter(Boolean);return((w[0]||'S')[0]+((
 fetch(BASE+'/api/search/shops').then(r=>r.ok?r.json():null).then(d=>{if(!d||!Array.isArray(d.shops))return;let added=0;
   d.shops.forEach(s=>{if(!s||!s.sid||s.sid==='seller1'||V.some(v=>v.sid===s.sid||v.id==='s_'+s.sid))return;
     const name=clean(s.name)||'Stafly shop',kind=SUB[s.kind]?s.kind:'services',loc=clean(s.location);
-    let near='sub';for(const[re,k]of NEAR)if(re.test(loc)&&LM[k]){near=k;break;}
+    let near='sub',pin=0;for(const[re,k]of NEAR)if(re.test(loc)&&LM[k]){near=k;pin=1;break;}
     const hsh=hash(s.sid),off=[(hsh%70)-35,((hsh>>7)%70)-35];
-    V.push({id:'s_'+s.sid,sid:s.sid,name,mono:mono(name),sub:SUB[kind],bg:BG[kind],cat:kind,tier:'verified',rating:Math.min(5,Math.max(0,Number(s.rating)||0)),reviews:Number(s.reviews)||0,orders:0,
-      near,off,place:loc||'On campus',hours:[480,1200],deliv:{fee:Math.max(0,Number(s.defaultFee)||0),eta:'30 to 45 min',to:'all halls'},tag:clean(s.headline)||('Order from '+name+' on Stafly'),
+    V.push({id:'s_'+s.sid,sid:s.sid,name,mono:mono(name),sub:SUB[kind],bg:BG[kind],cat:kind,tier:'listed',rating:Math.min(5,Math.max(0,Number(s.rating)||0)),reviews:Number(s.reviews)||0,orders:0,
+      near,off,noloc:pin?0:1,place:loc,hours:null,deliv:Number(s.defaultFee)>0?{fee:Math.max(0,Number(s.defaultFee)),eta:'',to:''}:null,tag:clean(s.headline)||('Order from '+name+' on Stafly'),
       about:['Message us and our assistant replies right away'],items:[],rev:[],real:1});added++;
     staflyLiveShop({base:BASE,sid:s.sid,id:'s_'+s.sid});});
   if(added){try{placeVendors();}catch(_){}try{drawMarkers();}catch(_){}try{render();}catch(_){}try{m2Apply();}catch(_){}}}).catch(()=>{});
@@ -4380,8 +4392,8 @@ const F={area:'',walk:0,price:0,group:false,trusted:false,live:false,top:false,c
 const AREAS=[['','Anywhere'],['moremi','Moremi'],['awo','Awo'],['fajuyi','Fajuyi'],['angola','Angola'],['mozambique','Mozambique'],['etf','ETF'],['alumni','Alumni'],['pg','PG Hall'],['sub','SUB'],['buka','New Buka'],['health','Health Centre'],['library','Library'],['senate','Senate']];
 const minP=v=>{const p=v.items.map(i=>typeof i[1]==='string'?Number(i[1].replace('from ','')):i[1]).filter(x=>x>0);return p.length?Math.min(...p):0;};
 function pass(v){
-  if(F.area&&!(v.near===F.area||meters(LM[F.area].ll,v.ll)<=280))return false;
-  if(F.walk&&walk(v)>F.walk)return false;
+  if(F.area&&(!sPin(v)||!(v.near===F.area||meters(LM[F.area].ll,v.ll)<=280)))return false;
+  if(F.walk&&(!sKnow(v)||walk(v)>F.walk))return false;
   if(F.price){const m=minP(v);if(!m||m>F.price)return false;}
   if(F.group&&!GROUPS[v.id])return false;
   if(F.trusted&&v.tier!=='trusted')return false;
@@ -4473,7 +4485,7 @@ function place(){const sb=document.getElementById('mSatB');if(!sb||!sb.offsetHei
   btn.style.top=(sb.offsetTop+sb.offsetHeight+10)+'px';btn.style.left=(sb.offsetLeft+sb.offsetWidth-40)+'px';btn.style.right='auto';toast.style.top=sb.offsetTop+'px';}
 place();addEventListener('resize',place);setTimeout(place,1200);setTimeout(place,3000);
 let wid=null,last=null,lastRoute=null,centred=false,warned=false;
-function moveYou(ll){YOU=ll;try{youM&&youM.setLngLat(ll2(YOU));const w=youM&&youM.getElement();if(w)w.classList.add('live');}catch(e){}
+function moveYou(ll){YOU=ll;window.__gpsYou=1;try{youM&&youM.setLngLat(ll2(YOU));const w=youM&&youM.getElement();if(w)w.classList.add('live');}catch(e){}
   try{render();}catch(e){}try{m2Refresh();}catch(e){}
   if(st.sel&&(!lastRoute||meters(lastRoute,ll)>25)){lastRoute=ll;const v=V.find(x=>x.id===st.sel);if(v)try{route(v);}catch(e){}}}
 function fix(p){const ll=[p.coords.latitude,p.coords.longitude];btn.classList.remove('wait');
@@ -4726,7 +4738,7 @@ function dlvHtml(v,G){const f=fee(v),m=CK.mode||'solo',gs=G.find(g=>g.id===m),lo
   const isG=!!gs,hs=CK.hall&&!/^\s*off[ -]?campus\s*$/i.test(CK.hall)?String(CK.hall).split(',')[0].trim().slice(0,24):'';
   const tile=(id,on,b,p,tag)=>`<button type="button" class="dl-t${on?' on':''}" data-ckmode="${id}"><b>${b}</b><em>${p}</em>${tag?`<i>${tag}</i>`:''}</button>`;
   let det='';
-  if(m==='solo')det=`<p class="dl-d">Straight to your door, ${v.deliv.eta}.</p>`;
+  if(m==='solo')det=`<p class="dl-d">Straight to your door${v.deliv.eta?', '+v.deliv.eta:''}.</p>`;
   else if(isG)det=`<p class="dl-d">${gs.joined} of ${gs.size} joined, going to ${gs.hall}. One rider, you pay a share.</p>${G.length>1?`<div class="dl-gs">${G.map(g=>`<button type="button" class="${g.id===m?'on':''}" data-ckmode="${g.id}">${g.hall}<small>${naira(g.share)}</small></button>`).join('')}</div>`:''}`;
   else if(m==='new')det=`<p class="dl-d">${hs?'You start a group to '+hs+'. ':''}Others can join, and it gets cheaper as they do.</p>`;
   return`<div class="m-sh"><b>Delivery</b></div><div class="m-card dl-c"><div class="dl-row${G.length?'':' two'}">${tile('solo',m==='solo','Just me',naira(f))}${low?tile(isG?gs.id:low.id,isG,'Join group',(isG?naira(gs.share):'from '+naira(low.share)),'Cheaper'):''}${tile('new',m==='new','New group',naira(f))}</div>${det}</div>`;}
@@ -5225,15 +5237,15 @@ function apply(d,theme){
   v.items=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||''),clean(i.cat||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3)]).slice(0,200);
   v.wa=waDigits(d.whatsapp)||'';
   try{REACH.pvshop=d.reach==='stafly'||d.reach==='whatsapp'?d.reach:'both';if(!v.wa&&REACH.pvshop!=='stafly')REACH.pvshop='stafly';}catch(_){}
-  v.deliv=Object.assign({},base.deliv||{},{fee:Math.max(0,Number(d.defaultFee)||0)});
+  {const fee=Math.max(0,Number(d.defaultFee)||0);v.deliv=fee?{fee,eta:'',to:''}:null;}v.real=1;v.noloc=1;
   const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}
-  else{v.hours=[0,1439];v.days=null;v.closedToday=false;}
+  else{v.hours=null;v.days=null;v.closedToday=false;}
   const rv=d.reviews||{};const L=(rv.latest||[]).filter(r=>r&&r.rating>=1&&r.rating<=5);
   if(rv.count>0&&L.length){v.reviews=Number(rv.count)||L.length;v.rating=Math.min(5,Math.max(1,Number(rv.avg)||0));
     v.rev=L.map(r=>[clean(r.name)||'A customer',Math.round(r.rating),String(r.text||'').replace(/[<>"'`&\\]/g,'').slice(0,400),'']);
     const c=[5,4,3,2,1].map(n=>L.filter(r=>Math.round(r.rating)===n).length);v.dist=c.map(x=>Math.round(x/L.length*100));}
   else{v.reviews=0;v.rating=0;v.rev=[];v.dist=[0,0,0,0,0];}
-  v.tier='verified';v.orders=0;
+  v.tier='listed';v.orders=0;
   wait.remove();
   const sub=document.getElementById('mSub'),top=sub?sub.scrollTop:0;
   try{m2Nav({t:'explore',s:'shop',id:'pvshop'});}catch(e){}
@@ -10109,7 +10121,7 @@ function place(ll,fromGps){if(fromGps)ll=free(ll);var moved=pos?M(ll,pos):0;
   if(pos&&fromGps&&moved>2&&moved<60)walked+=moved;
   pos=ll;if(!me)mkMe();else me.setLngLat(pos);
   var el=me.getElement();el.classList.add('moving');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('moving');},1400);
-  try{YOU=[pos[1],pos[0]];}catch(e){}
+  try{YOU=[pos[1],pos[0]];window.__gpsYou=1;}catch(e){}
   map.easeTo({center:pos,zoom:18.2,pitch:58,bearing:camB,duration:fromGps?900:0});top();update();if(tgt)drawRoute();}
 var BL=['bld','lmk','lmk2','lmk3','pop3'];
 function blocked(ll){try{var p=map.project(ll);var f=map.queryRenderedFeatures([[p.x-4,p.y-4],[p.x+4,p.y+4]],{layers:BL.filter(function(id){return map.getLayer(id);})});
@@ -10933,5 +10945,6 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub :is(.m-li.pf-ro,
 /* long emails shorten in the middle-free way: the text part ellipsizes, the tick always stays visible */
 (function(){new MutationObserver(function(){document.querySelectorAll(':is(#mSub,#mPage) :is(.m-li.pf-ro,.m-li.pf-em)>small').forEach(function(sm){if(sm.dataset.cx)return;sm.dataset.cx=1;var vf=sm.querySelector('.a-vf');var t=document.createElement('span');t.className='cx-v';t.style.cssText='overflow:hidden;text-overflow:ellipsis;min-width:0';[].slice.call(sm.childNodes).forEach(function(n){if(n!==vf)t.appendChild(n);});sm.insertBefore(t,vf||null);});}).observe(document.body,{childList:true,subtree:true});})();
 </script>
+<style>#mSub .sp-info:empty,#mSub .sp-info:not(:has(>div)){display:none!important}#mSub .m-qa>button:only-child{grid-column:1/-1;flex:1 1 100%}</style>
 </body>
 </html>
