@@ -3946,7 +3946,7 @@ function authWelcome(p){const A=AUTH,full=p&&p.name&&p.email&&HALLS.some(x=>x[0]
   A.step='ok';authRender();
   setTimeout(()=>{if(AUTH!==A)return;if(full){authDone();if(USER&&p.phone)USER.ph=p.phone;profApply(p);profPush();return;}A.step=3;authRender();setTimeout(()=>{const i=$('#aNm');i&&i.focus();},80);},1300);}
 function authFinish(){const A=AUTH,h=HALLS.find(x=>x[0]===A.hall);if(!h)return;A.busy=1;A.err='';authRender();
-  authApi('/api/search/me',{vid:vidQ(),name:A.name.trim().split(' ')[0],hall:profHall(h[0]),hk:h[0],email:String(A.email).trim(),follows:[...FOLLOW],saved:[...SAVED]})
+  authApi('/api/search/me',{vid:vidQ(),name:A.name.trim().split(' ')[0],hall:profHall(h[0]),hk:h[0],email:String(A.email).trim(),emProof:A.proof||undefined,follows:[...FOLLOW],saved:[...SAVED]})
     .then(p=>{A.busy=0;if(A.edit){USER.name=p.name;USER.hk=p.hk;USER.hall=p.hall;USER.email=p.email;try{localStorage.setItem('stafly_user',JSON.stringify(USER));}catch(_){}A.step='prof';authRender();try{m2Drawer();document.body.classList.remove('m-drw');}catch(_){}return;}authDone();if(USER)USER.ph=p.phone;})
     .catch(e=>{A.busy=0;A.err=e.message;if(/email/i.test(e.message))A.emailEdit=1;authRender();});}
 
@@ -9526,6 +9526,47 @@ body.lv-on #lvBk{display:block}
   ['wheel','touchmove'].forEach(function(t){b.addEventListener(t,function(e){e.preventDefault();},{passive:false});});
   document.body.appendChild(b);}
 if(document.body)mk();else document.addEventListener('DOMContentLoaded',mk);})();
+</script>
+<style id="m222">
+/* m222: smoother sign-in step changes */
+#mAuth .a-pg.a-in{animation:aIn2 .46s cubic-bezier(.2,.8,.2,1) both}
+@keyframes aIn2{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+#mAuth .steps i{transition:background .4s ease}
+@media (prefers-reduced-motion:reduce){#mAuth .a-pg.a-in{animation:none}}
+</style>
+<script id="m222s">
+(function(){var R=window.authRender;if(typeof R!=='function')return;
+window.authRender=function(){var el=document.getElementById('mAuth'),st=null;try{st=AUTH.step;}catch(e){}
+  var on=document.body.classList.contains('m-authon'),ch=on&&el&&el._st!==undefined&&el._st!==st,h0=el?el.offsetHeight:0;
+  var r=R.apply(this,arguments);if(el)el._st=st;
+  if(ch&&!matchMedia('(prefers-reduced-motion:reduce)').matches){el.style.height='';var h1=el.offsetHeight;
+    if(Math.abs(h1-h0)>2){el.style.overflow='hidden';el.style.height=h0+'px';void el.offsetHeight;
+      el.style.transition='transform .4s cubic-bezier(.2,.9,.2,1),height .44s cubic-bezier(.2,.8,.2,1)';el.style.height=h1+'px';
+      clearTimeout(el._ht);el._ht=setTimeout(function(){el.style.height='';el.style.overflow='';},480);}}
+  return r;};
+document.addEventListener('transitionend',function(e){var el=e.target;if(el&&el.id==='mAuth'&&!document.body.classList.contains('m-authon'))el._st=undefined;});
+})();
+</script>
+<script id="m223s">
+/* m223: new accounts confirm their email with a code first, then WhatsApp (a typo can't lock them out) */
+(function(){var oldVerify=window.emVerify;
+function fx(id){setTimeout(function(){var i=document.getElementById(id);i&&i.focus();},80);}
+function toPh(A){A.busy=0;A.step='ph';authRender();fx('aPh');}
+window.authEm=function(){var A=AUTH;A.email=String(A.email||'').trim();A.em=A.email;A.fresh=0;A.proof='';A.busy=1;A.err='';authRender();
+  authApi('/api/search/account/check',{vid:vidQ(),email:A.email}).then(function(d){A.busy=0;
+    if(d.exists&&d.mail)return emSend();
+    if(!d.exists&&d.mail){A.fresh=1;A.back=0;return emSend();}
+    A.back=d.exists?1:0;toPh(A);})
+    .catch(function(e){A.busy=0;A.err=e.message;authRender();});};
+window.emSend=function(){var A=AUTH;A.em=A.email;A.busy=1;A.err='';var again=A.step==='e2';if(!again)authRender();
+  authApi('/api/search/email/start',A.fresh?{vid:vidQ(),email:A.email,fresh:1}:{vid:vidQ(),email:A.email})
+    .then(function(d){A.busy=0;if(A.fresh&&!(d&&d.fresh)){A.fresh=0;return toPh(A);}if(!A.fresh)A.back=1;A.step='e2';authRender();fx('aECode');})
+    .catch(function(e){A.busy=0;if(A.fresh&&/couldn.t find/i.test(e.message)){A.fresh=0;return toPh(A);}A.err=e.message;authRender();});};
+window.emVerify=function(code){var A=AUTH;if(!A.fresh)return oldVerify.apply(this,arguments);A.busy=1;A.err='';
+  authApi('/api/search/email/verify',{vid:vidQ(),email:A.email,code:code,fresh:1})
+    .then(function(d){A.proof=(d&&d.proof)||'';A.back=0;toPh(A);})
+    .catch(function(e){A.busy=0;A.err=e.message;authRender();fx('aECode');});};
+})();
 </script>
 </body>
 </html>
