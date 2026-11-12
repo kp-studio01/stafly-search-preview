@@ -9971,10 +9971,10 @@ function build(){if(map.getZoom()<14.8)return;
   var seen={},feats=[],MAX=5200;var bb0=map.getBounds(),pad=.002,VB=[bb0.getWest()-pad,bb0.getSouth()-pad,bb0.getEast()+pad,bb0.getNorth()+pad];
   for(var i=0;i<src.length&&feats.length<MAX;i++){var f=src[i],cl=(f.properties||{}).class||'park';
     if(['grass','wood','forest','scrub','farmland','park','nature_reserve','garden'].indexOf(cl)<0&&f.sourceLayer!=='park')continue;
-    var dense=(cl==='wood'||cl==='forest')?11:(cl==='scrub'?14:17);
+    var dense=(cl==='wood'||cl==='forest')?15:(cl==='scrub'?20:26);
     polys(f.geometry).forEach(function(p){var b=bbox(p[0]);b=[Math.max(b[0],VB[0]),Math.max(b[1],VB[1]),Math.min(b[2],VB[2]),Math.min(b[3],VB[3])];if(b[0]>b[2]||b[1]>b[3])return;var sx=dense*MLNG,sy=dense*MLAT;
       for(var gx=Math.floor(b[0]/sx);gx*sx<=b[2]&&feats.length<MAX;gx++)for(var gy=Math.floor(b[1]/sy);gy*sy<=b[3]&&feats.length<MAX;gy++){
-        var key=dense+':'+gx+':'+gy;if(seen[key])continue;var h=hash(gx,gy);if(dense>=17&&h<.22){seen[key]=1;continue;}
+        var key=dense+':'+gx+':'+gy;if(seen[key])continue;var h=hash(gx,gy);if(dense>=20&&h<.45){seen[key]=1;continue;}
         var pt=[(gx+.15+.7*hash(gy,gx))*sx,(gy+.15+.7*h)*sy];
         if(!inPoly(pt,p))continue;seen[key]=1;
         var hitB=false;for(var q=0;q<bl.length;q++){var bb=bl[q].b;if(pt[0]<bb[0]-3*MLNG||pt[0]>bb[2]+3*MLNG||pt[1]<bb[1]-3*MLAT||pt[1]>bb[3]+3*MLAT)continue;if(inPoly(pt,bl[q].p)){hitB=true;break;}}
@@ -10003,6 +10003,32 @@ var tm=0;map.on('idle',function(){clearTimeout(tm);tm=setTimeout(function(){try{
 var tk=setInterval(function(){try{if(map.isStyleLoaded()&&map.getLayer('bld')){clearInterval(tk);add();}}catch(e){}},300);
 var oa=window.applyTheme;if(typeof oa==='function')window.applyTheme=function(){var r=oa.apply(this,arguments);try{paint();}catch(e){}return r;};
 var os=window.setSat;if(typeof os==='function')window.setSat=function(){var r=os.apply(this,arguments);try{paint();}catch(e){}return r;};
+})();
+</script>
+<script id="m218">
+/* m218: balance. One calm colour family for every building, only big names, glow on main roads only. */
+(function(){
+if(typeof map==='undefined'||!map.on)return;
+var LT=function(){return document.body.classList.contains('m-light');};
+function tone(lo,hi){var c=['to-rgba',['get','c']];var L=['/',['+',['*',.3,['at',0,c]],['*',.59,['at',1,c]],['*',.11,['at',2,c]]],255];
+  return ['rgb',['+',lo[0],['*',hi[0]-lo[0],L]],['+',lo[1],['*',hi[1]-lo[1],L]],['+',lo[2],['*',hi[2]-lo[2],L]]];}
+var T={light:{lo:[214,212,207],hi:[255,255,255],txt:'#3A3A40',halo:'rgba(255,255,255,.9)',minor:'#E4E1DB',path:'rgba(0,0,0,.08)',tree:['#C4D8B6','#B8D0A8','#CCDDBF']},
+       dark:{lo:[40,40,46],hi:[92,92,100],txt:'rgba(255,255,255,.72)',halo:'rgba(0,0,0,.65)',minor:'rgba(255,255,255,.10)',path:'rgba(255,255,255,.06)',tree:['#34493A','#3B5241','#304434']}};
+function sp(id,k,v){try{map.getLayer(id)&&map.setPaintProperty(id,k,v);}catch(e){}}
+function sl(id,k,v){try{map.getLayer(id)&&map.setLayoutProperty(id,k,v);}catch(e){}}
+function zr(id,a){try{map.getLayer(id)&&map.setLayerZoomRange(id,a,24);}catch(e){}}
+function paint(){if(!map.getLayer('bld'))return;var t=LT()?T.light:T.dark,sat=typeof SAT!=='undefined'&&SAT;
+  ['lmk','lmk2','lmk3','pop3'].forEach(function(id){sp(id,'fill-extrusion-color',tone(t.lo,t.hi));});
+  ['lmkl','lmk2l','lmk3l','pop3l'].forEach(function(id){if(!sat){sp(id,'text-color',t.txt);sp(id,'text-halo-color',t.halo);}});
+  sl('roadname','visibility','none');sl('poi','visibility','none');
+  zr('lmk3l',17.4);zr('pop3l',17.8);
+  if(!sat){sl('glw-min','visibility','none');sp('minor','line-color',t.minor);sp('minor','line-width',['interpolate',['exponential',1.6],['zoom'],13,.4,16,1.4,19,6]);sp('paths','line-color',t.path);
+    sp('m217tree','fill-extrusion-color',['match',['get','v'],0,t.tree[0],1,t.tree[1],2,t.tree[2],LT()?'#9C8C7A':'#3A3128']);}}
+window.m218Paint=paint;
+var oa=window.applyTheme;if(typeof oa==='function')window.applyTheme=function(){var r=oa.apply(this,arguments);try{paint();}catch(e){}return r;};
+var os=window.setSat;if(typeof os==='function')window.setSat=function(){var r=os.apply(this,arguments);try{paint();}catch(e){}return r;};
+var n=0,tk=setInterval(function(){n++;try{if(map.getLayer('lmk')&&map.getLayer('pop3')&&map.getLayer('m217tree')){paint();clearInterval(tk);}}catch(e){}if(n>80)clearInterval(tk);},250);
+map.on('idle',function(){if(!window.__m218once&&map.getLayer('lmk')){window.__m218once=1;paint();}});
 })();
 </script>
 </body>
