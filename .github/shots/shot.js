@@ -1,7 +1,7 @@
 const {chromium}=require('playwright');
 (async()=>{const page=process.env.PAGE||'v12/brand/index.html';const b=await chromium.launch();
 const C=(process.env.CENTER||'4.5228,7.5192').split(',').map(Number);const out=[];
-for(const theme of ['dark','light']) for(const [w,h,name] of [[1280,760,'desk']]){
+for(const theme of ['dark','light']) for(const [w,h,name] of [[1280,760,'desk'],[390,844,'phone']]){
   const p=await b.newPage({viewport:{width:w,height:h},deviceScaleFactor:2,colorScheme:theme});
   p.on('pageerror',e=>console.log('PAGEERR',e.message));
   await p.addInitScript(t=>{try{localStorage.setItem('stafly_sat','0');localStorage.setItem('stafly_theme',t);}catch(e){}},theme);
