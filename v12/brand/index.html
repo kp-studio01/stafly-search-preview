@@ -4372,9 +4372,7 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-pfpic]')&&USER)
 const NEED=5;
 const _ms=m2Sub;m2Sub=function(k){const h=_ms.apply(this,arguments);if(k!=='me'||!USER||typeof h!=='string')return h;
   const n=Math.min(NEED,Number(USER.paid)||0),got=n>=NEED;
-  const card=`<div class="pf-card tb2${got?' got':''}"><div class="tb2-h"><span class="tb2-ic">${SH}</span><div class="tb2-t"><b>Trusted buyer</b><small>${got?'Earned':'Your progress'}</small></div><span class="tb2-n"><b>${n}</b>/${NEED}</span></div>`+
-  `<div class="tb2-bar"><i style="width:${n/NEED*100}%"></i></div>`+
-  `<p>${got?'Shops see your badge, so they can offer you pay on delivery.':`${NEED-n} more paid ${NEED-n===1?'order':'orders'} and shops will see your badge.`}</p></div>`;
+  const card=`<div class="pf-card tb2${got?' got':''}"><div class="tb2-h"><span class="tb2-ic">${SH}</span><div class="tb2-t"><b>Trusted buyer</b><small>${got?'Earned. Shops can offer you pay on delivery.':n+' of '+NEED+' paid orders'}</small></div></div>`+`<div class="tb3-steps">${Array.from({length:NEED},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</div></div>`;
   return h.replace('<div class="m-dl">Your activity</div>',card+'<div class="m-dl">Your activity</div>');};
 
 /* 3) filters */
@@ -10626,5 +10624,36 @@ window.profApply=function(p){var r=P.apply(this,arguments);
   return r;};
 })();
 </script>
+<style id="m234">
+/* m234: profile card, premium layout: big photo + name on the left, stats stacked on the right */
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2){display:grid!important;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:center;padding:24px 22px!important;border-radius:28px!important}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-top{flex-direction:column;align-items:center;text-align:center;gap:0;padding-right:20px;min-width:0}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-top>div{min-width:0;max-width:100%}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-av{width:104px;height:104px;font-size:42px;margin-bottom:14px}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-av svg{width:40px;height:40px}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-cam{width:32px;height:32px;right:0;bottom:0}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-cam svg{width:16px;height:16px}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-top b{font-size:27px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-top>div>span{margin-top:5px;font-size:14px;font-weight:500}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-top>div>small{display:none}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st{flex-direction:column;margin:0;padding:0 0 0 20px;border-top:0;border-left:1px solid rgba(255,255,255,.08)}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st div{text-align:left;padding:11px 0;border-left:0!important}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st div:first-child{padding-top:2px}html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st div:last-child{padding-bottom:2px}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st div+div{border-top:1px solid rgba(255,255,255,.08)}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st b{font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}
+html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st span{font-size:12px;margin-top:3px}
+html body.m2on.m-light :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2){box-shadow:0 1px 2px rgba(18,18,21,.04),0 8px 28px rgba(18,18,21,.07)!important}
+html body.m2on.m-light :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st,html body.m2on.m-light :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-st div+div{border-color:#ECECEF}
+/* trusted buyer: compact, five steps */
+html body.m2on :is(#mSub,#mPage) .pf-card.tb2{padding:18px 20px!important;border-radius:24px!important}
+html body.m2on :is(#mSub,#mPage) .tb2 .tb2-t b{font-size:16px}
+html body.m2on :is(#mSub,#mPage) .tb2 .tb2-t small{margin-top:2px;font-size:13px}
+.tb3-steps{display:flex;gap:6px;margin-top:16px}
+.tb3-steps i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.1)}
+.tb3-steps i.on{background:#F4F3F7}
+.tb2.got .tb3-steps i{background:#7FD3A6}
+html body.m2on.m-light .tb3-steps i{background:#ECECEF}html body.m2on.m-light .tb3-steps i.on{background:#121215}
+@media (max-width:360px){html body.m2on :is(#mSub,#mPage) .pf-card:not(.pf-out):not(.tb2) .pf-av{width:88px;height:88px}}
+</style>
 </body>
 </html>
