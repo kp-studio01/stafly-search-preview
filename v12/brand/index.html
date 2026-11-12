@@ -10362,6 +10362,8 @@ window.__m221demo=function(id){try{var MINE=O().MINE;var v=id?vOf(id):V.find(fun
 </script>
 <style id="m225">
 #mAuth .a-wa2{margin:4px 0 14px}
+#mAuth .a-wa2w{display:flex;flex-direction:column;gap:8px;margin:4px 0 14px}#mAuth .a-wa2w .a-wa2{margin:0}
+#mAuth .a-wab{background:transparent!important;color:var(--ink,#121215)!important;box-shadow:inset 0 0 0 1px var(--line,#E9E7E3)!important}
 </style>
 <script id="m225s">
 /* m225: WhatsApp code the standard way, for free: tap Open WhatsApp, send "Hi Stafly, please send my sign-in code",
@@ -10373,9 +10375,9 @@ window.authPhSend=function(){var A=AUTH;A.busy=1;A.err='';authRender();
     A.viaWa=!!(d&&d.wa);A.waNum=(d&&d.wa)||'';A.waText=(d&&d.text)||'Hi Stafly, please send my sign-in code.';
     A.step='code';authRender();if(!A.viaWa)fx('aCode');})
   .catch(function(e){A.busy=0;A.err=e.message;authRender();});};
-function openWa(){var A=AUTH;window.open('https://wa.me/'+A.waNum+'?text='+encodeURIComponent(A.waText),'_blank');A.asked=1;authRender();fx('aCode');}
+var ANDR=/Android/i.test(navigator.userAgent);function openWa(pkg){var A=AUTH;var web='https://wa.me/'+A.waNum+'?text='+encodeURIComponent(A.waText);if(ANDR&&pkg){location.href='intent://send/?phone='+A.waNum+'&text='+encodeURIComponent(A.waText)+'#Intent;scheme=whatsapp;package='+pkg+';S.browser_fallback_url='+encodeURIComponent(web)+';end';}else window.open(web,'_blank');A.asked=1;authRender();fx('aCode');}
 /* catch the tap before the sheet's own click handler (it stops every click inside the sheet) */
-window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#mAuth .a-wa2');if(!b)return;e.stopImmediatePropagation();e.preventDefault();openWa();},true);
+window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#mAuth .a-wa2');if(!b)return;e.stopImmediatePropagation();e.preventDefault();openWa(b.getAttribute('data-pkg'));},true);
 var R=window.authRender;
 window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
   if(A&&A.step==='code'&&A.viaWa){var el=document.getElementById('mAuth');var pg=el&&el.querySelector('.a-pg');if(pg&&!pg.querySelector('.a-wa2')){
@@ -10383,7 +10385,7 @@ window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
     if(h)h.textContent='Get your code';
     if(sub)sub.innerHTML='Send the message on WhatsApp and we’ll reply with your code. <span class="lnk" data-aphchg="1">Change number</span>';
     var b=document.createElement('button');b.type='button';b.className='m-cta a-wa2';b.innerHTML=(typeof mS==='function'?mS('wa'):'')+(A.asked?'Open WhatsApp again':'Open WhatsApp');
-    if(inp)inp.parentNode.insertBefore(b,inp);
+    if(ANDR){b.setAttribute('data-pkg','com.whatsapp');b.innerHTML=(typeof mS==='function'?mS('wa'):'')+'WhatsApp';var b2=document.createElement('button');b2.type='button';b2.className='m-cta a-wa2 a-wab';b2.setAttribute('data-pkg','com.whatsapp.w4b');b2.innerHTML=(typeof mS==='function'?mS('wa'):'')+'WhatsApp Business';var w=document.createElement('div');w.className='a-wa2w';w.appendChild(b);w.appendChild(b2);b=w;}if(inp)inp.parentNode.insertBefore(b,inp);
     var alt=pg.querySelector('.a-alt');if(alt)alt.style.display='none';}}
   return r;};
 })();
