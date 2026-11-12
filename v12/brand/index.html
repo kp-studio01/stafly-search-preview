@@ -9956,7 +9956,7 @@ hook();
 (function(){
 if(typeof map==='undefined'||!map.on)return;
 var LT=function(){return document.body.classList.contains('m-light');};
-var LOOK={light:{sh:'#4a4a55',sho:.16,tree:['#B7D3A5','#A6C893','#C3DBB3'],light:.32},dark:{sh:'#000000',sho:.34,tree:['#2A3D2F','#30463A','#25372A'],light:.22}};
+var LOOK={light:{sh:'#4a4a55',sho:.16,tree:['#B7D3A5','#A6C893','#C3DBB3'],light:.32},dark:{sh:'#000000',sho:.34,tree:['#3F5E48','#4A6B52','#38553F'],light:.24}};
 function hash(x,y){var h=Math.sin(x*127.1+y*311.7)*43758.5453;return h-Math.floor(h);}
 function pip(pt,ring){var x=pt[0],y=pt[1],ins=false;for(var i=0,j=ring.length-1;i<ring.length;j=i++){var xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];if(((yi>y)!=(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))ins=!ins;}return ins;}
 function polys(g){if(!g)return[];if(g.type==='Polygon')return[g.coordinates];if(g.type==='MultiPolygon')return g.coordinates;return[];}
@@ -9968,13 +9968,13 @@ var last='';
 function build(){if(map.getZoom()<14.8)return;
   var src=[];['landcover','park'].forEach(function(l){try{src=src.concat(map.querySourceFeatures('ofm',{sourceLayer:l}));}catch(e){}});
   var bl=[];try{map.querySourceFeatures('ofm',{sourceLayer:'building'}).forEach(function(f){polys(f.geometry).forEach(function(p){bl.push({p:p,b:bbox(p[0])});});});}catch(e){}
-  var seen={},feats=[],MAX=2600;
+  var seen={},feats=[],MAX=5200;
   for(var i=0;i<src.length&&feats.length<MAX;i++){var f=src[i],cl=(f.properties||{}).class||'park';
     if(['grass','wood','forest','scrub','farmland','park','nature_reserve','garden'].indexOf(cl)<0&&f.sourceLayer!=='park')continue;
-    var dense=(cl==='wood'||cl==='forest')?11:(cl==='scrub'?16:24);
+    var dense=(cl==='wood'||cl==='forest')?11:(cl==='scrub'?14:17);
     polys(f.geometry).forEach(function(p){var b=bbox(p[0]);var sx=dense*MLNG,sy=dense*MLAT;
       for(var gx=Math.floor(b[0]/sx);gx*sx<=b[2]&&feats.length<MAX;gx++)for(var gy=Math.floor(b[1]/sy);gy*sy<=b[3]&&feats.length<MAX;gy++){
-        var key=dense+':'+gx+':'+gy;if(seen[key])continue;var h=hash(gx,gy);if(dense>=24&&h<.35){seen[key]=1;continue;}
+        var key=dense+':'+gx+':'+gy;if(seen[key])continue;var h=hash(gx,gy);if(dense>=17&&h<.22){seen[key]=1;continue;}
         var pt=[(gx+.15+.7*hash(gy,gx))*sx,(gy+.15+.7*h)*sy];
         if(!inPoly(pt,p))continue;seen[key]=1;
         var hitB=false;for(var q=0;q<bl.length;q++){var bb=bl[q].b;if(pt[0]<bb[0]-3*MLNG||pt[0]>bb[2]+3*MLNG||pt[1]<bb[1]-3*MLAT||pt[1]>bb[3]+3*MLAT)continue;if(inPoly(pt,bl[q].p)){hitB=true;break;}}
