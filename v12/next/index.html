@@ -9169,9 +9169,9 @@ window.slChats=function(){if(!(window.USER&&USER.wa)||busy)return;busy=1;
     const real=d.chats.map(c=>{const x=(window.SLCH||{})[c.sid],id=x?x.v.id:(c.sid==='seller1'?'foodhunt':'s_'+c.sid);return{id,t:(c.mine?'You: ':'')+esc(c.text),tm:hm(c.at),n:0};}).filter(c=>vOf(c.id));
     const ids=new Set(real.map(c=>c.id)),rest=CHATS.filter(c=>!ids.has(c.id)&&!(window.SLCH&&Object.values(SLCH).some(x=>x.v.id===c.id)));
     CHATS.length=0;real.concat(rest).forEach(c=>CHATS.push(c));
-    if(CUR&&CUR.s==='chats')$('#mSub').innerHTML=m2Sub('chats');},()=>{busy=0;});};
+    if(CUR&&CUR.s==='chats')$('#mSub').innerHTML=m2Sub('chats');else if(CUR&&CUR.t==='chats'&&!CUR.s&&window.slChatsPage)slChatsPage();},()=>{busy=0;});};
 const _nv=m2Nav;m2Nav=function(o){const r=_nv.apply(this,arguments);
-  if(o&&o.s==='chats')slChats();
+  if(o&&(o.s==='chats'||(o.t==='chats'&&!o.s)))slChats();
   if(o&&o.s==='talk'&&window.USER&&USER.wa){const x=Object.values(window.SLCH||{}).find(x=>x.v.id===o.id);if(x)x.hist();}
   return r;};
 // first time signed in on this page (or right after signing in): fetch chats once shops have loaded
@@ -9958,5 +9958,11 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-lig
 /* m244: the green open dot's soft glow was clipped on the left by the status line; give it room */
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .wa-h .wa-who small{padding:3px 0 3px 3px!important;margin-top:-2px!important}
 </style>
+<script id="m245">
+/* m245: Chats list fills in as soon as your chats arrive, even if you opened Chats right after loading */
+window.slChatsPage=function(){document.body.classList.remove('sl-wait');try{var pg=document.getElementById('mPage');if(!pg)return;var ord=pg.querySelector('.ch-tabs [aria-selected="true"],.ch-tabs .on');if(ord&&/order/i.test(ord.textContent))return;var y=pg.scrollTop;pg.innerHTML=m2Page('chats');pg.scrollTop=y;}catch(e){}};
+try{if(window.USER&&USER.wa){document.body.classList.add('sl-wait');setTimeout(function(){document.body.classList.remove('sl-wait');},8000);}}catch(e){}
+</script>
+<style>body.sl-wait #mPage .m-empty{visibility:hidden}</style>
 </body>
 </html>
