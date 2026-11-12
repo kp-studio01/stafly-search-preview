@@ -4691,7 +4691,7 @@ const PLUS='<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',MINUS='
 const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d;}catch(_){return d;}};
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}};
 let CART=ld('stafly_cart',{shop:null,q:{}});
-let MINE=ld('stafly_orders',[]);
+let MINE=ld('stafly_orders',[]);Object.defineProperty(window,'__SFO',{get:()=>({MINE:MINE,TK:TK,demoStage:demoStage,tkFetch:tkFetch}),configurable:true});
 let CK=ld('stafly_ck',{phone:'',name:'',hall:'',note:'',mode:'solo'});Object.defineProperty(window,'CK',{get:()=>CK,configurable:true});/* v124: later add-ons (my location, photo pick) use the same checkout details */
 let ERR='',BUSY=false;
 const price=i=>typeof i[1]==='string'?Number(i[1].replace('from ','')):Number(i[1])||0;
@@ -10331,7 +10331,8 @@ map.on('moveend',reseed);map.on('idle',function(){if(!seedAt)reseed();});
 
 /* ---------- 4. your order on the map ---------- */
 var R=null;
-function stageOf(o){try{if(o.demo)return demoStage(o);var d=TK[o.ref];return d&&d.status==='paid'?d.stage:null;}catch(e){return null;}}
+function O(){try{return window.__SFO||null;}catch(e){return null;}}
+function stageOf(o){try{var X=O();if(o.demo)return X.demoStage(o);var d=X.TK[o.ref];return d&&d.status==='paid'?d.stage:null;}catch(e){return null;}}
 function dest(o){var h=String(o.hall||'').toLowerCase().split(',')[0].trim();if(h&&typeof LM!=='undefined')for(var k in LM){var n=LM[k].n.toLowerCase();if(n.indexOf(h.split(' ')[0])===0&&h.length>1)return[LM[k].ll[1],LM[k].ll[0]];}
   if(typeof YOU!=='undefined'&&YOU)return[YOU[1],YOU[0]];return[LM.moremi.ll[1],LM.moremi.ll[0]];}
 var BIKE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3"/><circle cx="18.5" cy="17" r="3"/><path d="M8.5 17h5l3-6h-4l-2-3H8"/><path d="M15 6h2l1.5 5"/></svg>';
@@ -10340,12 +10341,12 @@ function startR(o,v){var el=document.createElement('div');el.className='m221r';e
   var a=[v.ll[1],v.ll[0]],b=dest(o);R={ref:o.ref,o:o,p:[a,b],C:cum([a,b]),seen:Date.now(),mk:new maplibregl.Marker({element:el}).setLngLat(a).addTo(map),el:el,done:0};
   fetch('https://routing.openstreetmap.de/routed-bike/route/v1/bike/'+a[0]+','+a[1]+';'+b[0]+','+b[1]+'?overview=full&geometries=geojson').then(function(r){return r.json();}).then(function(j){var c=j&&j.routes&&j.routes[0]&&j.routes[0].geometry.coordinates;if(c&&c.length>1&&R&&R.ref===o.ref){c=[a].concat(c,[b]);R.p=c;R.C=cum(c);}}).catch(function(){});}
 function frac(o){if(o.demo){var s=(Date.now()-o.at)/1000;return Math.max(0,Math.min(1,(s-70)/60));}
-  var t=null;try{var tl=(TK[o.ref].timeline||[]).find(function(x){return x.s==='on_the_way';});if(tl)t=new Date(tl.at).getTime();}catch(e){}
+  var t=null;try{var tl=(O().TK[o.ref].timeline||[]).find(function(x){return x.s==='on_the_way';});if(tl)t=new Date(tl.at).getTime();}catch(e){}
   return Math.min(.95,(Date.now()-(t||R.seen))/(12*60000));}
 function pos(f){var L=R.C[R.C.length-1],s=f*L,i=1;while(i<R.C.length-1&&R.C[i]<s)i++;var t=(s-R.C[i-1])/((R.C[i]-R.C[i-1])||1);return{i:i,q:[R.p[i-1][0]+(R.p[i][0]-R.p[i-1][0])*t,R.p[i-1][1]+(R.p[i][1]-R.p[i-1][1])*t]};}
 function stopR(){if(!R)return;try{R.mk.remove();}catch(e){}R=null;try{map.getSource('m221rl').setData(FC());}catch(e){}}
 var pollAt=0;
-function riderTick(){if(typeof MINE==='undefined')return;
+function riderTick(){var X=O();if(!X||!X.MINE)return;var MINE=X.MINE,tkFetch=X.tkFetch;
   if(Date.now()-pollAt>30000){pollAt=Date.now();try{MINE.slice(0,5).forEach(function(o){if(!o.demo&&Date.now()-o.at<3*3600e3&&stageOf(o)!=='delivered')tkFetch(o.ref);});}catch(e){}}
   var hit=null;for(var i=0;i<MINE.length&&i<10;i++){var o=MINE[i],st=stageOf(o);if(st==='on_the_way'||(st==='delivered'&&R&&R.ref===o.ref)){hit={o:o,st:st};break;}}
   if(!hit){if(R&&!R.done)stopR();return;}
@@ -10355,7 +10356,7 @@ function riderTick(){if(typeof MINE==='undefined')return;
   var P=pos(frac(hit.o));R.mk.setLngLat(P.q);
   try{map.getSource('m221rl').setData(FC([{type:'Feature',properties:{},geometry:{type:'LineString',coordinates:[P.q].concat(R.p.slice(P.i))}}]));}catch(e){}}
 setInterval(function(){try{riderTick();}catch(e){}},400);
-window.__m221demo=function(id){try{var v=id?vOf(id):V.find(function(x){return x.ll&&x.id!=='foodhunt';});MINE.unshift({shop:v.id,ref:'DEMO-T'+Date.now().toString(36),track:'x',total:0,at:Date.now()-95000,demo:1,items:[],fee:0,hall:'Moremi Hall'});riderTick();return v.id;}catch(e){return e.message;}};
+window.__m221demo=function(id){try{var MINE=O().MINE;var v=id?vOf(id):V.find(function(x){return x.ll&&x.id!=='foodhunt';});MINE.unshift({shop:v.id,ref:'DEMO-T'+Date.now().toString(36),track:'x',total:0,at:Date.now()-95000,demo:1,items:[],fee:0,hall:'Moremi Hall'});riderTick();return v.id;}catch(e){return e.message;}};
 })();
 </script>
 </body>
