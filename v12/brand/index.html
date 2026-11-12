@@ -10094,8 +10094,10 @@ function shopCard(v,d,go){var img=v.img||'';
   card.innerHTML='<i class="lg"'+(img?' style="background-image:url(\''+String(img).replace(/'/g,'')+'\')"':'')+'></i><div><b>'+esc(v.name)+'</b><span></span></div>';
   card.querySelector('span').textContent=go?(d<15?'You’re here':fmt(d)+' · '+mins(d)):fmt(d)+' away';
   card.dataset.id=v.id;card.classList.add('in');}
-var RP=null;function drawRoute(){if(!RP||!pos||typeof setRoute!=='function')return;var here=[pos[1],pos[0]],k=0,bd=1e9;for(var i=0;i<RP.length;i++){var d=M(pos,[RP[i][1],RP[i][0]]);if(d<bd){bd=d;k=i;}}setRoute([here].concat(RP.slice(k)));}
-function routeTo(v){if(!pos||typeof setRoute!=='function')return;lastRoute=pos.slice();
+var RP=null,SR=(typeof setRoute==='function')?setRoute:null;
+if(SR)window.setRoute=function(p){if(on)return;return SR(p);};
+function drawRoute(){if(!RP||!pos||!SR)return;var here=[pos[1],pos[0]],k=0,bd=1e9;for(var i=0;i<RP.length;i++){var d=M(pos,[RP[i][1],RP[i][0]]);if(d<bd){bd=d;k=i;}}SR([here].concat(RP.slice(k)));}
+function routeTo(v){if(!pos||!SR)return;lastRoute=pos.slice();
   var a=[pos[1],pos[0]],b=v.ll;RP=[b];drawRoute();
   fetch('https://routing.openstreetmap.de/routed-foot/route/v1/foot/'+pos[0]+','+pos[1]+';'+b[1]+','+b[0]+'?overview=full&geometries=geojson').then(function(r){return r.json();}).then(function(j){
     if(on&&tgt===v&&j.routes&&j.routes[0]){var r=j.routes[0].geometry.coordinates.map(function(c){return[c[1],c[0]];});RP=r.concat([b]);drawRoute();}}).catch(function(){});}
@@ -10137,11 +10139,12 @@ function start(sid){if(on)return;on=true;saved={center:map.getCenter(),zoom:map.
   if(typeof SAT!=='undefined'&&SAT&&typeof setSat==='function'){saved.sat=true;setSat(false);}
   document.body.classList.add('m-walk');top();
   var y=(typeof YOU!=='undefined'&&YOU)?YOU:[7.5196,4.5186];place([y[1],y[0]],false);map.easeTo({center:pos,zoom:18.2,pitch:58,bearing:camB,duration:1100});
+  try{map.setPaintProperty('route-line','line-color','#A98BFA');map.setPaintProperty('route-line','line-width',6);map.setPaintProperty('route-glow','line-opacity',.4);}catch(e){}
   gps();startCompass();setTimeout(function(){if(!on||!pos)return;var f=free(pos);if(f!==pos){pos=f;me.setLngLat(pos);map.easeTo({center:pos,duration:500});}if(tgt)routeTo(tgt);update();},1250);lastT=0;raf=requestAnimationFrame(step);}
 function stop(){if(!on)return;on=false;cancelAnimationFrame(raf);keys={};
   if(gpsId!==null){try{navigator.geolocation.clearWatch(gpsId);}catch(e){}gpsId=null;}
   removeEventListener('deviceorientation',compass);removeEventListener('deviceorientationabsolute',compass);
-  card.classList.remove('in');shopNear=null;if(tgt&&typeof setRoute==='function')setRoute([]);tgt=null;RP=null;
+  card.classList.remove('in');shopNear=null;if(tgt&&SR)SR([]);tgt=null;RP=null;try{map.setPaintProperty('route-line','line-width',5);}catch(e){}
   document.body.classList.remove('m-walk');if(me){me.remove();me=null;}
   try{if(saved.mp)map.setMaxPitch(saved.mp);}catch(e){}
   map.easeTo({center:saved.center,zoom:saved.zoom,pitch:Math.min(saved.pitch,map.getMaxPitch()),bearing:saved.bearing,duration:900});
