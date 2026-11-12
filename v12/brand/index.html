@@ -10533,9 +10533,45 @@ var W=window.authWelcome;if(typeof W==='function')window.authWelcome=function(p)
 </script>
 <script id="m226s">
 /* the side menu's Profile opens the full You page (with a back button), so there is one profile only */
-(function(){var S=window.m2Sub,busy=0;if(typeof S!=='function')return;
-window.m2Sub=function(k,id){if(k==='me'&&!busy&&USER&&USER.wa){busy=1;try{var x=m2Page('you');if(typeof x==='string'&&x)return x.replace('<div class="m-h"><h1>You</h1></div>','<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button><h1>Profile</h1><span style="width:46px"></span></div>');}finally{busy=0;}}
+(function(){var S=window.m2Sub,busy=0,P=window.m2Page;if(typeof S!=='function')return;
+if(typeof P==='function')window.m2Page=function(t){if(t!=='you')return P.apply(this,arguments);busy++;try{return P.apply(this,arguments);}finally{busy--;}};
+window.m2Sub=function(k,id){if(k==='me'&&!busy&&USER&&USER.wa){try{var x=m2Page('you');if(typeof x==='string'&&x)return x.replace('<div class="m-h"><h1>You</h1></div>','<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button><h1>Profile</h1><span style="width:46px"></span></div>');}catch(e){}}
   return S.apply(this,arguments);};})();
+</script>
+<style id="m229">
+/* m229: delete account (standard: under Sign out, with a confirm) */
+.pf-del{display:block;margin:14px auto 4px;background:none;border:0;padding:8px 12px;font:500 14px/1 inherit;color:inherit;opacity:.55;cursor:pointer}
+#m229{position:fixed;inset:0;z-index:3000;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s;pointer-events:none}
+#m229.in{opacity:1;pointer-events:auto}
+#m229 .bx{width:100%;max-width:440px;margin:0 12px max(12px,env(safe-area-inset-bottom));padding:22px 20px 16px;border-radius:24px;background:#1A1A1F;color:#fff;transform:translateY(20px);transition:transform .3s cubic-bezier(.2,.9,.2,1)}
+#m229.in .bx{transform:none}
+body.m-light #m229 .bx{background:#fff;color:#121215}
+#m229 h3{margin:0 0 6px;font:700 19px/1.25 inherit}
+#m229 p{margin:0 0 18px;opacity:.65;font-size:14.5px;line-height:1.45}
+#m229 .er{color:#FF6B78;opacity:1}
+#m229 button{display:block;width:100%;height:50px;border:0;border-radius:14px;font:600 15.5px/1 inherit;cursor:pointer}
+#m229 .go{background:#E5484D;color:#fff;margin-bottom:8px}
+#m229 .go:disabled{opacity:.6}
+#m229 .no{background:rgba(255,255,255,.07);color:inherit}
+body.m-light #m229 .no{background:#F1F1F3}
+@media (min-width:821px){#m229{align-items:center}}
+</style>
+<script id="m229s">
+(function(){
+function addBtn(root){try{var so=(root||document).querySelectorAll('[data-pfout]');so.forEach(function(b){if(b.nextElementSibling&&b.nextElementSibling.classList.contains('pf-del'))return;b.insertAdjacentHTML('afterend','<button type="button" class="pf-del" data-pfdel="1">Delete account</button>');});}catch(e){}}
+var q=0;new MutationObserver(function(){if(q)return;q=requestAnimationFrame(function(){q=0;addBtn();});}).observe(document.body,{childList:true,subtree:true});
+var m=null;
+function open(){if(!m){m=document.createElement('div');m.id='m229';document.body.appendChild(m);m.addEventListener('click',function(e){if(e.target===m||e.target.closest('.no'))close();if(e.target.closest('.go'))go();});}
+  m.innerHTML='<div class="bx" role="dialog" aria-modal="true"><h3>Delete your account?</h3><p>Your profile, email and posts will be removed from Stafly. This can’t be undone.</p><button type="button" class="go">Delete account</button><button type="button" class="no">Cancel</button></div>';
+  void m.offsetHeight;m.classList.add('in');}
+function close(){if(m)m.classList.remove('in');}
+function go(){var b=m.querySelector('.go');b.disabled=true;b.textContent='Deleting…';
+  authApi('/api/search/account/delete',{vid:vidQ(),confirm:'delete'}).then(function(){
+    try{USER=null;window.staflyWipe&&staflyWipe();localStorage.removeItem('stafly_key');}catch(e){}
+    close();try{YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();}catch(e){}try{m2Nav({t:'explore'});}catch(e){}
+  }).catch(function(e){b.disabled=false;b.textContent='Delete account';var p=m.querySelector('p');if(p){p.textContent=e.message;p.className='er';}});}
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-pfdel]')){e.preventDefault();e.stopPropagation();open();}},true);
+})();
 </script>
 </body>
 </html>
