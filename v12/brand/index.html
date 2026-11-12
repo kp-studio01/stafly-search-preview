@@ -10863,5 +10863,14 @@ var R=window.mTalkRender;if(R){window.mTalkRender=mTalkRender=function(id){try{v
   var r=R.apply(this,arguments);window.__cxSig=window.__cxSig||{};window.__cxSig[id]=s0;wrap();var m=document.getElementById('mSub');if(m)m.scrollTop=1e6;return r;}catch(e){return R.apply(this,arguments);}};}
 })();
 </script>
+<style id="m250">
+/* m250: going back from a chat: the whole chat slides away as one solid piece (no part fading early), same motion as opening; the tab bar is simply there underneath instead of rising up at the same time */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-subon) #mSub:has(.cx-hero){opacity:1!important;transition:transform .36s cubic-bezier(.32,.72,0,1)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-subon) #mSub:has(.cx-hero) *{transition:none!important;animation:none!important}
+html body.m2on.m2on.m2on.sub-out .m-tabs{transition:none!important}
+</style>
+<script id="m250js">
+(function(){var was=document.body.classList.contains('m-subon'),t=0;new MutationObserver(function(){var on=document.body.classList.contains('m-subon');if(was&&!on){document.body.classList.add('sub-out');clearTimeout(t);t=setTimeout(function(){document.body.classList.remove('sub-out');},450);}was=on;}).observe(document.body,{attributes:true,attributeFilter:['class']});})();
+</script>
 </body>
 </html>
