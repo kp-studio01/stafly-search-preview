@@ -4836,6 +4836,7 @@ function tkArt(v,d,wm){let P='';try{const L=(d.items||[]);for(const i of L){cons
   if(P){const u=String(P).replace(/"/g,'%22');return`<div class="tkx-art ph"><i style="background-image:url(&quot;${u}&quot;)"></i><i class="mb" style="background-image:url(&quot;${u}&quot;)"></i></div>`;}
   return`<div class="tkx-art tp"><span class="sl"></span><i class="c">${wm}</i><i class="b">${wm}</i><i class="a">${wm}</i></div>`;}
 window.ckBack=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;const v=vOf(o.shop);if(!v||!o.q||!Object.keys(o.q).length)return false;CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);try{CK.mode=o.gmode||'solo';}catch(_){}m2Nav({t:'places',s:'cart',id:o.shop});return true;};
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckgo]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckBack(a.dataset.ckgo))ckProd(a.dataset.ckgo);},true);
 window.ckProd=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;const v=vOf(o.shop);if(!v)return false;const ks=Object.keys(o.q||{}).filter(k=>o.q[k]>0&&v.items[k]);if(ks.length){CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);}try{CK.mode=o.gmode||'solo';}catch(_){}m2Nav({t:'places',s:'shop',id:o.shop});if(ks.length)setTimeout(()=>{const r=document.querySelector('#mSub [data-mitem="'+ks[0]+'"]');if(r){r.scrollIntoView({block:'center'});r.click();}},450);return true;};
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckback]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckProd(a.dataset.ckback)){const o=MINE.find(x=>x.ref===a.dataset.ckback);if(o)m2Nav({t:'places',s:'shop',id:o.shop});}},true);
 const _tkOld=tkPage;
@@ -4859,7 +4860,7 @@ tkPage=function(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);if(!o||!d)r
   </div>
   <div class="m-sh"><b>What you ordered</b><span>${o.pick||d.pickup?'Pick up':d.hall||''}</span></div>
   <div class="m-card ck-sum" style="padding:10px 18px">${(d.items||[]).map(i=>`<div><span>${i.qty>1?i.qty+' × ':''}${i.name}</span><b>${naira(i.price*i.qty)}</b></div>`).join('')}${o.pick||d.pickup?'<div><span>Pick up</span><b>Free</b></div>':`<div><span>Delivery</span><b>${naira(d.deliveryFee||0)}</b></div>`}<div class="tot"><span>${pending?'Total':'Total paid'}</span><b>${naira(d.total||0)}</b></div></div>
-  ${pending&&!declined&&!d.demo?`<button type="button" class="tk-chg" data-ckback="${ref}">Change order</button>`
+  ${pending&&!declined&&!d.demo?`<div class="tk-lk"><button type="button" class="tk-chg" data-ckback="${ref}">Change order</button><button type="button" class="tk-chg" data-ckgo="${ref}">Back to checkout</button></div>`
    :!d.demo&&d.whatsapp&&d.stage!=='delivered'?`<a class="m-pay" style="display:grid;place-items:center;text-decoration:none;background:#121215;margin:0 0 10px" href="https://wa.me/${String(d.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent('Hi! I just ordered on Stafly Search ('+ref+'). Please keep me posted here.')}" target="_blank" rel="noopener">Get updates on WhatsApp</a>`:''}
   ${pending&&!d.demo?'':`<p class="ck-note">${d.demo?'This is a preview of how tracking works. It moves on by itself.':'Tap above once so the shop can message you on WhatsApp at each step.'}</p>`}
   <div class="m-foot">${pending&&!declined&&!d.demo&&o.pay?`<a class="m-pay" style="display:grid;place-items:center;text-decoration:none" href="${String(o.pay).replace(/"/g,'%22')}">Complete payment</a>`:mFoot(v)}</div>`;};
@@ -11003,5 +11004,6 @@ html body.m2on.m-light .dir-loc{background:#F1F1F3;box-shadow:none;color:#121215
 html body.m2on .tk-chg{display:block;width:100%;margin:4px 0 14px;padding:12px;border:0;background:none;font:600 15px "DM Sans",system-ui,sans-serif;color:#F4F3F7;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 html body.m2on.m-light .tk-chg{color:#121215}
 </style>
+<style>html body.m2on .tk-lk{display:flex;gap:8px;margin:4px 0 14px}html body.m2on .tk-lk .tk-chg{flex:1;margin:0}</style>
 </body>
 </html>
