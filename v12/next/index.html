@@ -18,7 +18,7 @@ window.staflyKey=get;
 })();
 </script>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#121216"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Stafly"><link rel="apple-touch-icon" href="icon-180.png">
 <title>Stafly Search · OAU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
@@ -3773,14 +3773,14 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let 
   if(t.closest('[data-lvnext]')){stop();return lvStep(1);}
   if(el=t.closest('[data-lvmap]')){stop();lvClose();return lvFire('data-msel',el.dataset.lvmap);}
   if(el=t.closest('[data-lvtalk]')){stop();const d=DROPS.find(x=>x.id===el.dataset.lvtalk)||(LATE.id===el.dataset.lvtalk?LATE:null);if(!d)return;
-    LVCTX[d.id]={t:d.t,m:d.m,at:(TALK[d.id]||[]).length};lvClose();return lvFire('data-mtalk',d.id);}
+    LVCTX[d.id]={t:d.t,m:d.m,at:(TALK[d.id]||[]).length,img:d.img||'',ts:d.at||Date.now()-(d.m||0)*6e4,pend:1};lvClose();return lvFire('data-mtalk',d.id);}
 },true);
 document.addEventListener('keydown',e=>{if(!document.body.classList.contains('lv-on'))return;if(e.key==='Escape')lvClose();if(e.key==='ArrowRight')lvStep(1);if(e.key==='ArrowLeft')lvStep(-1);});
 (function(){const _ts=mTalkSend;mTalkSend=function(id,t){_ts(id,t);document.querySelectorAll('#mSub .m-qs').forEach(x=>x.remove());};})();
 (function(){const _mb=m2Busy;m2Busy=function(){return _mb()||document.body.classList.contains('lv-on');};})();
 mThread=function(id){const L=TALK[id]||[],c=LVCTX[id],v=vOf(id);
-  const q=c?`<div class="lv-quote"><span class="th">${v.img?`<img src="${v.img}" alt="">`:mLogo(v)}</span><div><small>${mS('radio')}You’re asking about their Live post · ${ago(c.m)}</small><p>${c.t}</p></div></div>`:'';
-  const row=m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}">${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`;
+  const q='';
+  const row=m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}">${m.lv?lqHtml(m.lv,id):''}${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`;
   let h='';L.forEach((m,k)=>{if(c&&k===c.at)h+=q;h+=row(m);});if(c&&c.at>=L.length)h+=q;
   return h+(TYP[id]?'<div class="tb them typ"><i></i><i></i><i></i></div>':'');};
 (function(){const _mt=mTalk;mTalk=function(id){let h=_mt(id);const c=LVCTX[id],L=TALK[id]||[];
@@ -3806,7 +3806,7 @@ function mTalk(id){const v=vOf(id),L=TALK[id]||[],r=reach(v);const loc=(USER&&US
   <div class="m-thread" id="mThread"><div class="m-sys">You’re chatting with ${v.name} on Stafly. Your phone number stays private.</div>${mThread(id)}</div>
   <div class="m-comp">${L.length?'':`<div class="m-qs">${qs.map(q=>`<button type="button" data-mq="${q.replace(/"/g,'&quot;')}">${q}</button>`).join('')}</div>`}
    <form class="m-in" id="mIn" data-id="${id}"><input id="mMsg" type="text" placeholder="Message ${v.name}…" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send">${mS('send')}</button></form></div>`;}
-function mTalkSend(id,t){t=t.trim();if(!t)return;const v=vOf(id),L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);L.push({me:1,t:t.replace(/</g,'&lt;'),tm:tnow()});
+function mTalkSend(id,t){t=t.trim();if(!t)return;const v=vOf(id),L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);L.push({me:1,t:t.replace(/</g,'&lt;'),tm:tnow()});lvTake(id,L[L.length-1]);
   if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:tnow(),n:0});
   TYP[id]=1;mTalkRender(id,true);
   setTimeout(()=>{TYP[id]=0;L.push({t:mReply(v,t,first),tm:tnow()});const c=CHATS.find(c=>c.id===id);if(c)c.t=L[L.length-1].t.replace(/<[^>]+>/g,' ');
@@ -4298,7 +4298,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   {const P=(Array.isArray(d.live)?d.live:[]).map(p=>({imgs:p&&p.imgs,t:String(p&&p.text||'').replace(/[<>"'`&\\]/g,'').replace(/\s+/g,' ').trim().slice(0,280),at:Date.parse(p&&p.at),img:SCDN(safeUrl(p&&p.img),640)})).filter(p=>p.img&&p.at>Date.now()-864e5).sort((a,b)=>b.at-a.at);
    if(P.length){const k=DROPS.findIndex(x=>x.id===v.id);if(k>=0)DROPS.splice(k,1);const mins=at=>Math.max(0,Math.round((Date.now()-at)/6e4));
      const SL=[];P.slice().reverse().forEach(p=>{const im=(Array.isArray(p.imgs)&&p.imgs.length?p.imgs:[p.img]).map(safeUrl).filter(Boolean).slice(0,10).map(function(u){return SCDN(back0(u),640);});im.forEach(u=>SL.push({img:u,t:p.t||(v.tag||'Fresh from '+v.name),m:mins(p.at)}));});
-     DROPS.unshift({id:v.id,t:P[0].t||(v.tag||'Fresh from '+v.name),m:mins(P[0].at),img:P[0].img,slides:SL,real:1});
+     DROPS.unshift({id:v.id,t:P[0].t||(v.tag||'Fresh from '+v.name),m:mins(P[0].at),at:P[0].at,raw:P[0].t||'',img:P[0].img,slides:SL,real:1});
      try{if(CUR.t==='live'&&!CUR.s){LVLIST=null;$('#mPage').innerHTML=m2Page('live');}}catch(_){}}}
   v.live=1;v.real=1;v.tier=v.id==='foodhunt'?'verified':'listed';try{placeVendors();}catch(e){}redraw();});}).catch(()=>{});
 const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Thanks for messaging ${vv.name}. What would you like today?`;};
@@ -4310,7 +4310,7 @@ const hm=at=>new Date(at||Date.now()).toLocaleTimeString('en-US',{hour:'numeric'
 function hist(){if(!(window.USER&&USER.wa)||!ON)return;
   fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages?acct=1&vid='+vid+'&since=0',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(!j||busy)return;got=1;
     const L=TALK[v.id]=[];SEEN.clear();
-    (j.messages||[]).forEach(m=>{last=Math.max(last,m.at||0);if(m.role==='visitor'){L.push({me:1,t:esc(m.text),tm:hm(m.at)});return;}
+    (j.messages||[]).forEach(m=>{last=Math.max(last,m.at||0);if(m.role==='visitor'){const it={me:1,t:esc(m.text),tm:hm(m.at)};if(m.live&&m.live.t)it.lv={t:esc(m.live.t),img:safeUrl(m.live.img||'')||'',at:+m.live.at||0};L.push(it);return;}
       SEEN.add((m.at||0)+'|'+(m.text||'')+'|'+(m.img||''));
       const t=m.img&&safeUrl(m.img)?`<img src="${esc(safeUrl(m.img))}" alt="" style="display:block;max-width:220px;border-radius:10px">${m.caption?'<br>'+html(m.caption):''}`:html(m.text);if(t)L.push({t,tm:hm(m.at)});});
     if(CUR&&CUR.s==='talk'&&CUR.id===v.id)mTalkRender(v.id);}).catch(()=>{});}
@@ -4323,9 +4323,9 @@ function push(ms){const L=TALK[v.id]=TALK[v.id]||[];let added=false;
   return added;}
 const _send=mTalkSend;mTalkSend=function(id,t){if(id!==v.id||!ON)return _send.apply(this,arguments);
   t=String(t||'').trim();if(!t)return;const L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);
-  L.push({me:1,t:esc(t),tm:now()});if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:now(),n:0});
+  L.push({me:1,t:esc(t),tm:now()});const lv=lvTake(id,L[L.length-1]);if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:now(),n:0});
   TYP[id]=1;mTalkRender(id,true);busy=true;
-  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vid,acct:1,text:t,name:(USER&&USER.name)||'',page:'Stafly Search'})})
+  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vid,acct:1,text:t,name:(USER&&USER.name)||'',page:'Stafly Search',live:lv?{t:lv.raw||String(lv.t).replace(/<[^>]+>/g,''),at:lv.at}:undefined})})
    .then(r=>r.json().then(j=>({ok:r.ok,j}))).then(({ok,j})=>{TYP[id]=0;busy=false;
      if(!ok&&j&&j.signin){L.pop();try{if(USER){delete USER.wa;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(_){}mTalkRender(id);authOpen('',{k:'talk',id});return;}
      if(ok){got=1;window.slChats&&setTimeout(slChats,400);}
@@ -11046,5 +11046,82 @@ new MutationObserver(function(){var b=document.body,on=b.classList.contains('m-s
 was=document.body.classList.contains('m-subon');})();
 </script>
 <style>html body #mSub:not(:has(.m-comp)),html body #mSub:not(:has(.m-comp)) *{overflow-anchor:none!important}html body.m2on #mSub .m-foot>.m-bask:first-child{margin-top:18px}</style>
+<script>/* m281: Live post replies, laid out like a WhatsApp status reply; tap the quote to see the post */
+(function(){
+var esc=function(x){return String(x==null?'':x).replace(/"/g,'&quot;');};
+var RADIO='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 18.7a9.5 9.5 0 0 1 0-13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4"/></svg>';
+function dropOf(id){return (typeof DROPS!=='undefined'?DROPS:[]).find(function(x){return x.id===id;});}
+function nameOf(id){try{var v=vOf(id);return v&&v.name||'';}catch(_){return '';}}
+function quote(lv,id,tag){var gone=!dropOf(id);
+  return '<'+tag+' class="lq'+(gone?' gone':'')+'"'+(tag==='button'?' type="button"':'')+' data-lvpost="'+esc(id)+'" data-lvt="'+esc(String(lv.t).replace(/<[^>]+>/g,''))+'">'
+   +'<span class="lq-tx"><b>'+nameOf(id)+' · Live post</b><span>'+RADIO+(gone?'Post ended · ':'')+lv.t+'</span></span>'
+   +(lv.img?'<span class="lq-th" style="background-image:url(&quot;'+esc(lv.img)+'&quot;)"></span>':'')+'</'+tag+'>';}
+window.lqHtml=function(lv,id){return quote(lv,id,'span');};
+window.lvTake=function(id,msg){var c=LVCTX[id];if(!c||!c.pend||!msg)return null;c.pend=0;try{document.querySelectorAll('#mSub .lq-bar').forEach(function(x){x.remove();});}catch(_){}var d=dropOf(id);
+  msg.lv={t:c.t,img:c.img||'',at:c.ts||0,raw:d&&d.raw||''};return msg.lv;};
+var _mt=mTalk;mTalk=function(id){var h=_mt(id),c=LVCTX[id];if(!c||!c.pend)return h;
+  var bar='<div class="lq-bar">'+quote(c,id,'button')+'<button type="button" class="lq-x" data-lqx="'+esc(id)+'" aria-label="Remove"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+  var i=h.indexOf('<form',h.indexOf('m-comp'));return i<0?h:h.slice(0,i)+bar+h.slice(i);};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lqx]');
+  if(b){e.preventDefault();e.stopPropagation();var c=LVCTX[b.dataset.lqx];if(c)c.pend=0;var bar=b.closest('.lq-bar');if(bar)bar.remove();try{var i=document.querySelector('#mSub #mMsg');if(i)i.focus({preventScroll:true});}catch(_){}return;}
+  var p=e.target.closest&&e.target.closest('[data-lvpost]');if(!p)return;e.preventDefault();e.stopPropagation();
+  var d=dropOf(p.dataset.lvpost);if(!d)return;try{LVLIST=[d];lvOpen(0);var SL=d.slides||[],want=(p.dataset.lvt||'').trim(),k=SL.findIndex(function(x){return String(x.t||'').replace(/<[^>]+>/g,'').trim()===want;});if(k>0){LVS=k;lvShow();}}catch(_){}},true);
+})();
+</script>
+<style>
+html body.m2on :is(.tb,.msg):has(>.lq){min-width:min(300px,82%)}
+html body.m2on .lq{position:relative;display:flex;align-items:stretch;width:auto;margin:-6px -10px 8px;min-height:62px;border-radius:14px;overflow:hidden;background:rgba(0,0,0,.2);cursor:pointer;text-align:left;font:inherit;color:inherit;border:0;padding:0}
+html body.m2on .lq::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:rgba(255,255,255,.85)}
+html body.m2on .lq-tx{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:8px 12px 9px 14px}
+html body.m2on .lq-tx b{font:600 14px/1.25 "DM Sans",system-ui,sans-serif;color:inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on .lq-tx>span{font:400 13.5px/1.38 "DM Sans",system-ui,sans-serif;color:inherit;opacity:.72;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html body.m2on .lq-tx>span svg{width:14px;height:14px;margin:0 5px -2px 0;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+html body.m2on .lq-tx>span svg circle{fill:currentColor;stroke:none}
+html body.m2on .lq-th{flex:none;width:62px;background:#2A2A31 center/cover no-repeat}
+html body.m2on .lq.gone{cursor:default}
+html body.m2on .lq-bar{display:flex;align-items:center;gap:4px;margin:0 0 8px;padding:6px 4px 6px 6px;border-radius:22px;background:#0E0E11;box-shadow:0 0 0 1px rgba(255,255,255,.05)}
+html body.m2on .lq-bar .lq{flex:1;margin:0;min-height:56px;border-radius:16px;background:rgba(255,255,255,.05);color:#F4F3F7}
+html body.m2on .lq-bar .lq::before{background:rgba(244,243,247,.45)}
+html body.m2on .lq-bar .lq-tx b{color:#F4F3F7}
+html body.m2on .lq-bar .lq-tx>span{-webkit-line-clamp:1}
+html body.m2on .lq-bar .lq-th{width:56px}
+html body.m2on .lq-x{flex:none;width:40px;height:40px;border:0;border-radius:50%;display:grid;place-items:center;background:transparent;color:rgba(244,243,247,.7);cursor:pointer}
+html body.m2on .lq-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+html body.m2on.m-light .lq-bar{background:#FFFFFF;box-shadow:0 0 0 1px rgba(18,18,21,.03),0 6px 18px rgba(18,18,21,.035)}
+html body.m2on.m-light .lq-bar .lq{background:#F5F5F6;color:#121215}
+html body.m2on.m-light .lq-bar .lq::before{background:rgba(18,18,21,.35)}
+html body.m2on.m-light .lq-bar .lq-tx b{color:#121215}
+html body.m2on.m-light .lq-x{color:#6B6B75}
+html body.m2on.m-light .tb.me .lq{background:rgba(117,81,220,.1)}html body.m2on.m-light .tb.me .lq::before{background:#7551DC}
+</style>
+<script>/* m282 */
+(function(){
+var _mt=mTalk;mTalk=function(id){var h=_mt(id),L=(typeof TALK!=='undefined'&&TALK[id])||[],c=(typeof LVCTX!=='undefined')&&LVCTX[id];
+  var keep=!L.some(function(m){return m&&m.me;})||(c&&c.pend);
+  return keep?h:h.replace(/<div class="m-qs">[\s\S]*?<\/div>(?=\s*(?:<div class="lq-bar"|<form))/,'');};
+var lastId=null,lastN=0,lastTyp=false;
+function isTyp(e){return e.classList.contains('typ')||(!e.textContent.trim()&&!e.querySelector('img'));}
+function bubbles(t){return [].filter.call(t.querySelectorAll('.tb,.msg'),function(e){return !isTyp(e);});}
+function pop(el,me){if(!el.animate)return;el.style.transformOrigin=me?'100% 100%':'0 100%';
+  try{el.animate([{opacity:0,transform:'translateY(18px) scale(.7)'},{opacity:1,transform:'translateY(-3px) scale(1.03)',offset:.65},{opacity:1,transform:'none'}],{duration:me?460:500,easing:'cubic-bezier(.2,.8,.2,1)'});}catch(e){}}
+function check(){var t=document.querySelector('#mSub #mThread, #mSub .m-thread');var id=null;try{id=CUR&&CUR.s==='talk'?CUR.id:null;}catch(e){}
+  if(!t||!id){lastId=null;lastN=0;lastTyp=false;return;}
+  var B=bubbles(t),n=B.length,typ=[].find.call(t.querySelectorAll('.tb,.msg'),isTyp);
+  if(id===lastId&&n>lastN&&n-lastN<=3){for(var i=lastN;i<n;i++){var el=B[i];pop(el,el.classList.contains('me')||el.classList.contains('out'));}}
+  if(id===lastId&&typ&&!lastTyp)pop(typ,false);
+  lastId=id;lastN=n;lastTyp=!!typ;}
+function keep(e){var b=e.target.closest&&e.target.closest('#mSub .wa-send,#mSub .m-qs button,#mSub .lq-x');if(!b)return;var i=(document.querySelector('#mSub #mMsg')||document.querySelector('#mSub input,#mSub textarea'));if(i&&document.activeElement===i)e.preventDefault();}
+document.addEventListener('mousedown',keep,true);document.addEventListener('pointerdown',keep,true);document.addEventListener('touchstart',function(e){var b=e.target.closest&&e.target.closest('#mSub .wa-send');if(!b)return;var i=(document.querySelector('#mSub #mMsg')||document.querySelector('#mSub input,#mSub textarea'));if(i&&document.activeElement===i){e.preventDefault();b.click();}},{capture:true,passive:false});
+function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(check).observe(p,{childList:true,subtree:true});check();}
+start();
+})();
+</script>
+<style>
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .m-qs button{background:transparent!important;color:#F4F3F7!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)!important;border:0!important;font-weight:500!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .m-qs button{background:#FFFFFF!important;color:#121215!important;box-shadow:inset 0 0 0 1px #E4E4E8!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .m-qs button:active{background:rgba(255,255,255,.08)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .m-qs button:active{background:#F5F5F6!important}
+@media (prefers-reduced-motion: reduce){html body #mSub .m-thread *{animation:none!important}}
+</style>
 </body>
 </html>
