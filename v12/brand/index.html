@@ -2930,7 +2930,7 @@ const PINI='<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C
 
 /* Sample vendors. "near" ties each shop to a landmark; off = metres east/north of it. */
 const V=[
- {id:'foodhunt',name:'Foodhunt',mono:'FH',sub:'kitchen',bg:'#FFD7B5',cat:'food',tier:'listed',rating:0,reviews:0,orders:0,near:'moremi',off:[30,-20],place:'',hours:null,deliv:null,wa:'',real:1,noloc:1,
+ {id:'foodhunt',name:'Foodhunt',mono:'FH',sub:'kitchen',bg:'#FFD7B5',cat:'food',tier:'verified',rating:0,reviews:0,orders:0,near:'moremi',off:[30,-20],place:'',hours:null,deliv:null,wa:'',real:1,noloc:1,
   tag:'Test shop on Stafly',about:['Message us and Amara, our assistant, replies right away','Menu and prices below are samples until the real ones are added'],
   items:[['Jollof rice and chicken',2500],['Fried rice and turkey',3000],['Spaghetti and egg',1800],['Chapman',800]],
   rev:[]},
@@ -4295,7 +4295,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
      const SL=[];P.slice().reverse().forEach(p=>{const im=(Array.isArray(p.imgs)&&p.imgs.length?p.imgs:[p.img]).map(safeUrl).filter(Boolean).slice(0,10).map(function(u){return SCDN(back0(u),640);});im.forEach(u=>SL.push({img:u,t:p.t||(v.tag||'Fresh from '+v.name),m:mins(p.at)}));});
      DROPS.unshift({id:v.id,t:P[0].t||(v.tag||'Fresh from '+v.name),m:mins(P[0].at),img:P[0].img,slides:SL,real:1});
      try{if(CUR.t==='live'&&!CUR.s){LVLIST=null;$('#mPage').innerHTML=m2Page('live');}}catch(_){}}}
-  v.live=1;v.real=1;v.tier='listed';try{placeVendors();}catch(e){}redraw();});}).catch(()=>{});
+  v.live=1;v.real=1;v.tier=v.id==='foodhunt'?'verified':'listed';try{placeVendors();}catch(e){}redraw();});}).catch(()=>{});
 const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Thanks for messaging ${vv.name}. What would you like today?`;};
 /* 2) real chat with Amara through Stafly's website-chat line */
 let vid='';try{vid=localStorage.getItem('stafly_vid')||'';}catch(e){}
