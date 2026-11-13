@@ -11030,5 +11030,20 @@ function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(s
   new MutationObserver(function(){if(!document.body.classList.contains('m-subon')){onBefore=false;lastKey='';}}).observe(document.body,{attributes:true,attributeFilter:['class']});up();}
 start();})();
 </script>
+<style>
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-subon) #mSub,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-subon) #mSub:has(.cx-hero){opacity:0!important;box-shadow:none!important;transition:opacity .16s ease-out,transform 0s linear .18s!important}
+</style>
+<script>/* m278: back to a main page fades the page under in from the left, like the back inside a shop */
+(function(){var was=false;
+function under(){var o=[];['.m2>.m-top','#mChips','#mNear','#mSatB','#mLoc'].forEach(function(q){var e=document.querySelector(q);if(e)o.push(e);});return o;}
+var E='cubic-bezier(.32,.72,0,1)';
+function an(el,k){try{el.animate(k,{duration:420,easing:E});}catch(e){}}
+function go(){var b=document.body;if(b.classList.contains('m-subon'))return;
+  if(b.classList.contains('m-pgon')){var pg=document.getElementById('mPage');if(!pg||!pg.animate)return;
+    an(pg,[{transform:'translateX(-36px)'},{transform:'none'}]);[].forEach.call(pg.children,function(c){an(c,[{opacity:0},{opacity:1}]);});return;}
+  [].forEach.call(under(),function(el){if(!el.animate)return;var cs=getComputedStyle(el);if(cs.display==='none'||+cs.opacity<.5)return;var t=cs.transform==='none'?'':' '+cs.transform;an(el,[{opacity:0,transform:'translateX(-36px)'+t},{opacity:+cs.opacity,transform:t||'none'}]);});}
+new MutationObserver(function(){var b=document.body,on=b.classList.contains('m-subon');if(was&&!on&&!b.classList.contains('dk'))requestAnimationFrame(function(){requestAnimationFrame(go);});was=on;}).observe(document.body,{attributes:true,attributeFilter:['class']});
+was=document.body.classList.contains('m-subon');})();
+</script>
 </body>
 </html>
