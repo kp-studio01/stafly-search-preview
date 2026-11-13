@@ -4805,7 +4805,7 @@ function tkData(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return null;
   if(o.demo){const st=demoStage(o),k=STEPS.findIndex(x=>x[0]===st),tl=[0,25,70,130].slice(0,k+1).map((t,i)=>({s:STEPS[i][0],at:new Date(o.at+t*1000).toISOString()}));return{demo:1,shop:vOf(o.shop).name,stage:st,status:'paid',items:o.items,deliveryFee:o.fee,total:o.total,hall:o.hall,timeline:tl};}
   return TK[ref]||null;}
 async function tkFetch(ref){const o=MINE.find(x=>x.ref===ref);if(!o||o.demo)return;const v=vOf(o.shop);if(!v||!v.sid)return;
-  try{const r=await fetch(API+'/api/w/'+v.sid+'/order/'+encodeURIComponent(o.track));if(r.ok){TK[ref]=await r.json();if(CUR.s==='track'&&CUR.id===ref)rer();}}catch(_){}}
+  try{const r=await fetch(API+'/api/w/'+v.sid+'/order/'+encodeURIComponent(o.track));if(r.ok){const prev=JSON.stringify(TK[ref]||null);TK[ref]=await r.json();if(CUR.s==='track'&&CUR.id===ref)rer();else if(prev!==JSON.stringify(TK[ref])&&(CUR.s==='mine'||(!CUR.s&&CUR.t==='chats'))){try{rer();}catch(_){}}}}catch(_){}}
 function tkPage(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);
   if(!o)return`<div class="m-h c">${back()}<h1>Order</h1><span style="width:46px"></span></div><div class="m-empty"><b>We couldn't find that order</b>It may have been opened on another phone.</div>`;
   const v=vOf(o.shop);
@@ -4882,7 +4882,11 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
   else{try{navigator.clipboard.writeText(txt+' '+url);b.classList.add('ok');setTimeout(()=>b.classList.remove('ok'),1400);}catch(_){}}},true);
 addEventListener('keydown',e=>{if(e.key==='Escape')tkQrClose();});
 /* ---- your orders, in the menu drawer and on the Chats page ---- */
-function minePage(){return`<div class="m-h c">${back()}<h1>Your orders</h1><span style="width:46px"></span></div>${MINE.length?'<div class="m-card" style="padding:2px 16px">'+MINE.map(o=>{const v=vOf(o.shop),d=tkData(o.ref),st=d?(d.stage==='delivered'?'Received':d.status!=='paid'?'Not paid':(STEPS.find(x=>x[0]===d.stage)||[0,'On it'])[1]):'Open';
+window.tkLabel=function(o){const d=tkData(o.ref);if(!d){const v=vOf(o.shop);if(!v||!v.sid)return '';try{tkFetch(o.ref);}catch(_){}return 'Checking…';}
+  if(d.stage==='declined')return 'Not accepted';if(d.status!=='paid')return 'Not paid';
+  const pk=!!(o.pick||d.pickup||d.hall==='Pick up at the shop'),st=d.stage||'paid';
+  return pk?({paid:'Paid',accepted:'Getting it ready',ready:'Ready to collect',on_the_way:'Ready to collect',delivered:'Collected'}[st]||'Paid'):({paid:'Paid',accepted:'Preparing',ready:'Preparing',on_the_way:'On the way',delivered:'Received'}[st]||'Paid');};
+function minePage(){return`<div class="m-h c">${back()}<h1>Your orders</h1><span style="width:46px"></span></div>${MINE.length?'<div class="m-card" style="padding:2px 16px">'+MINE.map(o=>{const v=vOf(o.shop),st=tkLabel(o);
   return`<button type="button" class="od-mine" data-mtrack="${o.ref}">${mLogo(v)}<div><b>${v.name}</b><span>${naira(o.total)} · ${new Date(o.at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div><em>${st}</em></button>`;}).join('')+'</div>':`<div class="m-empty"><b>No orders yet</b>When you order from a shop, you can follow it here.</div>`}`;}
 const _sub=m2Sub;m2Sub=function(k,id){
   if(k==='cart')return ckPage(vOf(id));
@@ -4931,7 +4935,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;cons
   if(t.closest('[data-mmine]')){e.preventDefault();e.stopImmediatePropagation();m2Nav({t:CUR.t,s:'mine'});}},true);
 document.addEventListener('input',e=>{const k=e.target&&e.target.dataset&&e.target.dataset.ck;if(!k)return;CK[k]=e.target.value.slice(0,k==='note'?200:60);sv('stafly_ck',CK);if(ERR){ERR='';}},true);
 /* "Your orders" on the Chats page */
-const _pg=m2Page;m2Page=function(t){let h=_pg.apply(this,arguments);if(t==='chats'&&MINE.length&&typeof h==='string'){const o=MINE[0],v=vOf(o.shop),d=tkData(o.ref);const st=d?(d.stage==='delivered'?'Received':(STEPS.find(x=>x[0]===d.stage)||[0,'On it'])[1]):'Open';
+const _pg=m2Page;m2Page=function(t){let h=_pg.apply(this,arguments);if(t==='chats'&&MINE.length&&typeof h==='string'){const o=MINE[0],v=vOf(o.shop),st=tkLabel(o);
   h=h.replace(/(<div class="m-h"><h1>Chats<\/h1><\/div>)/,`$1<div class="m-sh" style="margin-top:0"><b>Your orders</b><button type="button" class="lnk" data-mmine="1" style="width:auto;height:auto;padding:0;border:0;background:none;color:inherit;font:600 13px 'DM Sans',sans-serif;opacity:.7">See all</button></div><div class="m-card" style="padding:2px 16px"><button type="button" class="od-mine" data-mtrack="${o.ref}">${mLogo(v)}<div><b>${v.name}</b><span>${naira(o.total)}</span></div><em>${st}</em></button></div><div class="m-sh"><b>Messages</b></div>`);}
   return h;};
 
@@ -11013,5 +11017,16 @@ html body.m2on.m-light .tk-chg{color:#121215}
 <style>/* m271: short product lists keep the basket bar at the bottom */html body.m2on #mSub .al-grid{min-height:calc(100dvh - 238px);align-content:start}</style>
 <style>html body.m2on .ck-clr{border:0;background:none;padding:0;font:600 14px "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.62);text-decoration:underline;text-underline-offset:3px;cursor:pointer}html body.m2on.m-light .ck-clr{color:#55555E}</style>
 <style>html body.m2on .ck-browse{display:block;width:auto;min-width:200px;margin:22px auto 0;padding:0 28px}</style>
+<script>/* m276: every page-to-page move inside a shop slides, like the rest (forward slides in, back slides back) */
+(function(){var stack=[],t=0;
+function key(){try{return CUR.s?CUR.s+'|'+(CUR.id||''):'';}catch(e){return '';}}
+function run(cls){var p=document.getElementById('mSub');if(!p)return;p.classList.remove('al-in','al-back');void p.offsetWidth;p.classList.add(cls);clearTimeout(t);t=setTimeout(function(){p.classList.remove(cls);},700);}
+function up(){var k=key(),on=document.body.classList.contains('m-subon');if(!k||!on){stack=k?[k]:[];return;}
+  var top=stack[stack.length-1];if(top===k)return;
+  if(!top){stack=[k];return;}
+  if(stack[stack.length-2]===k){stack.pop();run('al-back');}else{stack.push(k);if(stack.length>30)stack.shift();run('al-in');}}
+function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(up).observe(p,{childList:true});up();}
+start();})();
+</script>
 </body>
 </html>
