@@ -4766,7 +4766,7 @@ function ckPage(v){ckFix(v);const L=lines(v),G=groupsFor(v),d=delivery(v),tot=su
   const opt=(id,b,sp,em,was)=>`<button type="button" class="ck-o${CK.mode===id?' on':''}" data-ckmode="${id}"><span class="rd"></span><div><b>${b}</b><span>${sp}</span></div><em>${em}${was?`<s>${was}</s>`:''}</em></button>`;
   const hallKeys=HALLS.filter(h=>h[0]!=='off').map(h=>h[1]+(h[0]==='pg'?'':' Hall')).concat(PLACES_EXTRA);
   return`<div class="m-h c">${back()}<h1>Checkout</h1><span style="width:46px"></span></div>
-  <div class="m-sh" style="margin-top:0"><b>${v.name}</b><span>${L.reduce((a,l)=>a+l.qty,0)} item${L.length===1&&L[0].qty===1?'':'s'}</span></div>
+  <div class="m-sh" style="margin-top:0"><b>${v.name}</b><button type="button" class="ck-clr" data-ckclear="${v.id}">Clear basket</button></div>
   <div class="m-card" style="padding:2px 16px">${L.map(l=>`<div class="ck-l"><div><b>${l.name}</b><span>${naira(l.price)} each</span></div><span class="qa"><button type="button" class="qb" data-mdec="${l.i}" aria-label="One less">${MINUS}</button><span class="qn">${l.qty}</span><button type="button" class="qb" data-madd="${l.i}" aria-label="One more">${PLUS}</button></span></div>`).join('')}</div>
   ${v.deliv?dlvHtml(v,G):(v.real&&v.pickup)?`<div class="m-sh"><b>Pick up</b></div><div class="m-card dl-c"><p class="dl-d" style="margin:0">Collect it from the shop. No delivery fee.</p></div>`:''}
   <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
@@ -4838,6 +4838,7 @@ function tkArt(v,d,wm){let P='';try{const L=(d.items||[]);for(const i of L){cons
 window.ckQ=function(o){if(o.q&&Object.keys(o.q).length)return o.q;const v=vOf(o.shop),d=(typeof TK!=='undefined'&&TK[o.ref])||{},its=d.items||o.items||[],q={};if(!v)return null;its.forEach(i=>{const n=String(i.name||'').trim().toLowerCase(),k=v.items.findIndex(x=>String(x[0]).trim().toLowerCase()===n);if(k>=0)q[k]=(q[k]||0)+Math.max(1,Number(i.qty)||1);});if(Object.keys(q).length){o.q=q;try{sv('stafly_orders',MINE.slice(0,20));}catch(_){}return q;}return null;};
 window.ckBack=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;ckQ(o);const v=vOf(o.shop);if(!v||!o.q||!Object.keys(o.q).length)return false;CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);try{CK.mode=o.gmode||'solo';}catch(_){}m2Nav({t:'places',s:'cart',id:o.shop});return true;};
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckgo]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckBack(a.dataset.ckgo))ckProd(a.dataset.ckgo);},true);
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ckclear]');if(!b)return;e.preventDefault();e.stopPropagation();CART={shop:null,q:{}};sv('stafly_cart',CART);m2Nav({t:CUR.t||'places',s:'shop',id:b.dataset.ckclear});},true);
 window.ckProd=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;ckQ(o);const v=vOf(o.shop);if(!v)return false;const ks=Object.keys(o.q||{}).filter(k=>o.q[k]>0&&v.items[k]);if(ks.length){CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);}try{CK.mode=o.gmode||'solo';}catch(_){}window.ALLQ='';window.MCAT=window.MCAT||{};MCAT[o.shop]='';window.GPFOR='';m2Nav({t:'places',s:'all',id:o.shop});return true;};
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckback]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckProd(a.dataset.ckback)){const o=MINE.find(x=>x.ref===a.dataset.ckback);if(o)m2Nav({t:'places',s:'shop',id:o.shop});}},true);
 const _tkOld=tkPage;
@@ -11007,5 +11008,6 @@ html body.m2on.m-light .tk-chg{color:#121215}
 </style>
 <style>html body.m2on .tk-lk{display:flex;gap:8px;margin:4px 0 14px}html body.m2on .tk-lk .tk-chg{flex:1;margin:0}</style>
 <style>/* m271: short product lists keep the basket bar at the bottom */html body.m2on #mSub .al-grid{min-height:calc(100dvh - 238px);align-content:start}</style>
+<style>html body.m2on .ck-clr{border:0;background:none;padding:0;font:600 14px "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.62);text-decoration:underline;text-underline-offset:3px;cursor:pointer}html body.m2on.m-light .ck-clr{color:#55555E}</style>
 </body>
 </html>
