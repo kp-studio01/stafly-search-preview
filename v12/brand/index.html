@@ -11094,5 +11094,31 @@ html body.m2on.m-light .lq-bar .lq-tx b{color:#121215}
 html body.m2on.m-light .lq-x{color:#6B6B75}
 html body.m2on.m-light .tb.me .lq{background:rgba(117,81,220,.1)}html body.m2on.m-light .tb.me .lq::before{background:#7551DC}
 </style>
+<script>/* m282 */
+(function(){
+var _mt=mTalk;mTalk=function(id){var h=_mt(id),L=(typeof TALK!=='undefined'&&TALK[id])||[],c=(typeof LVCTX!=='undefined')&&LVCTX[id];
+  var keep=!L.some(function(m){return m&&m.me;})||(c&&c.pend);
+  return keep?h:h.replace(/<div class="m-qs">[\s\S]*?<\/div>(?=\s*(?:<div class="lq-bar"|<form))/,'');};
+var lastId=null,lastN=0,lastTyp=false;
+function bubbles(t){return [].filter.call(t.querySelectorAll('.tb,.msg'),function(e){return !e.classList.contains('typ');});}
+function pop(el,me){if(!el.animate)return;el.style.transformOrigin=me?'100% 100%':'0 100%';
+  try{el.animate([{opacity:0,transform:'translateY(14px) scale(.82)'},{opacity:1,transform:'translateY(-2px) scale(1.01)',offset:.7},{opacity:1,transform:'none'}],{duration:me?420:460,easing:'cubic-bezier(.2,.8,.2,1)'});}catch(e){}}
+function check(){var t=document.querySelector('#mSub #mThread, #mSub .m-thread');var id=null;try{id=CUR&&CUR.s==='talk'?CUR.id:null;}catch(e){}
+  if(!t||!id){lastId=null;lastN=0;lastTyp=false;return;}
+  var B=bubbles(t),n=B.length,typ=t.querySelector('.typ');
+  if(id===lastId&&n>lastN&&n-lastN<=3){for(var i=lastN;i<n;i++){var el=B[i];pop(el,el.classList.contains('me')||el.classList.contains('out'));}}
+  if(id===lastId&&typ&&!lastTyp)pop(typ,false);
+  lastId=id;lastN=n;lastTyp=!!typ;}
+function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(check).observe(p,{childList:true,subtree:true});check();}
+start();
+})();
+</script>
+<style>
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .m-qs button{background:transparent!important;color:#F4F3F7!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)!important;border:0!important;font-weight:500!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .m-qs button{background:#FFFFFF!important;color:#121215!important;box-shadow:inset 0 0 0 1px #E4E4E8!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .m-qs button:active{background:rgba(255,255,255,.08)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .m-qs button:active{background:#F5F5F6!important}
+@media (prefers-reduced-motion: reduce){html body #mSub .m-thread *{animation:none!important}}
+</style>
 </body>
 </html>
