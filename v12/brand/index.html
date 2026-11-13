@@ -2440,7 +2440,7 @@ body.m-light #mLoc{background:#fff;color:#121215;box-shadow:0 0 0 1px #E6E6EA,0 
 body.m-light #mLoc.on{color:#6A45D6}
 body.dk #mLoc{background:#1B1B20;-webkit-backdrop-filter:none;backdrop-filter:none}
 body.dk.m-light #mLoc{background:#fff}
-body.m2on.m-pgon:not(.dk) #mLoc,body.m2on.m-diron #mLoc,body.m2on.m-subon:not(.dk) #mLoc{display:none}
+body.m2on.m-pgon:not(.dk):not(.m-diron) #mLoc,body.m2on.m-subon:not(.dk):not(.m-diron) #mLoc{display:none}
 #mLocT{position:absolute;z-index:700;left:50%;top:176px;transform:translate(-50%,-6px);max-width:min(92vw,420px);padding:11px 16px;border-radius:16px;font:500 13.5px/1.4 "DM Sans",system-ui,sans-serif;
   background:rgba(16,16,20,.9);color:#F4F3F7;box-shadow:0 0 0 1px rgba(255,255,255,.09),0 14px 36px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;text-align:center}
 #mLocT.in{opacity:1;transform:translate(-50%,0)}
@@ -2870,6 +2870,7 @@ window.sPin=v=>!(v&&v.real&&v.noloc);
 /* real follower count: the server's number, less you if you followed before it was counted, plus you now */
 window.sFol=(v,fo)=>Math.max(fo?1:0,(v.fol||0)-(v.fol0||0)+(fo?1:0));
 /* where the seller says they are: their own pin first, else the campus place they picked */
+window.hrsTxt=function(v){if(!v||!v.hours)return 'Hours not set';const D=v.days,N=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],t=tfmt(v.hours[0])+' to '+tfmt(v.hours[1]);if(!D||!D.length||D.length===7)return 'Every day, '+t;const o=D.slice().sort((a,b)=>a-b),run=o.every((x,i)=>!i||x===o[i-1]+1);if(run&&o.length>2)return N[o[0]]+' to '+N[o[o.length-1]]+', '+t;return o.map(x=>N[x].slice(0,3)).join(', ')+', '+t;};
 window.staflySpot=function(v,d){const A=d&&LM[d.area]?d.area:'',pm=/^(-?\d+\.\d+),(-?\d+\.\d+)$/.exec(String(d&&d.pin||'')),sp=String(d&&d.spot||'').replace(/[<>"'`&\\]/g,'').trim().slice(0,80);
   if(A||pm||sp)v.place=[sp,A?LM[A].n:''].filter(Boolean).join(', ')||v.place;
   if(pm){v.pinll=[+pm[1],+pm[2]];if(A)v.near=A;v.noloc=0;}else{v.pinll=null;if(A){v.near=A;v.noloc=0;}}};
@@ -2996,8 +2997,8 @@ const V=[
 const $=s=>document.querySelector(s);
 const naira=v=>typeof v==='string'?'from ₦'+Number(v.replace('from ','')).toLocaleString('en-NG'):'₦'+v.toLocaleString('en-NG');
 const tfmt=m=>{const h=Math.floor(m/60)%24,mm=m%60,ap=h>=12?'pm':'am';return (((h+11)%12)+1)+(mm?':'+String(mm).padStart(2,'0'):'')+ap;};
-function status(v){if(!v||!v.hours)return{k:'na',t:'Hours not set'};const[o,c]=v.hours,n=NOW.min;const wd=new Date(Date.now()+3600000).getUTCDay();if(v.closedToday||(v.days&&!v.days.includes(wd))){const nx=v.days&&v.days.length?v.days.map(x=>(x-wd+7)%7||7).sort((a,b)=>a-b)[0]:1;return{k:'shut',t:'Opens '+(nx===1?'tomorrow':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][(wd+nx)%7])+' '+tfmt(o)};}if(n>=o&&n<c)return c-n<=60?{k:'soon',t:'Closes '+tfmt(c)}:{k:'open',t:'Open \u2019til '+tfmt(c)};return{k:'shut',t:n<o?'Opens '+tfmt(o):'Opens '+tfmt(o)+' tomorrow'};}
-const isOpen=v=>status(v).k!=='shut';
+function status(v){if(!v||!v.hours)return{k:'na',t:'Hours not set'};const[o,c]=v.hours,n=v.real?(()=>{const d=new Date(Date.now()+3600000);return d.getUTCHours()*60+d.getUTCMinutes();})():NOW.min;const wd=new Date(Date.now()+3600000).getUTCDay();if(v.closedToday||(v.days&&!v.days.includes(wd))){const nx=v.days&&v.days.length?v.days.map(x=>(x-wd+7)%7||7).sort((a,b)=>a-b)[0]:1;return{k:'shut',t:'Opens '+(nx===1?'tomorrow':['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][(wd+nx)%7])+' '+tfmt(o)};}if(n>=o&&n<c)return c-n<=60?{k:'soon',t:'Closes '+tfmt(c)}:{k:'open',t:'Open \u2019til '+tfmt(c)};return{k:'shut',t:n<o?'Opens '+tfmt(o):'Opens '+tfmt(o)+' tomorrow'};}
+const isOpen=v=>{const k=status(v).k;return k==='open'||k==='soon';};
 const logo=(v,extra='')=>`<span class="logo ${extra}" style="background:${v.bg}">${v.mono}</span>`;
 let YOU=null;
 function shift(ll,[e,n]){return[ll[0]+n/111320,ll[1]+e/(111320*Math.cos(ll[0]*Math.PI/180))];}
@@ -3236,10 +3237,10 @@ function openDetail(id){if(window.__m2)return m2Nav({t:CUR.t,s:'shop',id});if(ph
   const stars=n=>'<span class="stars">'+[1,2,3,4,5].map(i=>STAR.replace('<svg',`<svg class="${i<=n?'':'off'}"`)).join('')+'</span>';
   const tierTxt={trusted:'Trusted',verified:'Verified',listed:'New on Stafly'}[v.tier];
   $('#dbody').innerHTML=`<div class="hero">${logo(v)}<div><h2>${v.name}</h2></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge ${v.tier}">${S(SHIELD)}${tierTxt}</span>${v.reviews>=3?`<span class="badge verified num">${STAR.replace('<svg','<svg style="fill:var(--star)"')}${v.rating.toFixed(1)} · ${v.reviews} reviews</span>`:`<span class="badge listed num">${v.orders} orders so far</span>`}</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge ${v.tier}">${S(SHIELD)}${tierTxt}</span>${v.reviews>=3?`<span class="badge verified num">${STAR.replace('<svg','<svg style="fill:var(--star)"')}${v.rating.toFixed(1)} · ${v.reviews} review${v.reviews===1?'':'s'}</span>`:`<span class="badge listed num">${v.orders} orders so far</span>`}</div></div>
     <p class="about">${v.about.join('. ')}.</p>
     <div class="facts">
-      <div class="fact">${S(CLOCK)}<div><b class="st ${s.k}">${s.t}</b><span>${v.hours?`Every day, ${tfmt(v.hours[0])} to ${tfmt(v.hours[1])}`:'Hours not set'}</span></div></div>
+      <div class="fact">${S(CLOCK)}<div><b class="st ${s.k}">${s.t}</b><span>${hrsTxt(v)}</span></div></div>
       <div class="fact">${S(PINI)}<div><b>${v.place}</b><span class="num">${dtxt(v)} from you · ${walk(v)} min walk</span></div></div>
       <div class="fact">${S(BIKE)}<div>${v.deliv?`<b>${naira(v.deliv.fee)} delivery to ${v.deliv.to}</b><span>${(v.deliv.eta||'').replace(/^./,c=>c.toUpperCase())}</span>`:`<b>Pick up only</b><span>Chat first and they\u2019ll have it ready when you arrive</span>`}</div></div>
     </div>
@@ -3513,8 +3514,8 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
       ${g&&v.deliv?`<button type="button" class="od-opt" data-mjoin="${id}"><span class="od-ic g">${mS('users')}</span><div><b>${joined.has(id)?'You’re in the group':'Group order'}</b><span>${g.n+(joined.has(id)?1:0)} of ${g.need} to ${g.hall} · ${g.closes} min left</span></div><em>${naira(share(v,g.n+1))}<s>${naira(v.deliv.fee)}</s></em></button>`:''}
     </div>`:''}
     <div class="m-sh"><b>Menu</b><span>Prices set by the shop</span></div><div class="m-card" style="padding:4px 16px">${v.items.map(i=>`<div class="m-price"><span>${i[0]}</span><b>${naira(i[1])}</b></div>`).join('')}</div>
-    <div class="m-sh"><b>Where</b><span>${s.k==='na'?'':s.k==='shut'?s.t:'Every day, '+tfmt(v.hours[0])+' to '+tfmt(v.hours[1])}</span></div><div class="m-card"><div class="m-where wh"><span class="wh-ic">${mS('pin')}</span><div><b style="font-size:16px">${v.place||'Location not added yet'}</b><span>${v.deliv?(v.deliv.to?'Delivers to '+v.deliv.to+', '+v.deliv.eta:(v.real&&v.pickup?'Delivers or pick up':'Delivers')):v.real?(v.pickup?'Pick up only':'Ask the shop about delivery'):'Pick up only. Chat first and it will be ready when you arrive'}</span></div></div></div>
-    <div class="m-sh"><b>Reviews</b><span>${v.reviews?'From paid orders':'None yet'}</span></div><div class="m-card rv2">${v.reviews?`<div class="rv-sum"><div class="rv-big"><b>${v.rating.toFixed(1)}</b>${stz(Math.round(v.rating))}<span>${v.reviews} reviews</span></div><div class="rv-bars">${(v.dist||rvDist(v.rating)).map((x,i)=>`<div><span>${5-i}</span><i><u style="width:${x}%"></u></i></div>`).join('')}</div></div>`:''}${v.rev.length?v.rev.map(r=>`<div class="rv-it"><div class="rv-h"><span class="rv-av">${r[0].split(' ').map(w=>w[0]).join('').slice(0,2)}</span><div><b>${r[0]}</b><div class="rv-s">${stz(r[1])}<span>${r[3]}</span></div></div></div><p>${r[2]}</p>${r[4]?`<div class="rv-rp"><b>${v.name}</b>${r[4]}</div>`:''}</div>`).join(''):`<div class="rv-it"><p>${v.real?'Buyers who pay can leave a review.':`New on Stafly with ${v.orders} completed orders. Stars show after 3 reviews from real buyers.`}</p></div>`}</div>
+    <div class="m-sh"><b>Where</b><span>${s.k==='na'?'':s.k==='shut'?s.t:hrsTxt(v)}</span></div><div class="m-card"><div class="m-where wh"><span class="wh-ic">${mS('pin')}</span><div><b style="font-size:16px">${v.place||'Location not added yet'}</b><span>${v.deliv?(v.deliv.to?'Delivers to '+v.deliv.to+', '+v.deliv.eta:(v.real&&v.pickup?'Delivers or pick up':'Delivers')):v.real?(v.pickup?'Pick up only':'Ask the shop about delivery'):'Pick up only. Chat first and it will be ready when you arrive'}</span></div></div></div>
+    <div class="m-sh"><b>Reviews</b><span>${v.reviews?'From paid orders':'None yet'}</span></div><div class="m-card rv2">${v.reviews?`<div class="rv-sum"><div class="rv-big"><b>${v.rating.toFixed(1)}</b>${stz(Math.round(v.rating))}<span>${v.reviews} review${v.reviews===1?'':'s'}</span></div><div class="rv-bars">${(v.dist||rvDist(v.rating)).map((x,i)=>`<div><span>${5-i}</span><i><u style="width:${x}%"></u></i></div>`).join('')}</div></div>`:''}${v.rev.length?v.rev.map(r=>`<div class="rv-it"><div class="rv-h"><span class="rv-av">${r[0].split(' ').map(w=>w[0]).join('').slice(0,2)}</span><div><b>${r[0]}</b><div class="rv-s">${stz(r[1])}<span>${r[3]}</span></div></div></div><p>${r[2]}</p>${r[4]?`<div class="rv-rp"><b>${v.name}</b>${r[4]}</div>`:''}</div>`).join(''):`<div class="rv-it"><p>${v.real?'Buyers who pay can leave a review.':`New on Stafly with ${v.orders} completed orders. Stars show after 3 reviews from real buyers.`}</p></div>`}</div>
     <p class="m-note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':v.real?'':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</p>
     <div class="m-foot">${mFoot(v)}</div>`;}
   if(k==='alerts'){const g=GROUPS.mamatee,mt=vOf('mamatee'),kem=DROPS.includes(LATE);
@@ -3656,18 +3657,20 @@ function m2DirView(){const b=document.body,id=CUR.dir,el=$('#mDir');
   if(!id){b.classList.remove('m-diron');if(el)el.innerHTML='';return;}
   const v=vOf(id),w=walk(v),now=new Date(),am=now.getHours()*60+now.getMinutes()+w,s=status(v);
   st.sel=id;for(const k in markers){const e=markers[k].getElement();e.classList.toggle('sel',k===id);e.style.zIndex=k===id?5:'';}
-  route(v);b.classList.add('m-diron');try{map.setPaintProperty('route-line','line-color','#A98BFA');map.setPaintProperty('route-glow','line-opacity',.35);}catch(e){}
-  try{map.fitBounds(bounds([YOU,v.ll]),{padding:{top:110,bottom:330,left:70,right:70},maxZoom:17.6,duration:700});}catch(e){}
+  const kn=sKnow(v);if(kn)route(v);else{try{map.getSource('route')&&map.getSource('route').setData({type:'FeatureCollection',features:[]});}catch(e){}}b.classList.add('m-diron');try{map.setPaintProperty('route-line','line-color','#A98BFA');map.setPaintProperty('route-glow','line-opacity',.35);}catch(e){}
+  if(!window.__dirQuiet)try{if(kn)map.fitBounds(bounds([YOU,v.ll]),{padding:{top:110,bottom:330,left:70,right:70},maxZoom:17.6,duration:700});else map.easeTo({center:ll2(v.ll),zoom:17,offset:[0,-110],duration:700});}catch(e){}
   const ride=Math.max(2,Math.round(dist(v)/350)+2);
   el.innerHTML=`<button class="m-circ dir-x" type="button" data-mdirx="1" aria-label="Back">${mS('back')}</button>
    <div class="dir-p"><div class="dir-to">${mLogo(v)}<div><small>Directions to</small><b>${v.name}${vt(v)}</b></div></div>
-    <div class="dir-big"><b>${w} min</b><span>walk · ${dtxt(v)}</span></div>
-    <div class="dir-row"><div><small>You arrive</small><b>${tfmt(am%1440)}</b></div><div><small>Shop at that time</small><b class="${isOpen(v)?'ok':''}">${isOpen(v)?'Open':'Closed'}</b></div><div><small>By okada</small><b>~${ride} min</b></div></div>
+    ${kn?`<div class="dir-big"><b>${w} min</b><span>walk · ${dtxt(v)}</span></div>
+    <div class="dir-row"><div><small>You arrive</small><b>${tfmt(am%1440)}</b></div><div><small>Shop at that time</small><b class="${s.k!=='na'&&isOpen(v)?'ok':''}">${s.k==='na'?'Hours not set':isOpen(v)?'Open':'Closed'}</b></div><div><small>By okada</small><b>~${ride} min</b></div></div>`
+    :`<button type="button" class="dir-loc" data-dirloc="1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="7.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg>Use my location</button>`}
     <div class="dir-pl">${mS('pin')}<span>${v.place}</span></div>
     <div class="dir-act"><a class="dir-go" href="https://www.google.com/maps/dir/?api=1&destination=${v.ll[0]},${v.ll[1]}&travelmode=walking" target="_blank" rel="noopener">${mS('nav')}Start walking</a><button type="button" class="dir-c" data-mtalk="${id}" aria-label="Chat">${mS('chat')}</button></div></div>`;}
 (function(){const _ap=m2Apply;m2Apply=function(){_ap();m2DirView();};})();
 document.addEventListener('click',e=>{const t=e.target;let el;
   if(el=t.closest('[data-mdir]')){e.preventDefault();e.stopPropagation();m2Nav({t:'explore',dir:el.dataset.mdir});return;}
+  if(el=t.closest('[data-dirloc]')){e.preventDefault();e.stopPropagation();const L=document.getElementById('mLoc');if(L)L.click();return;}
   if(el=t.closest('[data-mdirx]')){e.preventDefault();e.stopPropagation();history.back();return;}},true);
 
 
@@ -4498,6 +4501,7 @@ place();addEventListener('resize',place);setTimeout(place,1200);setTimeout(place
 let wid=null,last=null,lastRoute=null,centred=false,warned=false;
 function moveYou(ll){YOU=ll;window.__gpsYou=1;try{youM&&youM.setLngLat(ll2(YOU));const w=youM&&youM.getElement();if(w)w.classList.add('live');}catch(e){}
   try{render();}catch(e){}try{m2Refresh();}catch(e){}
+  try{if(CUR.dir){const first=!window.__dirHadYou;window.__dirHadYou=1;window.__dirQuiet=!first;m2DirView();window.__dirQuiet=0;}}catch(e){window.__dirQuiet=0;}
   if(st.sel&&(!lastRoute||meters(lastRoute,ll)>25)){lastRoute=ll;const v=V.find(x=>x.id===st.sel);if(v)try{route(v);}catch(e){}}}
 function fix(p){const ll=[p.coords.latitude,p.coords.longitude];btn.classList.remove('wait');
   if(!onCampus(ll)){btn.classList.remove('on');if(!warned){warned=true;say('Not on campus. Using your hall for now.');}return;}
@@ -5245,8 +5249,9 @@ function apply(d,theme){
   if(theme==='dark'||theme==='light'){try{localStorage.setItem('stafly_theme',theme);}catch(_){}
     B.classList.toggle('m-light',theme==='light');}
   v.name=clean(d.businessName)||'Your shop';v.mono=v.name.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
-  v.tag=clean(d.headline)||'';
-  const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>clean(x).replace(/\.$/,'')).filter(Boolean).slice(0,2);v.about=ab.length?ab:['Message us and our assistant replies right away'];
+  const words=t=>String(t==null?'':t).replace(/'/g,'\u2019').replace(/[<>"`&\\]/g,'').replace(/\s+/g,' ').trim();
+  v.tag=words(d.headline).slice(0,120).replace(/[.!]+$/,'');
+  {const ab=words(d.about).slice(0,600).replace(/\.$/,'');v.about=[ab||'Message us and our assistant replies right away'];}
   v.img=safeUrl(d.avatar)||'';v.cover=safeUrl(d.cover)||'';
   v.place=clean(d.location)||'Add where you are';
   v.items=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':safeUrl(i.img),clean(i.desc||''),clean(i.cat||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3)]).slice(0,200);
@@ -10984,5 +10989,11 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
   if(p.classList.contains('open')){p.classList.remove('open');fit(p);}else{p.classList.add('open');p.textContent=p.dataset.full+' ';var l=document.createElement('button');l.type='button';l.className='sp-more';l.setAttribute('data-spmore','');l.textContent='less';p.appendChild(l);}},true);
 })();
 </script>
+<style>
+html body.m2on .dir-loc{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin:16px 0 0;height:50px;border:0;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);color:#F4F3F7;font:600 15px "DM Sans",system-ui,sans-serif;cursor:pointer}
+html body.m2on .dir-loc svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+html body.m2on.m-light .dir-loc{background:#F1F1F3;box-shadow:none;color:#121215}
+</style>
+<style>html body.m2on .rv-big .stz svg.off{fill:rgba(255,255,255,.2)}html body.m2on.m-light .rv-big .stz svg.off{fill:rgba(18,18,21,.15)}</style>
 </body>
 </html>
