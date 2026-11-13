@@ -11017,15 +11017,17 @@ html body.m2on.m-light .tk-chg{color:#121215}
 <style>/* m271: short product lists keep the basket bar at the bottom */html body.m2on #mSub .al-grid{min-height:calc(100dvh - 238px);align-content:start}</style>
 <style>html body.m2on .ck-clr{border:0;background:none;padding:0;font:600 14px "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.62);text-decoration:underline;text-underline-offset:3px;cursor:pointer}html body.m2on.m-light .ck-clr{color:#55555E}</style>
 <style>html body.m2on .ck-browse{display:block;width:auto;min-width:200px;margin:22px auto 0;padding:0 28px}</style>
-<script>/* m276: every page-to-page move inside a shop slides, like the rest (forward slides in, back slides back) */
-(function(){var stack=[],t=0;
-function key(){try{return CUR.s?CUR.s+'|'+(CUR.id||''):'';}catch(e){return '';}}
-function run(cls){var p=document.getElementById('mSub');if(!p)return;p.classList.remove('al-in','al-back');void p.offsetWidth;p.classList.add(cls);clearTimeout(t);t=setTimeout(function(){p.classList.remove(cls);},700);}
-function up(){var k=key(),on=document.body.classList.contains('m-subon');if(!k||!on){stack=k?[k]:[];return;}
-  var top=stack[stack.length-1];if(top===k)return;
-  if(!top){stack=[k];return;}
-  if(stack[stack.length-2]===k){stack.pop();run('al-back');}else{stack.push(k);if(stack.length>30)stack.shift();run('al-in');}}
-function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(up).observe(p,{childList:true});up();}
+<script>/* m277: slide between pages inside the panel (forward in from the right, back from the left) */
+(function(){var last=null,lastKey='',onBefore=false;
+function key(c){return c&&c.s?c.s+'|'+(c.id||''):'';}
+function slide(dir){var p=document.getElementById('mSub');if(!p||!p.animate)return;var x=dir>0?36:-36;p.style.overflowX='clip';clearTimeout(p.__slT);p.__slT=setTimeout(function(){p.style.overflowX='';},460);
+  [].forEach.call(p.children,function(el){if(el.classList.contains('m-foot')||el.classList.contains('m-in')||el.id==='mIn'||el.querySelector('#mIn,.m-foot'))return;
+    var cs=getComputedStyle(el),wide=el.classList.contains('wa-h')||el.classList.contains('cx-hero')||cs.position==='sticky'||cs.position==='fixed'||parseFloat(cs.marginLeft)<0||parseFloat(cs.marginRight)<0;try{el.animate(wide?[{opacity:0},{opacity:1}]:[{opacity:0,transform:'translateX('+x+'px)'},{opacity:1,transform:'none'}],{duration:420,easing:'cubic-bezier(.32,.72,0,1)'});}catch(e){}});}
+function up(){var c=null;try{c=CUR;}catch(e){}var k=key(c),on=document.body.classList.contains('m-subon');
+  if(k&&k!==lastKey&&lastKey&&onBefore&&on){var back=!!(last&&last.pv&&key(last.pv)===k&&c.pv!==last);slide(back?-1:1);}
+  last=c;lastKey=k;onBefore=on&&!!k;}
+function start(){var p=document.getElementById('mSub');if(!p)return setTimeout(start,300);new MutationObserver(up).observe(p,{childList:true});
+  new MutationObserver(function(){if(!document.body.classList.contains('m-subon')){onBefore=false;lastKey='';}}).observe(document.body,{attributes:true,attributeFilter:['class']});up();}
 start();})();
 </script>
 </body>
