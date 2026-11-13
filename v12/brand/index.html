@@ -4836,7 +4836,8 @@ function tkArt(v,d,wm){let P='';try{const L=(d.items||[]);for(const i of L){cons
   if(P){const u=String(P).replace(/"/g,'%22');return`<div class="tkx-art ph"><i style="background-image:url(&quot;${u}&quot;)"></i><i class="mb" style="background-image:url(&quot;${u}&quot;)"></i></div>`;}
   return`<div class="tkx-art tp"><span class="sl"></span><i class="c">${wm}</i><i class="b">${wm}</i><i class="a">${wm}</i></div>`;}
 window.ckBack=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;const v=vOf(o.shop);if(!v||!o.q||!Object.keys(o.q).length)return false;CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);try{CK.mode=o.gmode||'solo';}catch(_){}m2Nav({t:'places',s:'cart',id:o.shop});return true;};
-document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckback]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckBack(a.dataset.ckback)){const o=MINE.find(x=>x.ref===a.dataset.ckback);if(o)m2Nav({t:'places',s:'shop',id:o.shop});}},true);
+window.ckProd=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;const v=vOf(o.shop);if(!v)return false;const ks=Object.keys(o.q||{}).filter(k=>o.q[k]>0&&v.items[k]);if(ks.length){CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);}try{CK.mode=o.gmode||'solo';}catch(_){}m2Nav({t:'places',s:'shop',id:o.shop});if(ks.length)setTimeout(()=>{const r=document.querySelector('#mSub [data-mitem="'+ks[0]+'"]');if(r){r.scrollIntoView({block:'center'});r.click();}},450);return true;};
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckback]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckProd(a.dataset.ckback)){const o=MINE.find(x=>x.ref===a.dataset.ckback);if(o)m2Nav({t:'places',s:'shop',id:o.shop});}},true);
 const _tkOld=tkPage;
 tkPage=function(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);if(!o||!d)return _tkOld(ref);
   const v=vOf(o.shop);
