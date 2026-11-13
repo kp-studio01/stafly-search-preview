@@ -3773,14 +3773,14 @@ document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;let 
   if(t.closest('[data-lvnext]')){stop();return lvStep(1);}
   if(el=t.closest('[data-lvmap]')){stop();lvClose();return lvFire('data-msel',el.dataset.lvmap);}
   if(el=t.closest('[data-lvtalk]')){stop();const d=DROPS.find(x=>x.id===el.dataset.lvtalk)||(LATE.id===el.dataset.lvtalk?LATE:null);if(!d)return;
-    LVCTX[d.id]={t:d.t,m:d.m,at:(TALK[d.id]||[]).length};lvClose();return lvFire('data-mtalk',d.id);}
+    LVCTX[d.id]={t:d.t,m:d.m,at:(TALK[d.id]||[]).length,img:d.img||'',ts:d.at||Date.now()-(d.m||0)*6e4,pend:1};lvClose();return lvFire('data-mtalk',d.id);}
 },true);
 document.addEventListener('keydown',e=>{if(!document.body.classList.contains('lv-on'))return;if(e.key==='Escape')lvClose();if(e.key==='ArrowRight')lvStep(1);if(e.key==='ArrowLeft')lvStep(-1);});
 (function(){const _ts=mTalkSend;mTalkSend=function(id,t){_ts(id,t);document.querySelectorAll('#mSub .m-qs').forEach(x=>x.remove());};})();
 (function(){const _mb=m2Busy;m2Busy=function(){return _mb()||document.body.classList.contains('lv-on');};})();
 mThread=function(id){const L=TALK[id]||[],c=LVCTX[id],v=vOf(id);
-  const q=c?`<div class="lv-quote"><span class="th">${v.img?`<img src="${v.img}" alt="">`:mLogo(v)}</span><div><small>${mS('radio')}You’re asking about their Live post · ${ago(c.m)}</small><p>${c.t}</p></div></div>`:'';
-  const row=m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}">${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`;
+  const q='';
+  const row=m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}${m.lv?' has-lq':''}">${m.lv?lqHtml(m.lv):''}${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`;
   let h='';L.forEach((m,k)=>{if(c&&k===c.at)h+=q;h+=row(m);});if(c&&c.at>=L.length)h+=q;
   return h+(TYP[id]?'<div class="tb them typ"><i></i><i></i><i></i></div>':'');};
 (function(){const _mt=mTalk;mTalk=function(id){let h=_mt(id);const c=LVCTX[id],L=TALK[id]||[];
@@ -3806,7 +3806,7 @@ function mTalk(id){const v=vOf(id),L=TALK[id]||[],r=reach(v);const loc=(USER&&US
   <div class="m-thread" id="mThread"><div class="m-sys">You’re chatting with ${v.name} on Stafly. Your phone number stays private.</div>${mThread(id)}</div>
   <div class="m-comp">${L.length?'':`<div class="m-qs">${qs.map(q=>`<button type="button" data-mq="${q.replace(/"/g,'&quot;')}">${q}</button>`).join('')}</div>`}
    <form class="m-in" id="mIn" data-id="${id}"><input id="mMsg" type="text" placeholder="Message ${v.name}…" autocomplete="off" enterkeyhint="send"><button type="submit" aria-label="Send">${mS('send')}</button></form></div>`;}
-function mTalkSend(id,t){t=t.trim();if(!t)return;const v=vOf(id),L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);L.push({me:1,t:t.replace(/</g,'&lt;'),tm:tnow()});
+function mTalkSend(id,t){t=t.trim();if(!t)return;const v=vOf(id),L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);L.push({me:1,t:t.replace(/</g,'&lt;'),tm:tnow()});lvTake(id,L[L.length-1]);
   if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:tnow(),n:0});
   TYP[id]=1;mTalkRender(id,true);
   setTimeout(()=>{TYP[id]=0;L.push({t:mReply(v,t,first),tm:tnow()});const c=CHATS.find(c=>c.id===id);if(c)c.t=L[L.length-1].t.replace(/<[^>]+>/g,' ');
@@ -4298,7 +4298,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   {const P=(Array.isArray(d.live)?d.live:[]).map(p=>({imgs:p&&p.imgs,t:String(p&&p.text||'').replace(/[<>"'`&\\]/g,'').replace(/\s+/g,' ').trim().slice(0,280),at:Date.parse(p&&p.at),img:SCDN(safeUrl(p&&p.img),640)})).filter(p=>p.img&&p.at>Date.now()-864e5).sort((a,b)=>b.at-a.at);
    if(P.length){const k=DROPS.findIndex(x=>x.id===v.id);if(k>=0)DROPS.splice(k,1);const mins=at=>Math.max(0,Math.round((Date.now()-at)/6e4));
      const SL=[];P.slice().reverse().forEach(p=>{const im=(Array.isArray(p.imgs)&&p.imgs.length?p.imgs:[p.img]).map(safeUrl).filter(Boolean).slice(0,10).map(function(u){return SCDN(back0(u),640);});im.forEach(u=>SL.push({img:u,t:p.t||(v.tag||'Fresh from '+v.name),m:mins(p.at)}));});
-     DROPS.unshift({id:v.id,t:P[0].t||(v.tag||'Fresh from '+v.name),m:mins(P[0].at),img:P[0].img,slides:SL,real:1});
+     DROPS.unshift({id:v.id,t:P[0].t||(v.tag||'Fresh from '+v.name),m:mins(P[0].at),at:P[0].at,raw:P[0].t||'',img:P[0].img,slides:SL,real:1});
      try{if(CUR.t==='live'&&!CUR.s){LVLIST=null;$('#mPage').innerHTML=m2Page('live');}}catch(_){}}}
   v.live=1;v.real=1;v.tier=v.id==='foodhunt'?'verified':'listed';try{placeVendors();}catch(e){}redraw();});}).catch(()=>{});
 const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Thanks for messaging ${vv.name}. What would you like today?`;};
@@ -4310,7 +4310,7 @@ const hm=at=>new Date(at||Date.now()).toLocaleTimeString('en-US',{hour:'numeric'
 function hist(){if(!(window.USER&&USER.wa)||!ON)return;
   fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages?acct=1&vid='+vid+'&since=0',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(!j||busy)return;got=1;
     const L=TALK[v.id]=[];SEEN.clear();
-    (j.messages||[]).forEach(m=>{last=Math.max(last,m.at||0);if(m.role==='visitor'){L.push({me:1,t:esc(m.text),tm:hm(m.at)});return;}
+    (j.messages||[]).forEach(m=>{last=Math.max(last,m.at||0);if(m.role==='visitor'){const it={me:1,t:esc(m.text),tm:hm(m.at)};if(m.live&&m.live.t)it.lv={t:esc(m.live.t),img:safeUrl(m.live.img||'')||'',at:+m.live.at||0};L.push(it);return;}
       SEEN.add((m.at||0)+'|'+(m.text||'')+'|'+(m.img||''));
       const t=m.img&&safeUrl(m.img)?`<img src="${esc(safeUrl(m.img))}" alt="" style="display:block;max-width:220px;border-radius:10px">${m.caption?'<br>'+html(m.caption):''}`:html(m.text);if(t)L.push({t,tm:hm(m.at)});});
     if(CUR&&CUR.s==='talk'&&CUR.id===v.id)mTalkRender(v.id);}).catch(()=>{});}
@@ -4323,9 +4323,9 @@ function push(ms){const L=TALK[v.id]=TALK[v.id]||[];let added=false;
   return added;}
 const _send=mTalkSend;mTalkSend=function(id,t){if(id!==v.id||!ON)return _send.apply(this,arguments);
   t=String(t||'').trim();if(!t)return;const L=TALK[id]=TALK[id]||[];const first=!L.some(m=>m.me);
-  L.push({me:1,t:esc(t),tm:now()});if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:now(),n:0});
+  L.push({me:1,t:esc(t),tm:now()});const lv=lvTake(id,L[L.length-1]);if(!CHATS.find(c=>c.id===id))CHATS.unshift({id,t,tm:now(),n:0});
   TYP[id]=1;mTalkRender(id,true);busy=true;
-  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vid,acct:1,text:t,name:(USER&&USER.name)||'',page:'Stafly Search'})})
+  fetch(LIVE.base+'/api/w/'+LIVE.sid+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vid,acct:1,text:t,name:(USER&&USER.name)||'',page:'Stafly Search',live:lv?{t:lv.raw||String(lv.t).replace(/<[^>]+>/g,''),at:lv.at}:undefined})})
    .then(r=>r.json().then(j=>({ok:r.ok,j}))).then(({ok,j})=>{TYP[id]=0;busy=false;
      if(!ok&&j&&j.signin){L.pop();try{if(USER){delete USER.wa;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(_){}mTalkRender(id);authOpen('',{k:'talk',id});return;}
      if(ok){got=1;window.slChats&&setTimeout(slChats,400);}
@@ -11046,5 +11046,38 @@ new MutationObserver(function(){var b=document.body,on=b.classList.contains('m-s
 was=document.body.classList.contains('m-subon');})();
 </script>
 <style>html body #mSub:not(:has(.m-comp)),html body #mSub:not(:has(.m-comp)) *{overflow-anchor:none!important}html body.m2on #mSub .m-foot>.m-bask:first-child{margin-top:18px}</style>
+<script>/* m281: Live post replies */
+window.lqHtml=function(lv){var img=lv.img?'<img src="'+String(lv.img).replace(/"/g,'%22')+'" alt="">':'';
+  return '<span class="lq"><span class="lq-tx"><b>'+(typeof mS==='function'?mS('radio'):'')+'Live post</b><span>'+lv.t+'</span></span>'+img+'</span>';};
+window.lvTake=function(id,msg){var c=LVCTX[id];if(!c||!c.pend||!msg)return null;c.pend=0;try{document.querySelectorAll('#mSub .lq-bar').forEach(function(x){x.remove();});}catch(_){}var d=(typeof DROPS!=='undefined'?DROPS:[]).find(function(x){return x.id===id;});
+  msg.lv={t:c.t,img:c.img||'',at:c.ts||0,raw:d&&d.raw||''};return msg.lv;};
+(function(){var _mt=mTalk;mTalk=function(id){var h=_mt(id),c=LVCTX[id];if(!c||!c.pend)return h;
+  var bar='<div class="lq-bar">'+lqHtml({t:c.t,img:c.img})+'<button type="button" class="lq-x" data-lqx="'+id+'" aria-label="Remove">'+'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+  var i=h.indexOf('<form',h.indexOf('m-comp'));return i<0?h:h.slice(0,i)+bar+h.slice(i);};})();
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lqx]');if(!b)return;e.preventDefault();e.stopPropagation();var c=LVCTX[b.dataset.lqx];if(c)c.pend=0;try{mTalkRender(b.dataset.lqx);}catch(_){}},true);
+</script>
+<style>
+html body.m2on :is(.tb,.msg):has(>.lq){min-width:min(240px,72vw)}
+html body.m2on .lq{display:flex;align-items:center;gap:10px;margin:-1px -3px 7px;padding:7px 7px 7px 10px;border-radius:11px;background:rgba(255,255,255,.07);box-shadow:inset 3px 0 0 #A88BFF;text-align:left}
+html body.m2on .lq-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+html body.m2on .lq-tx b{display:flex;align-items:center;gap:5px;font:600 12.5px/1.2 "DM Sans",system-ui,sans-serif;color:#C9B8FF}
+html body.m2on .lq-tx b svg{width:13px;height:13px;flex:none}
+html body.m2on .lq-tx>span{font:400 13px/1.35 "DM Sans",system-ui,sans-serif;color:rgba(241,237,255,.72);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html body.m2on .lq img{flex:none;width:42px;height:42px;border-radius:8px;object-fit:cover;display:block}
+html body.m2on .lq-bar{display:flex;align-items:center;gap:6px;margin:0 2px 8px;padding:6px 6px 6px 6px;border-radius:16px;background:#1C1C22;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+html body.m2on .lq-bar .lq{flex:1;margin:0;background:transparent}
+html body.m2on .lq-bar .lq-tx>span{-webkit-line-clamp:1;color:rgba(244,243,247,.62)}
+html body.m2on .lq-x{flex:none;width:30px;height:30px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:#F4F3F7;cursor:pointer}
+html body.m2on .lq-x svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+html body.m2on.m-light .lq{background:rgba(117,81,220,.08);box-shadow:inset 3px 0 0 #7551DC}
+html body.m2on.m-light .lq-tx b{color:#6A45D6}
+html body.m2on.m-light .lq-tx>span{color:#5C5C66}
+html body.m2on.m-light .lq-bar{background:#FFFFFF;box-shadow:0 1px 2px rgba(18,18,21,.05),0 4px 16px rgba(18,18,21,.06)}
+html body.m2on.m-light .lq-bar .lq{background:transparent}
+html body.m2on.m-light .lq-x{background:#F1F1F3;color:#121215}
+html body.m2on :is(.tb,.msg) .lq,html body.m2on.m-light :is(.tb,.msg) .lq{background:rgba(0,0,0,.14);box-shadow:inset 3px 0 0 color-mix(in srgb,currentColor 75%,transparent)}
+html body.m2on :is(.tb,.msg) .lq-tx b,html body.m2on.m-light :is(.tb,.msg) .lq-tx b{color:inherit;opacity:.95}
+html body.m2on :is(.tb,.msg) .lq-tx>span,html body.m2on.m-light :is(.tb,.msg) .lq-tx>span{color:inherit;opacity:.78}
+</style>
 </body>
 </html>
