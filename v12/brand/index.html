@@ -3780,7 +3780,7 @@ document.addEventListener('keydown',e=>{if(!document.body.classList.contains('lv
 (function(){const _mb=m2Busy;m2Busy=function(){return _mb()||document.body.classList.contains('lv-on');};})();
 mThread=function(id){const L=TALK[id]||[],c=LVCTX[id],v=vOf(id);
   const q='';
-  const row=m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}${m.lv?' has-lq':''}">${m.lv?lqHtml(m.lv):''}${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`;
+  const row=m=>m.sys?`<div class="m-sys">${m.t}</div>`:`${m.lv?lvrHtml(m.lv,id):''}<div class="tb ${m.me?'me':'them'}">${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`;
   let h='';L.forEach((m,k)=>{if(c&&k===c.at)h+=q;h+=row(m);});if(c&&c.at>=L.length)h+=q;
   return h+(TYP[id]?'<div class="tb them typ"><i></i><i></i><i></i></div>':'');};
 (function(){const _mt=mTalk;mTalk=function(id){let h=_mt(id);const c=LVCTX[id],L=TALK[id]||[];
@@ -11046,38 +11046,53 @@ new MutationObserver(function(){var b=document.body,on=b.classList.contains('m-s
 was=document.body.classList.contains('m-subon');})();
 </script>
 <style>html body #mSub:not(:has(.m-comp)),html body #mSub:not(:has(.m-comp)) *{overflow-anchor:none!important}html body.m2on #mSub .m-foot>.m-bask:first-child{margin-top:18px}</style>
-<script>/* m281: Live post replies */
-window.lqHtml=function(lv){var img=lv.img?'<img src="'+String(lv.img).replace(/"/g,'%22')+'" alt="">':'';
-  return '<span class="lq"><span class="lq-tx"><b>'+(typeof mS==='function'?mS('radio'):'')+'Live post</b><span>'+lv.t+'</span></span>'+img+'</span>';};
-window.lvTake=function(id,msg){var c=LVCTX[id];if(!c||!c.pend||!msg)return null;c.pend=0;try{document.querySelectorAll('#mSub .lq-bar').forEach(function(x){x.remove();});}catch(_){}var d=(typeof DROPS!=='undefined'?DROPS:[]).find(function(x){return x.id===id;});
+<script>/* m281: Live post replies, story-reply style; tap the post to see it again */
+(function(){
+var esc=function(x){return String(x==null?'':x).replace(/"/g,'&quot;');};
+var RADIO='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.3 18.7a9.5 9.5 0 0 1 0-13.4M18.7 5.3a9.5 9.5 0 0 1 0 13.4"/></svg>';
+function dropOf(id){return (typeof DROPS!=='undefined'?DROPS:[]).find(function(x){return x.id===id;});}
+function art(lv,cls){return lv.img?'<span class="'+cls+'" style="background-image:url(&quot;'+esc(lv.img)+'&quot;)"></span>':'<span class="'+cls+' tx"><i>'+RADIO+'</i><em>'+lv.t+'</em></span>';}
+window.lvrHtml=function(lv,id){var live=!!dropOf(id);
+  return '<div class="lvr"><small>'+(live?'You replied to their Live post':'Replied to a Live post · ended')+'</small><button type="button" class="lvr-card'+(live?'':' gone')+'" data-lvpost="'+esc(id)+'" data-lvt="'+esc(String(lv.t).replace(/<[^>]+>/g,''))+'" aria-label="See the Live post">'+art(lv,'lvr-art')+'</button></div>';};
+window.lqHtml=window.lvrHtml;
+window.lvTake=function(id,msg){var c=LVCTX[id];if(!c||!c.pend||!msg)return null;c.pend=0;try{document.querySelectorAll('#mSub .lq-bar').forEach(function(x){x.remove();});}catch(_){}var d=dropOf(id);
   msg.lv={t:c.t,img:c.img||'',at:c.ts||0,raw:d&&d.raw||''};return msg.lv;};
-(function(){var _mt=mTalk;mTalk=function(id){var h=_mt(id),c=LVCTX[id];if(!c||!c.pend)return h;
-  var bar='<div class="lq-bar">'+lqHtml({t:c.t,img:c.img})+'<button type="button" class="lq-x" data-lqx="'+id+'" aria-label="Remove">'+'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
-  var i=h.indexOf('<form',h.indexOf('m-comp'));return i<0?h:h.slice(0,i)+bar+h.slice(i);};})();
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lqx]');if(!b)return;e.preventDefault();e.stopPropagation();var c=LVCTX[b.dataset.lqx];if(c)c.pend=0;try{mTalkRender(b.dataset.lqx);}catch(_){}},true);
+var _mt=mTalk;mTalk=function(id){var h=_mt(id),c=LVCTX[id];if(!c||!c.pend)return h;
+  var bar='<div class="lq-bar"><button type="button" class="lq-open" data-lvpost="'+esc(id)+'" data-lvt="'+esc(String(c.t).replace(/<[^>]+>/g,''))+'">'+art(c,'lq-art')+'<span class="lq-tx"><b>Replying to their Live post</b><span>'+c.t+'</span></span></button><button type="button" class="lq-x" data-lqx="'+esc(id)+'" aria-label="Remove"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+  var i=h.indexOf('<form',h.indexOf('m-comp'));return i<0?h:h.slice(0,i)+bar+h.slice(i);};
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lqx]');
+  if(b){e.preventDefault();e.stopPropagation();var c=LVCTX[b.dataset.lqx];if(c)c.pend=0;try{mTalkRender(b.dataset.lqx);}catch(_){}return;}
+  var p=e.target.closest&&e.target.closest('[data-lvpost]');if(!p)return;e.preventDefault();e.stopPropagation();
+  var d=dropOf(p.dataset.lvpost);if(!d)return;try{LVLIST=[d];lvOpen(0);var SL=d.slides||[],want=(p.dataset.lvt||'').trim(),k=SL.findIndex(function(x){return String(x.t||'').replace(/<[^>]+>/g,'').trim()===want;});if(k>0){LVS=k;lvShow();}}catch(_){}},true);
+})();
 </script>
 <style>
-html body.m2on :is(.tb,.msg):has(>.lq){min-width:min(240px,72vw)}
-html body.m2on .lq{display:flex;align-items:center;gap:10px;margin:-1px -3px 7px;padding:7px 7px 7px 10px;border-radius:11px;background:rgba(255,255,255,.07);box-shadow:inset 3px 0 0 #A88BFF;text-align:left}
+html body.m2on .lvr{align-self:flex-end;display:flex;flex-direction:column;align-items:flex-end;gap:6px;margin:10px 2px 4px auto;max-width:80%}
+html body.m2on .lvr small{font:500 12px/1.2 "DM Sans",system-ui,sans-serif;color:rgba(244,243,247,.5)}
+html body.m2on .lvr-card{display:block;padding:0;border:0;background:none;cursor:pointer;border-radius:14px;-webkit-tap-highlight-color:transparent}
+html body.m2on .lvr-art{display:flex;flex-direction:column;justify-content:space-between;width:112px;height:168px;border-radius:14px;background:#2A2A31 center/cover no-repeat;box-shadow:0 0 0 1px rgba(255,255,255,.06);overflow:hidden}
+html body.m2on .lvr-card:active .lvr-art{transform:scale(.97)}
+html body.m2on .lvr-card.gone{cursor:default}html body.m2on .lvr-card.gone .lvr-art{opacity:.45}
+html body.m2on :is(.lvr-art,.lq-art).tx{background:linear-gradient(165deg,#8B5371 0%,#4A2C3E 100%);padding:10px;text-align:left}
+html body.m2on :is(.lvr-art,.lq-art).tx i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.18);color:#fff}
+html body.m2on :is(.lvr-art,.lq-art).tx i svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+html body.m2on :is(.lvr-art,.lq-art).tx i svg circle{fill:currentColor;stroke:none}
+html body.m2on .lvr-art.tx em{font:600 13px/1.3 "DM Sans",system-ui,sans-serif;font-style:normal;color:#fff;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+html body.m2on .lq-bar{display:flex;align-items:center;gap:8px;margin:0 2px 8px;padding:8px 8px 8px 8px;border-radius:18px;background:#1C1C22;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+html body.m2on .lq-open{flex:1;min-width:0;display:flex;align-items:center;gap:11px;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer}
+html body.m2on .lq-art{flex:none;width:34px;height:48px;border-radius:7px;background:#2A2A31 center/cover no-repeat}
+html body.m2on .lq-art.tx{padding:0;display:grid;place-items:center}html body.m2on .lq-art.tx em{display:none}
 html body.m2on .lq-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-html body.m2on .lq-tx b{display:flex;align-items:center;gap:5px;font:600 12.5px/1.2 "DM Sans",system-ui,sans-serif;color:#C9B8FF}
-html body.m2on .lq-tx b svg{width:13px;height:13px;flex:none}
-html body.m2on .lq-tx>span{font:400 13px/1.35 "DM Sans",system-ui,sans-serif;color:rgba(241,237,255,.72);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-html body.m2on .lq img{flex:none;width:42px;height:42px;border-radius:8px;object-fit:cover;display:block}
-html body.m2on .lq-bar{display:flex;align-items:center;gap:6px;margin:0 2px 8px;padding:6px 6px 6px 6px;border-radius:16px;background:#1C1C22;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-html body.m2on .lq-bar .lq{flex:1;margin:0;background:transparent}
-html body.m2on .lq-bar .lq-tx>span{-webkit-line-clamp:1;color:rgba(244,243,247,.62)}
+html body.m2on .lq-tx b{font:600 13.5px/1.25 "DM Sans",system-ui,sans-serif;color:#F4F3F7}
+html body.m2on .lq-tx>span{font:400 13px/1.35 "DM Sans",system-ui,sans-serif;color:rgba(244,243,247,.58);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html body.m2on .lq-x{flex:none;width:30px;height:30px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:#F4F3F7;cursor:pointer}
 html body.m2on .lq-x svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
-html body.m2on.m-light .lq{background:rgba(117,81,220,.08);box-shadow:inset 3px 0 0 #7551DC}
-html body.m2on.m-light .lq-tx b{color:#6A45D6}
-html body.m2on.m-light .lq-tx>span{color:#5C5C66}
+html body.m2on.m-light .lvr small{color:#8A8A94}
+html body.m2on.m-light .lvr-art{box-shadow:0 1px 2px rgba(18,18,21,.06),0 6px 18px rgba(18,18,21,.08)}
 html body.m2on.m-light .lq-bar{background:#FFFFFF;box-shadow:0 1px 2px rgba(18,18,21,.05),0 4px 16px rgba(18,18,21,.06)}
-html body.m2on.m-light .lq-bar .lq{background:transparent}
+html body.m2on.m-light .lq-tx b{color:#121215}
+html body.m2on.m-light .lq-tx>span{color:#6B6B75}
 html body.m2on.m-light .lq-x{background:#F1F1F3;color:#121215}
-html body.m2on :is(.tb,.msg) .lq,html body.m2on.m-light :is(.tb,.msg) .lq{background:rgba(0,0,0,.14);box-shadow:inset 3px 0 0 color-mix(in srgb,currentColor 75%,transparent)}
-html body.m2on :is(.tb,.msg) .lq-tx b,html body.m2on.m-light :is(.tb,.msg) .lq-tx b{color:inherit;opacity:.95}
-html body.m2on :is(.tb,.msg) .lq-tx>span,html body.m2on.m-light :is(.tb,.msg) .lq-tx>span{color:inherit;opacity:.78}
 </style>
 </body>
 </html>
