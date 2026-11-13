@@ -4844,9 +4844,11 @@ document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest
 const _tkOld=tkPage;
 tkPage=function(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);if(!o||!d)return _tkOld(ref);
   const v=vOf(o.shop);
-  const pending=d.status!=='paid',declined=d.stage==='declined',k=pending||declined?-1:STEPS.findIndex(x=>x[0]===d.stage),done=d.stage==='delivered';
-  const head=pending?'Waiting for payment':declined?'Not accepted':done?'Received':STEPS[k][1]==='Paid'?'Order received':STEPS[k][1];
-  const sub=pending?'Finish paying to send it to the shop':declined?'You will get your money back':TKLINE[d.stage]||'';
+  const pk=!!(o.pick||d.pickup||d.hall==='Pick up at the shop'),stg=d.stage==='ready'?(pk?'on_the_way':'accepted'):d.stage;
+  const pending=d.status!=='paid',declined=d.stage==='declined',k0=pending||declined?-1:STEPS.findIndex(x=>x[0]===stg),k=k0<0&&!pending&&!declined?0:k0,done=d.stage==='delivered';
+  const PKH={paid:'Order received',accepted:'Getting it ready',on_the_way:'Ready to collect',delivered:'Collected'},PKS={paid:'The shop has your order',accepted:'The shop is getting it ready',on_the_way:'Show your code at the shop',delivered:'Collected with your code'};
+  const head=pending?'Waiting for payment':declined?'Not accepted':pk?PKH[stg]||'Order received':done?'Received':STEPS[k][1]==='Paid'?'Order received':STEPS[k][1];
+  const sub=pending?'Finish paying to send it to the shop':declined?'You will get your money back':pk?PKS[stg]||'':TKLINE[stg]||'';
   const prev=TKSEEN[ref],key=d.stage+'|'+d.status,onIt=!!document.querySelector('#mSub .tkx[data-ref="'+ref+'"]'),fresh=prev===undefined||!onIt,moved=!fresh&&prev!==key;TKSEEN[ref]=key;
   const code=tkCode(ref),cat=(v&&v.cat)||'food';let wm='';try{const t=document.createElement('div');t.innerHTML=lvPh(v||{cat});const q=t.querySelector('i svg');wm=q?q.outerHTML:'';}catch(_){}
   const seg=pending||declined?'':`<div class="tkx-seg">${STEPS.map((s,i)=>`<i class="${i<k||done?'on':i===k?'on cur':''}"><b></b></i>`).join('')}</div>`;
@@ -10386,6 +10388,7 @@ function stopR(){if(!R)return;try{R.mk.remove();}catch(e){}R=null;try{map.getSou
 var pollAt=0;
 function riderTick(){var X=O();if(!X||!X.MINE)return;var MINE=X.MINE,tkFetch=X.tkFetch;
   if(Date.now()-pollAt>30000){pollAt=Date.now();try{MINE.slice(0,5).forEach(function(o){if(!o.demo&&Date.now()-o.at<3*3600e3&&stageOf(o)!=='delivered')tkFetch(o.ref);});}catch(e){}}
+  if(!window.RIDER_LIVE){if(R)stopR();return;}
   var hit=null;for(var i=0;i<MINE.length&&i<10;i++){var o=MINE[i],st=stageOf(o);if(st==='on_the_way'||(st==='delivered'&&R&&R.ref===o.ref)){hit={o:o,st:st};break;}}
   if(!hit){if(R&&!R.done)stopR();return;}
   var v=null;try{v=vOf(hit.o.shop);}catch(e){}if(!v||!v.ll)return;
