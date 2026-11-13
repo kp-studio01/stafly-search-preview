@@ -4762,7 +4762,7 @@ function dlvHtml(v,G){const f=fee(v),m=CK.mode||'solo',gs=G.find(g=>g.id===m),lo
 function ckFix(v){const pk=!!(v&&v.real&&v.pickup);if(pk&&!v.deliv)CK.mode='pick';else if(CK.mode==='pick'&&!pk)CK.mode='solo';}
 window.ckNone=v=>!!(v&&isReal(v)&&v.real&&!v.deliv&&!v.pickup);
 function ckPage(v){ckFix(v);const L=lines(v),G=groupsFor(v),d=delivery(v),tot=sub(v)+d;
-  if(!L.length)return`<div class="m-h c">${back()}<h1>Basket</h1><span style="width:46px"></span></div><div class="m-empty"><span class="ei">${mS('bag')||''}</span><b>Your basket is empty</b>Add something from ${v.name}'s menu.</div>`;
+  if(!L.length)return`<div class="m-h c">${back()}<h1>Basket</h1><span style="width:46px"></span></div><div class="m-empty"><span class="ei">${S('<path d="M6 8h12l-1 11.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 19.5z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>')}</span><b>Your basket is empty</b>Add something from ${v.name}.<button type="button" class="m-pay ck-browse" data-mall="${v.id}">Browse products</button></div>`;
   const opt=(id,b,sp,em,was)=>`<button type="button" class="ck-o${CK.mode===id?' on':''}" data-ckmode="${id}"><span class="rd"></span><div><b>${b}</b><span>${sp}</span></div><em>${em}${was?`<s>${was}</s>`:''}</em></button>`;
   const hallKeys=HALLS.filter(h=>h[0]!=='off').map(h=>h[1]+(h[0]==='pg'?'':' Hall')).concat(PLACES_EXTRA);
   return`<div class="m-h c">${back()}<h1>Checkout</h1><span style="width:46px"></span></div>
@@ -4838,7 +4838,7 @@ function tkArt(v,d,wm){let P='';try{const L=(d.items||[]);for(const i of L){cons
 window.ckQ=function(o){if(o.q&&Object.keys(o.q).length)return o.q;const v=vOf(o.shop),d=(typeof TK!=='undefined'&&TK[o.ref])||{},its=d.items||o.items||[],q={};if(!v)return null;its.forEach(i=>{const n=String(i.name||'').trim().toLowerCase(),k=v.items.findIndex(x=>String(x[0]).trim().toLowerCase()===n);if(k>=0)q[k]=(q[k]||0)+Math.max(1,Number(i.qty)||1);});if(Object.keys(q).length){o.q=q;try{sv('stafly_orders',MINE.slice(0,20));}catch(_){}return q;}return null;};
 window.ckBack=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;ckQ(o);const v=vOf(o.shop);if(!v||!o.q||!Object.keys(o.q).length)return false;CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);try{CK.mode=o.gmode||'solo';}catch(_){}m2Nav({t:'places',s:'cart',id:o.shop});return true;};
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckgo]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckBack(a.dataset.ckgo))ckProd(a.dataset.ckgo);},true);
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ckclear]');if(!b)return;e.preventDefault();e.stopPropagation();CART={shop:null,q:{}};sv('stafly_cart',CART);m2Nav({t:CUR.t||'places',s:'shop',id:b.dataset.ckclear});},true);
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ckclear]');if(!b)return;e.preventDefault();e.stopPropagation();CART={shop:null,q:{}};sv('stafly_cart',CART);try{rer();}catch(_){m2Nav({t:CUR.t||'places',s:'cart',id:b.dataset.ckclear});}},true);
 window.ckProd=function(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return false;ckQ(o);const v=vOf(o.shop);if(!v)return false;const ks=Object.keys(o.q||{}).filter(k=>o.q[k]>0&&v.items[k]);if(ks.length){CART={shop:o.shop,q:Object.assign({},o.q)};sv('stafly_cart',CART);}try{CK.mode=o.gmode||'solo';}catch(_){}window.ALLQ='';window.MCAT=window.MCAT||{};MCAT[o.shop]='';window.GPFOR='';m2Nav({t:'places',s:'all',id:o.shop});return true;};
 document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('[data-ckback]');if(!a)return;e.preventDefault();e.stopPropagation();if(!ckProd(a.dataset.ckback)){const o=MINE.find(x=>x.ref===a.dataset.ckback);if(o)m2Nav({t:'places',s:'shop',id:o.shop});}},true);
 const _tkOld=tkPage;
@@ -11009,5 +11009,6 @@ html body.m2on.m-light .tk-chg{color:#121215}
 <style>html body.m2on .tk-lk{display:flex;gap:8px;margin:4px 0 14px}html body.m2on .tk-lk .tk-chg{flex:1;margin:0}</style>
 <style>/* m271: short product lists keep the basket bar at the bottom */html body.m2on #mSub .al-grid{min-height:calc(100dvh - 238px);align-content:start}</style>
 <style>html body.m2on .ck-clr{border:0;background:none;padding:0;font:600 14px "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.62);text-decoration:underline;text-underline-offset:3px;cursor:pointer}html body.m2on.m-light .ck-clr{color:#55555E}</style>
+<style>html body.m2on .ck-browse{display:block;width:auto;min-width:200px;margin:22px auto 0;padding:0 28px}</style>
 </body>
 </html>
