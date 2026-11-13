@@ -2930,7 +2930,7 @@ const PINI='<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C
 
 /* Sample vendors. "near" ties each shop to a landmark; off = metres east/north of it. */
 const V=[
- {id:'foodhunt',name:'Foodhunt',mono:'FH',sub:'kitchen',bg:'#FFD7B5',cat:'food',tier:'listed',rating:0,reviews:0,orders:0,near:'moremi',off:[30,-20],place:'',hours:null,deliv:null,wa:'',real:1,noloc:1,
+ {id:'foodhunt',name:'Foodhunt',mono:'FH',sub:'kitchen',bg:'#FFD7B5',cat:'food',tier:'verified',rating:0,reviews:0,orders:0,near:'moremi',off:[30,-20],place:'',hours:null,deliv:null,wa:'',real:1,noloc:1,
   tag:'Test shop on Stafly',about:['Message us and Amara, our assistant, replies right away','Menu and prices below are samples until the real ones are added'],
   items:[['Jollof rice and chicken',2500],['Fried rice and turkey',3000],['Spaghetti and egg',1800],['Chapman',800]],
   rev:[]},
@@ -3501,7 +3501,7 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
     return`<div class="sp-cover">${(v.cover!==undefined?v.cover:v.img)?`<img class="g-photo" src="${v.cover!==undefined?v.cover:v.img}" alt="">`:spNoCover(v)}<span class="g-shade"></span>
       <div class="sp-bar">${back()}<button class="m-circ" type="button" data-mshare="${id}" aria-label="Share">${mS('share')}</button><button class="m-circ" type="button" data-msave="${id}" aria-label="Save">${S(sv?MIF.heart:MI.heart,sv?'i sv':'i')}</button></div></div>
     <div class="sp-head"><span class="sp-logo${d?' live':''}"${d?` data-lvgo="${id}"`:''}>${mLogo(v)}${d?'<em class="sp-lt">Live</em>':''}</span><button type="button" class="sp-follow${fo?' on':''}" data-mfollow="${id}">${fo?mS('check')+'Following':'Follow'}</button></div>
-    <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)}${v.real?(sFol(v,fo)?` · ${fmtK(sFol(v,fo))} follower${sFol(v,fo)===1?'':'s'}`:''):` · ${fmtK(followers(v)+(fo?1:0))} followers`}</div><p>${v.tag?`<b>${v.tag}.</b> `:''}${v.about[0]}.</p></div>
+    <div class="sp-id"><h2>${v.name}${vt(v)}</h2><div class="sp-meta">${rateTxt(v)}${v.real?(sFol(v,fo)?` · ${fmtK(sFol(v,fo))} follower${sFol(v,fo)===1?'':'s'}`:''):` · ${fmtK(followers(v)+(fo?1:0))} followers`}</div><p class="sp-desc">${v.tag?`${v.tag}. `:''}${v.about[0]}.</p><button type="button" class="sp-more" data-spmore hidden>More</button></div>
     <div class="sp-info">${s.k==='na'?'':`<div><b class="${s.k}"><i></i>${s.k==='open'?'Open':s.k==='soon'?'Soon':'Closed'}</b><span>${s.t.replace(/^Open(?!s)\s*/,'').replace(/^’til/,'till').replace(/^'til/,'till')||'today'}</span></div>`}${sKnow(v)?`<div><b>${walk(v)} min</b><span>${dtxt(v)} walk</span></div>`:''}${v.deliv?`<div><b>${sDel(v)}</b><span>delivery</span></div>`:(v.pickup||!v.real)?`<div><b>Pick up</b><span>only</span></div>`:''}</div>
     
     <div class="m-qa"><button type="button" data-mtalk="${id}">${mS('chat')}Chat</button>${sPin(v)?`<button type="button" data-mdir="${id}">${mS('nav')}Directions</button>`:''}</div>
@@ -4275,8 +4275,9 @@ fetch(LIVE.base+'/api/w/'+LIVE.sid+'/config').then(r=>r.ok?r.json():null).then(c
 /* 1) real details: name, photo, tagline, menu, prices */
 return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).then(d=>{if(!d)return;
   if(clean(d.businessName))v.name=clean(d.businessName);
-  v.tag=clean(d.headline);
-  v.about=['Message us and our assistant replies right away'];const ab=String(d.about||'').split(/\n+|(?<=\.)\s+/).map(x=>clean(x).replace(/\.$/,'')).filter(Boolean).slice(0,2);if(ab.length)v.about=ab;
+  const words=t=>String(t==null?'':t).replace(/'/g,'\u2019').replace(/[<>"`&\\]/g,'').replace(/\s+/g,' ').trim();
+  v.tag=words(d.headline).slice(0,120).replace(/[.!]+$/,'');
+  v.about=['Message us and our assistant replies right away'];{const ab=words(d.about).slice(0,600).replace(/\.$/,'');if(ab)v.about=[ab];}
   if(safeUrl(d.avatar))v.img=SCDN(safeUrl(d.avatar),120);v.cover=SCDN(safeUrl(d.cover),640);
   v.place=clean(d.location);staflyPin(v);staflySpot(v,d);
   const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':SCDN(safeUrl(i.img),600),clean(i.desc||''),clean(i.cat||i.category||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3).map(function(u){return SCDN(u,600);})]);if(it.length)v.items=it.slice(0,30);
@@ -4294,7 +4295,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
      const SL=[];P.slice().reverse().forEach(p=>{const im=(Array.isArray(p.imgs)&&p.imgs.length?p.imgs:[p.img]).map(safeUrl).filter(Boolean).slice(0,10).map(function(u){return SCDN(back0(u),640);});im.forEach(u=>SL.push({img:u,t:p.t||(v.tag||'Fresh from '+v.name),m:mins(p.at)}));});
      DROPS.unshift({id:v.id,t:P[0].t||(v.tag||'Fresh from '+v.name),m:mins(P[0].at),img:P[0].img,slides:SL,real:1});
      try{if(CUR.t==='live'&&!CUR.s){LVLIST=null;$('#mPage').innerHTML=m2Page('live');}}catch(_){}}}
-  v.live=1;v.real=1;v.tier='listed';try{placeVendors();}catch(e){}redraw();});}).catch(()=>{});
+  v.live=1;v.real=1;v.tier=v.id==='foodhunt'?'verified':'listed';try{placeVendors();}catch(e){}redraw();});}).catch(()=>{});
 const _mr=mReply;mReply=function(vv){return _mr.apply(this,arguments)||`Hi! Thanks for messaging ${vv.name}. What would you like today?`;};
 /* 2) real chat with Amara through Stafly's website-chat line */
 let vid='';try{vid=localStorage.getItem('stafly_vid')||'';}catch(e){}
@@ -10959,5 +10960,17 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub :is(.m-li.pf-ro,
 </script>
 <style>#mSub .sp-info:empty,#mSub .sp-info:not(:has(>div)){display:none!important}#mSub .m-qa>button:only-child{grid-column:1/-1;flex:1 1 100%}</style>
 <script>/* m259: send your follows once after load so the shop counts are right */setTimeout(function(){try{if(window.USER&&USER.wa&&FOLLOW.size)profPush({});}catch(_){}},5000);</script>
+<style>
+html body.m2on .sp-id p.sp-desc.open{display:block;-webkit-line-clamp:unset;overflow:visible}
+html body.m2on .sp-more{display:inline-block;margin:6px 0 0;padding:0;border:0;background:none;font:inherit;font-size:14px;font-weight:600;color:#F4F3F7;cursor:pointer}
+html body.m2on .sp-more[hidden]{display:none}
+html body.m2on.m-light .sp-more{color:#121215}
+</style>
+<script>/* m260: show More only when the description is cut */
+(function(){function chk(){var p=document.querySelector('#mSub .sp-desc'),b=document.querySelector('#mSub [data-spmore]');if(!p||!b||p.classList.contains('open'))return;b.hidden=!(p.scrollHeight>p.clientHeight+2);}
+var sub=document.getElementById('mSub');if(sub)new MutationObserver(function(){requestAnimationFrame(chk);}).observe(sub,{childList:true});
+addEventListener('resize',chk);
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#mSub [data-spmore]');if(!b)return;e.preventDefault();e.stopPropagation();var p=document.querySelector('#mSub .sp-desc');if(!p)return;var o=p.classList.toggle('open');b.textContent=o?'Less':'More';},true);})();
+</script>
 </body>
 </html>
