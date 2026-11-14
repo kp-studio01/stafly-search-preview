@@ -11345,5 +11345,24 @@ html body.m2on.m2on.m2on .pf-av:has(.sf-face),html body.m2on.m2on.m2on #mDrawer 
 html body.m2on.m2on.m2on .rv-av:has(.sf-face),html body.m2on.m2on.m2on .ak-in:has(.sf-face){overflow:hidden!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on .youwrap .yc .sf-face svg{margin:0!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on .youwrap .yc:has(.sf-face){display:block!important}
+</style><script>
+/* m299: opening a page from the side menu: the page slides in over the menu, the map screen behind never flashes */
+(function(){var B=document.body,t1,t2;
+addEventListener('click',function(e){var x=e.target.closest&&e.target.closest('#mDrawer [data-msub]');if(!x)return;
+  clearTimeout(t1);clearTimeout(t2);B.classList.remove('m-dsub2');B.classList.add('m-dsub');
+  t1=setTimeout(function(){B.classList.add('m-dsub2');B.classList.remove('m-dsub');t2=setTimeout(function(){B.classList.remove('m-dsub2');},80);},650);},true);
+})();
+</script><style>
+/* m299 */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-dsub #mSub{z-index:1520!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-dsub #mDrawer{transform:none!important;transition:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-dsub #mScrim{opacity:1!important;transition:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-dsub2 #mDrawer,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-dsub2 #mScrim{transition:none!important}
+/* dark mode: category tiles in the dark card look, colour only in the glow and the picture */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mSub .cg2-t{background:radial-gradient(70% 90% at 100% 100%,color-mix(in srgb,var(--c) 34%,transparent),transparent 70%),#141418!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mSub .cg2-t small{color:rgba(255,255,255,.55)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mSub .cg2-t em{background:color-mix(in srgb,var(--c) 24%,transparent)!important;color:color-mix(in srgb,var(--c) 55%,#fff)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mSub .cg2-t em.z{background:rgba(255,255,255,.08)!important;color:rgba(255,255,255,.6)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mSub .cg2-a{filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))!important}
 </style></body>
 </html>
