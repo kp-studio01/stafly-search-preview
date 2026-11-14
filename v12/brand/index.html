@@ -11318,5 +11318,55 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage
 /* m294: product category chips: picked chip keeps the same clean outline as the others; no clipped shadow */
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .mi-cats{padding:2px 16px!important;margin:-2px -16px 14px!important;scroll-padding:0 16px}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light .mi-cats button.on,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light [data-micat].on{background:#fff!important;color:#121215!important;border:1px solid rgba(0,0,0,.14)!important;box-shadow:none!important}
+</style><script>
+/* m296: All categories as colour tiles (big icon in the corner, count tag); types for the picked group show under the tiles */
+(function(){
+var COL={food:'#E9A825',fashion:'#6C72E8',beauty:'#D9658A',services:'#8A9BAE',health:'#46B074',gadgets:'#4BB0E0',printing:'#6E9CF5',study:'#8C6CF0',places:'#B99572'};
+var SPAN={food:2,gadgets:2,places:2};
+function build(sh){if(!sh||sh.querySelector('.ct-grid'))return;var grps=[].slice.call(sh.querySelectorAll('.grp'));if(!grps.length)return;
+  var tiles='',ty='';
+  grps.forEach(function(g){var b=g.querySelector('[data-cg]');if(!b)return;var k=b.dataset.cg,ic=b.querySelector('i'),em=b.querySelector('em'),lab='';
+    b.childNodes.forEach(function(n){if(n.nodeType===3)lab+=n.textContent;});lab=lab.trim();var cnt=em?em.textContent.trim():'';
+    var tps=g.querySelector('.tps'),names=tps?[].map.call(tps.querySelectorAll('.tp'),function(x){return x.textContent;}):[];
+    var svg=ic?ic.innerHTML:'';
+    tiles+='<button type="button" class="ct-t'+(b.classList.contains('on')?' on':'')+(SPAN[k]?' w':'')+'" data-cg="'+k+'" style="--c:'+(COL[k]||'#8A9BAE')+'"><b>'+lab+'</b>'+(SPAN[k]&&names.length?'<small>'+names.slice(0,2).join(', ')+'</small>':'')+'<em class="'+(/soon/i.test(cnt)?'z':'')+'">'+(/soon/i.test(cnt)?'Soon':cnt)+'</em><span class="ct-ic">'+svg+'</span><span class="ct-ic2">'+svg+'</span><i class="ct-ck"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i></button>';
+    ty+='<div class="ct-tg" data-ctg="'+k+'"><div class="ct-tl">'+lab+'</div>'+(tps?tps.outerHTML:'')+'</div>';});
+  grps.forEach(function(g,i){if(i)g.remove();});
+  var box=document.createElement('div');box.innerHTML='<div class="ct-grid">'+tiles+'</div><div class="ct-ty">'+ty+'</div>';
+  grps[0].replaceWith.apply(grps[0],[].slice.call(box.childNodes));sync(sh);}
+function sync(sh){var on={};[].forEach.call(sh.querySelectorAll('.ct-t'),function(t){if(t.classList.contains('on'))on[t.dataset.cg]=1;});
+  [].forEach.call(sh.querySelectorAll('.ct-tg'),function(g){g.classList.toggle('show',!!on[g.dataset.ctg]||!!g.querySelector('.tp.on'));});}
+var mo=new MutationObserver(function(){var sh=document.getElementById('catSheet');if(sh&&!sh._ct){sh._ct=1;new MutationObserver(function(ms){if(!sh.querySelector('.ct-grid'))build(sh);else sync(sh);}).observe(sh,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});build(sh);}});
+mo.observe(document.body,{childList:true});
+})();
+</script><style>
+/* m296 category tiles */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 4px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t{position:relative;overflow:hidden;display:flex!important;flex-direction:column;justify-content:flex-start!important;align-items:flex-start!important;height:118px;padding:14px!important;border:0!important;border-radius:22px!important;text-align:left;color:#fff!important;cursor:pointer;
+ background:radial-gradient(120% 100% at 0% 0%,rgba(255,255,255,.18),transparent 55%),linear-gradient(160deg,color-mix(in srgb,var(--c) 92%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 82%,#000))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)!important;transition:transform .15s}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t:active{transform:scale(.97)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t.w{grid-column:span 2}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t b{position:relative;z-index:2;display:block;font:600 16px/1.2 "DM Sans",system-ui,sans-serif;letter-spacing:-.01em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t small{position:relative;z-index:2;display:block;margin-top:4px;max-width:60%;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;font:500 12.5px/1.35 "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.85)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t em{position:absolute;z-index:2;left:14px;bottom:13px;height:22px;padding:0 8px;border-radius:7px;display:flex;align-items:center;font:700 11.5px/1 "DM Sans",system-ui,sans-serif;font-style:normal;color:#121215;background:#FFDB3D;opacity:1!important;margin:0!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t em.z{background:rgba(255,255,255,.28);color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic2{position:absolute;right:-18px;bottom:-16px;width:80px;height:80px;transform:rotate(-14deg);pointer-events:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t.w .ct-ic,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t.w .ct-ic2{width:118px;height:118px;right:-6px;bottom:-26px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic svg,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic2 svg{width:100%!important;height:100%!important;fill:none;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic2 svg{stroke:rgba(255,255,255,.6)!important;stroke-width:1.6!important}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic2{opacity:1!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic{filter:blur(6px);opacity:.55;transform:translate(6px,6px) rotate(-14deg)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic svg{stroke:color-mix(in srgb,var(--c) 55%,#000);stroke-width:3.4}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic2 svg *{fill:rgba(255,255,255,.14)!important;stroke:inherit!important}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ic svg *{fill:none!important;stroke:inherit!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ck{position:absolute;z-index:3;top:12px;right:12px;width:24px;height:24px;border-radius:50%;background:#fff;display:none;place-items:center}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ck svg{width:15px;height:15px;fill:none;stroke:#121215;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t.on{box-shadow:inset 0 0 0 3px #fff,inset 0 1px 0 rgba(255,255,255,.22)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #catSheet .ct-t.on{box-shadow:0 0 0 2px #fff,0 0 0 4px #121215!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t.on .ct-ck{display:grid}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-ty{margin-top:6px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-tg{display:none;padding:14px 0 4px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-tg.show{display:block}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-tl{font:600 15px/1.2 "DM Sans",system-ui,sans-serif;margin-bottom:10px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-tg .tps{padding-left:0!important;margin-top:0!important}
+@media (max-width:360px){html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #catSheet .ct-t b{font-size:14.5px}}
 </style></body>
 </html>
