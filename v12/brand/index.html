@@ -8787,7 +8787,13 @@ function list(){var L=ASKS.filter(function(a){return AKT!=='mine'||SENT[a.id||(a
   if(AKC)L=L.filter(function(a){return a.c===AKC;});
   if(AKQ.trim()){var q=AKQ.trim().toLowerCase();L=L.filter(function(a){return(a.t+' '+a.h+' '+cl(a.c)).toLowerCase().indexOf(q)>=0;});}
   return L;}
-function card(a){var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
+function myCard(a){var id=a.id||(a.n+a.m),R=a.R||[];
+  var meta=[ago(a.m),a.b?'Up to ₦'+a.b.toLocaleString('en-US'):'',a.h&&a.h!=='On campus'?a.h:''].filter(Boolean).map(esc).join(' · ');
+  var rows=R.map(function(r){return'<div class="ak-rr"><div class="ak-rrm"><b>'+esc(r[0])+(r[6]&&NEWK[r[6]]?'<em class="ak-nw">New</em>':'')+'</b><p>'+esc(r[3])+'</p></div><div class="ak-rrr"><strong>₦'+(+r[2]||0).toLocaleString('en-US')+'</strong><button type="button" class="ak-rc" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div>';}).join('');
+  return'<div class="ak-my"><div class="ak-myh"><span class="ak-pi">'+icon(a.c)+'</span><div class="ak-myt"><b>'+esc(a.t)+'</b><small>'+meta+'</small></div></div>'+
+   (R.length?'<div class="ak-myl">'+(R.length===1?'1 reply':R.length+' replies')+'</div>'+rows:'<div class="ak-my0">No replies yet</div>')+
+   '<div class="ak-myf"><button type="button" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="pri" data-akdone="'+esc(id)+'">I found it</button></div></div>';}
+function card(a){if(a.me)return myCard(a);var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
   return'<div class="g-card lv-card ak-card"><div class="g-media lv-media g-poster">'+(window.gArt?gArt({cat:a.c,name:'',id:'',place:''}):'')+'<span class="g-shade"></span>'+
    '<span class="g-tag'+(a.m<=30?' hot':'')+'">'+(a.m<=30?'<i class="lvd"></i>New':mS('clock')+ago(a.m))+'</span><span class="g-time">'+cl(a.c)+'</span>'+
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div>'+(a.b?'<span class="ak-bd">Budget ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'</div></div>'+
@@ -8800,7 +8806,7 @@ function card(a){var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
 function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'You haven’t replied to anyone yet.':'Nothing here yet. Be the first to post.')+'</div>';return L.map(card).join('');}
 function sw(){return'<div class="lv-tabs ak-sw'+(ROLE!=='seller'&&UNS>0&&AKM!=='need'?' ak-sdot':'')+'"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
 function buyerPage(head){if(liveNow())markSeen();else countNew();setTimeout(akDots,0);setTimeout(loadPast,0);
-  return head+sw()+pv()+'<div class="ak-bh"><b>Can’t find something?</b><span>Tell shops what you need. Only verified shops see it, and they reply here.</span></div>'+cmpH(true)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div><div id="akPast">'+pastHtml()+'</div>';}
+  return head+sw()+pv()+'<div class="ak-bh"></div>'+cmpH(true)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div><div id="akPast">'+pastHtml()+'</div>';}
 var PAST=[],PASTOPEN={},LOADP=0;
 function pdate(t){try{return new Date(+t).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch(_){return'';}}
 var PSL={found:'Found',closed:'Closed',ended:'Ended'};
@@ -11223,5 +11229,36 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-p
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-ps.s-found{background:#E7F7EC;color:#15803D}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-ag{background:#F1F1F3!important;color:#121215!important}
 body.m-guest #akPast{display:none!important}
+</style><style>
+/* m287: tidy own-post card */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-bh{display:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage #akList{display:flex;flex-direction:column;gap:12px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-my{border-radius:20px;overflow:hidden}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myh{display:flex;gap:12px;align-items:flex-start;padding:16px 16px 14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-my .ak-pi{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-my .ak-pi svg{width:19px;height:19px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myt{flex:1;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myt b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;font-weight:600;line-height:1.35}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myt small{display:block;margin-top:4px;font-size:13px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myl{padding:0 16px 2px;font-size:13px;font-weight:600;opacity:.55}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-my0{padding:0 16px 14px;font-size:14px;opacity:.5}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rr{display:flex;gap:12px;align-items:center;margin:0 16px;padding:12px 0;border-top:1px solid rgba(255,255,255,.07)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myl+.ak-rr{border-top:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rrm{flex:1;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rrm b{display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:600}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rrm p{margin:2px 0 0;font-size:13.5px;line-height:1.4;opacity:.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-nw{font-style:normal;font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:#7551DC;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rrr{flex:none;display:flex;align-items:center;gap:10px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rrr strong{font-size:14.5px;font-weight:600}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rc{height:34px!important;width:auto!important;min-width:0!important;padding:0 14px!important;border:0!important;border-radius:17px!important;font:600 13.5px "DM Sans",sans-serif!important;box-shadow:none!important;cursor:pointer;background:#7551DC!important;color:#fff!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myf{display:flex;border-top:1px solid rgba(255,255,255,.07)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myf button{flex:1;height:48px!important;width:auto!important;min-width:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font:500 14.5px "DM Sans",sans-serif!important;color:inherit;opacity:.7;cursor:pointer}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myf button+button{border-left:1px solid rgba(255,255,255,.07)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-myf button.pri{opacity:1;font-weight:600!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-my{background:#0E0E11;box-shadow:0 0 0 1px rgba(255,255,255,.07);color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-my .ak-pi{background:#16161A}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-my{background:#fff;box-shadow:0 0 0 1px #ECECEF;color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-my .ak-pi{background:#F3F3F5}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-rr,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-myf,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-myf button+button{border-color:#EEEEF1!important}
 </style></body>
 </html>
