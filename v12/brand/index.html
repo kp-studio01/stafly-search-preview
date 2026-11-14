@@ -8813,7 +8813,7 @@ function card(a){if(a.me)return myCardC(a);var id=a.id||(a.n+a.m),done=SENT[id],
 function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'You haven’t replied to anyone yet.':'Nothing here yet. Be the first to post.')+'</div>';return L.map(card).join('');}
 function sw(){return'<div class="lv-tabs ak-sw'+(ROLE!=='seller'&&UNS>0&&AKM!=='need'?' ak-sdot':'')+'"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
 function buyerPage(head){if(liveNow())markSeen();else countNew();setTimeout(akDots,0);setTimeout(loadPast,0);
-  return head+sw()+pv()+'<div class="ak-bh"><b>Can’t find something?</b><span>Tell shops what you need. Only verified shops see it, and they reply here.</span></div>'+cmpH(true)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div><div id="akPast">'+pastHtml()+'</div>';}
+  return head+sw()+pv()+'<div class="ak-bh ak-bh0"></div>'+cmpH(false)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div><div id="akPast">'+pastHtml()+'</div>';}
 var PAST=[],PASTOPEN={},LOADP=0;
 function pdate(t){try{return new Date(+t).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch(_){return'';}}
 var PSL={found:'Found',closed:'Closed',ended:'Ended'};
@@ -8833,11 +8833,12 @@ function mineCard(a){var R=a.R||[],n=R.length;
    '<p class="ak-mq">'+esc(a.t)+'</p><div class="ak-mm">'+(a.b?'<span>'+mS('tag')+'Up to ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'<span>'+mS('pin')+esc(a.h)+'</span></div>'+
    '<div class="ak-os"><div class="ak-osh">'+(n?n+(n===1?' reply':' replies'):'No replies yet')+'</div>'+(n?off:'<p class="ak-wt">Shops that sell this will see it soon. Replies show up here.</p>')+'</div>'+
    '<div class="ak-mf"><button type="button" class="ak-mx" data-akclose="'+esc(a.id)+'">Close post</button><button type="button" class="ak-md" data-akdone="'+esc(a.id)+'">I found it</button></div></div>';}
-function cmpH(open){return '<div class="ak-wrap'+(open?' open':'')+'"><div class="ak-cmp" data-aknew="1"><span class="logo mlg">'+mS('search')+'</span><div><b>Can’t find it?</b><small>Post it and shops will reply.</small></div><button type="button" class="g-go">Post<i>'+mS('arrow')+'</i></button></div>'+
+var PLUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+function cmpH(open){return '<div class="ak-wrap'+(open?' open':'')+'"><div class="ak-cmp" data-aknew="1"><span class="logo mlg">'+mS('search')+'</span><div><b>Can’t find it?</b><small>Post it and shops will reply.</small></div><button type="button" class="g-go ak-mk"><i>'+PLUS+'</i>Create</button></div>'+
    '<div class="ak-form"><b>What do you need?</b><textarea maxlength="160" placeholder="e.g. Type-C charger before 6pm"></textarea>'+
    '<div class="ak-cts">'+CATS.map(function(c,i){return'<button type="button" data-akpc="'+c[0]+'" class="'+(i===0?'on':'')+'">'+c[1]+'</button>';}).join('')+'</div>'+
    '<div class="ak-rows"><div class="ak-row"><i>'+mS('pin')+'</i><input type="text" class="ak-hall" maxlength="80" placeholder="Where? Hall, faculty or any address" value="'+esc(myPlace())+'" autocomplete="street-address"><button type="button" class="ak-loc" data-akloc="1" aria-label="Use my location"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="7.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg></button></div><div class="ak-row"><i class="ak-nr">₦</i><input type="text" class="ak-bud" inputmode="numeric" placeholder="Budget (optional)"></div></div>'+
-   '<div class="g-act"><button type="button" class="g-ghost" data-akno="1">Clear</button><button type="button" class="g-go" data-akpost="1">Post it<i>'+mS('arrow')+'</i></button></div></div></div>';}
+   '<div class="g-act"><button type="button" class="g-ghost" data-akno="1">Cancel</button><button type="button" class="g-go" data-akpost="1">Post it<i>'+mS('arrow')+'</i></button></div></div></div>';}
 function pv(){if(SHOP||!/[?&]preview=1/.test(location.search))return'';return'<div class="ak-pv"><span>Preview</span><button type="button" data-akrole="buyer" class="'+(ROLE==='buyer'?'on':'')+'">View as buyer</button><button type="button" data-akrole="seller" class="'+(ROLE==='seller'?'on':'')+'">View as seller</button></div>';}
 function needPage(head){
   var circ='<div class="lv-row lv2">'+CATS.map(function(c){return'<button type="button" class="lv-st ak-ct'+(AKC===c[0]?' on':'')+'" data-akcat="'+c[0]+'"><span class="rg"><span class="logo mlg">'+icon(c[0])+'</span></span><em>'+c[1]+'</em></button>';}).join('')+'</div>';
@@ -8910,12 +8911,12 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   if(x.dataset.aktab){AKT=x.dataset.aktab;[].forEach.call(document.querySelectorAll('#mPage [data-aktab]'),function(b){b.classList.toggle('on',b===x);});return relist();}
   if(x.dataset.akcat){AKC=AKC===x.dataset.akcat?'':x.dataset.akcat;[].forEach.call(document.querySelectorAll('#mPage [data-akcat]'),function(b){b.classList.toggle('on',b.dataset.akcat===AKC);});return relist();}
   if(x.dataset.aknew){w.classList.add('open');var ta=w.querySelector('textarea');if(ta&&window.innerWidth>820)ta.focus();return;}
-  if(x.dataset.akno){w.querySelector('textarea').value='';if(ROLE==='seller')w.classList.remove('open');return;}
+  if(x.dataset.akno){w.querySelector('textarea').value='';w.querySelector('.ak-bud').value='';var er1=w.querySelector('.ak-er');if(er1)er1.remove();w.classList.remove('open');return;}
   if(x.dataset.akpc){[].forEach.call(w.querySelectorAll('[data-akpc]'),function(b){b.classList.toggle('on',b===x);});return;}
   if(x.dataset.akpost){var ta2=w.querySelector('textarea'),tx=ta2.value.trim();if(!tx){ta2.focus();return;}if(ROLE!=='seller'&&!(window.USER&&USER.wa)){authOpen('Sign in with WhatsApp to post, so shops know you’re a real student.',{k:'ask'});return;}var pc=w.querySelector('[data-akpc].on');
     var np={id:'me'+Date.now(),n:'You',h:w.querySelector('.ak-hall').value.trim()||'On campus',m:0,t:tx,c:pc?pc.dataset.akpc:'services',b:parseInt(w.querySelector('.ak-bud').value.replace(/\D/g,''),10)||0,o:0,me:1};
     if(x.disabled)return;x.disabled=true;var er0=w.querySelector('.ak-er');if(er0)er0.remove();
-    api('/api/search/asks',{vid:vidG(),text:np.t,cat:np.c,hall:np.h,budget:np.b,name:(window.CK&&CK.name)||''}).then(function(d){np.id=d.id;try{localStorage.setItem('stafly_has_asks','1');}catch(_){}MINEASK.unshift(np);ta2.value='';ta2.style.height='';x.disabled=false;buyerList();loadMine();})
+    api('/api/search/asks',{vid:vidG(),text:np.t,cat:np.c,hall:np.h,budget:np.b,name:(window.CK&&CK.name)||''}).then(function(d){np.id=d.id;try{localStorage.setItem('stafly_has_asks','1');}catch(_){}MINEASK.unshift(np);ta2.value='';ta2.style.height='';w.querySelector('.ak-bud').value='';w.classList.remove('open');x.disabled=false;buyerList();loadMine();})
       .catch(function(e){x.disabled=false;if(e.status===401){try{if(window.USER){delete USER.wa;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(_){}authOpen('Sign in with WhatsApp to post, so shops know you’re a real student.',{k:'ask'});return;}if(e.status===400||e.status===429){akErr(w.querySelector('.ak-form'),e.message);return;}MINEASK.unshift(np);ta2.value='';buyerList();});
     return;}
   if(x.dataset.akhas){var k=x.dataset.akhas;OPEN={};OPEN[k]=1;relist();var c=document.querySelector('#mPage .ak-rb');if(c){var pv0=SENT[k];if(pv0){c.querySelector('.ak-pp').value=pv0.p?pv0.p.toLocaleString('en-US'):'';var tm=c.querySelector('.ak-pm');tm.value=pv0.m||'';tm.style.height='auto';tm.style.height=tm.scrollHeight+'px';}c.scrollIntoView({block:'center',behavior:'smooth'});var ip=c.querySelector('.ak-pp');if(window.innerWidth>820)ip.focus();}return;}
@@ -11302,5 +11303,16 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-l
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-pl{border-radius:28px!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-pl{box-shadow:0 0 0 1px rgba(255,255,255,.05)!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-pl{box-shadow:0 0 0 1px rgba(18,18,21,.05),0 8px 20px rgba(18,18,21,.08)!important}
+</style><style>
+/* m293: Create bar opens the form; your post body sits on its own surface */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-bh0{display:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-cmp{padding:14px 14px 14px 16px!important;margin:4px 0 22px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-cmp b{font-size:16px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mk{display:inline-flex!important;align-items:center;gap:6px;height:42px!important;padding:0 18px 0 14px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mk i{display:inline-flex;width:18px;height:18px;margin:0!important;background:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mk i svg{width:18px;height:18px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-wrap.open .ak-form{animation:akIn .22s ease-out}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-cc .g-body{background:#17171C!important;border-top:1px solid rgba(255,255,255,.08)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-cc .g-media .g-shade{opacity:.9}
 </style></body>
 </html>
