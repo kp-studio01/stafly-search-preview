@@ -8795,8 +8795,9 @@ function myCardC(a){var id=a.id||(a.n+a.m),R=a.R||[],n=R.length,op=DTOPEN[id];
    '<span class="g-tag'+(a.m<=30?' hot':'')+'">'+(a.m<=30?'<i class="lvd"></i>New':mS('clock')+ago(a.m))+'</span><span class="g-time">'+cl(a.c)+'</span>'+
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div></div></div>';
   var det='';
-  if(op){var rows=n?'<div class="ak-rl">'+R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+(r[6]&&NEWK[r[6]]?'<em class="ak-new">New</em>':'')+'</b><small class="ak-rs">'+esc(r[1]?r[1]+' · ':'')+ago(r[4]).toLowerCase()+'</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+(+r[2]||0).toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div></div>';}).join('')+'</div>':'';
-    det='<div class="ak-dx"><div class="ak-dm"><div>'+mS('pin')+'<span>'+esc(a.h||'On campus')+'</span></div><div>'+mS('clock')+'<span>Posted '+ago(a.m).toLowerCase()+'</span></div>'+(a.b?'<div>'+mS('tag')+'<span>Budget up to ₦'+a.b.toLocaleString('en-US')+'</span></div>':'')+'</div>'+rows+
+  if(op){var best=n?Math.min.apply(null,R.map(function(r){return +r[2]||1e12;})):0;
+    var rows=n?'<div class="ak-ol"><div class="ak-oh">Offers</div>'+R.map(function(r){var low=n>1&&(+r[2]||0)===best;return'<div class="ak-of2"><span class="ak-oi">'+icon(a.c)+'</span><div class="ak-om"><div class="ak-on"><b>'+esc(r[0])+'</b>'+(r[6]&&NEWK[r[6]]?'<em class="ak-nw2">New</em>':'')+'</div><small>'+esc(r[1]?r[1]+' · ':'')+ago(r[4]).toLowerCase()+'</small><p>'+esc(r[3])+'</p></div><div class="ak-or"><strong>₦'+(+r[2]||0).toLocaleString('en-US')+'</strong>'+(low?'<em class="ak-lo">Lowest</em>':'')+'<button type="button" class="ak-oc2" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">'+mS('chat')+'Chat</button></div></div>';}).join('')+'</div>':'<div class="ak-ow">'+mS('clock')+'<span>Shops that sell this will reply here</span></div>';
+    det='<div class="ak-dx"><div class="ak-tiles"><div class="ak-tile ak-tw">'+mS('pin')+'<div><small>Deliver to</small><b>'+esc(a.h||'On campus')+'</b></div></div><div class="ak-tile">'+mS('tag')+'<div><small>Budget</small><b>'+(a.b?'₦'+a.b.toLocaleString('en-US'):'Any')+'</b></div></div><div class="ak-tile">'+mS('clock')+'<div><small>Posted</small><b>'+ago(a.m)+'</b></div></div></div>'+rows+
      '<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div></div>';}
   return'<div class="g-card lv-card ak-card ak-cc'+(op?' on':'')+'">'+media+'<div class="g-body"><button type="button" class="ak-dt" data-akdt="'+esc(id)+'"><b>'+head+'</b><span>'+(op?'Less':'Details')+CHEV+'</span></button>'+det+'</div></div>';}
 function card(a){if(a.me)return myCardC(a);var id=a.id||(a.n+a.m),done=SENT[id],oc=(a.o||0)+(done?1:0);
@@ -11258,5 +11259,48 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-dt span,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-dm div{color:#fff}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-dt b,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-dt span,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-dm div{color:#121215}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-dm{border-top-color:#EEEEF1}
+</style><style>
+/* m292: opened part, premium; edges match the cards above */
+@keyframes akIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-dx{animation:akIn .28s cubic-bezier(.2,.8,.2,1);padding-bottom:14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 18px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-tile{display:flex;align-items:center;gap:12px;min-width:0;padding:12px 14px;border-radius:16px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-tw{grid-column:1/-1}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-tile>svg{flex:none;width:18px;height:18px;opacity:.6}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-tile>div{min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-tile small{display:block;font-size:12px;font-weight:500;opacity:.5;letter-spacing:.01em}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-tile b{display:block;margin-top:2px;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-oh{margin:0 0 4px;font-size:13px;font-weight:600;opacity:.5}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-ol{margin-bottom:16px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-of2{display:flex;gap:12px;padding:14px 0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-of2+.ak-of2{border-top:1px solid rgba(255,255,255,.07)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-oi{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-oi svg{width:19px;height:19px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-om{flex:1;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-on{display:flex;align-items:center;gap:6px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-on b{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-nw2{flex:none;font-style:normal;font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:#7551DC;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-om small{display:block;margin-top:1px;font-size:12.5px;opacity:.5}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-om p{margin:6px 0 0;font-size:14px;line-height:1.45;opacity:.85}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-or{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-or strong{font-size:16px;font-weight:600;letter-spacing:-.01em}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-lo{font-style:normal;font-size:11.5px;font-weight:600;color:#4ADE80}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-oc2{display:inline-flex!important;align-items:center;gap:6px;height:34px!important;width:auto!important;min-width:0!important;margin-top:2px;padding:0 13px!important;border:0!important;border-radius:17px!important;background:#7551DC!important;color:#fff!important;font:600 13.5px "DM Sans",sans-serif!important;box-shadow:none!important;cursor:pointer}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-oc2 svg{width:15px;height:15px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-ow{display:flex;align-items:center;gap:10px;margin:0 0 16px;padding:14px;border-radius:16px;font-size:14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-ow svg{flex:none;width:17px;height:17px;opacity:.55}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-ow span{opacity:.7}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-tile,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-ow{background:#16161A;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-oi{background:#16161A;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-of2,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-oh{color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-tile,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-ow{background:#F5F5F6;color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-oi{background:#F3F3F5;color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-of2,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-oh{color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-of2+.ak-of2{border-top-color:#EEEEF1}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-lo{color:#15803D}
+/* past posts box: same edge and corner as the cards above */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-pl{border-radius:28px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-pl{box-shadow:0 0 0 1px rgba(255,255,255,.05)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-pl{box-shadow:0 0 0 1px rgba(18,18,21,.05),0 8px 20px rgba(18,18,21,.08)!important}
 </style></body>
 </html>
