@@ -3725,7 +3725,7 @@ function sellPage(){const S_=SELL,st=S_.step,hall=(HALLS.find(h=>h[0]===S_.area)
     <h2 class="sl-h2">What happens next</h2>
     <ol class="sl-ol sm"><li><b>We check your shop</b><span>Usually within a day. We may message you on WhatsApp.</span></li><li><b>You get the blue tick</b><span>Then you appear on the map.</span></li><li><b>Add your menu in the dashboard</b><span>Prices, Live posts and group orders all live there.</span></li></ol>`;
   return `<div class="sl">${top}<div class="sl-b">${b}</div>${foot}</div>`;}
-function sellGo(n){if(n!==undefined)SELL.step=n;const el=$('#mSub');el.innerHTML=sellPage();el.scrollTop=0;
+function sellGo(n){const same=n===undefined||n===SELL.step;if(n!==undefined)SELL.step=n;const el=$('#mSub'),y=el.scrollTop;el.innerHTML=sellPage();if(same){el.style.scrollBehavior='auto';el.scrollTop=y;el.style.scrollBehavior='';}else el.scrollTop=0;
   if(SELL.step===1){setTimeout(()=>{const i=$('#slPh')||$('#slCode');i&&i.focus();},250);}}
 document.addEventListener('input',e=>{const t=e.target,S_=SELL;
   if(t.id==='slPh'){S_.ph=t.value;const b=$('[data-slsend]');if(b)b.disabled=S_.ph.replace(/\D/g,'').replace(/^0/,'').length<10;}
@@ -11403,5 +11403,11 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .cg2-a{filter:drop-shadow(0 6px 10px rgba(18,18,21,.14))!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .cg2-t:before{content:"";position:absolute;z-index:0;right:-26px;bottom:-30px;width:122px;height:122px;border-radius:50%;background:color-mix(in srgb,var(--c) 16%,#fff)}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .cg2-t.w:before{width:150px;height:150px;right:-6px;bottom:-40px}
+</style><style>
+/* m302: white mode Categories kept simple like dark (no circles) */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .cg2-t:before{display:none!important}
+/* m302: the option you pick in Sell on Stafly is Stafly purple (not black) */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sl .sl-grid button.on,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sl .sl-tags button.on{background:#7551DC!important;color:#fff!important;box-shadow:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sl .sl-grid button.on svg{stroke:#fff!important;color:#fff!important}
 </style></body>
 </html>
