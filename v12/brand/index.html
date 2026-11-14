@@ -8787,7 +8787,18 @@ function list(){var L=ASKS.filter(function(a){return AKT!=='mine'||SENT[a.id||(a
   if(AKC)L=L.filter(function(a){return a.c===AKC;});
   if(AKQ.trim()){var q=AKQ.trim().toLowerCase();L=L.filter(function(a){return(a.t+' '+a.h+' '+cl(a.c)).toLowerCase().indexOf(q)>=0;});}
   return L;}
-function myCard(a){var id=a.id||(a.n+a.m),R=a.R||[];
+function myCard(a){var id=a.id||(a.n+a.m),R=a.R||[],n=R.length,left=48*60-(a.m||0);
+  var ends=left<=0?'Soon':left<60?left+' min':Math.floor(left/60)+'h';
+  var bud=a.b?(a.b>=1000?'₦'+(Math.round(a.b/100)/10)+'k':'₦'+a.b):'Any';
+  var place=a.h&&a.h!=='On campus'?a.h:'On campus';
+  var rows=R.map(function(r){return'<div class="ak-rw"><span class="logo mlg">'+icon(a.c)+'</span><div class="ak-rwm"><b>'+esc(r[0])+(r[6]&&NEWK[r[6]]?'<em class="ak-nw">New</em>':'')+'</b><small>'+esc(r[3])+'</small></div><div class="ak-rwr"><strong>₦'+(+r[2]||0).toLocaleString('en-US')+'</strong><button type="button" class="ak-rc" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div>';}).join('');
+  return'<div class="g-card ak-mine"><div class="g-media g-poster">'+(window.gArt?gArt({cat:a.c,name:'',id:'',place:''}):'')+'<span class="g-shade"></span>'+
+   '<span class="g-tag ak-open"><i></i>'+(a.m<=30?'New':'Open')+'</span><span class="g-time">'+cl(a.c)+'</span>'+
+   '<div class="g-cap"><div class="nm"><b>'+esc(a.t)+'</b><span>'+mS('pin')+esc(place)+'</span></div></div></div>'+
+   '<div class="g-body"><div class="g-stats"><div>'+mS('chat')+'<span>Replies</span><b>'+n+'</b></div><div>'+mS('tag')+'<span>Budget</span><b>'+bud+'</b></div><div>'+mS('clock')+'<span>Ends</span><b>'+ends+'</b></div></div>'+
+   (n?'<div class="ak-rws">'+rows+'</div>':'')+
+   '<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('check')+'</i></button></div></div></div>';}
+function myCardOld(a){var id=a.id||(a.n+a.m),R=a.R||[];
   var meta=[ago(a.m),a.b?'Up to ₦'+a.b.toLocaleString('en-US'):'',a.h&&a.h!=='On campus'?a.h:''].filter(Boolean).map(esc).join(' · ');
   var rows=R.map(function(r){return'<div class="ak-rr"><div class="ak-rrm"><b>'+esc(r[0])+(r[6]&&NEWK[r[6]]?'<em class="ak-nw">New</em>':'')+'</b><p>'+esc(r[3])+'</p></div><div class="ak-rrr"><strong>₦'+(+r[2]||0).toLocaleString('en-US')+'</strong><button type="button" class="ak-rc" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div>';}).join('');
   return'<div class="ak-my"><div class="ak-myh"><span class="ak-pi">'+icon(a.c)+'</span><div class="ak-myt"><b>'+esc(a.t)+'</b><small>'+meta+'</small></div></div>'+
@@ -11260,5 +11271,25 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-my{background:#fff;box-shadow:0 0 0 1px #ECECEF;color:#121215}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-my .ak-pi{background:#F3F3F5}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-rr,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-myf,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-myf button+button{border-color:#EEEEF1!important}
+</style><style>
+/* m288: your post = brand card at a moderate height */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mine .g-media{height:164px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mine .g-cap{display:block!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mine .g-cap .nm{max-width:none!important;width:100%}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mine .g-cap .nm b{display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal!important;font-size:19px!important;line-height:1.3!important;letter-spacing:-.01em}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mine .g-cap .nm span{display:flex!important;align-items:center;gap:5px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mine .g-cap .nm span svg{flex:none;width:14px;height:14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-open i{width:7px;height:7px;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 3px rgba(74,222,128,.18);margin-right:2px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-mine .g-stats{margin-top:0!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rws{margin:4px 0 14px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rw{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid rgba(255,255,255,.07)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rw .mlg{flex:none;width:40px!important;height:40px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rwm{flex:1;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rwm b{display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:600}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rwm small{display:block;margin-top:2px;font-size:13px;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rwr{flex:none;display:flex;align-items:center;gap:10px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .ak-rwr strong{font-size:15px;font-weight:600}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.m-light) #mPage .ak-rw{color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .ak-rw{color:#121215;border-top-color:#EEEEF1}
 </style></body>
 </html>
