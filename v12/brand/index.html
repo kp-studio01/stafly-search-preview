@@ -9042,36 +9042,24 @@ try{var pa=profApply;profApply=function(p){pa(p);try{if(p&&p.signedIn&&/^[+0-9]{
 .ok p:empty,#mPage p:empty,#mSub p:empty,#pgs:empty{display:none!important}
 </style><script id="m311">if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
 <style id="m312">
-/* m312 bottom bar: glass capsule, both themes (phone layout) */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mTabs{background:rgba(255,255,255,.80)!important;-webkit-backdrop-filter:blur(22px) saturate(1.8)!important;backdrop-filter:blur(22px) saturate(1.8)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(18,18,21,.04),0 0 0 1px rgba(18,18,21,.07),0 1px 2px rgba(20,16,50,.05),0 18px 36px -16px rgba(20,16,50,.32)!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-light) #mTabs{background:rgba(24,24,29,.62)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 0 0 1px rgba(255,255,255,.10),0 18px 36px -14px rgba(0,0,0,.7)!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk).m-subon #mTabs{background:rgba(255,255,255,.80)!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk).m-subon:not(.m-light) #mTabs{background:rgba(24,24,29,.80)!important}
+/* m312 bottom bar: same bar as before, the purple pill now slides between tabs (phone layout) */
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mTabs .m-tab{position:relative;z-index:1}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mTabs .m-tab.on{background:transparent!important;box-shadow:none!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mTabs .m-thumb{position:absolute;left:0;top:7px;height:50px;width:50px;border-radius:25px;z-index:0;pointer-events:none;background:linear-gradient(180deg,#8A6BEF 0%,#7551DC 52%,#6943D1 100%)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -2px 5px rgba(38,14,118,.24),0 1px 2px rgba(48,22,130,.22),0 6px 14px -5px rgba(62,30,156,.42)!important;border:0!important;text-shadow:none!important;
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mTabs .m-thumb{position:absolute;left:0;top:7px;height:50px;width:50px;border-radius:25px;z-index:0;pointer-events:none;background:linear-gradient(180deg,#7D5BE3 0%,#7150D8 100%)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px -4px rgba(84,52,190,.40)!important;border:0!important;text-shadow:none!important;
   transition:transform .42s cubic-bezier(.3,.78,.26,1),width .42s cubic-bezier(.3,.78,.26,1),opacity .2s ease}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mTabs .m-thumb.still{transition:none!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk) #mTabs .m-tab:not(.on){color:rgba(18,18,21,.58)!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on:not(.dk):not(.m-light) #mTabs .m-tab:not(.on){color:rgba(255,255,255,.62)!important}
 
-/* m312 light mode: colour instead of blank white */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear{background:linear-gradient(160deg,#8565EC 0%,#7551DC 48%,#623ECB 100%)!important;color:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 6px rgba(38,14,118,.18),0 2px 4px rgba(48,22,130,.14),0 18px 34px -14px rgba(62,30,156,.50)!important}
+/* m312 light mode: purple instead of blank white, kept subtle */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear{background:linear-gradient(180deg,#7B59E1 0%,#7150D8 100%)!important;color:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 10px 26px -12px rgba(84,52,190,.45)!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear small,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear span,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear p{color:rgba(255,255,255,.80)!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear b{color:#fff!important;font-weight:700!important;letter-spacing:-.02em}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear button{background:linear-gradient(180deg,#FFFFFF 0%,#F3F0FD 100%)!important;color:#5B39C9!important;
-  box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(38,14,118,.18),0 6px 14px -6px rgba(38,14,118,.45)!important;border:0!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear button{background:#fff!important;color:#5B39C9!important;box-shadow:0 2px 6px rgba(40,20,120,.14)!important;border:0!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear button svg,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mNear button svg *{color:#5B39C9!important;stroke:currentColor}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mChips .mc.on,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPChips .mc.on{background:linear-gradient(180deg,#8A6BEF 0%,#7551DC 52%,#6943D1 100%)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -2px 5px rgba(38,14,118,.24),0 1px 2px rgba(48,22,130,.22),0 6px 14px -5px rgba(62,30,156,.42)!important;border:0!important;text-shadow:none!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -2px 5px rgba(38,14,118,.24),0 1px 2px rgba(48,22,130,.25),0 3px 6px -3px rgba(62,30,156,.45)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mChips .mc.on,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPChips .mc.on{background:linear-gradient(180deg,#7D5BE3 0%,#7150D8 100%)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px -4px rgba(84,52,190,.40)!important;border:0!important;text-shadow:none!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 6px -2px rgba(84,52,190,.40)!important}
 
-/* m312 buttons: realistic, not flat (both themes) */
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(.g-go,.m-cta,.pf-cta,.m-sign button,#mFb.flt,.m-search i.flt){background:linear-gradient(180deg,#8A6BEF 0%,#7551DC 52%,#6943D1 100%)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -2px 5px rgba(38,14,118,.24),0 1px 2px rgba(48,22,130,.22),0 6px 14px -5px rgba(62,30,156,.42)!important;border:0!important;text-shadow:none!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light :is(.g-ghost,.m-duo>button:not(.m-cta)){background:linear-gradient(180deg,#FFFFFF 0%,#F6F6F8 100%)!important;color:#121215!important;box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(18,18,21,.08),0 1px 2px rgba(18,18,21,.06),0 4px 10px -4px rgba(18,18,21,.14)!important;border:0!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(.g-go,.m-cta,.pf-cta,.m-sign button,.g-ghost,#mNear button,.mc){transition:transform .12s ease,box-shadow .2s ease!important}
-html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(.g-go,.m-cta,.pf-cta,.m-sign button,.g-ghost,#mNear button):active{transform:scale(.97)}
+/* m312 main purple buttons: same soft look as the pill */
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(.g-go,.m-cta,.pf-cta,.m-sign button,#mFb.flt,.m-search i.flt){background:linear-gradient(180deg,#7D5BE3 0%,#7150D8 100%)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px -4px rgba(84,52,190,.40)!important;border:0!important;text-shadow:none!important}
 </style>
 <script id="m312js">
 (function(){
