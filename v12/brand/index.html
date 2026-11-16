@@ -9108,5 +9108,57 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(.g-go,
   };
 })();
 </script>
+<script id="m318js">
+(function(){
+  var SEL='.lv-tabs,.m-thm', EASE='cubic-bezier(.4,0,.2,1)', MS=300, pend=null;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  function list(cls){return [].filter.call(document.querySelectorAll(SEL),function(g){return g.className===cls;});}
+  var down=null;
+  function rec(btn){
+    var g=btn.parentElement; if(!g||!g.matches||!g.matches(SEL)||btn.classList.contains('on'))return null;
+    var on=g.querySelector(':scope>button.on'); if(!on)return null;
+    var gr=g.getBoundingClientRect(), r=on.getBoundingClientRect();
+    return {btn:btn,cls:g.className,gi:list(g.className).indexOf(g),bi:[].indexOf.call(g.children,btn),oi:[].indexOf.call(g.children,on),
+            x:r.left-gr.left,y:r.top-gr.top,w:r.width,cOn:getComputedStyle(on).color,cOff:getComputedStyle(btn).color};
+  }
+  function watch(r){pend=r; if(!r)return; mo.disconnect(); mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});}
+  function check(){var p=pend;if(!p)return;var G=list(p.cls)[p.gi],N=G&&G.children[p.bi];if(N&&N.classList.contains('on')){mo.disconnect();run();}}
+  window.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('button');watch(b?rec(b):null);},true);
+  window.addEventListener('pointerup',function(){var p=pend;setTimeout(function(){if(pend===p){mo.disconnect();pend=null;}},700);},true);
+  window.addEventListener('pointercancel',function(){mo.disconnect();pend=null;},true);
+  window.addEventListener('click',function(e){
+    if(pend)return;
+    var btn=e.target.closest&&e.target.closest('button'); if(!btn||!btn.isConnected)return;
+    watch(rec(btn)); if(pend)setTimeout(function(){mo.disconnect();check();pend=null;},0);
+  },true);
+  function run(){
+    var p=pend; pend=null; if(!p)return;
+    try{
+      var G=list(p.cls)[p.gi]; if(!G)return;
+      var N=G.children[p.bi], O=G.children[p.oi]; if(!N||!N.classList.contains('on'))return;
+      var cs=getComputedStyle(N), G2=G.getBoundingClientRect(), nr=N.getBoundingClientRect();
+      if(getComputedStyle(G).position==='static')G.style.position='relative';
+      var BS=[].filter.call(G.children,function(c){return c.tagName==='BUTTON';});
+      var th=document.createElement('span');
+      th.style.cssText='position:absolute;left:0;top:0;pointer-events:none;z-index:0;border-radius:'+cs.borderRadius+';background-color:'+cs.backgroundColor+';background-image:'+cs.backgroundImage+';box-shadow:'+cs.boxShadow+';height:'+nr.height+'px;width:'+nr.width+'px;transform:translate('+(nr.left-G2.left)+'px,'+(nr.top-G2.top)+'px)';
+      G.insertBefore(th,G.firstChild);
+      BS.forEach(function(c){c.style.position='relative';c.style.zIndex='1';c.style.setProperty('transition','none','important');});
+      N.style.setProperty('background','transparent','important');N.style.setProperty('box-shadow','none','important');
+      if(O&&O!==N){O.style.setProperty('background','transparent','important');O.style.setProperty('box-shadow','none','important');}
+      [[N,p.cOff,p.cOn],[O,p.cOn,p.cOff]].forEach(function(z){var el=z[0];if(!el||el===N&&z[1]===z[2])return;
+        el.style.setProperty('color',z[1],'important');void el.offsetWidth;
+        el.style.setProperty('transition','color '+MS+'ms '+EASE,'important');el.style.setProperty('color',z[2],'important');});
+      var an=th.animate([{transform:'translate('+p.x+'px,'+p.y+'px)',width:p.w+'px'},{transform:'translate('+(nr.left-G2.left)+'px,'+(nr.top-G2.top)+'px)',width:nr.width+'px'}],{duration:MS,easing:EASE});
+      var done=function(){
+        BS.forEach(function(c){c.style.removeProperty('background');c.style.removeProperty('box-shadow');c.style.removeProperty('color');c.style.setProperty('transition','none','important');});
+        void G.offsetWidth; th.remove();
+        requestAnimationFrame(function(){requestAnimationFrame(function(){BS.forEach(function(c){c.style.removeProperty('transition');});});});
+      };
+      an.onfinish=done; an.oncancel=done;
+    }catch(_){}
+  }
+  var mo=new MutationObserver(check);
+})();
+</script>
 </body>
 </html>
