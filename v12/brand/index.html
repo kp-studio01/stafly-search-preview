@@ -3100,7 +3100,7 @@ function render(){
     <button class="rchat" type="button" data-chat="${v.id}" aria-label="Chat to ${v.name}">${S(CHAT)}</button>
   </div>`;};
   const op=results.filter(r=>isOpen(r.v)&&status(r.v).k!=='na'),cl=results.filter(r=>!isOpen(r.v)),na=results.filter(r=>status(r.v).k==='na');
-  $('#list').innerHTML=n?(op.length?`<div class="sec">Open near you<span>${op.length} open</span></div>`:'')+op.map(rowH).join('')+(cl.length?`<div class="sec">Opening later<span>${cl.length}</span></div>`:'')+cl.map(rowH).join(''):`<div class="empty"><b>No match yet</b>Try a shorter word or clear a filter.</div>`;
+  $('#list').innerHTML=n?(op.length?`<div class="sec">Open near you<span>${op.length} open</span></div>`:'')+op.map(rowH).join('')+(cl.length?`<div class="sec">Opening later<span>${cl.length}</span></div>`:'')+cl.map(rowH).join(''):`<div class="empty"><b>No match yet</b>Try another word.</div>`;
   const ids=new Set(results.map(r=>r.v.id));
   for(const id in markers)markers[id].getElement().classList.toggle('fade',!ids.has(id));
   if(st.sel&&!ids.has(st.sel))unselect();
@@ -3109,7 +3109,7 @@ function render(){
 }
 
 function renderLive(){
-  $('#live').innerHTML=`<div class="liveh"><span class="dotlive"></span><b>Live on campus</b> · what vendors just posted</div><div class="strip">${DROPS.map(d=>{const v=V.find(x=>x.id===d.id);return`<button class="drop${d.m<2?' fresh':''}" type="button" data-id="${v.id}">${logo(v)}<span style="min-width:0"><b>${v.name}</b><p>${d.t}</p><time>${ago(d.m)}</time></span></button>`;}).join('')}</div>`;
+  $('#live').innerHTML=`<div class="liveh"><span class="dotlive"></span><b>Live on campus</b> </div><div class="strip">${DROPS.map(d=>{const v=V.find(x=>x.id===d.id);return`<button class="drop${d.m<2?' fresh':''}" type="button" data-id="${v.id}">${logo(v)}<span style="min-width:0"><b>${v.name}</b><p>${d.t}</p><time>${ago(d.m)}</time></span></button>`;}).join('')}</div>`;
 }
 const GROUPI='<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />';
 /* dropdowns */
@@ -3249,7 +3249,7 @@ function openDetail(id){if(window.__m2)return m2Nav({t:CUR.t,s:'shop',id});if(ph
     <div class="sec"><h5>Reviews ${v.reviews?`<small class="num">${v.reviews} from paid orders</small>`:''}</h5>
       ${v.reviews<3?`<div class="note">New on Stafly with ${v.orders} completed ${v.orders===1?'order':'orders'}. Stars show after 3 reviews from real buyers.</div>`:''}
       ${v.rev.map(r=>`<div class="rv"><div class="rvh">${stars(r[1])}<b>${r[0]}</b><span>${r[3]}</span><span class="conf">${S(CHECK)}Paid order</span></div><p>${r[2]}</p>${r[4]?`<div class="reply"><b>${v.name} replied</b>${r[4]}</div>`:''}</div>`).join('')}</div>
-    <div class="note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':v.real?'':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</div>`;
+    <div class="note">${v.tier==='trusted'?'ID and stall checked. Top rated by buyers.':v.tier==='verified'?'ID and stall checked by Stafly.':v.real?'':'Phone number confirmed.'} Only buyers who paid can review.</div>`;
   $('#dfoot').innerHTML=`<button class="btn pri" type="button" data-chat="${id}">${S(CHAT)}Chat on WhatsApp to order</button>`;
   $('#dbody').scrollTop=0;$('#detail').classList.add('on');$('#detail').setAttribute('aria-hidden','false');
   if(phone())setSheet('full');
@@ -3350,9 +3350,9 @@ function pageHtml(pg){
      <div class="gfee"><span>${me?'Your delivery share':'Your share if you join'}</span><b>${naira(Math.ceil(fee/(me?n:n+1)/10)*10)} <span style="font-size:13px;color:var(--mute);font-weight:400;text-decoration:line-through">${naira(fee)}</span></b></div>
      <div class="cacts"><button type="button" data-nview="${id}">${S(NI.map)}See on map</button><button type="button" class="pri" data-gjoin="${id}">${me?S(CHECK)+'You’re in':'Join group'}</button></div></div>`;}).join('')];
   if(pg==='cats'){const tint={food:'#F6D77A',fashion:'#FFD7B5',beauty:'#F7C6E6',gadgets:'#D9CCFF',printing:'#BDEBD3',services:'#C9E4FF'};return['Categories','What do you need today?',`<div class="cgrid">${CATS.filter(c=>c[0]!=='all').map(([k,l])=>{const n=V.filter(v=>v.cat===k).length,o=V.filter(v=>v.cat===k&&isOpen(v)).length;return`<button class="ctile" type="button" data-gocat="${k}"><span class="ci" style="background:${tint[k]}">${S(ICON[k])}</span><span><b>${l.replace(' and repairs','')}</b><span>${n} ${n===1?'place':'places'} · ${o} open</span></span></button>`;}).join('')}</div>`];}
-  if(pg==='chats')return['My chats','Orders you started on WhatsApp',CHATS.map(c=>{const v=V.find(x=>x.id===c.id);return`<button class="crow" type="button" data-chat="${v.id}">${logo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')];
-  if(pg==='saved')return['Saved','Shops you want to come back to',`<div class="empty2"><span class="ei">${S(NI.heart)}</span><b>Nothing saved yet</b>Shops you save will show up here, so you can order again in one tap.</div>`];
-  if(pg==='vendor')return['Sell on Stafly Search','Get found by students, staff and people around campus',`<div class="steps"><div class="step"><i>1</i><div><b>Chat with Stafly on WhatsApp</b><span>Tell us your shop name, where you are on campus and what you sell.</span></div></div><div class="step"><i>2</i><div><b>Your AI assistant is set up</b><span>It answers buyers, shares prices and takes orders for you, day and night.</span></div></div><div class="step"><i>3</i><div><b>You show up on the map</b><span>Post live drops and group orders, and build your rating from real buyers.</span></div></div></div><button class="bigbtn" type="button">${S(CHAT)}Start on WhatsApp</button>`];
+  if(pg==='chats')return['My chats','',CHATS.map(c=>{const v=V.find(x=>x.id===c.id);return`<button class="crow" type="button" data-chat="${v.id}">${logo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')];
+  if(pg==='saved')return['Saved','',`<div class="empty2"><span class="ei">${S(NI.heart)}</span><b>Nothing saved yet</b></div>`];
+  if(pg==='vendor')return['Sell on Stafly Search','',`<div class="steps"><div class="step"><i>1</i><div><b>Chat with Stafly on WhatsApp</b><span></span></div></div><div class="step"><i>2</i><div><b>Your AI assistant is set up</b><span></span></div></div><div class="step"><i>3</i><div><b>You show up on the map</b><span></span></div></div></div><button class="bigbtn" type="button">${S(CHAT)}Start on WhatsApp</button>`];
   return['','',''];
 }
 function go(pg,push=true){
@@ -3466,7 +3466,7 @@ function m2PlacesList(){const el=$('#mList');if(!el)return;
   const op=results.filter(r=>isOpen(r.v)&&status(r.v).k!=='na'),cl=results.filter(r=>!isOpen(r.v)),na=results.filter(r=>status(r.v).k==='na');
   const hit=r=>r.hit?`<span class="ht">${r.hit[0]} · <b>${naira(r.hit[1])}</b></span>`:'';
   const fb=$('#mFb');if(fb){const n=st.f.size+(st.sort==='near'?1:0);fb.innerHTML=mS('sliders')+(n?`<em>${n}</em>`:'');}
-  el.innerHTML=results.length?(op.length?`<div class="m-sh"><b>Open now</b><span>${op.length} ${op.length===1?'place':'places'}</span></div><div class="m-lst">`+op.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(cl.length?`<div class="m-sh"><b>Opening later</b><span>${cl.length}</span></div><div class="m-lst">`+cl.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(na.length?`<div class="m-sh"><b>Hours not set</b><span>${na.length}</span></div><div class="m-lst">`+na.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':''):`<div class="m-empty"><span class="ei">${mS('search')}</span><b>No match yet</b>Try a shorter word, or clear a filter.</div>`;}
+  el.innerHTML=results.length?(op.length?`<div class="m-sh"><b>Open now</b><span>${op.length} ${op.length===1?'place':'places'}</span></div><div class="m-lst">`+op.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(cl.length?`<div class="m-sh"><b>Opening later</b><span>${cl.length}</span></div><div class="m-lst">`+cl.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':'')+(na.length?`<div class="m-sh"><b>Hours not set</b><span>${na.length}</span></div><div class="m-lst">`+na.map(r=>m2Shop(r.v,hit(r))).join('')+'</div>':''):`<div class="m-empty"><span class="ei">${mS('search')}</span><b>No match yet</b>Try another word.</div>`;}
 const back=()=>`<button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button>`;
 function m2Page(t){
   if(t==='places')return`<div class="m-h"><h1>Places</h1><button class="m-circ" type="button" data-mtab="explore" aria-label="Map">${mS('compass')}</button></div>
@@ -3477,14 +3477,14 @@ function m2Page(t){
     return`<div class="m-h"><h1>Live</h1><button class="m-circ" type="button" data-msub="alerts" aria-label="Alerts">${mS('bell')}</button></div>
     <div class="lv-row lv2">${ST.map(d=>{const v=vOf(d.id),sn=LVSEEN.has(d.id);return`<button type="button" class="lv-st${sn?'':' new'}" data-lvgo="${d.id}"><span class="rg">${mLogo(v)}</span>${d.m<=60&&!sn?'<i class="lv-dot">NEW</i>':''}<em>${v.name.split(' ').slice(0,2).join(' ')}</em></button>`;}).join('')}</div>
     <div class="lv-tabs">${[['foryou','For you'],['following','Following'],['near','Near you']].map(([k,l])=>`<button type="button" data-lvtab="${k}" class="${LVTAB===k?'on':''}">${l}</button>`).join('')}</div>
-    ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts first</b><span>Popular ones to start with</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${v.real?(sFol(v,0)?fmtK(sFol(v,0))+' follower'+(sFol(v,0)===1?'':'s'):catL(v.cat)):fmtK(followers(v))+' followers'}</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
+    ${LVTAB==='following'&&!LL.length?`<div class="lv-empty"><b>Follow shops to see their posts</b><span>Popular</span>${lvPop().slice(0,3).map(d=>{const v=vOf(d.id);return`<div class="lv-sug">${mLogo(v)}<div><b>${v.name}${vt(v)}</b><span>${v.real?(sFol(v,0)?fmtK(sFol(v,0))+' follower'+(sFol(v,0)===1?'':'s'):catL(v.cat)):fmtK(followers(v))+' followers'}</span></div><button type="button" class="sp-follow sm" data-mfollow="${v.id}">Follow</button></div>`;}).join('')}</div>`:''}
     ${LL.map(d=>{const v=vOf(d.id);return`<div class="g-card lv-card" id="lv-${d.id}"><div class="g-media lv-media${(d.img||CV(v))?'':' g-poster'}">${(d.img||CV(v))?`<img class="g-photo" src="${d.img||CV(v)}" alt="">`:(window.gArt?gArt(v):lvPh(v))}<span class="g-shade"></span>
       ${d.slides&&d.slides.length>1?`<span class="lv-cnt"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="13" height="13" rx="3"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>${d.slides.length}</span>`:''}<span class="g-tag${d.m<=60?' hot':''}">${d.m<=60?'<i class="lvd"></i>New':mS('clock')+ago(d.m)}</span><span class="g-time">${catL(v.cat)}</span>
       <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
       <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${[v.place.split(',')[0],sKnow(v)?dtxt(v):''].filter(Boolean).join(' · ')}</span></div><span class="tm">${ago(d.m)}</span></div>
       <div class="g-act"><button type="button" class="g-ghost" data-msel="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div></div>`;}).join('')}`;}
   if(t==='groups'){const ids=Object.keys(GROUPS);return`<div class="m-h"><h1>Group orders</h1></div>
-    <div class="gx-hero"><span class="gx-k">Order with your hall</span><div class="gx-t"><b class="t1">Order together.</b><b class="t2">Pay less.</b></div><svg class="gx-sw" viewBox="0 0 120 40" aria-hidden="true"><path d="M3 30c14-18 30-22 34-10s-10 16-8 6 22-20 40-12 20 20 46 4"/></svg><p>One rider, one trip. The delivery fee is split between everyone.</p><span class="gx-live"><i></i>${ids.length} ${ids.length===1?'group':'groups'} filling now</span><span class="gx-st" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><defs><path id="gxc" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs><text><textPath href="#gxc" textLength="230">SPLIT THE FEE · SAVE MORE ·</textPath></text></svg><svg class="ic" viewBox="0 0 32 32"><circle cx="8" cy="23" r="4"/><circle cx="25" cy="23" r="4"/><path d="M12 23h9l3-8h-6l-2 4H9"/><path d="M20 9h4l2 6"/><path d="M5 15h8"/></svg></span></div>
+    <div class="gx-hero"><span class="gx-k">Order with your hall</span><div class="gx-t"><b class="t1">Order together.</b><b class="t2">Pay less.</b></div><svg class="gx-sw" viewBox="0 0 120 40" aria-hidden="true"><path d="M3 30c14-18 30-22 34-10s-10 16-8 6 22-20 40-12 20 20 46 4"/></svg><p>Split one delivery fee.</p><span class="gx-live"><i></i>${ids.length} ${ids.length===1?'group':'groups'} filling now</span><span class="gx-st" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><defs><path id="gxc" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs><text><textPath href="#gxc" textLength="230">SPLIT THE FEE · SAVE MORE ·</textPath></text></svg><svg class="ic" viewBox="0 0 32 32"><circle cx="8" cy="23" r="4"/><circle cx="25" cy="23" r="4"/><path d="M12 23h9l3-8h-6l-2 4H9"/><path d="M20 9h4l2 6"/><path d="M5 15h8"/></svg></span></div>
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
       const steps=Array.from({length:g.need},(_,i)=>{const c=i<g.n?'f':(me&&i===g.n?'me':'');return(i?`<span class="ln${i<n?' f':''}"></span>`:'')+`<span class="st ${c}">${c?mS('check'):''}</span>`;}).join('');
       const left=g.need-n;
@@ -3495,7 +3495,7 @@ function m2Page(t){
         <div class="g-body"><div class="g-seg">${Array.from({length:g.need},(_,k)=>`<i class="${k<g.n?'f':(me&&k===g.n?'me':'')}"></i>`).join('')}</div>
         <div class="g-stats"><div>${mS('users3')}<span>Joined</span><b>${n}/${g.need}</b></div><div>${mS('clock')}<span>Spots</span><b>${left>0?left+' left':'Full'}</b></div><div>${mS('walk')}<span>Shop</span><b>${walk(v)} min</b></div></div>
         <div class="g-act"><button type="button" class="g-ghost" data-mshop="${id}">View shop</button><button type="button" class="g-go" data-mjoin="${id}">${me?'You’re in':'Join group'}<i>${me?mS('check'):mS('arrow')}</i></button></div></div></div>`;}).join('')}
-    <p class="m-note">Group orders close when the timer ends or the group fills. You only pay when the vendor confirms.</p>`;}
+    <p class="m-note">You only pay when the shop confirms.</p>`;}
   if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.length?'':`<div class="m-empty"><span class="ei">${mS('chat')}</span><b>No chats yet</b></div>`}${CHATS.filter(c=>vOf(c.id)).map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-mtalk="${v.id}">${mLogo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}`;
   return'';
 }
@@ -3517,7 +3517,7 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
     <div class="m-sh"><b>Menu</b><span>Prices set by the shop</span></div><div class="m-card" style="padding:4px 16px">${v.items.map(i=>`<div class="m-price"><span>${i[0]}</span><b>${naira(i[1])}</b></div>`).join('')}</div>
     <div class="m-sh"><b>Where</b><span>${s.k==='na'?'':s.k==='shut'?s.t:hrsTxt(v)}</span></div><div class="m-card"><div class="m-where wh"><span class="wh-ic">${mS('pin')}</span><div><b style="font-size:16px">${v.place||'Location not added yet'}</b><span>${v.deliv?(v.deliv.to?'Delivers to '+v.deliv.to+', '+v.deliv.eta:(v.real&&v.pickup?'Delivers or pick up':'Delivers')):v.real?(v.pickup?'Pick up only':'Ask the shop about delivery'):'Pick up only. Chat first and it will be ready when you arrive'}</span></div></div></div>
     <div class="m-sh"><b>Reviews</b><span>${v.reviews?'From paid orders':'None yet'}</span></div><div class="m-card rv2">${v.reviews?`<div class="rv-sum"><div class="rv-big"><b>${v.rating.toFixed(1)}</b>${stz(Math.round(v.rating))}<span>${v.reviews} review${v.reviews===1?'':'s'}</span></div><div class="rv-bars">${(v.dist||rvDist(v.rating)).map((x,i)=>`<div><span>${5-i}</span><i><u style="width:${x}%"></u></i></div>`).join('')}</div></div>`:''}${v.rev.length?v.rev.map(r=>`<div class="rv-it"><div class="rv-h"><span class="rv-av">${sfFace(r[0])}</span><div><b>${r[0]}</b><div class="rv-s">${stz(r[1])}<span>${r[3]}</span></div></div></div><p>${r[2]}</p>${r[4]?`<div class="rv-rp"><b>${v.name}</b>${r[4]}</div>`:''}</div>`).join(''):`<div class="rv-it"><p>${v.real?'Buyers who pay can leave a review.':`New on Stafly with ${v.orders} completed orders. Stars show after 3 reviews from real buyers.`}</p></div>`}</div>
-    <p class="m-note">${v.tier==='trusted'?'Trusted means Stafly checked their ID and stall, and many different buyers have ordered and rated them well.':v.tier==='verified'?'Verified means Stafly checked their ID and a photo of their stall at this spot.':v.real?'':'This vendor has confirmed their phone number. ID checks come next.'} Only buyers who paid through Stafly can leave a review.</p>
+    <p class="m-note">${v.tier==='trusted'?'ID and stall checked. Top rated by buyers.':v.tier==='verified'?'ID and stall checked by Stafly.':v.real?'':'Phone number confirmed.'} Only buyers who paid can review.</p>
     <div class="m-foot">${mFoot(v)}</div>`;}
   if(k==='alerts'){const g=GROUPS.mamatee,mt=vOf('mamatee'),kem=DROPS.includes(LATE);
     const al=(ic,bg,col,b,p,tm,a)=>`<button class="m-al" type="button" ${a}><span class="ai" style="background:${bg};color:${col}">${mS(ic)}</span><span><b>${b}</b><p>${p}</p><time>${tm}</time></span></button>`;
@@ -3525,11 +3525,11 @@ function m2Sub(k,id){if(k==='talk')return mTalk(id);
     ${NOTES.length?'<div class="m-sh" style="margin-top:0"><b>New</b><span>'+NOTES.length+'</span></div>':''}
     ${NOTES.map(n=>{const B=banOf(n);return al(n.kind==='group'?'users':'radio',n.kind==='group'?'var(--act)':'#FFF1F2',n.kind==='group'?'var(--ac)':'#E5394F',B.lt||n.title,B.long,Date.now()-n.at<60000?'Just now':Math.round((Date.now()-n.at)/60000)+' min ago',B.go);}).join('')}
     <div class="m-sh"><b>Earlier</b></div>
-    ${al('info','#fff','var(--ink)','Welcome to Stafly Search','Tap any pin to see the walk, prices and reviews. Ordering happens in a WhatsApp chat with the shop.','Today','data-mabout="1"')}`;}
+    ${al('info','#fff','var(--ink)','Welcome to Stafly Search','Tap a pin to see a shop.','Today','data-mabout="1"')}`;}
   if(k==='cats'){const COL={food:'#E9A825',fashion:'#6C72E8',beauty:'#D9658A',services:'#8A9BAE',health:'#46B074',gadgets:'#4BB0E0',printing:'#6E9CF5',study:'#8C6CF0',places:'#B99572'};
     return`<div class="m-h c">${back()}<h1>Categories</h1><span style="width:46px"></span></div><div class="cg2">${CATS.filter(c=>c[0]!=='all').map(([c],ix)=>{const n=V.filter(v=>v.cat===c).length,o=V.filter(v=>v.cat===c&&isOpen(v)).length,ty=(TYPES[c]||[]).map(t=>t[1]).join(', ');
       return`<button class="cg2-t${ix===0?' w':''}" type="button" data-mcat="${c}" style="--c:${COL[c]||'#8A9BAE'}"><b>${catL(c).replace(' and repairs',' & repairs')}</b><small>${ty}</small><em class="${n?'':'z'}">${n?(n+(n===1?' place':' places')):'Coming soon'}</em><span class="cg2-a">${(window.CATILL||{})[c]||''}</span></button>`;}).join('')}</div>`;}
-  if(k==='saved'){const L=V.filter(v=>SAVED.has(v.id));return`<div class="m-h c">${back()}<h1>Saved</h1><span style="width:46px"></span></div>${L.length?'<div class="m-lst">'+L.map(v=>m2Shop(v)).join('')+'</div>':`<div class="m-empty"><span class="ei">${mS('heart')}</span><b>Nothing saved yet</b>Tap the heart on any shop and it will wait for you here.</div>`}`;}
+  if(k==='saved'){const L=V.filter(v=>SAVED.has(v.id));return`<div class="m-h c">${back()}<h1>Saved</h1><span style="width:46px"></span></div>${L.length?'<div class="m-lst">'+L.map(v=>m2Shop(v)).join('')+'</div>':`<div class="m-empty"><span class="ei">${mS('heart')}</span><b>Nothing saved yet</b></div>`}`;}
   if(k==='vendor')return sellPage();
   return'';
 }
@@ -3556,7 +3556,7 @@ function m2Sheet(id){const v=vOf(id),s=status(v),d=dropOf(id),g=GROUPS[id],sv=SA
 function m2Join(id,go){const v=vOf(id),g=GROUPS[id];if(BNOW&&BNOW.v.id===id)m2BanHide();if(joined.has(id)){joined.delete(id);}else{joined.add(id);if(0)notify({v,kind:'group',me:true,title:"You're in. Delivery is split "+(g.n+1)+" ways",short:"You joined the group",body:'Your share of delivery to '+g.hall.replace(' Hall','')+' is now '+naira(share(v,g.n+1))+'. We’ll message you on WhatsApp when the rider leaves.',group:{n:g.n+1,need:g.need,closes:g.closes},acts:[['View on map','data-nview="'+id+'"',''],['Chat to order','data-chat="'+id+'"','pri']]});}
   drawMarkers();if(go&&!joined.has(id))return;if(go)return m2Nav({t:'groups'});m2Apply();}
 function m2Drawer(){const c=shellCounts(),row=(a,ic,l,n,r)=>`<button class="m-li" type="button" ${a}>${mS(ic)}<span>${l}</span>${n?`<em class="${r?'r':''}">${n}</em>`:''}${mS('chev')}</button>`;
-  $('#mDrawer').innerHTML=(USER?`<div class="m-dh"><span class="av">${uAv()}</span><div><b>Hi, ${USER.name}</b><span>${USER.hall} · OAU</span></div></div>`:`<div class="m-sign"><b>Sign in</b><span>Save shops and join group orders.</span><button type="button" data-msign="1">Sign in or sign up</button></div>`)+`
+  $('#mDrawer').innerHTML=(USER?`<div class="m-dh"><span class="av">${uAv()}</span><div><b>Hi, ${USER.name}</b><span>${USER.hall} · OAU</span></div></div>`:`<div class="m-sign"><b>Sign in</b><span></span><button type="button" data-msign="1">Sign in or sign up</button></div>`)+`
   <div class="m-dg">${row('data-mtab="explore"','compass','Explore the map')}${row('data-mtab="places"','list','Places',c.op)}${row('data-mtab="live"','radio','Live on campus',c.live,1)}${row('data-mtab="groups"','users','Group orders',c.groups)}${row('data-msub="chats"','chat','Chats',c.chats)}</div>
   <div class="m-dl">You</div><div class="m-dg">${row('data-msub="cats"','grid','Categories')}${row('data-msub="saved"','heart','Saved',SAVED.size)}${row('data-msub="alerts"','bell','Alerts')}</div>
   <div class="m-dl">Appearance</div><div class="m-thm"><button type="button" data-mtheme="dark" class="${curTheme()==='dark'?'on':''}">${mS('moon')}Dark</button><button type="button" data-mtheme="light" class="${curTheme()==='light'?'on':''}">${mS('sun')}Light</button></div>
@@ -3573,7 +3573,7 @@ MI.satic='<svg class="i" viewBox="0 0 24 24"><g transform="scale(0.09375)" fill=
 MI.plus='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></g>';MI.lockc='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></g>';MI.ticks='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="M149.61,85.71l-89.6,88a8,8,0,0,1-11.22,0L10.39,136a8,8,0,1,1,11.22-11.41L54.4,156.79l84-82.5a8,8,0,1,1,11.22,11.42Zm96.1-11.32a8,8,0,0,0-11.32-.1l-84,82.5-18.83-18.5a8,8,0,0,0-11.21,11.42l24.43,24a8,8,0,0,0,11.22,0l89.6-88A8,8,0,0,0,245.71,74.39Z"/></g>';
 function mThreadAll(id){const v=vOf(id),L=TALK[id]||[];
   const sys=`<div class="m-sys">${mS('lockc')}<span>Chats here stay on Stafly. ${v.name} never sees your phone number.</span></div>`;
-  return (L.length?'':`<div class="m-hi">${mLogo(v)}<b>${v.name}</b><span>${rateTxt(v)} · ${tierTxt(v)}</span><p>Ask about prices, delivery or opening hours. The shop’s assistant replies in seconds, day or night.</p></div>`)
+  return (L.length?'':`<div class="m-hi">${mLogo(v)}<b>${v.name}</b><span>${rateTxt(v)} · ${tierTxt(v)}</span><p></p></div>`)
     +`<div class="m-day">Today</div>`+sys+mThread(id);}
 mThread=function(id){const L=TALK[id]||[];
   return L.map(m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}">${m.t}<time>${m.tm}${m.me?mS('ticks'):''}</time></div>`).join('')+(TYP[id]?'<div class="tb them typ"><i></i><i></i><i></i></div>':'');};
@@ -3625,7 +3625,7 @@ function doFollow(id){if(FOLLOW.has(id))FOLLOW.delete(id);else FOLLOW.add(id);sa
   if(CUR.s==='shop'){const st=$('#mSub').scrollTop;$('#mSub').innerHTML=m2Sub('shop',CUR.id);$('#mSub').scrollTop=st;}
   if(CUR.t==='live'&&!CUR.s){const st=$('#mPage').scrollTop;$('#mPage').innerHTML=m2Page('live');$('#mPage').scrollTop=st;}}
 document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('[data-mfollow]');if(!el)return;e.stopImmediatePropagation();e.preventDefault();
-  const id=el.dataset.mfollow;if(!USER)return authOpen('Sign in to follow shops and see their posts first.',{k:'follow',id});doFollow(id);},true);
+  const id=el.dataset.mfollow;if(!USER)return authOpen('Sign in to follow shops.',{k:'follow',id});doFollow(id);},true);
 /* ---- Live: Following / Popular / Near you ---- */
 var LVTAB=null,LVLIST=null;
 const lvPop=()=>[...DROPS].sort((a,b)=>(vOf(b.id).orders/(b.m+8))-(vOf(a.id).orders/(a.m+8)));
@@ -3695,8 +3695,8 @@ function sellPage(){const S_=SELL,st=S_.step,hall=(HALLS.find(h=>h[0]===S_.area)
   let b='';
   if(st===0)b=`<div class="sl-map">${satTiles(LM.moremi.ll,4)}<span class="sl-pin"><b>Your shop</b><i></i></span></div>
     <h1 class="sl-h">Sell to students on campus</h1>
-    <ol class="sl-ol"><li><b>Tell us about your shop</b><span>Name, what you sell, where you are and your hours.</span></li><li><b>Add a logo and a photo</b><span>Buyers trust shops they can see.</span></li><li><b>Show up on the map</b><span>After a quick check, students can find, follow and order from you.</span></li></ol>`;
-  if(st===1)b=!S_.sent?`<h1 class="sl-h">What’s your WhatsApp number?</h1><p class="sl-p">We’ll send you a code. Your buyers will also reach you here.</p>
+    <ol class="sl-ol"><li><b>Tell us about your shop</b><span></span></li><li><b>Add a logo and a photo</b><span></span></li><li><b>Show up on the map</b><span></span></li></ol>`;
+  if(st===1)b=!S_.sent?`<h1 class="sl-h">What’s your WhatsApp number?</h1><p class="sl-p"></p>
     <label class="sl-box sl-ph"><span>+234</span><input id="slPh" type="tel" inputmode="numeric" placeholder="801 234 5678" value="${S_.ph}"></label>`
    :`<h1 class="sl-h">Enter the code</h1><p class="sl-p">Sent to +234 ${fmtPh(S_.ph.replace(/\D/g,''))} on WhatsApp. <button type="button" class="sl-u" data-slre="1">Change number</button></p>
     <input class="sl-box sl-code" id="slCode" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000">
@@ -3708,22 +3708,22 @@ function sellPage(){const S_=SELL,st=S_.step,hall=(HALLS.find(h=>h[0]===S_.area)
     ${S_.cat&&(TYPES[S_.cat]||[]).length?`<h2 class="sl-h2">Which one is closest?</h2><div class="sl-tags">${TYPES[S_.cat].map(([k,l])=>`<button type="button" class="${S_.type===k?'on':''}" data-sltype="${k}">${l}</button>`).join('')}</div>`:''}
     <h2 class="sl-h2">Describe it in one line <em>Optional</em></h2>
     <input class="sl-box" id="slTg" type="text" maxlength="60" placeholder="Party jollof, every afternoon" value="${S_.tag}">`;
-  if(st===3)b=`<h1 class="sl-h">Where and when can buyers find you?</h1>
+  if(st===3)b=`<h1 class="sl-h">Location and hours</h1>
     <h2 class="sl-h2">Closest hall or area</h2>
     <div class="sl-tags">${HALLS.map(([k,l])=>`<button type="button" class="${S_.area===k?'on':''}" data-slarea="${k}">${l}</button>`).join('')}</div>
     <input class="sl-box" id="slSp" type="text" placeholder="Exact spot, e.g. behind Block C (optional)" value="${S_.spot}">
     <h2 class="sl-h2">Opening hours</h2>
     <div class="sl-hrs"><label><small>Opens</small><select id="slOp">${SL_HRS.map(m=>`<option value="${m}" ${m===S_.open?'selected':''}>${tfmt(m)}</option>`).join('')}</select></label><label><small>Closes</small><select id="slCl">${SL_HRS.map(m=>`<option value="${m}" ${m===S_.close?'selected':''}>${tfmt(m)}</option>`).join('')}</select></label></div>
-    <h2 class="sl-h2">How do buyers get their order?</h2>
-    <div class="sl-rad"><button type="button" class="${S_.deliv===true?'on':''}" data-sldel="1"><span><b>I deliver</b>Buyers pay a delivery fee</span><i></i></button><button type="button" class="${S_.deliv===false?'on':''}" data-sldel="0"><span><b>Pick up only</b>Buyers come to you</span><i></i></button></div>
+    <h2 class="sl-h2">Delivery or pick up</h2>
+    <div class="sl-rad"><button type="button" class="${S_.deliv===true?'on':''}" data-sldel="1"><span><b>I deliver</b>Buyers pay a delivery fee</span><i></i></button><button type="button" class="${S_.deliv===false?'on':''}" data-sldel="0"><span><b>Pick up only</b></span><i></i></button></div>
     ${S_.deliv?`<h2 class="sl-h2">Delivery fee</h2><div class="sl-tags">${[200,300,500,800,1000].map(f=>`<button type="button" class="${S_.fee===f?'on':''}" data-slfee="${f}">${naira(f)}</button>`).join('')}</div>`:''}`;
-  if(st===4)b=`<h1 class="sl-h">Add a photo and your logo</h1><p class="sl-p">A clear photo of your shop or what you sell. You can change these any time.</p>
-    <label class="sl-up${S_.cover?' has':''}" ${S_.cover?`style="background-image:url(${S_.cover})"`:''}><input type="file" accept="image/*" id="slCov" hidden>${S_.cover?'<em>Change photo</em>':`${mS('plus')}<b>Add a photo</b><span>Your shop, your stall or your best product</span>`}</label>
+  if(st===4)b=`<h1 class="sl-h">Add a photo and your logo</h1><p class="sl-p"></p>
+    <label class="sl-up${S_.cover?' has':''}" ${S_.cover?`style="background-image:url(${S_.cover})"`:''}><input type="file" accept="image/*" id="slCov" hidden>${S_.cover?'<em>Change photo</em>':`${mS('plus')}<b>Add a photo</b><span>Shop photo</span>`}</label>
     <div class="sl-lg"><label class="sl-lc" ${S_.logo?`style="background-image:url(${S_.logo})"`:''}><input type="file" accept="image/*" id="slLogo" hidden>${S_.logo?'':S(ICON[S_.cat||'food'])}</label><div><b>Logo</b><span>Square works best</span></div><label class="sl-u">${S_.logo?'Change':'Upload'}<input type="file" accept="image/*" id="slLogo2" hidden></label></div>`;
-  if(st===5)b=`<h1 class="sl-h">You’re all set${S_.name?', '+S_.name:''}</h1><p class="sl-p">This is how buyers will see you once we’ve checked your shop.</p>
+  if(st===5)b=`<h1 class="sl-h">You’re all set${S_.name?', '+S_.name:''}</h1><p class="sl-p"></p>
     <div class="sl-card"><div class="sl-cc" ${S_.cover?`style="background-image:url(${S_.cover})"`:''}>${S_.cover?'':satTiles((LM[S_.area]||LM.moremi).ll,4)}</div><div class="sl-ci"><span class="sl-cl" ${S_.logo?`style="background-image:url(${S_.logo})"`:''}>${S_.logo?'':S(ICON[S_.cat||'food'])}</span><div><b>${S_.name||'Your shop'}</b><span>${catL(S_.cat||'food')}${hall?' · '+hall:''} · ${tfmt(S_.open)} to ${tfmt(S_.close)}</span></div></div></div>
     <h2 class="sl-h2">What happens next</h2>
-    <ol class="sl-ol sm"><li><b>We check your shop</b><span>Usually within a day. We may message you on WhatsApp.</span></li><li><b>You get the blue tick</b><span>Then you appear on the map.</span></li><li><b>Add your menu in the dashboard</b><span>Prices, Live posts and group orders all live there.</span></li></ol>`;
+    <ol class="sl-ol sm"><li><b>We check your shop</b><span>Usually within a day.</span></li><li><b>You get the blue tick</b><span></span></li><li><b>Add your menu in the dashboard</b><span></span></li></ol>`;
   return `<div class="sl">${top}<div class="sl-b">${b}</div>${foot}</div>`;}
 function sellGo(n){const same=n===undefined||n===SELL.step;if(n!==undefined)SELL.step=n;const el=$('#mSub'),y=el.scrollTop;el.innerHTML=sellPage();if(same){el.style.scrollBehavior='auto';el.scrollTop=y;el.style.scrollBehavior='';}else el.scrollTop=0;
   if(SELL.step===1){setTimeout(()=>{const i=$('#slPh')||$('#slCode');i&&i.focus();},250);}}
@@ -3796,9 +3796,9 @@ MI.wa='<g transform="scale(0.09375)" fill="currentColor" stroke="none"><path d="
 var REACH={printpro:'stafly',basira:'whatsapp',ayo:'whatsapp'};const reach=v=>REACH[v.id]||'both';
 var TALK={},TYP={};CHATS.forEach(c=>{TALK[c.id]=[{t:c.t,tm:c.tm}];});
 function mFoot(v){const r=reach(v);
-  if(r==='whatsapp')return`<button class="m-cta wa" type="button" data-chat="${v.id}">${mS('wa')}Chat on WhatsApp</button><p class="m-via">This shop takes orders on WhatsApp only.</p>`;
-  if(r==='stafly')return`<button class="m-cta" type="button" data-mtalk="${v.id}">${mS('chat')}Chat here to order</button><p class="m-via">Chat right here. Your number stays private.</p>`;
-  return`<div class="m-duo"><button class="m-cta" type="button" data-mtalk="${v.id}">${mS('chat')}Chat here to order</button><button class="m-wab" type="button" data-chat="${v.id}" aria-label="Chat on WhatsApp">${mS('wa')}</button></div><p class="m-via">Chat here, or on WhatsApp if you prefer.</p>`;}
+  if(r==='whatsapp')return`<button class="m-cta wa" type="button" data-chat="${v.id}">${mS('wa')}Chat on WhatsApp</button><p class="m-via">Orders on WhatsApp only.</p>`;
+  if(r==='stafly')return`<button class="m-cta" type="button" data-mtalk="${v.id}">${mS('chat')}Chat here to order</button><p class="m-via">Your number stays private.</p>`;
+  return`<div class="m-duo"><button class="m-cta" type="button" data-mtalk="${v.id}">${mS('chat')}Chat here to order</button><button class="m-wab" type="button" data-chat="${v.id}" aria-label="Chat on WhatsApp">${mS('wa')}</button></div><p class="m-via"></p>`;}
 const tnow=()=>'1:20 PM';
 function mThread(id){const v=vOf(id),L=TALK[id]||[];
   return L.map(m=>m.sys?`<div class="m-sys">${m.t}</div>`:`<div class="tb ${m.me?'me':'them'}">${m.t}<time>${m.tm}</time></div>`).join('')+(TYP[id]?'<div class="tb them typ"><i></i><i></i><i></i></div>':'');}
@@ -3860,7 +3860,7 @@ function authRender(){const A=AUTH,el=$('#mAuth'),st3=`<div class="steps">${[1,2
     <span class="lbl">Your hall</span><div class="halls">${HALLS.map(([k,l])=>`<button type="button" class="${A.hall===k?'on':''}" data-ahall="${k}">${l}</button>`).join('')}</div>
     ${A.err?`<p class="a-er">${A.err}</p>`:''}<button class="m-cta" type="button" data-adone="1" ${A.name.trim()&&A.hall&&emOk(A.email)&&!A.busy?'':'disabled'}>${A.busy?'Saving…':'Done'}</button>`;
 }
-function authApi(path,body){const base=window.staflyApi||'https://kp-assistant.onrender.com';return fetch(base+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json().catch(()=>({})).then(d=>{if(!r.ok)throw new Error(d.error||'Something went wrong. Please try again.');return d;}),e=>{if(e&&e.message&&!/fetch|network|load/i.test(e.message))throw e;throw new Error('We couldn’t reach Stafly. Check your internet and try again.');});}
+function authApi(path,body){const base=window.staflyApi||'https://kp-assistant.onrender.com';return fetch(base+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json().catch(()=>({})).then(d=>{if(!r.ok)throw new Error(d.error||'Something went wrong. Please try again.');return d;}),e=>{if(e&&e.message&&!/fetch|network|load/i.test(e.message))throw e;throw new Error('No connection. Try again.');});}
 function authPh(){return '0'+AUTH.ph.replace(/\D/g,'').replace(/^0/,'');}
 function authSend(){AUTH.busy=1;AUTH.err='';authRender();authApi('/api/search/signin/start',{vid:window.staflyVid?staflyVid():'',phone:authPh()})
   .then(d=>{AUTH.busy=0;AUTH.step=2;AUTH.sent=0;AUTH.wa=d&&d.wa||'';AUTH.txt=d&&d.text||'';authRender();setTimeout(()=>{const i=$('#aCode');i&&i.focus();},60);})
@@ -3883,7 +3883,7 @@ function authTap(){const A=AUTH;if(!A.ref){A.ref=authRef();A.linked=0;}
   authPoll();}
 function authPoll(){clearTimeout(AUTH.pt);const A=AUTH,ref=A.ref,t0=A.t0||(A.t0=Date.now());
   if(!ref||A.step!==2||!document.body.classList.contains('m-authon'))return;
-  if(Date.now()-t0>10*60000){A.ref='';A.t0=0;A.step=1;A.err='That took a while. Please try again.';return authRender();}
+  if(Date.now()-t0>10*60000){A.ref='';A.t0=0;A.step=1;A.err='That took too long. Try again.';return authRender();}
   authGet('/api/search/signin/check?vid='+(window.staflyVid?staflyVid():'')+'&ref='+ref).then(d=>{if(AUTH.ref!==ref||AUTH.step!==2)return;
     if(d&&d.ok){AUTH.ok=1;AUTH.ref='';AUTH.t0=0;return authAfter();}
     AUTH.pt=setTimeout(authPoll,document.hidden?6000:2000);}).catch(()=>{AUTH.pt=setTimeout(authPoll,4000);});}
@@ -3963,7 +3963,7 @@ function emVerify(code){const A=AUTH;A.busy=1;A.err='';authApi('/api/search/emai
   .then(p=>{A.busy=0;A.ok=1;authWelcome(p);}).catch(e=>{A.busy=0;A.err=e.message;authRender();const i=$('#aECode');i&&i.focus();});}
 function authPoll(){clearTimeout(AUTH.pt);const A=AUTH,ref=A.ref,t0=A.t0||(A.t0=Date.now());
   if(!ref||A.step!=='wa'||!document.body.classList.contains('m-authon'))return;
-  if(Date.now()-t0>10*60000){A.err='That took a while. Tap Change email and try again.';return authRender();}
+  if(Date.now()-t0>10*60000){A.err='That took too long. Try again.';return authRender();}
   authGet('/api/search/signin/check?vid='+vidQ()+'&ref='+ref).then(d=>{if(AUTH.ref!==ref||AUTH.step!=='wa')return;
     if(d&&d.ok){AUTH.ok=1;AUTH.ref='';return authGet('/api/search/me?vid='+vidQ()).then(authWelcome,()=>authWelcome(null));}
     AUTH.pt=setTimeout(authPoll,document.hidden?6000:2000);}).catch(()=>{AUTH.pt=setTimeout(authPoll,4000);});}
@@ -4007,8 +4007,8 @@ document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=
   if(a('[data-msign]')){halt();return authOpen('');}if(a('[data-mprof]')){halt();return profOpen();}
   if(a('[data-mout]')){halt();if(window.staflySignOut){window.staflySignOut();return m2Drawer();}try{if(USER&&USER.wa)authApi('/api/search/signout',{vid:vidQ()}).catch(()=>{});}catch(_){}USER=null;try{localStorage.removeItem('stafly_user');}catch(_){}YOU=shift(LM.moremi.ll,[75,-60]);drawMarkers();return m2Drawer();}
   if(USER)return;
-  if(el=a('[data-msave]')){halt();if(a('#mBan'))m2BanHide();return authOpen('Sign in to save shops and find them again in one tap.',{k:'save',id:el.dataset.msave});}
-  if(el=a('[data-mjoin]')||a('[data-mbjoin]')){halt();const id=el.dataset.mjoin||el.dataset.mbjoin;if(a('#mBan'))m2BanHide();if(joined.has(id))return;return authOpen('Sign in to join the group order, so the vendor knows who to deliver to.',{k:'join',id,go:!!el.dataset.mbjoin});}
+  if(el=a('[data-msave]')){halt();if(a('#mBan'))m2BanHide();return authOpen('Sign in to save shops.',{k:'save',id:el.dataset.msave});}
+  if(el=a('[data-mjoin]')||a('[data-mbjoin]')){halt();const id=el.dataset.mjoin||el.dataset.mbjoin;if(a('#mBan'))m2BanHide();if(joined.has(id))return;return authOpen('Sign in to join.',{k:'join',id,go:!!el.dataset.mbjoin});}
 },true);
 
 document.addEventListener('click',e=>{if(!window.__m2)return;const t=e.target,a=(q)=>t.closest(q);let el;
@@ -4143,7 +4143,7 @@ const hallShort=h=>(h||'').replace(' Hall','');
 function since(){try{let d=localStorage.getItem('stafly_since');if(!d){d=new Date().toISOString();localStorage.setItem('stafly_since',d);}return new Date(d).toLocaleDateString('en-GB',{month:'long',year:'numeric'});}catch(e){return'';}}
 function profile(){
   const head=`<div class="m-h c">${'<button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button>'}<h1>Profile</h1><span style="width:46px"></span></div>`;
-  if(!USER)return head+`<div class="pf-card pf-out"><span class="pf-av">${mS('user')}</span><b>Your Stafly profile</b><p>Sign in with WhatsApp to save shops, follow them and join group orders. No password needed.</p><button type="button" class="pf-cta" data-msign="1">${mS('wa')}Continue with WhatsApp</button></div>`;
+  if(!USER)return head+`<div class="pf-card pf-out"><span class="pf-av">${mS('user')}</span><b>Your Stafly profile</b><p></p><button type="button" class="pf-cta" data-msign="1">${mS('wa')}Continue with WhatsApp</button></div>`;
   const fol=V.filter(v=>FOLLOW.has(v.id)).length,sv=SAVED.size,ord=CHATS.length,grp=joined.size;
   return head+`<div class="pf-card"><div class="pf-top"><span class="pf-av" data-pfpic="1" role="button" aria-label="Change your photo">${uAv()}<i class="pf-cam">${CAM}</i></span><div><b>${USER.name}</b><span>${USER.hall} · OAU</span><small>On Stafly since ${since()}</small></div></div>
     <div class="pf-st"><div><b>${ord}</b><span>Chats</span></div><div><b>${sv}</b><span>Saved</span></div><div><b>${fol}</b><span>Following</span></div></div></div>
@@ -4151,7 +4151,7 @@ function profile(){
     <div class="m-dl">Account</div><div class="m-dg">${R('data-msub="hall"','pin','Your hall',hallShort(USER.hall))}${R('data-msub="spots"','pin','Your spots',window.spotsN&&spotsN()?spotsN():'')}<div class="m-li pf-ro">${mS('wa')}<span>WhatsApp number</span><small>Private</small></div>${R('data-msub="alerts"','bell','Alerts')}</div>
     <div class="m-dl">Appearance</div><div class="m-thm"><button type="button" data-mtheme="dark" class="${curTheme()==='dark'?'on':''}">${mS('moon')}Dark</button><button type="button" data-mtheme="light" class="${curTheme()==='light'?'on':''}">${mS('sun')}Light</button></div>
     <button type="button" class="pf-so" data-pfout="1">Sign out</button>
-    <p class="pf-note">Your number is only used to sign you in. Shops never see it.</p>`;}
+    <p class="pf-note">Shops never see your number.</p>`;}
 
 /* v150: saved spots */
 function spotsGet(){try{const a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');return Array.isArray(a)?a.slice(0,6):[];}catch(_){return[];}}
@@ -4164,14 +4164,14 @@ window.spotsHtml=function(){const L=spotsGet();
   <button type="button" class="ck-save${CK.saveSpot===false?'':' on'}" data-cksave="1"><i></i>Save this spot for next time</button>`;};
 function spotsPage(){const L=spotsGet();
   return`<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button><h1>Your spots</h1><span style="width:46px"></span></div>
-  <p class="pf-sub">Places you get things delivered to. Pick one at checkout in one tap.</p>
+  <p class="pf-sub"></p>
   ${L.length?`<div class="m-dg">${L.map((p,i)=>`<div class="m-li sp-row"><span class="sp-pin">${mS('pin')}</span><div><b>${spEsc(p.hall)}</b><small>${spEsc(p.spot||'No exact spot yet')}</small></div><button type="button" class="sp-del" data-spdel="${i}" aria-label="Remove">${mS('x')||'×'}</button></div>`).join('')}</div>`:`<div class="m-empty"><span class="ei">${mS('pin')}</span><b>No saved spots yet</b>When you order, tick "Save this spot" and it shows here.</div>`}`;}
 const _sSp=m2Sub;m2Sub=function(k,id){if(k==='spots')return spotsPage();return _sSp.apply(this,arguments);};
 function following(){const L=V.filter(v=>FOLLOW.has(v.id));
-  return`<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button><h1>Following</h1><span style="width:46px"></span></div>${L.length?'<div class="m-lst">'+L.map(v=>m2Shop(v)).join('')+'</div>':`<div class="m-empty"><span class="ei">${mS('store')}</span><b>Not following anyone yet</b>Tap Follow on a shop to see its posts first on Live.</div>`}`;}
+  return`<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button><h1>Following</h1><span style="width:46px"></span></div>${L.length?'<div class="m-lst">'+L.map(v=>m2Shop(v)).join('')+'</div>':`<div class="m-empty"><span class="ei">${mS('store')}</span><b>Not following anyone yet</b></div>`}`;}
 function hallPick(){const cur=USER&&USER.hk;
   return`<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">${mS('back')}</button><h1>Your hall</h1><span style="width:46px"></span></div>
-  <p class="pf-sub">Shops use this for delivery, and we show group orders going there.</p><div class="m-dg pf-halls">${HALLS.map(([k,l])=>`<button type="button" class="m-li pf-h${k===cur?' on':''}" data-pfhall="${k}"><span>${k==='off'?'Off campus':l+(k==='pg'?'':' Hall')}</span><i></i></button>`).join('')}</div>`;}
+  <p class="pf-sub"></p><div class="m-dg pf-halls">${HALLS.map(([k,l])=>`<button type="button" class="m-li pf-h${k===cur?' on':''}" data-pfhall="${k}"><span>${k==='off'?'Off campus':l+(k==='pg'?'':' Hall')}</span><i></i></button>`).join('')}</div>`;}
 const _sub=m2Sub;m2Sub=function(k,id){if(k==='me')return profile();if(k==='following')return following();if(k==='hall')return hallPick();return _sub(k,id);};
 /* drawer: your name opens your profile */
 const _dr=m2Drawer;m2Drawer=function(){_dr();const h=document.querySelector('#mDrawer .m-dh');if(h&&!h.dataset.msub){h.setAttribute('data-msub','me');h.setAttribute('role','button');h.classList.add('pf-dh');h.insertAdjacentHTML('beforeend',mS('chev'));}
@@ -4428,8 +4428,8 @@ function body(){
   <div class="fs-s"><div class="fs-t">Area on campus<small>${F.area?LM[F.area].n:'All of OAU'}</small></div><div class="fs-o">${AREAS.map(([k,l])=>o('area',k,l,F.area===k)).join('')}</div></div>
   <div class="fs-s"><div class="fs-t">Walking time<small>from ${(USER&&USER.hall)||'Moremi Hall'}</small></div><div class="fs-seg">${[[0,'Any'],[5,'5 min'],[10,'10 min'],[15,'15 min']].map(([k,l])=>o('walk',k,l,F.walk===k)).join('')}</div></div>
   <div class="fs-s"><div class="fs-t">Price<small>cheapest item</small></div><div class="fs-seg">${[[0,'Any'],[1000,'Under ₦1k'],[2500,'Under ₦2.5k'],[5000,'Under ₦5k']].map(([k,l])=>o('price',k,l,F.price===k)).join('')}</div></div>
-  <div class="fs-s"><div class="fs-t">Getting it</div>${tg('delivers','Delivers to me','Shops that bring it to your hall',st.f.has('delivers'))}${tg('group','Group order going','Split the delivery fee with others',F.group)}</div>
-  <div class="fs-s"><div class="fs-t">Shop</div>${tg('open','Open now','',st.f.has('open'))}${tg('verified','Verified shops','Checked by Stafly',st.f.has('verified'))}${tg('trusted','Trusted shops','Lots of paid orders, great reviews',F.trusted)}${tg('top','Rated 4.5 and up','',F.top)}${tg('live','Posting live now','',F.live)}</div>`;}
+  <div class="fs-s"><div class="fs-t">Getting it</div>${tg('delivers','Delivers to me','',st.f.has('delivers'))}${tg('group','Group order going','Split the delivery fee with others',F.group)}</div>
+  <div class="fs-s"><div class="fs-t">Shop</div>${tg('open','Open now','',st.f.has('open'))}${tg('verified','Verified shops','Checked by Stafly',st.f.has('verified'))}${tg('trusted','Trusted shops','',F.trusted)}${tg('top','Rated 4.5 and up','',F.top)}${tg('live','Posting live now','',F.live)}</div>`;}
 const onMap=()=>CUR&&CUR.t==='explore'&&!CUR.s&&!document.body.classList.contains('dk');
 function frame(){try{const r=search();if(!r.length||typeof map==='undefined')return;const lls=r.map(x=>x.v.ll);if(F.area)lls.push(LM[F.area].ll);else lls.push(YOU);const h=map.getContainer().clientHeight;
   map.fitBounds(bounds(lls),{padding:document.body.classList.contains('dk')?{top:120,bottom:80,left:560,right:80}:{top:170,bottom:Math.min(260,h*.32),left:50,right:50},maxZoom:17.2,duration:900});}catch(e){}}
@@ -4468,14 +4468,14 @@ window.uAddr=()=>USER&&USER.addr?USER.addr:'';
 const _ms=m2Sub;m2Sub=function(k){let h=_ms.apply(this,arguments);if(typeof h!=='string')return h;
   if(k==='me'&&USER){h=h.replace('<span>Your hall</span>','<span>Your location</span>');
     if(USER.addr)h=h.replace(/(<span>Your location<\/span><small>)([^<]*)(<\/small>)/,(m,a,b,c)=>a+at(USER.addr.length>18?USER.addr.slice(0,17)+'…':USER.addr)+c);}
-  if(k==='hall'){h=h.replace('<h1>Your hall</h1>','<h1>Your location</h1>').replace(/<p class="pf-sub">[^<]*<\/p>/,'<p class="pf-sub">Pick your hall, then add your exact spot so shops and riders find you first time.</p>');
+  if(k==='hall'){h=h.replace('<h1>Your hall</h1>','<h1>Your location</h1>').replace(/<p class="pf-sub">[^<]*<\/p>/,'<p class="pf-sub"></p>');
     const u=USER||{},g=u.geo;
     h+=`<div class="ad-h">Your exact address</div>
     <div class="m-dg ad-card"><label class="ad-f"><small>Block, room or street</small><input id="adA" type="text" maxlength="120" autocomplete="street-address" placeholder="${u.hk==='off'?'e.g. 12 Road 7, Fajuyi Estate':'e.g. Block C, Room 214'}" value="${at(u.addr||'')}"></label>
-    <label class="ad-f"><small>Landmark or note for the rider (optional)</small><textarea id="adN" rows="2" maxlength="160" placeholder="e.g. Opposite the porters' lodge, call when you arrive">${at(u.note||'')}</textarea></label></div>
+    <label class="ad-f"><small>Note for the rider (optional)</small><textarea id="adN" rows="2" maxlength="160" placeholder="e.g. Opposite the porters' lodge, call when you arrive">${at(u.note||'')}</textarea></label></div>
     <button type="button" class="ad-gps${g?' on':''}" data-adgps="1">${PIN}<span>Use my phone's location</span><small>${g?'Added':'Optional'}</small></button>
     <button type="button" class="ad-save" data-adsave="1">Save location</button>
-    <p class="ad-note">Only the shop you order from sees your address. It never shows on your profile.</p>`;}
+    <p class="ad-note">Only the shop you order from sees this.</p>`;}
   return h;};
 window.addEventListener('click',e=>{
   const g=e.target.closest('[data-adgps]');
@@ -4506,12 +4506,12 @@ function moveYou(ll){YOU=ll;window.__gpsYou=1;try{youM&&youM.setLngLat(ll2(YOU))
   try{if(CUR.dir){const first=!window.__dirHadYou;window.__dirHadYou=1;window.__dirQuiet=!first;m2DirView();window.__dirQuiet=0;}}catch(e){window.__dirQuiet=0;}
   if(st.sel&&(!lastRoute||meters(lastRoute,ll)>25)){lastRoute=ll;const v=V.find(x=>x.id===st.sel);if(v)try{route(v);}catch(e){}}}
 function fix(p){const ll=[p.coords.latitude,p.coords.longitude];btn.classList.remove('wait');
-  if(!onCampus(ll)){btn.classList.remove('on');if(!warned){warned=true;say('Not on campus. Using your hall for now.');}return;}
+  if(!onCampus(ll)){btn.classList.remove('on');if(!warned){warned=true;say('You’re off campus. Using your hall.');}return;}
   warned=false;btn.classList.add('on');last=ll;moveYou(ll);
   if(!centred){centred=true;try{map.easeTo({center:ll2(ll),zoom:Math.max(map.getZoom(),16.8),duration:800});}catch(e){}}}
 function fail(e){if(e&&e.code===1){btn.classList.remove('wait','on');stop();return say('Location is off. Turn it on in browser settings.');}
   /* a slow or weak signal is normal indoors: keep listening, only tell you if we never found you */
-  if(!last&&btn.classList.contains('wait')){btn.classList.remove('wait');say('Still looking for you. Turn on location or step near a window.');}}
+  if(!last&&btn.classList.contains('wait')){btn.classList.remove('wait');say('Still finding you. Turn on location.');}}
 function start(){if(wid!==null)return;btn.classList.add('wait');centred=false;
   wid=navigator.geolocation.watchPosition(fix,fail,{enableHighAccuracy:true,maximumAge:5000,timeout:20000});}
 function stop(){if(wid!==null){navigator.geolocation.clearWatch(wid);wid=null;}}
@@ -4644,7 +4644,7 @@ let scrim,sheet;
 function close(){if(sheet){sheet.classList.remove('on');scrim.classList.remove('on');}}
 function open(m){mode=m;if(!sheet){scrim=document.createElement('div');scrim.id='catScrim';sheet=document.createElement('div');sheet.id='catSheet';document.body.append(scrim,sheet);scrim.addEventListener('click',close);sheet.addEventListener('scroll',()=>sheet.classList.toggle('sc',sheet.scrollTop>4),{passive:true});}
   const curC=m==='live'?LVCAT:st.cat,curT=m==='live'?LVTYPE:st.type,L=m==='live';
-  sheet.innerHTML=`<div class="cat-hd"><div class="gr"></div><h3>All categories</h3><p class="sub">${L?'Pick one or more':'Find any kind of business on campus'}</p></div>`+
+  sheet.innerHTML=`<div class="cat-hd"><div class="gr"></div><h3>All categories</h3><p class="sub">${L?'':''}</p></div>`+
    CATS.filter(c=>c[0]!=='all').map(([g,l])=>{const n=V.filter(v=>v.cat===g).length;return`<div class="grp"><button type="button" class="gh${L&&LVSEL.includes('g:'+g)?' on':''}" data-cg="${g}"><i>${S(ICON[g])}</i>${l.replace(' and repairs',' & repairs')}<em>${n?n+(n===1?' place':' places'):'Coming soon'}</em></button>
      <div class="tps">${(TYPES[g]||[]).map(([t,tl])=>`<button type="button" class="tp${(L?LVSEL.includes('t:'+t):curT===t)?' on':''}" data-ct="${t}">${tl}</button>`).join('')}</div></div>`;}).join('')+(L?`<div class="lvft"><button type="button" class="clr" data-lvclr="1">Clear</button><button type="button" class="go" data-lvdone="1">${lvDoneL()}</button></div>`:'');
   sheet.scrollTop=0;sheet.classList.remove('sc');requestAnimationFrame(()=>{scrim.classList.add('on');sheet.classList.add('on');});}
@@ -4682,7 +4682,7 @@ const _pg=window.m2Page;window.m2Page=function(t){let h=_pg.apply(this,arguments
     const bar=`<label class="m-field lv-q">${mS('search')}<input id="lvQ" type="search" placeholder="Search Live: laundry, jollof, hair" value="${LVQ.replace(/"/g,'&quot;')}" autocomplete="off" enterkeyhint="search"><button class="flt lvf${act?' on':''}" type="button" data-lvcat="more" aria-label="Filter by category">${mS('sliders')}</button></label>`+
       (act?`<div class="lv-act">${LVSEL.map(k=>`<button type="button" data-lvrm="${k}">${S(ICON[k.slice(0,2)==='g:'?k.slice(2):TYPE_GROUP[k.slice(2)]])}${selL(k)}<b aria-label="Remove">×</b></button>`).join('')}${LVSEL.length>1?'<button type="button" class="ca" data-lvcat="all">Clear all</button>':''}</div>`:'');
     h=h.replace('<div class="lv-tabs">',bar+'<div class="lv-tabs">');
-    if((LVSEL.length||LVQ.trim())&&lvList(LVTAB).length===0&&h.indexOf('class="lv-empty"')<0)h=h.replace(/(<div class="lv-tabs">[\s\S]*?<\/div>)/,`$1<div class="m-empty"><span class="ei">${S(ICON.services)}</span><b>${LVQ.trim()?'Nothing live for “'+LVQ.trim().replace(/[<>&"]/g,'')+'” yet':lab+': nothing live yet'}</b>${LVQ.trim()?'Try another word, or clear the filter.':'When one of these shops posts, it shows up here.'}</div>`);
+    if((LVSEL.length||LVQ.trim())&&lvList(LVTAB).length===0&&h.indexOf('class="lv-empty"')<0)h=h.replace(/(<div class="lv-tabs">[\s\S]*?<\/div>)/,`$1<div class="m-empty"><span class="ei">${S(ICON.services)}</span><b>${LVQ.trim()?'Nothing live for “'+LVQ.trim().replace(/[<>&"]/g,'')+'” yet':lab+': nothing live yet'}</b>${LVQ.trim()?'Try another word.':''}</div>`);
   }return h;};
 })();
 </script><script>
@@ -4693,9 +4693,9 @@ const ICS={store:'<path d="M5 13v13h22V13"/><path d="M3 13l3-8h20l3 8"/><path d=
  share:'<circle cx="24" cy="8" r="4"/><circle cx="8" cy="16" r="4"/><circle cx="24" cy="24" r="4"/><path d="M11.5 14l9-4M11.5 18l9 4"/>',
  bike:'<circle cx="8" cy="23" r="4"/><circle cx="25" cy="23" r="4"/><path d="M12 23h9l3-8h-6l-2 4H9"/><path d="M20 9h4l2 6"/><path d="M5 15h8"/>'};
 window.SFCARDS=[
- {c:'p',k:'For shops on campus',t1:'Post once.',t2:'Sell all day.',p:'Send a photo to Amara on WhatsApp. Students see it here in seconds.',go:'Start selling',at:'data-msub="vendor"',ring:'STAFLY LIVE · FREE TO START ·',ic:'store'},
- {c:'y',k:"Hungry? Don't order alone",t1:'Split the rider.',t2:'Save the fee.',p:'Join a group from your hall and pay a small share of delivery.',go:'See group orders',at:'data-mtab="groups"',ring:'ORDER TOGETHER · PAY LESS ·',ic:'bike'},
- {c:'k',k:'Bring your hallmates',t1:'More friends.',t2:'Bigger groups.',p:'The more people in your hall on Stafly, the faster group orders fill.',go:'Share Stafly',at:'data-sfshare="1"',ring:'SHARE · SAVE · REPEAT ·',ic:'share'}
+ {c:'p',k:'For shops on campus',t1:'Post once.',t2:'Sell all day.',p:'Post from WhatsApp in seconds.',go:'Start selling',at:'data-msub="vendor"',ring:'STAFLY LIVE · FREE TO START ·',ic:'store'},
+ {c:'y',k:"Hungry? Don't order alone",t1:'Split the rider.',t2:'Save the fee.',p:'Order with your hall. Split delivery.',go:'See group orders',at:'data-mtab="groups"',ring:'ORDER TOGETHER · PAY LESS ·',ic:'bike'},
+ {c:'k',k:'Bring your hallmates',t1:'More friends.',t2:'Bigger groups.',p:'Bigger groups fill faster.',go:'Share Stafly',at:'data-sfshare="1"',ring:'SHARE · SAVE · REPEAT ·',ic:'share'}
 ];
 const card=(x,i)=>`<div class="sf-card ${x.c}"><span class="sf-tag">STAFLY</span><span class="sf-k">${x.k}</span><div class="gx-t"><b class="t1">${x.t1}</b><b class="t2">${x.t2}</b></div><p>${x.p}</p><button type="button" class="sf-go" ${x.at}>${x.go}<i>${ARR}</i></button>
  <span class="gx-st" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><defs><path id="sfc${i}" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs><text><textPath href="#sfc${i}" textLength="230">${x.ring}</textPath></text></svg><svg class="ic" viewBox="0 0 32 32">${ICS[x.ic]||''}</svg></span></div>`;
@@ -4757,8 +4757,8 @@ function dlvHtml(v,G){const f=fee(v),m=CK.mode||'solo',gs=G.find(g=>g.id===m),lo
   let det='';
   if(m==='solo')det=`<p class="dl-d">Straight to your door${v.deliv.eta?', '+v.deliv.eta:''}.</p>`;
   else if(isG)det=`<p class="dl-d">${gs.joined} of ${gs.size} joined, going to ${gs.hall}. One rider, you pay a share.</p>${G.length>1?`<div class="dl-gs">${G.map(g=>`<button type="button" class="${g.id===m?'on':''}" data-ckmode="${g.id}">${g.hall}<small>${naira(g.share)}</small></button>`).join('')}</div>`:''}`;
-  else if(m==='new')det=`<p class="dl-d">${hs?'You start a group to '+hs+'. ':''}Others can join, and it gets cheaper as they do.</p>`;
-  const pk=!!(v.real&&v.pickup);if(m==='pick')det=`<p class="dl-d">Collect it from the shop. No delivery fee.</p>`;
+  else if(m==='new')det=`<p class="dl-d">${hs?'You start a group to '+hs+'. ':''}Cheaper as more join.</p>`;
+  const pk=!!(v.real&&v.pickup);if(m==='pick')det=`<p class="dl-d">No delivery fee.</p>`;
   return`<div class="m-sh"><b>Delivery</b></div><div class="m-card dl-c"><div class="dl-row${G.length||pk?'':' two'}">${tile('solo',m==='solo','Just me',f?naira(f):'Free')}${pk?tile('pick',m==='pick','Pick up','Free'):''}${low?tile(isG?gs.id:low.id,isG,'Join group',(isG?naira(gs.share):'from '+naira(low.share)),'Cheaper'):''}${tile('new',m==='new','New group',naira(f))}</div>${det}</div>`;}
 /* ---- checkout ---- */
 function ckFix(v){const pk=!!(v&&v.real&&v.pickup);if(pk&&!v.deliv)CK.mode='pick';else if(CK.mode==='pick'&&!pk)CK.mode='solo';}
@@ -4770,17 +4770,17 @@ function ckPage(v){ckFix(v);const L=lines(v),G=groupsFor(v),d=delivery(v),tot=su
   return`<div class="m-h c">${back()}<h1>Checkout</h1><span style="width:46px"></span></div>
   <div class="m-sh" style="margin-top:0"><b>${v.name}</b><button type="button" class="ck-clr" data-ckclear="${v.id}">Clear basket</button></div>
   <div class="m-card" style="padding:2px 16px">${L.map(l=>`<div class="ck-l"><div><b>${l.name}</b><span>${naira(l.price)} each</span></div><span class="qa"><button type="button" class="qb" data-mdec="${l.i}" aria-label="One less">${MINUS}</button><span class="qn">${l.qty}</span><button type="button" class="qb" data-madd="${l.i}" aria-label="One more">${PLUS}</button></span></div>`).join('')}</div>
-  ${v.deliv?dlvHtml(v,G):(v.real&&v.pickup)?`<div class="m-sh"><b>Pick up</b></div><div class="m-card dl-c"><p class="dl-d" style="margin:0">Collect it from the shop. No delivery fee.</p></div>`:''}
-  <div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>
+  ${v.deliv?dlvHtml(v,G):(v.real&&v.pickup)?`<div class="m-sh"><b>Pick up</b></div><div class="m-card dl-c"><p class="dl-d" style="margin:0">No delivery fee.</p></div>`:''}
+  <div class="m-sh"><b>Your details</b><span></span></div>
   <div class="m-card" style="padding:4px 16px">
-    ${CK.mode==='pick'||ckNone(v)?'':`<label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area, like Moremi Hall, Block 3'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckpin="1" class="${CK.pin?'on':''}">${CK.pin?'Pin dropped ✓':'Drop a pin'}</button><button type="button" data-ckloc="1">Use my location</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>${window.spotsHtml?spotsHtml():''}`}
+    ${CK.mode==='pick'||ckNone(v)?'':`<label class="ck-f"><span>Where to bring it</span><input data-ck="hall" type="text" placeholder="${(window.ckOff&&ckOff())?'Area and street, like Asherifa':'Hall, room or area'}" value="${(/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')?'':(CK.hall||'')).replace(/"/g,'&quot;')}" autocomplete="off"><div class="ck-hl"><button type="button" data-ckpin="1" class="${CK.pin?'on':''}">${CK.pin?'Pin dropped ✓':'Drop a pin'}</button><button type="button" data-ckloc="1">Use my location</button>${((window.ckOff&&ckOff())?PLACES_EXTRA.slice(4).concat(hallKeys.filter(x=>PLACES_EXTRA.slice(4).indexOf(x)<0)):hallKeys).map(h=>`<button type="button" class="${CK.hall&&CK.hall.indexOf(h)===0?'on':''}" data-ckhall="${h}">${h}</button>`).join('')}</div></label>${window.spotsHtml?spotsHtml():''}`}
     <label class="ck-f"><span>WhatsApp number</span><input data-ck="phone" type="tel" inputmode="tel" placeholder="0803 123 4567" value="${(CK.phone||'').replace(/"/g,'&quot;')}" autocomplete="tel"></label>
     <label class="ck-f"><span>Your name</span><input data-ck="name" type="text" placeholder="First name" value="${(CK.name||'').replace(/"/g,'&quot;')}" autocomplete="given-name"></label>
     <label class="ck-f"><span>Note for the shop</span><input data-ck="note" type="text" placeholder="Optional, like extra pepper" value="${(CK.note||'').replace(/"/g,'&quot;')}"></label>
   </div>
   <div class="m-sh"><b>Summary</b></div>
   <div class="m-card ck-sum" style="padding:10px 18px"><div><span>Items</span><b>${naira(sub(v))}</b></div>${CK.mode==='pick'?'<div><span>Pick up</span><b>Free</b></div>':ckNone(v)?'':`<div><span>Delivery${CK.mode!=='solo'?' (your share)':''}</span><b>${naira(d)}</b></div>`}<div class="tot"><span>Total</span><b>${naira(tot)}</b></div></div>
-  <p class="ck-note">${isReal(v)?'You pay securely with Paystack. The money goes to '+v.name+'.':'Preview shop: no money moves. Real checkout turns on when the shop joins.'} You get a tracking page and WhatsApp updates.</p>
+  <p class="ck-note">${isReal(v)?'You pay securely with Paystack. The money goes to '+v.name+'.':'Preview shop. No real payment.'} </p>
   ${ERR?`<div class="ck-err">${ERR}</div>`:''}
   <div class="m-foot">${ckNone(v)?`<button type="button" class="m-pay" data-mtalk="${v.id}">Chat to order</button>`:`<button type="button" class="m-pay" data-mpay="${v.id}"${BUSY?' disabled':''}>${BUSY?'Getting your payment ready…':'Pay '+naira(tot)}</button>`}</div>`;}
 async function pay(v){ERR='';ckFix(v);if(ckNone(v))return;
@@ -4809,7 +4809,7 @@ function tkData(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return null;
 async function tkFetch(ref){const o=MINE.find(x=>x.ref===ref);if(!o||o.demo)return;const v=vOf(o.shop);if(!v||!v.sid)return;
   try{const r=await fetch(API+'/api/w/'+v.sid+'/order/'+encodeURIComponent(o.track));if(r.ok){const prev=JSON.stringify(TK[ref]||null);TK[ref]=(function f(x,d){if(typeof x==='string')return x.replace(/[<>`\\]/g,'').replace(/"/g,'\u201D').replace(/'/g,'\u2019');if(!x||typeof x!=='object'||d>8)return x;if(Array.isArray(x))return x.map(function(y){return f(y,d+1);});var o={};Object.keys(x).forEach(function(k){o[k]=f(x[k],d+1);});return o;})(await r.json(),0);if(CUR.s==='track'&&CUR.id===ref)rer();else if(prev!==JSON.stringify(TK[ref])&&(CUR.s==='mine'||(!CUR.s&&CUR.t==='chats'))){try{rer();}catch(_){}}}}catch(_){}}
 function tkPage(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);
-  if(!o)return`<div class="m-h c">${back()}<h1>Order</h1><span style="width:46px"></span></div><div class="m-empty"><b>We couldn't find that order</b>It may have been opened on another phone.</div>`;
+  if(!o)return`<div class="m-h c">${back()}<h1>Order</h1><span style="width:46px"></span></div><div class="m-empty"><b>We couldn't find that order</b></div>`;
   const v=vOf(o.shop);
   if(!d){tkFetch(ref);return`<div class="m-h c">${back()}<h1>Your order</h1><span style="width:46px"></span></div><div class="m-card" style="height:220px"></div>`;}
   const at=s=>{const t=(d.timeline||[]).find(x=>x.s===s);return t?new Date(t.at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'';};
@@ -4821,7 +4821,7 @@ function tkPage(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);
   <div class="m-sh"><b>What you ordered</b><span>${d.hall||''}</span></div>
   <div class="m-card ck-sum" style="padding:10px 18px">${(d.items||[]).map(i=>`<div><span>${i.qty>1?i.qty+' × ':''}${i.name}</span><b>${naira(i.price*i.qty)}</b></div>`).join('')}<div><span>Delivery</span><b>${naira(d.deliveryFee||0)}</b></div><div class="tot"><span>Total paid</span><b>${naira(d.total||0)}</b></div></div>
   ${!d.demo&&d.whatsapp&&d.stage!=='delivered'?`<a class="m-pay" style="display:grid;place-items:center;text-decoration:none;background:#121215;margin:0 0 10px" href="https://wa.me/${String(d.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent('Hi! I just ordered on Stafly Search ('+ref+'). Please keep me posted here.')}" target="_blank" rel="noopener">Get updates on WhatsApp</a>`:''}
-  <p class="ck-note">${d.demo?'This is a preview of how tracking works. It moves on by itself.':'Tap above once so the shop can message you on WhatsApp at each step.'}</p>
+  <p class="ck-note">${d.demo?'Preview. Steps move on their own.':''}</p>
   <div class="m-foot">${mFoot(v)}</div>`;}
 
 /* v149: premium ticket */
@@ -4868,10 +4868,10 @@ tkPage=function(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);if(!o||!d)r
   <div class="m-card ck-sum" style="padding:10px 18px">${(d.items||[]).map(i=>`<div><span>${i.qty>1?i.qty+' × ':''}${i.name}</span><b>${naira(i.price*i.qty)}</b></div>`).join('')}${o.pick||d.pickup?'<div><span>Pick up</span><b>Free</b></div>':`<div><span>Delivery</span><b>${naira(d.deliveryFee||0)}</b></div>`}<div class="tot"><span>${pending?'Total':'Total paid'}</span><b>${naira(d.total||0)}</b></div></div>
   ${pending&&!declined&&!d.demo?`<div class="tk-lk"><button type="button" class="tk-chg" data-ckback="${ref}">Change order</button><button type="button" class="tk-chg" data-ckgo="${ref}">Back to checkout</button></div>`
    :!d.demo&&d.whatsapp&&d.stage!=='delivered'?`<a class="m-pay" style="display:grid;place-items:center;text-decoration:none;background:#121215;margin:0 0 10px" href="https://wa.me/${String(d.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent('Hi! I just ordered on Stafly Search ('+ref+'). Please keep me posted here.')}" target="_blank" rel="noopener">Get updates on WhatsApp</a>`:''}
-  ${pending&&!d.demo?'':`<p class="ck-note">${d.demo?'This is a preview of how tracking works. It moves on by itself.':'Tap above once so the shop can message you on WhatsApp at each step.'}</p>`}
+  ${pending&&!d.demo?'':`<p class="ck-note">${d.demo?'Preview. Steps move on their own.':''}</p>`}
   <div class="m-foot">${pending&&!declined&&!d.demo&&o.pay?`<a class="m-pay" style="display:grid;place-items:center;text-decoration:none" href="${String(o.pay).replace(/"/g,'%22')}">Complete payment</a>`:mFoot(v)}</div>`;};
 function tkQrOpen(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return;const v=vOf(o.shop);
-  const w=document.createElement('div');w.className='tkq';w.innerHTML=`<div class="tkq-sc" data-tkqx="1"></div><div class="tkq-c" role="dialog" aria-label="Order QR code"><small>${v?v.name:''}</small><div class="tkq-q">${tkQR(tkLink(ref))}</div><b>${tkCode(ref)}</b><span>Show this when you get your order. It's how the shop knows it reached you.</span><button type="button" data-tkqx="1">Done</button></div>`;
+  const w=document.createElement('div');w.className='tkq';w.innerHTML=`<div class="tkq-sc" data-tkqx="1"></div><div class="tkq-c" role="dialog" aria-label="Order QR code"><small>${v?v.name:''}</small><div class="tkq-q">${tkQR(tkLink(ref))}</div><b>${tkCode(ref)}</b><span>Show this code when you get your order.</span><button type="button" data-tkqx="1">Done</button></div>`;
   document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('on'));}
 function tkQrClose(){const w=document.querySelector('.tkq');if(!w)return;w.classList.remove('on');setTimeout(()=>w.remove(),260);}
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
@@ -4889,7 +4889,7 @@ window.tkLabel=function(o){const d=tkData(o.ref);if(!d){const v=vOf(o.shop);if(!
   const pk=!!(o.pick||d.pickup||d.hall==='Pick up at the shop'),st=d.stage||'paid';
   return pk?({paid:'Paid',accepted:'Getting it ready',ready:'Ready to collect',on_the_way:'Ready to collect',delivered:'Collected'}[st]||'Paid'):({paid:'Paid',accepted:'Preparing',ready:'Preparing',on_the_way:'On the way',delivered:'Received'}[st]||'Paid');};
 function minePage(){return`<div class="m-h c">${back()}<h1>Your orders</h1><span style="width:46px"></span></div>${MINE.length?'<div class="m-card" style="padding:2px 16px">'+MINE.map(o=>{const v=vOf(o.shop),st=tkLabel(o);
-  return`<button type="button" class="od-mine" data-mtrack="${o.ref}">${mLogo(v)}<div><b>${v.name}</b><span>${naira(o.total)} · ${new Date(o.at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div><em>${st}</em></button>`;}).join('')+'</div>':`<div class="m-empty"><b>No orders yet</b>When you order from a shop, you can follow it here.</div>`}`;}
+  return`<button type="button" class="od-mine" data-mtrack="${o.ref}">${mLogo(v)}<div><b>${v.name}</b><span>${naira(o.total)} · ${new Date(o.at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div><em>${st}</em></button>`;}).join('')+'</div>':`<div class="m-empty"><b>No orders yet</b></div>`}`;}
 const _sub=m2Sub;m2Sub=function(k,id){
   if(k==='cart')return ckPage(vOf(id));
   if(k==='track'){clearInterval(poll);poll=setInterval(()=>{if(CUR.s!=='track'){clearInterval(poll);return;}const o=MINE.find(x=>x.ref===CUR.id);if(o&&o.demo)rer();else tkFetch(CUR.id);},8000);return tkPage(id);}
@@ -4917,7 +4917,7 @@ function allPage(v){const q=cartOf(v.id);
   <div class="al-top"><div class="al-sub">${v.name} · ${v.items.length} products</div>
   <label class="al-q"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" data-allq="1" placeholder="Search ${v.name.replace(/"/g,'')}" value="${String(window.ALLQ||'').replace(/"/g,'&quot;')}" autocomplete="off"></label>
   ${tops.length>1?`<div class="mi-cats">${['',...tops].map(t=>`<button type="button" data-micat="${t}" class="${sel===t?'on':''}">${cap(t)||'All'}</button>`).join('')}</div>`:''}</div>
-  <div class="al-grid">${list.map(([it,k])=>card(it,k)).join('')}</div><div class="al-none"${list.some(([it])=>!sq||(it[0]+' '+(it[3]||'')).toLowerCase().indexOf(sq)>=0)?' hidden':''}>Nothing matches that. Try another word.</div>
+  <div class="al-grid">${list.map(([it,k])=>card(it,k)).join('')}</div><div class="al-none"${list.some(([it])=>!sq||(it[0]+' '+(it[3]||'')).toLowerCase().indexOf(sq)>=0)?' hidden':''}>No results.</div>
   ${count(v)?`<div class="m-foot">${baskHtml(v)}</div>`:''}`;}
 const _sAll=m2Sub;m2Sub=function(k,id){if(k==='all'){const v=vOf(id);return v?allPage(v):'';}return _sAll.apply(this,arguments);};
 document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;const a=t.closest('#mSub [data-mall]');if(!a)return;e.preventDefault();e.stopImmediatePropagation();window.ALLQ='';window.MCAT=window.MCAT||{};MCAT[a.dataset.mall]='';m2Nav({t:CUR.t,s:'all',id:a.dataset.mall});},true);
@@ -4964,7 +4964,7 @@ function gsCard(o,ask){
     '<div class="gs-rows"><div><span>Delivery you paid</span><b>'+gsN(fee)+'</b></div><div><span>Back to you if it fills</span><b class="gn">up to '+gsN(back)+'</b></div></div>'+btns+'</div>';}
 {const _tk=tkPage;tkPage=function(ref){let h=_tk.apply(this,arguments);const o=MINE.find(x=>x.ref===ref);
   if(typeof h!=='string'||!gsStarter(o))return h;const d=tkData(ref);if(!d||d.stage!=='paid')return h;
-  var G0=gsG(o);if(!o.sentAt&&!(G0&&G0.ready)){h=h.replace('Order received','Group forming').replace('The shop has your order','Goes to the shop when it fills or time runs out');}
+  var G0=gsG(o);if(!o.sentAt&&!(G0&&G0.ready)){h=h.replace('Order received','Group forming').replace('The shop has your order','Sends when full or time’s up');}
   let i=h.indexOf('<div class="m-sh"><b>What you ordered');if(i<0)i=h.indexOf('<div class="m-foot">');if(i<0)return h;
   return h.slice(0,i)+gsCard(o)+h.slice(i);};}
 setInterval(function(){try{if(CUR.s!=='track')return;const o=MINE.find(x=>x.ref===CUR.id),g=gsG(o);if(g&&!g.ready&&!document.querySelector('#mSub .gs-ask'))tkFetch(o.ref);}catch(_){}},20000);
@@ -5179,7 +5179,7 @@ let CHTAB='messages';
   const tabs=`<div class="lv-tabs ch-tabs">${[['messages','Messages'],['orders','Orders'+(mine.length?' ('+mine.length+')':'')]].map(([k,l])=>`<button type="button" data-chtab="${k}" class="${CHTAB===k?'on':''}">${l}</button>`).join('')}</div>`;
   if(CHTAB!=='orders')return head[0]+tabs+h.slice(head[0].length);
   let list='';try{const sub=m2Sub('mine');list=sub.replace(/^[\s\S]*?<\/div>/,'');}catch(_){list='';}
-  return head[0]+tabs+(list||'<div class="m-empty"><b>No orders yet</b>When you order from a shop, you can follow it here.</div>');};})();
+  return head[0]+tabs+(list||'<div class="m-empty"><b>No orders yet</b></div>');};})();
 /* Checkout: "Use my location" adds a map pin to the note so the rider finds you anywhere */
 (function(){document.addEventListener('click',e=>{const b=e.target.closest('[data-ckloc]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();
   if(!navigator.geolocation)return;b.textContent='Finding you…';
@@ -8080,7 +8080,7 @@ function spots(){try{return JSON.parse(localStorage.getItem('stafly_spots')||'[]
 var pk=null,back=null;
 function openPick(){if(typeof map==='undefined')return;back={c:map.getCenter(),z:map.getZoom(),p:map.getPitch()};
   document.body.classList.add('pinpick');
-  pk=document.createElement('div');pk.id='pinPick';pk.innerHTML='<div class="pp-top"><b>Drop a pin</b><span>Move the map so the pin sits on your exact spot</span></div><div class="pp-pin"><span class="pp-head"></span><span class="pp-shadow"></span></div><div class="pp-bar"><button type="button" class="pp-no" data-ppno="1">Cancel</button><button type="button" class="pp-ok" data-ppok="1">Use this spot</button></div>';
+  pk=document.createElement('div');pk.id='pinPick';pk.innerHTML='<div class="pp-top"><b>Drop a pin</b><span>Move the map to your spot</span></div><div class="pp-pin"><span class="pp-head"></span><span class="pp-shadow"></span></div><div class="pp-bar"><button type="button" class="pp-no" data-ppno="1">Cancel</button><button type="button" class="pp-ok" data-ppok="1">Use this spot</button></div>';
   document.body.appendChild(pk);
   try{map.resize();var c=CK.pin?CK.pin.split(',').map(Number):null;map.easeTo({center:c?[c[1],c[0]]:(typeof YOU!=='undefined'&&YOU?[YOU[1],YOU[0]]:map.getCenter()),zoom:18,pitch:0,duration:700});}catch(_){}
   map.on('movestart',lift);map.on('moveend',drop);}
@@ -8204,10 +8204,10 @@ var X='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 function L(){try{var a=JSON.parse(localStorage.getItem('stafly_spots')||'[]');return Array.isArray(a)?a.slice(0,6):[];}catch(_){return[];}}
 function page(){var a=L();
   var h='<div class="m-h c"><button class="m-circ" type="button" data-mback="1" aria-label="Back">'+mS('back')+'</button><h1>Your spots</h1><span style="width:46px"></span></div>';
-  if(!a.length)return h+'<div class="sx-empty"><span class="sx-ic">'+PIN+'</span><b>No saved spots yet</b><span>When you order, keep "Save this spot" on and it shows up here.</span></div>';
-  return h+'<div class="sx-hero"><p>Where your orders come to. Pick one at checkout in one tap.</p></div><div class="sx-list">'+a.map(function(p,i){
+  if(!a.length)return h+'<div class="sx-empty"><span class="sx-ic">'+PIN+'</span><b>No saved spots yet</b><span></span></div>';
+  return h+'<div class="sx-hero"><p></p></div><div class="sx-list">'+a.map(function(p,i){
     var tags=(i===0?'<em>Last used</em>':'')+(p.pin?'<em class="pin">On the map</em>':'');
-    return '<div class="sx-c sp-row" style="animation-delay:'+(i*50)+'ms"><span class="sx-ic">'+PIN+'</span><div class="sx-tx"><b>'+E(p.hall)+'</b><span>'+E(p.spot||'No exact spot yet')+'</span>'+(tags?'<div class="sx-tags">'+tags+'</div>':'')+'</div><button type="button" class="sx-del" data-spdel="'+i+'" aria-label="Remove this spot">'+X+'</button></div>';}).join('')+'</div><p class="sx-foot">You can keep up to 6 spots.</p>';}
+    return '<div class="sx-c sp-row" style="animation-delay:'+(i*50)+'ms"><span class="sx-ic">'+PIN+'</span><div class="sx-tx"><b>'+E(p.hall)+'</b><span>'+E(p.spot||'No exact spot yet')+'</span>'+(tags?'<div class="sx-tags">'+tags+'</div>':'')+'</div><button type="button" class="sx-del" data-spdel="'+i+'" aria-label="Remove this spot">'+X+'</button></div>';}).join('')+'</div><p class="sx-foot">Up to 6 spots.</p>';}
 var _m=m2Sub;m2Sub=function(k,id){if(k==='spots')return page();return _m.apply(this,arguments);};
 })();
 </script>
@@ -8306,7 +8306,7 @@ function page(id){var v=vOf(id),g=GROUPS[id];if(!v||!g)return'<div class="m-h c"
    '<div><span>Delivering to</span><b>'+E(g.hall)+'</b></div>'+
    '<div><span>Leaves</span><b>When full, or in '+g.closes+' min</b></div>'+
    '<div><span>Delivery</span><b>'+naira(fee)+' shared · you pay '+naira(shr)+'</b></div>'+
-   '<div><span>If more join</span><b>Your share drops, we send back the difference</b></div></div>'+
+   '<div><span>If more join</span><b>You get the difference back</b></div></div>'+
   '<div class="m-foot gp-foot"><button type="button" class="m-pay gp-go" data-gpgo="'+id+'">'+(my.length?(me?'See your order':'Join with your items')+' · '+naira(sub+shr):'Pick your items')+'</button></div>';}
 function joinFx(id,v,cb){var g=GROUPS[id],c=document.querySelector('#mSub .gp-card');if(!c||!g)return cb();
   var fee=v.deliv?v.deliv.fee:0,shr=share(v,g.n+1),n=g.n+1,left=g.need-n;
@@ -8489,7 +8489,7 @@ var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='cart'
   CK.hall=g.hall;try{localStorage.setItem('stafly_ck',JSON.stringify(CK));}catch(_){}
   var hall=String(g.hall).replace(/</g,'&lt;');
   return h.replace(/<label class="ck-f"><span>Where to bring it<\/span>[\s\S]*?<\/div><\/label>/,
-    '<div class="ck-f ck-lock"><span>Where to bring it</span><div class="lk-v">'+mS('users3')+hall+'</div><small>The group\'s drop-off. Add your room or spot below.</small></div>');};
+    '<div class="ck-f ck-lock"><span>Where to bring it</span><div class="lk-v">'+mS('users3')+hall+'</div><small>Group drop-off. Add your room below.</small></div>');};
 })();</script>
 <style id="m170">
 html body.m2on #mSub .dv-c{padding:4px 16px!important}
@@ -8540,7 +8540,7 @@ var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='cart'
   var spots=[];re=/data-ckspot="(\d+)"[^>]*>([^<]*)</g;while((m=re.exec(loc)))spots.push([m[1],m[2]]);
   var place=CK.hall||'',sub=CK.pin?'Pin dropped on the map':(CK.spot?esc(CK.spot):'Add your room or spot below');
   var top;
-  if(lock){var gh=(lock.match(/<\/svg>([^<]*)<\/div>/)||['',''])[1];top='<div class="dv-row"><span class="dv-ic">'+mS('users3')+'</span><div class="dv-t"><b>'+gh+'</b><small>The group\'s drop-off. Add your room below.</small></div></div>';}
+  if(lock){var gh=(lock.match(/<\/svg>([^<]*)<\/div>/)||['',''])[1];top='<div class="dv-row"><span class="dv-ic">'+mS('users3')+'</span><div class="dv-t"><b>'+gh+'</b><small>Group drop-off. Add your room below.</small></div></div>';}
   else{
     var list='<button type="button" data-ckloc="1">'+NAV+'Use my location</button><button type="button" data-ckpin="1">'+DROP+'Drop a pin on the map</button>';
     if(spots.length)list+='<div class="dv-gl">Your spots</div>'+spots.map(function(s){return'<button type="button" data-ckspot="'+s[0]+'">'+STAR+s[1]+'</button>';}).join('');
@@ -8549,7 +8549,7 @@ var _ms=m2Sub;m2Sub=function(k,id){var h=_ms.apply(this,arguments);if(k!=='cart'
       '<div class="dv-pk">'+'<input class="dv-q" type="text" placeholder="Search or type a place" autocomplete="off">'+'<div class="dv-l">'+list+'</div></div>';
   }
   var dv=(CK.mode==='pick'||ckNone(vOf(id)))?'':'<div class="m-sh"><b>Deliver to</b></div><div class="m-card dv-c'+(place||lock?'':' open')+'">'+top+spotLbl+'</div>';
-  var det='<div class="m-sh"><b>Your details</b><span>So the shop can reach you</span></div>'+cardOpen+rest;
+  var det='<div class="m-sh"><b>Your details</b><span></span></div>'+cardOpen+rest;
   return h.slice(0,a)+dv+det;};
 window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;var b=t.closest('#mSub [data-dvopen]');if(!b)return;
   e.preventDefault();e.stopImmediatePropagation();var c=b.closest('.dv-c');if(c){c.classList.toggle('open');var q=c.querySelector('.dv-q');if(c.classList.contains('open')&&q&&window.innerWidth>820)q.focus();}},true);
@@ -8807,12 +8807,12 @@ function card(a){if(a.me)return myCardC(a);var id=a.id||(a.n+a.m),done=SENT[id],
    '<span class="g-tag'+(a.m<=30?' hot':'')+'">'+(a.m<=30?'<i class="lvd"></i>New':mS('clock')+ago(a.m))+'</span><span class="g-time">'+cl(a.c)+'</span>'+
    '<div class="g-cap"><div class="nm lv-q"><b>'+esc(a.t)+'</b></div>'+(a.b?'<span class="ak-bd">Budget ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'</div></div>'+
    '<div class="g-body">'+(a.me?'<div class="ak-rh">'+(a.o?a.o+(a.o===1?' shop replied':' shops replied'):'No replies yet')+'<span>'+esc(a.h)+' · '+ago(a.m)+'</span></div>':'<div class="lv-who"><span class="logo mlg ak-in'+(a.n==='You'?'':' sf-in')+'">'+(a.n==='You'?ini(a.n):sfFace(a.n))+'</span><div><b>'+esc(a.n==='You'?'Your post':a.n)+'</b><span>'+esc(a.h)+' · '+(oc?oc+(oc===1?' shop replied':' shops replied'):'No replies yet')+'</span></div><span class="tm">'+ago(a.m)+'</span></div>')+
-   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+(r[6]&&NEWK[r[6]]?'<em class="ak-new">New</em>':'')+'</b><small class="ak-rs">'+esc(r[1]?r[1]+' · ':'')+ago(r[4]).toLowerCase()+'</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">Waiting for shops to reply. Replies show up here.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
+   (a.me?((a.R||[]).length?'<div class="ak-rl">'+a.R.map(function(r){return'<div class="ak-rp"><span class="logo mlg">'+icon(a.c)+'</span><div><b>'+esc(r[0])+(r[6]&&NEWK[r[6]]?'<em class="ak-new">New</em>':'')+'</b><small class="ak-rs">'+esc(r[1]?r[1]+' · ':'')+ago(r[4]).toLowerCase()+'</small><p>'+esc(r[3])+'</p><div class="ak-rf"><strong>₦'+r[2].toLocaleString('en-US')+'</strong><button type="button" class="g-go ak-ch" data-akmsg="1" data-aksid="'+esc(r[5]||'')+'">Chat</button></div></div></div>';}).join('')+'</div>':'<div class="ak-wt">No replies yet.</div>')+'<div class="g-act"><button type="button" class="g-ghost" data-akclose="'+esc(id)+'">Close post</button><button type="button" class="g-go" data-akdone="'+esc(id)+'">I found it<i>'+mS('arrow')+'</i></button></div>'
         :(OPEN[id]?'<div class="ak-rb"><div class="ak-rbh">'+(done?'Edit your reply':'Reply to '+esc(fnm(a.n)))+'</div><span class="ak-fl">Price</span><label class="ak-rpr"><span>₦</span><input class="ak-pp" inputmode="numeric" placeholder="3,000"></label><span class="ak-fl">Message</span><textarea class="ak-pm" maxlength="160" placeholder="e.g. New Oraimo, can deliver"></textarea><div class="g-act"><button type="button" class="g-ghost" data-akcan="'+esc(id)+'">Cancel</button><button type="button" class="g-go" data-aksend="'+esc(id)+'">'+(done?'Update reply':'Send reply')+'<i>'+mS('arrow')+'</i></button></div></div>'
         :done?'<div class="ak-yr"><div class="ak-yrh"><b>Your reply</b><strong>'+(done.p?'₦'+done.p.toLocaleString('en-US'):'')+'</strong></div>'+(done.m?'<p>'+esc(done.m)+'</p>':'')+'</div><div class="g-act"><button type="button" class="g-ghost" data-akhas="'+esc(id)+'">Edit reply</button><button type="button" class="g-go" data-akmsg="1">Message '+esc(fnm(a.n))+'<i>'+mS('arrow')+'</i></button></div>'
         :'<div class="g-act"><button type="button" class="g-ghost" data-akmsg="1">Message</button><button type="button" class="g-go" data-akhas="'+esc(id)+'">I have this<i>'+mS('arrow')+'</i></button></div>'))+
    '</div></div>';}
-function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'You haven’t replied to anyone yet.':'Nothing here yet. Be the first to post.')+'</div>';return L.map(card).join('');}
+function cards(){var L=list();if(!L.length)return'<div class="ak-none">'+(AKT==='mine'?'No replies yet.':'No posts yet.')+'</div>';return L.map(card).join('');}
 function sw(){return'<div class="lv-tabs ak-sw'+(ROLE!=='seller'&&UNS>0&&AKM!=='need'?' ak-sdot':'')+'"><button type="button" data-akm="shops" class="'+(AKM==='shops'?'on':'')+'">Shops live</button><button type="button" data-akm="need" class="'+(AKM==='need'?'on':'')+'">'+(ROLE==='seller'?'Students need':'Ask shops')+'</button></div>';}
 function buyerPage(head){if(liveNow())markSeen();else countNew();setTimeout(akDots,0);setTimeout(loadPast,0);
   return head+sw()+pv()+'<div class="ak-bh ak-bh0"></div>'+cmpH(false)+'<div class="ak-lb ak-lb2">Your posts</div><div id="akList">'+(MINEASK.length?MINEASK.map(card).join(''):'<div class="ak-none">Nothing posted yet.</div>')+'</div><div id="akPast">'+pastHtml()+'</div>';}
@@ -8833,7 +8833,7 @@ function mineCard(a){var R=a.R||[],n=R.length;
   var off=R.map(function(r){var v={cat:a.c};return'<div class="ak-of"><span class="logo mlg">'+icon(a.c)+'</span><div class="ak-ofm"><div class="ak-ofh"><b>'+esc(r[0])+'</b><strong>₦'+r[2].toLocaleString('en-US')+'</strong></div><small>'+esc(r[1])+' · '+r[4]+' min ago</small><p>'+esc(r[3])+'</p><div class="ak-ofb"><button type="button" class="ak-oc" data-akmsg="1">'+mS('chat')+'Chat</button></div></div></div>';}).join('');
   return'<div class="ak-mc"><div class="ak-mh"><span class="ak-mi">'+icon(a.c)+'</span><div><b>'+cl(a.c)+'</b><small>Posted '+ago(a.m).toLowerCase()+'</small></div><span class="ak-st"><i></i>Open</span></div>'+
    '<p class="ak-mq">'+esc(a.t)+'</p><div class="ak-mm">'+(a.b?'<span>'+mS('tag')+'Up to ₦'+a.b.toLocaleString('en-US')+'</span>':'')+'<span>'+mS('pin')+esc(a.h)+'</span></div>'+
-   '<div class="ak-os"><div class="ak-osh">'+(n?n+(n===1?' reply':' replies'):'No replies yet')+'</div>'+(n?off:'<p class="ak-wt">Shops that sell this will see it soon. Replies show up here.</p>')+'</div>'+
+   '<div class="ak-os"><div class="ak-osh">'+(n?n+(n===1?' reply':' replies'):'No replies yet')+'</div>'+(n?off:'<p class="ak-wt">Posted. Replies show up here.</p>')+'</div>'+
    '<div class="ak-mf"><button type="button" class="ak-mx" data-akclose="'+esc(a.id)+'">Close post</button><button type="button" class="ak-md" data-akdone="'+esc(a.id)+'">I found it</button></div></div>';}
 var PLUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
 function cmpH(open){return '<div class="ak-wrap'+(open?' open':'')+'"><div class="ak-cmp" data-aknew="1"><span class="logo mlg">'+mS('search')+'</span><div><b>Can’t find it?</b><small>Post it and shops will reply.</small></div><button type="button" class="g-go ak-mk"><i>'+PLUS+'</i>Create</button></div>'+
@@ -8915,11 +8915,11 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.clo
   if(x.dataset.aknew){w.classList.add('open');var ta=w.querySelector('textarea');if(ta&&window.innerWidth>820)ta.focus();return;}
   if(x.dataset.akno){w.querySelector('textarea').value='';w.querySelector('.ak-bud').value='';var er1=w.querySelector('.ak-er');if(er1)er1.remove();w.classList.remove('open');return;}
   if(x.dataset.akpc){[].forEach.call(w.querySelectorAll('[data-akpc]'),function(b){b.classList.toggle('on',b===x);});return;}
-  if(x.dataset.akpost){var ta2=w.querySelector('textarea'),tx=ta2.value.trim();if(!tx){ta2.focus();return;}if(ROLE!=='seller'&&!(window.USER&&USER.wa)){authOpen('Sign in with WhatsApp to post, so shops know you’re a real student.',{k:'ask'});return;}var pc=w.querySelector('[data-akpc].on');
+  if(x.dataset.akpost){var ta2=w.querySelector('textarea'),tx=ta2.value.trim();if(!tx){ta2.focus();return;}if(ROLE!=='seller'&&!(window.USER&&USER.wa)){authOpen('Sign in to post.',{k:'ask'});return;}var pc=w.querySelector('[data-akpc].on');
     var np={id:'me'+Date.now(),n:'You',h:w.querySelector('.ak-hall').value.trim()||'On campus',m:0,t:tx,c:pc?pc.dataset.akpc:'services',b:parseInt(w.querySelector('.ak-bud').value.replace(/\D/g,''),10)||0,o:0,me:1};
     if(x.disabled)return;x.disabled=true;var er0=w.querySelector('.ak-er');if(er0)er0.remove();
     api('/api/search/asks',{vid:vidG(),text:np.t,cat:np.c,hall:np.h,budget:np.b,name:(window.CK&&CK.name)||''}).then(function(d){np.id=d.id;try{localStorage.setItem('stafly_has_asks','1');}catch(_){}MINEASK.unshift(np);ta2.value='';ta2.style.height='';w.querySelector('.ak-bud').value='';w.classList.remove('open');x.disabled=false;buyerList();loadMine();})
-      .catch(function(e){x.disabled=false;if(e.status===401){try{if(window.USER){delete USER.wa;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(_){}authOpen('Sign in with WhatsApp to post, so shops know you’re a real student.',{k:'ask'});return;}if(e.status===400||e.status===429){akErr(w.querySelector('.ak-form'),e.message);return;}MINEASK.unshift(np);ta2.value='';buyerList();});
+      .catch(function(e){x.disabled=false;if(e.status===401){try{if(window.USER){delete USER.wa;localStorage.setItem('stafly_user',JSON.stringify(USER));}}catch(_){}authOpen('Sign in to post.',{k:'ask'});return;}if(e.status===400||e.status===429){akErr(w.querySelector('.ak-form'),e.message);return;}MINEASK.unshift(np);ta2.value='';buyerList();});
     return;}
   if(x.dataset.akhas){var k=x.dataset.akhas;OPEN={};OPEN[k]=1;relist();var c=document.querySelector('#mPage .ak-rb');if(c){var pv0=SENT[k];if(pv0){c.querySelector('.ak-pp').value=pv0.p?pv0.p.toLocaleString('en-US'):'';var tm=c.querySelector('.ak-pm');tm.value=pv0.m||'';tm.style.height='auto';tm.style.height=tm.scrollHeight+'px';}c.scrollIntoView({block:'center',behavior:'smooth'});var ip=c.querySelector('.ak-pp');if(window.innerWidth>820)ip.focus();}return;}
   if(x.dataset.akcan){OPEN={};return relist();}
@@ -9042,7 +9042,7 @@ function report(){why=-1;var v=vOf(cur);
    '<span class="cm-fl">Note (optional)</span><textarea maxlength="300" placeholder="e.g. Paid at 2pm, nothing came"></textarea>'+
    '<div class="cm-bt"><button type="button" class="cm-no" data-cma="back">Back</button><button type="button" class="cm-go" data-cma="send" disabled>Send report</button></div>');}
 function blockAsk(){var v=vOf(cur);
-  show('<h3>Block '+esc(v.name)+'?</h3><p class="cm-sub">They can’t message you, and you won’t see them in your feed. You can unblock them from your profile.</p><div class="cm-bt"><button type="button" class="cm-no" data-cma="back">Cancel</button><button type="button" class="cm-dg" data-cma="doblock">Block</button></div>');}
+  show('<h3>Block '+esc(v.name)+'?</h3><p class="cm-sub">They can’t message you. Unblock any time from your profile.</p><div class="cm-bt"><button type="button" class="cm-no" data-cma="back">Cancel</button><button type="button" class="cm-dg" data-cma="doblock">Block</button></div>');}
 window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   var m=t.closest('[data-cmenu]');if(m){e.preventDefault();e.stopImmediatePropagation();return menu(m.dataset.cmenu);}
   if(!t.closest('#cmS'))return;
@@ -9056,7 +9056,7 @@ window.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
   if(k==='block')return blockAsk();
   if(k==='back')return menu(cur);
   if(k==='send'){if(why<0)return;var R=ld('stafly_reports');R.push({shop:cur,why:REASONS[why],note:box.querySelector('textarea').value.trim(),at:Date.now()});sv('stafly_reports',R);if(window.akReport)akReport(R[R.length-1]);
-    return show('<div class="cm-c"><div class="cm-ok">'+TICK+'</div><h3>Thanks for telling us</h3><p class="cm-sub">Stafly will look into it within 24 hours and message you on WhatsApp. The shop won’t see your name.</p></div><div class="cm-bt"><button type="button" class="cm-go" data-cmx="1">Done</button></div>');}
+    return show('<div class="cm-c"><div class="cm-ok">'+TICK+'</div><h3>Thanks for telling us</h3><p class="cm-sub">We’ll look into it within 24 hours. The shop won’t see your name.</p></div><div class="cm-bt"><button type="button" class="cm-go" data-cmx="1">Done</button></div>');}
   if(k==='doblock'){var B=ld('stafly_block');if(B.indexOf(cur)<0)B.push(cur);sv('stafly_block',B);close();toast(vOf(cur).name+' blocked');setTimeout(function(){try{history.back();}catch(_){}},300);}},true);
 document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
 })();</script>
@@ -9307,7 +9307,7 @@ window.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;
   if(!t.closest('#mAuth'))return;const A=AUTH;
   if(t.closest('[data-avadd]')){e.stopImmediatePropagation();const em=String(($('#aVEm')||{}).value||'').trim();A.busy=1;A.err='';authRender();
     authApi('/api/search/me',{vid:vidQ(),email:em}).then(d=>{A.busy=0;if(d.email===em.toLowerCase()&&d.ev){USER.email=d.email;USER.ev=1;save();return A.next==='shop'?acctShop():authClose();}
-      USER.emailNew=d.emailNew;save();if(d.mailSent===false){A.err='We couldn’t send the email just now. Please try again later.';return authRender();}A.step='ev';A.em=d.emailNew;authRender();setTimeout(()=>{const i=$('#aVCode');i&&i.focus();},80);})
+      USER.emailNew=d.emailNew;save();if(d.mailSent===false){A.err='Couldn’t send the email. Try again later.';return authRender();}A.step='ev';A.em=d.emailNew;authRender();setTimeout(()=>{const i=$('#aVCode');i&&i.focus();},80);})
       .catch(er=>{A.busy=0;A.err=er.message;authRender();});return;}
   if(t.closest('[data-avsend]')){e.stopImmediatePropagation();if(A.sent)return;A.sent=1;acctResend(A.em).then(()=>{authRender();setTimeout(()=>{A.sent=0;if(A.step==='ev')authRender();},30000);});return;}
   if(t.closest('[data-avchg]')){e.stopImmediatePropagation();A.step='evadd';A.err='';authRender();return;}
@@ -10471,7 +10471,7 @@ window.authRender=function(){var r=R.apply(this,arguments);var A=AUTH;
   if(A&&A.step==='code'&&A.viaWa){var el=document.getElementById('mAuth');var pg=el&&el.querySelector('.a-pg');if(pg&&!pg.querySelector('.a-wa2')){
     var h=pg.querySelector('h2'),sub=pg.querySelector('.sub'),inp=pg.querySelector('#aCode');
     if(h)h.textContent='Get your code';
-    if(sub)sub.innerHTML='Send the message on WhatsApp and we’ll reply with your code. <span class="lnk" data-aphchg="1">Change number</span>';
+    if(sub)sub.innerHTML='Send it and we’ll reply with your code. <span class="lnk" data-aphchg="1">Change number</span>';
     var b=document.createElement('button');b.type='button';b.className='m-cta a-wa2';b.innerHTML=(typeof mS==='function'?mS('wa'):'')+(A.asked?'Open WhatsApp again':'Open WhatsApp');
     if(inp)inp.parentNode.insertBefore(b,inp);
     var alt=pg.querySelector('.a-alt');if(alt)alt.style.display='none';}}
@@ -10555,7 +10555,7 @@ window.authDone=function(){var A=AUTH,self=this,args=arguments;
     cf+='<i class="cf" style="background:'+cols[i%5]+';--x:'+Math.round(Math.cos(ang)*d*1.6)+'px;--y:'+Math.round(Math.sin(ang)*d-20)+'px;--r:'+Math.round(Math.random()*540-270)+'deg;animation-delay:'+(0.8+Math.random()*.15).toFixed(2)+'s"></i>';}
   var h0=el.offsetHeight;
   pg.className='a-pg a-in';
-  pg.innerHTML='<div class="ob-done">'+cf+'<div class="ring"><svg class="r" viewBox="0 0 96 96"><circle cx="48" cy="48" r="46"/></svg><span class="av">'+(A.photo?'<img src="'+A.photo+'" alt="">':sfFace(window.USER&&USER.name?USER.name+(USER.wa||''):nm,1))+'</span><span class="ck"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div><h2>You’re all set'+(nm?', '+E(nm):'')+'</h2><p>Your Stafly account is ready.</p></div>';
+  pg.innerHTML='<div class="ob-done">'+cf+'<div class="ring"><svg class="r" viewBox="0 0 96 96"><circle cx="48" cy="48" r="46"/></svg><span class="av">'+(A.photo?'<img src="'+A.photo+'" alt="">':sfFace(window.USER&&USER.name?USER.name+(USER.wa||''):nm,1))+'</span><span class="ck"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div><h2>You’re all set'+(nm?', '+E(nm):'')+'</h2><p></p></div>';
   var bar=el.querySelector('.steps');if(bar)bar.style.visibility='hidden';
   try{var h1=el.offsetHeight;if(Math.abs(h1-h0)>2){el.style.overflow='hidden';el.style.height=h0+'px';void el.offsetHeight;el.style.transition='transform .4s cubic-bezier(.2,.9,.2,1),height .44s cubic-bezier(.2,.8,.2,1)';el.style.height=h1+'px';setTimeout(function(){el.style.height='';el.style.overflow='';},480);}}catch(e){}
   try{navigator.vibrate&&navigator.vibrate(18);}catch(e){}
@@ -10656,7 +10656,7 @@ function addBtn(root){try{var so=(root||document).querySelectorAll('[data-pfout]
 var q=0;new MutationObserver(function(){if(q)return;q=requestAnimationFrame(function(){q=0;addBtn();});}).observe(document.body,{childList:true,subtree:true});
 var m=null;
 function open(){if(!m){m=document.createElement('div');m.id='m229';document.body.appendChild(m);m.addEventListener('click',function(e){if(e.target===m||e.target.closest('.no'))close();if(e.target.closest('.go'))go();});}
-  m.innerHTML='<div class="bx" role="dialog" aria-modal="true"><h3>Delete your account?</h3><p>Your profile, email and posts will be removed from Stafly. This can’t be undone.</p><button type="button" class="go">Delete account</button><button type="button" class="no">Cancel</button></div>';
+  m.innerHTML='<div class="bx" role="dialog" aria-modal="true"><h3>Delete your account?</h3><p>This removes your profile and posts. You can’t undo it.</p><button type="button" class="go">Delete account</button><button type="button" class="no">Cancel</button></div>';
   void m.offsetHeight;m.classList.add('in');}
 function close(){if(m)m.classList.remove('in');}
 function go(){var b=m.querySelector('.go');b.disabled=true;b.textContent='Deleting…';
@@ -11417,5 +11417,9 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sl 
 function fill(){try{var c=window.CK;if(!c||typeof USER==='undefined'||!USER||!USER.wa)return;if(!c.phone&&TEL)c.phone=TEL;if(!c.name&&USER.name)c.name=String(USER.name).slice(0,40);}catch(_){}}
 try{var pa=profApply;profApply=function(p){pa(p);try{if(p&&p.signedIn&&/^[+0-9]{10,16}$/.test(String(p.tel||'')))TEL=String(p.tel);fill();}catch(_){}};}catch(_){}
 })();</script>
-</body>
+<style id="m307">
+.m-sign span:empty,.pf-card p:empty,.pf-sub:empty,.sx-hero:has(p:empty),.sx-empty span:empty,.cat-hd .sub:empty,
+.sl-p:empty,.sl-ol span:empty,.step span:empty,.m-hi p:empty,.m-via:empty,.m-sh span:empty,.ck-note:empty,
+.ok p:empty,#mPage p:empty,#mSub p:empty,#pgs:empty{display:none!important}
+</style></body>
 </html>
