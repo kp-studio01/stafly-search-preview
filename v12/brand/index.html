@@ -9098,15 +9098,52 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(.g-go,
       if(calm||!was||document.body.classList.contains('dk'))return r;
       if(was.s||now.s||was.t===now.t||was.t==='explore'||now.t==='explore')return r;
       var P=document.getElementById('mPage'); if(!P||!P.animate)return r;
-      var dir=ORDER.indexOf(now.t)>ORDER.indexOf(was.t)?1:-1;
+      
       [].forEach.call(P.children,function(el){
         if(el.getAnimations)el.getAnimations().forEach(function(a){if(a.id==='m314')a.cancel();});
-        var a=el.animate([{opacity:0,transform:'translateX('+(28*dir)+'px)'},{opacity:1,transform:'translateX(0)'}],{duration:340,easing:'cubic-bezier(.22,.8,.24,1)'});
-        a.id='m314';
+        var a=el.animate([{transform:'translateY(12px)'},{transform:'translateY(0)'}],{duration:440,easing:'cubic-bezier(.32,.72,0,1)'});var f=el.animate([{opacity:0},{opacity:1}],{duration:240,easing:'ease-out'});f.id='m314';a.id='m314';
       });
     }catch(_){}
     return r;
   };
+})();
+</script>
+<script id="m315js">
+(function(){
+  var SEL='.lv-tabs,.m-thm';
+  var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(calm)return;
+  function groups(cls){return [].filter.call(document.querySelectorAll(SEL),function(g){return g.className===cls;});}
+  window.addEventListener('click',function(e){
+    var btn=e.target.closest&&e.target.closest('button'); if(!btn)return;
+    var g=btn.parentElement; if(!g||!g.matches||!g.matches(SEL)||btn.classList.contains('on'))return;
+    var on=g.querySelector(':scope>button.on'); if(!on)return;
+    var cls=g.className, gi=groups(cls).indexOf(g), bi=[].indexOf.call(g.children,btn);
+    var gr=g.getBoundingClientRect(), orr=on.getBoundingClientRect();
+    var from={x:orr.left-gr.left,y:orr.top-gr.top,w:orr.width,h:orr.height};
+    setTimeout(function(){requestAnimationFrame(function(){try{
+      var G=groups(cls)[gi]; if(!G)return;
+      var N=G.querySelector(':scope>button.on'); if(!N||[].indexOf.call(G.children,N)!==bi)return;
+      var cs=getComputedStyle(N), G2=G.getBoundingClientRect(), nr=N.getBoundingClientRect();
+      if(getComputedStyle(G).position==='static')G.style.position='relative';
+      var th=document.createElement('span');
+      th.style.cssText='position:absolute;left:0;top:0;pointer-events:none;z-index:0;border-radius:'+cs.borderRadius+';background:'+cs.backgroundColor+';background-image:'+cs.backgroundImage+';box-shadow:'+cs.boxShadow+';width:'+nr.width+'px;height:'+nr.height+'px';
+      G.insertBefore(th,G.firstChild);
+      var BS=[].filter.call(G.children,function(c){return c!==th&&c.tagName==='BUTTON';});BS.forEach(function(c){c.style.position='relative';c.style.zIndex='1';c.style.setProperty('transition','none','important');});
+      N.style.setProperty('background','transparent','important');N.style.setProperty('box-shadow','none','important');
+      var to={x:nr.left-G2.left,y:nr.top-G2.top};
+      var an=th.animate([{transform:'translate('+from.x+'px,'+from.y+'px)',width:from.w+'px'},{transform:'translate('+to.x+'px,'+to.y+'px)',width:nr.width+'px'}],{duration:340,easing:'cubic-bezier(.32,.72,0,1)',fill:'forwards'});
+      var done=function(){N.style.removeProperty('background');N.style.removeProperty('box-shadow');void N.offsetWidth;th.remove();requestAnimationFrame(function(){requestAnimationFrame(function(){BS.forEach(function(c){c.style.removeProperty('transition');});});});};
+      an.onfinish=done; an.oncancel=done;
+      var P=G.closest('#mPage,#mSub');
+      if(P){var gb=G.getBoundingClientRect().bottom;
+        [].forEach.call(P.querySelectorAll('*'),function(el){
+          if(el.parentElement!==P&&!(el.parentElement&&el.parentElement.contains(G)&&!el.contains(G)))return;
+          if(el.contains(G)||el===G)return; var r=el.getBoundingClientRect(); if(r.top<gb-1||!r.height)return;
+          el.animate([{opacity:.0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:320,easing:'cubic-bezier(.32,.72,0,1)'});
+        });}
+    }catch(_){}});},0);
+  },true);
 })();
 </script>
 </body>
