@@ -9086,5 +9086,28 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(.g-go,
 })();
 </script>
 <style id="m313">html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub:has(.cx-hero) .m-thread .msg.out .meta .ticks{color:inherit!important}</style>
+<script id="m314js">
+(function(){
+  if(typeof m2Apply!=='function')return;
+  var ORDER=['explore','places','live','groups','you','chats'], prev=null, base=m2Apply;
+  var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  m2Apply=function(){
+    var was=prev, r=base.apply(this,arguments);
+    try{
+      var now={t:CUR.t,s:CUR.s}; prev=now;
+      if(calm||!was||document.body.classList.contains('dk'))return r;
+      if(was.s||now.s||was.t===now.t||was.t==='explore'||now.t==='explore')return r;
+      var P=document.getElementById('mPage'); if(!P||!P.animate)return r;
+      var dir=ORDER.indexOf(now.t)>ORDER.indexOf(was.t)?1:-1;
+      [].forEach.call(P.children,function(el){
+        if(el.getAnimations)el.getAnimations().forEach(function(a){if(a.id==='m314')a.cancel();});
+        var a=el.animate([{opacity:0,transform:'translateX('+(28*dir)+'px)'},{opacity:1,transform:'translateX(0)'}],{duration:340,easing:'cubic-bezier(.22,.8,.24,1)'});
+        a.id='m314';
+      });
+    }catch(_){}
+    return r;
+  };
+})();
+</script>
 </body>
 </html>
