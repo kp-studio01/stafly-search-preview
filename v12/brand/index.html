@@ -4287,7 +4287,7 @@ return fetch(LIVE.base+'/api/w/'+LIVE.sid+'/shop').then(r=>r.ok?r.json():null).t
   v.about=['Message us and our assistant replies right away'];{const ab=words(d.about).slice(0,600).replace(/\.$/,'');if(ab)v.about=[ab];}
   if(safeUrl(d.avatar))v.img=SCDN(safeUrl(d.avatar),120);v.cover=SCDN(safeUrl(d.cover),640);
   v.place=clean(d.location);staflyPin(v);staflySpot(v,d);
-  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[clean(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':SCDN(safeUrl(i.img),600),clean(i.desc||''),clean(i.cat||i.category||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3).map(function(u){return SCDN(u,600);})]);if(it.length)v.items=it.slice(0,30);
+  const it=(d.items||[]).filter(i=>!i.soldOut&&clean(i.name)).map(i=>[(function(t){return String(t==null?'':t).replace(/[<>`\\]/g,'').replace(/"/g,'\u201D').replace(/'/g,'\u2019').replace(/\s*&\s*/g,' & ').replace(/\s+/g,' ').trim().slice(0,160);})(i.name),Math.max(0,Number(i.price)||0),/\/images\/[^/]+\.png$/.test(String(i.img||''))?'':SCDN(safeUrl(i.img),600),clean(i.desc||''),clean(i.cat||i.category||''),(Array.isArray(i.imgs)?i.imgs:[]).map(safeUrl).filter(Boolean).slice(0,3).map(function(u){return SCDN(u,600);}),String(i.key||'').replace(/[^\w.\-]/g,'').slice(0,80)]);if(it.length)v.items=it.slice(0,30);
   v.wa=waDigits(d.whatsapp);try{REACH[v.id]=!v.wa?'stafly':(d.reach==='whatsapp'||d.reach==='stafly'?d.reach:'both');}catch(e){}
   v.deliv=typeof d.campusFee==='number'&&d.campusFee>=0?{fee:Math.round(d.campusFee),eta:'',to:''}:null;v.pickup=!!d.pickup;v.fol=Math.max(0,Number(d.followers)||0);try{v.fol0=FOLLOW.has(v.id)?1:0;}catch(_){v.fol0=0;}
   const hh=d.hours;if(hh&&Number.isFinite(hh.openMin)&&Number.isFinite(hh.closeMin)){v.hours=[hh.openMin,Math.max(hh.closeMin,hh.openMin+1)];v.days=Array.isArray(hh.days)?hh.days:null;v.closedToday=!!hh.closedToday;}else{v.hours=null;v.days=null;v.closedToday=false;}
@@ -4788,7 +4788,7 @@ async function pay(v){ERR='';ckFix(v);if(ckNone(v))return;
   if(CK.mode!=='pick'&&/^\s*off[ -]?campus\s*$/i.test(CK.hall||'')){ERR=/off/i.test(CK.hall)?'Which area off campus? Like Asherifa or Mayfair.':'Tell the shop where to bring it.';return rer();}
   if(!/^(0[789]\d{9}|234[789]\d{9}|[789]\d{9})$/.test(ph)){ERR='Add your WhatsApp number, like 0803 123 4567.';return rer();}
   const L=lines(v);if(!L.length)return;BUSY=true;rer();
-  const body={acct:1,vid:(localStorage.getItem('stafly_vid')||('v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10))).replace(/[^a-z0-9]/g,'').slice(0,24),phone:ph,name:CK.name,hall:CK.hall,note:CK.note,items:L.map(l=>({name:l.name,qty:l.qty})),back:location.origin+location.pathname};
+  const body={acct:1,vid:(localStorage.getItem('stafly_vid')||('v'+Date.now().toString(36)+Math.random().toString(36).slice(2,10))).replace(/[^a-z0-9]/g,'').slice(0,24),phone:ph,name:CK.name,hall:CK.hall,note:CK.note,items:L.map(l=>({key:(v.items[l.i]||[])[6]||undefined,name:l.name,qty:l.qty})),back:location.origin+location.pathname};
   if(CK.mode==='pick'){body.pickup=1;body.hall='';}else if(CK.mode==='new'){body.group='new';body.groupSize=4;}else if(CK.mode!=='solo')body.group=CK.mode;
   if(isReal(v)){try{const r=await fetch(API+'/api/w/'+v.sid+'/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       if(r.status!==404){const j=await r.json().catch(()=>({}));BUSY=false;
@@ -4807,7 +4807,7 @@ function tkData(ref){const o=MINE.find(x=>x.ref===ref);if(!o)return null;
   if(o.demo){const st=demoStage(o),k=STEPS.findIndex(x=>x[0]===st),tl=[0,25,70,130].slice(0,k+1).map((t,i)=>({s:STEPS[i][0],at:new Date(o.at+t*1000).toISOString()}));return{demo:1,shop:vOf(o.shop).name,stage:st,status:'paid',items:o.items,deliveryFee:o.fee,total:o.total,hall:o.hall,timeline:tl};}
   return TK[ref]||null;}
 async function tkFetch(ref){const o=MINE.find(x=>x.ref===ref);if(!o||o.demo)return;const v=vOf(o.shop);if(!v||!v.sid)return;
-  try{const r=await fetch(API+'/api/w/'+v.sid+'/order/'+encodeURIComponent(o.track));if(r.ok){const prev=JSON.stringify(TK[ref]||null);TK[ref]=await r.json();if(CUR.s==='track'&&CUR.id===ref)rer();else if(prev!==JSON.stringify(TK[ref])&&(CUR.s==='mine'||(!CUR.s&&CUR.t==='chats'))){try{rer();}catch(_){}}}}catch(_){}}
+  try{const r=await fetch(API+'/api/w/'+v.sid+'/order/'+encodeURIComponent(o.track));if(r.ok){const prev=JSON.stringify(TK[ref]||null);TK[ref]=(function f(x,d){if(typeof x==='string')return x.replace(/[<>`\\]/g,'').replace(/"/g,'\u201D').replace(/'/g,'\u2019');if(!x||typeof x!=='object'||d>8)return x;if(Array.isArray(x))return x.map(function(y){return f(y,d+1);});var o={};Object.keys(x).forEach(function(k){o[k]=f(x[k],d+1);});return o;})(await r.json(),0);if(CUR.s==='track'&&CUR.id===ref)rer();else if(prev!==JSON.stringify(TK[ref])&&(CUR.s==='mine'||(!CUR.s&&CUR.t==='chats'))){try{rer();}catch(_){}}}}catch(_){}}
 function tkPage(ref){const o=MINE.find(x=>x.ref===ref),d=tkData(ref);
   if(!o)return`<div class="m-h c">${back()}<h1>Order</h1><span style="width:46px"></span></div><div class="m-empty"><b>We couldn't find that order</b>It may have been opened on another phone.</div>`;
   const v=vOf(o.shop);
@@ -11412,5 +11412,10 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .sl 
 </style><style id="m303">html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light.m-dlt{background:#F5F5F6!important}html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light.m-dlt .mapwrap{visibility:hidden!important}</style>
 <script id="m303js">(function(){var tm=0;window.addEventListener('click',function(e){var b=document.body;if(!b.classList.contains('m-light'))return;var x=e.target.closest&&e.target.closest('#mDrawer [data-msub],#mDrawer [data-mtab]');if(!x||x.dataset.mtab==='explore')return;b.classList.add('m-dlt');clearInterval(tm);var t0=Date.now();tm=setInterval(function(){var c=b.classList;if(Date.now()-t0<700)return;if(c.contains('m-mapoff')||!(c.contains('m-pgon')||c.contains('m-subon'))||Date.now()-t0>4000){c.remove('m-dlt');clearInterval(tm);}},100);},true);})();</script>
 <style id="m305">html:has(body.m-light),html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light{background:#F5F5F6!important;color-scheme:light}</style>
+<script id="m306">/* m306: checkout already knows a signed-in buyer's WhatsApp number and name */
+(function(){var TEL='';
+function fill(){try{var c=window.CK;if(!c||typeof USER==='undefined'||!USER||!USER.wa)return;if(!c.phone&&TEL)c.phone=TEL;if(!c.name&&USER.name)c.name=String(USER.name).slice(0,40);}catch(_){}}
+try{var pa=profApply;profApply=function(p){pa(p);try{if(p&&p.signedIn&&/^[+0-9]{10,16}$/.test(String(p.tel||'')))TEL=String(p.tel);fill();}catch(_){}};}catch(_){}
+})();</script>
 </body>
 </html>
