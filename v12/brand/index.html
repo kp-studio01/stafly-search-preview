@@ -3086,7 +3086,10 @@ function setSat(on){SAT=on;try{localStorage.setItem('stafly_sat',on?'1':'0');}ca
   ['roadname','poi','place'].forEach(id=>{map.setPaintProperty(id,'text-color',on?'#FFFFFF':(id==='place'?C.tplace:id==='poi'?C.label:C.troad));map.setPaintProperty(id,'text-halo-color',on?'rgba(0,0,0,.6)':C.halo);});
   document.body.classList.toggle('m-sat',on);const b=document.getElementById('mSatB');if(b)b.innerHTML=(on?MI.mapic:MI.satic)+'<span>'+(on?'Map':'Satellite')+'</span>';}
 const ll2=ll=>[ll[1],ll[0]];
-const map=new maplibregl.Map({container:'map',style:STYLE,center:[4.5262,7.5185],zoom:16,pitch:42,bearing:-18,maxPitch:50,minZoom:13.5,maxBounds:[[4.47,7.47],[4.58,7.56]],antialias:(matchMedia('(min-width:821px)').matches||(devicePixelRatio||1)<2),pixelRatio:Math.min(devicePixelRatio||1,2),attributionControl:false,fadeDuration:120});
+const SFPR={B:3.2e6,pr(){const d=Math.min(devicePixelRatio||1,2),a=Math.max(1,innerWidth*innerHeight);return Math.max(.75,Math.min(d,Math.sqrt(this.B/a)));}};SFPR.aa=(matchMedia('(min-width:821px)').matches||(devicePixelRatio||1)<2)&&innerWidth*innerHeight*Math.pow(Math.min(devicePixelRatio||1,2),2)<=2.4e6;
+const map=new maplibregl.Map({container:'map',style:STYLE,center:[4.5262,7.5185],zoom:16,pitch:42,bearing:-18,maxPitch:50,minZoom:13.5,maxBounds:[[4.47,7.47],[4.58,7.56]],antialias:SFPR.aa,pixelRatio:SFPR.pr(),attributionControl:false,fadeDuration:120});
+addEventListener('resize',()=>{try{const r=SFPR.pr();if(Math.abs(r-map.getPixelRatio())>.05)map.setPixelRatio(r);}catch(e){}});
+
 map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:'© OpenStreetMap contributors · OpenFreeMap'}),'bottom-left');
 let ready=false;
 map.on('load',()=>{ready=true;applyTheme();setSat(SAT);
