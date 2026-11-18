@@ -3421,10 +3421,10 @@ function m2Page(t){
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
       const steps=Array.from({length:g.need},(_,i)=>{const c=i<g.n?'f':(me&&i===g.n?'me':'');return(i?`<span class="ln${i<n?' f':''}"></span>`:'')+`<span class="st ${c}">${c?mS('check'):''}</span>`;}).join('');
       const left=g.need-n;
-      return`<div class="g-card${me?' in':''}"><div class="g-media${CV(v)?'':' g-poster'}">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:gArt(v)}<span class="g-shade"></span>
+      return`<div class="g-card${me?' in':''}">${(CV(v)||!(window.CATILL&&CATILL[v.cat]))?`<div class="g-media${CV(v)?'':' g-poster'}">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:gArt(v)}<span class="g-shade"></span>
         <span class="g-tag">${mS('users3')}Group order</span><span class="g-time${g.closes<=15?' soon':''}">${mS('clock')}${g.closes} min left</span>
         
-        <div class="g-cap"><div class="nm"><b>${v.name}</b><span>To ${g.hall}</span></div><div class="pr"><b>${naira(share(v,me?n:n+1))}</b><span><s>${naira(fee)}</s></span></div></div></div>
+        <div class="g-cap"><div class="nm"><b>${v.name}</b><span>To ${g.hall}</span></div><div class="pr"><b>${naira(share(v,me?n:n+1))}</b><span><s>${naira(fee)}</s></span></div></div></div>`:`<div class="gz3"><span class="gz3-g"></span><span class="gz3-a">${CATILL[v.cat]}</span><b>${v.name}</b><small>To ${g.hall}</small><div class="gz3-p"><em>${naira(share(v,me?n:n+1))}<s>${naira(fee)}</s></em><span class="gz3-t${g.closes<=15?' soon':''}">${mS('clock')}${g.closes} min left</span></div></div>`}
         <div class="g-body gc-b"><!--m345--><div class="gc-f">${(window.gpMembers?gpMembers(id,v,g):(g.faces||[]).map(c=>({c,nm:' '}))).slice(0,g.n).map(m=>`<i class="p">${gpPic(m.nm)}</i>`).join('')}${me?`<i class="you p">${gpPic(null)}</i>`:''}${Array.from({length:Math.max(0,left)},()=>'<i class="e"></i>').join('')}</div><button type="button" class="g-go" data-mjoin="${id}">${me?'You’re in':'Join'}<i>${me?mS('check'):mS('arrow')}</i></button></div></div></div>`;}).join('')}
     <p class="m-note">You only pay when the shop confirms.</p>`;}
   if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.length?'':`<div class="m-empty"><span class="ei">${mS('chat')}</span><b>No chats yet</b></div>`}${CHATS.filter(c=>vOf(c.id)).map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-mtalk="${v.id}">${mLogo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}`;
@@ -9241,6 +9241,29 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.
 <style id="m346">
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mPage .gc-f i.p,#mSub .gp-faces>span i.p,#mSub .gp-av.p){background:transparent!important;overflow:hidden;padding:0!important;font-size:0!important}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on :is(#mPage .gc-f i.p,#mSub .gp-faces>span i.p,#mSub .gp-av.p) :is(.sf-face,img){display:block!important;width:100%!important;height:100%!important;margin:0!important;box-shadow:none!important;border-radius:50%;object-fit:cover}
+</style>
+<style id="m347">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3){position:relative;overflow:hidden!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3{position:relative;display:flex;flex-direction:column;align-items:flex-start;padding:18px 18px 0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3>b{position:relative;z-index:2;max-width:64%;font:600 18px/1.2 "DM Sans",system-ui,sans-serif;letter-spacing:-.01em;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3>small{position:relative;z-index:2;margin-top:5px;font:500 13.5px/1.3 "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.5)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-p{position:relative;z-index:2;display:flex;align-items:center;gap:6px;margin-top:16px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-p :is(em,.gz3-t){display:flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:9px;background:#1E1E24;font:700 12.5px/1 "DM Sans",system-ui,sans-serif;font-style:normal;color:#fff;white-space:nowrap}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-p em s{font-weight:500;opacity:.45}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-p .gz3-t{font-weight:600;color:rgba(255,255,255,.72)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-p .gz3-t.soon{color:#F5C451}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-p .gz3-t svg{width:13px;height:13px;flex:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-a{position:absolute;z-index:1;right:-12px;top:-8px;width:116px;height:116px;transform:rotate(-8deg);pointer-events:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-a svg{display:block;width:100%;height:100%}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gz3-g{position:absolute;z-index:0;right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,122,168,.2),rgba(255,122,168,0))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gz3) .gc-b{position:relative;z-index:2;padding-top:16px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3>b{color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3>small{color:#6B6B75}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3-p :is(em,.gz3-t){background:#F3F3F4;color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3-p .gz3-t{color:#55555F}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3-p .gz3-t.soon{color:#A86A00}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3-a{filter:drop-shadow(0 6px 10px rgba(18,18,21,.14))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3-g{background:radial-gradient(closest-side,rgba(255,122,168,.16),rgba(255,122,168,0))}
 </style>
 </body>
 </html>
