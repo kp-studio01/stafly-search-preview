@@ -4143,8 +4143,8 @@ function topField(){const top=document.querySelector('.m-top');if(!top)return;
   else if(!tf){const d=document.createElement('div');d.innerHTML=m2Page('places');const f=d.querySelector('.m-field');top.querySelector('.dk-sp').insertAdjacentElement('beforebegin',f);}}
 const _apply=m2Apply;m2Apply=function(){
   if(DK()&&CUR.t==='explore'){CUR=Object.assign({},CUR,{t:'places'});history.replaceState(CUR,'','#'+(CUR.s?CUR.s+(CUR.id?'/'+CUR.id:''):'places'));}
-  _apply();if(!DK())return;document.body.classList.add('m-pgon');topField();mark2();
-  if(CUR.s==='shop'&&CUR.id)fly(CUR.id);};
+  const _wasSub=document.body.classList.contains('m-subon');_apply();if(!DK())return;document.body.classList.add('m-pgon');topField();mark2();
+  /*m340*/clearTimeout(window.__flyT);if(CUR.s==='shop'&&CUR.id){const _id=CUR.id;window.__flyT=setTimeout(()=>{if(CUR.s==='shop'&&CUR.id===_id)fly(_id);},_wasSub?90:420);}};
 document.addEventListener('focusin',e=>{if(DK()&&e.target.id==='mQ'&&CUR.t!=='places'){m2Nav({t:'places'});setTimeout(()=>{const q=$('#mQ');q&&q.focus();},30);}});
 /* pins open the shop beside the list */
 const _open=m2Open;m2Open=function(id){if(!DK())return _open(id);m2Nav({t:CUR.t==='explore'?'places':CUR.t,s:'shop',id});};
