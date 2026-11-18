@@ -3415,8 +3415,8 @@ function m2Page(t){
       <div class="g-cap"><div class="nm lv-q"><b>${d.t}</b></div></div></div>
       <div class="g-body"><div class="lv-who">${mLogo(v)}<div><b>${v.name}</b><span>${[v.place.split(',')[0],sKnow(v)?dtxt(v):''].filter(Boolean).join(' · ')}</span></div><span class="tm">${ago(d.m)}</span></div>
       <div class="g-act"><button type="button" class="g-ghost" data-msel="${v.id}">Show on map</button><button type="button" class="g-go" data-lvtalk="${d.id}">Chat to order<i>${mS('arrow')}</i></button></div></div></div>`;}).join('')}`;}
-  if(t==='groups'){const ids=Object.keys(GROUPS);return`<div class="m-h"><h1>Group orders</h1></div>
-    <div class="gx-hero gx2"><span class="gx-k">Order with your hall</span><div class="gx-t"><b class="t1">Order together.</b><b class="t2">Pay less.</b></div><svg class="gx-sw" viewBox="0 0 120 40" aria-hidden="true"><path d="M3 30c14-18 30-22 34-10s-10 16-8 6 22-20 40-12 20 20 46 4"/></svg><p>Split one delivery fee.</p><span class="gx-st" aria-hidden="true"><svg class="ring" viewBox="0 0 100 100"><defs><path id="gxc" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs><text><textPath href="#gxc" textLength="230">SPLIT THE FEE · SAVE MORE ·</textPath></text></svg><svg class="ic" viewBox="0 0 32 32"><circle cx="8" cy="23" r="4"/><circle cx="25" cy="23" r="4"/><path d="M12 23h9l3-8h-6l-2 4H9"/><path d="M20 9h4l2 6"/><path d="M5 15h8"/></svg></span></div>
+  if(t==='groups'){/*m343*/const all=Object.keys(GROUPS),hk=(typeof USER!=='undefined'&&USER&&USER.hk&&USER.hk!=='off')?USER.hk:'',hr=hk?new RegExp(hk==='pg'?'pg|post':hk,'i'):null,mine=i=>!!hr&&hr.test(GROUPS[i].hall||''),gt=(window.GPTAB==='hall'&&!hk)?'all':(window.GPTAB||'all');const ids=gt==='hall'?all.filter(mine):gt==='soon'?all.slice().sort((a,b)=>GROUPS[a].closes-GROUPS[b].closes):all.slice().sort((a,b)=>mine(b)-mine(a));return`<div class="m-h"><h1>Group orders</h1></div>
+    <div class="lv-tabs gp-tabs">${[['all','All']].concat(hk?[['hall','My hall']]:[],[['soon','Ending soon']]).map(([k,l])=>`<button type="button" data-gptab="${k}" class="${gt===k?'on':''}">${l}</button>`).join('')}</div>${ids.length?'':`<div class="m-empty"><span class="ei">${mS('users3')}</span><b>No group for your hall yet</b></div>`}
     ${ids.map(id=>{const v=vOf(id),g=GROUPS[id],me=joined.has(id),n=g.n+(me?1:0),fee=v.deliv?v.deliv.fee:0;
       const steps=Array.from({length:g.need},(_,i)=>{const c=i<g.n?'f':(me&&i===g.n?'me':'');return(i?`<span class="ln${i<n?' f':''}"></span>`:'')+`<span class="st ${c}">${c?mS('check'):''}</span>`;}).join('');
       const left=g.need-n;
@@ -9215,5 +9215,10 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.g-seg) .g-stats>div+div::before{content:"\00B7";margin:0 8px;opacity:.5}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.g-seg) .g-act{margin-top:14px!important}
 </style>
+<script id="m343js">/* Groups filter row */
+document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('[data-gptab]');if(!el)return;e.stopImmediatePropagation();e.preventDefault();
+  if(el.classList.contains('on'))return;window.GPTAB=el.getAttribute('data-gptab');var P=document.getElementById('mPage');if(!P)return;
+  try{var h=window.m2Page('groups');P.innerHTML=h;window.M2PH=h;P.scrollTop=0;}catch(_){}},true);
+</script>
 </body>
 </html>
