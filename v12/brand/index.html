@@ -3423,10 +3423,8 @@ function m2Page(t){
       return`<div class="g-card${me?' in':''}"><div class="g-media${CV(v)?'':' g-poster'}">${CV(v)?`<img class="g-photo" src="${CV(v)}" alt="">`:gArt(v)}<span class="g-shade"></span>
         <span class="g-tag">${mS('users3')}Group order</span><span class="g-time${g.closes<=15?' soon':''}">${mS('clock')}${g.closes} min left</span>
         
-        <div class="g-cap"><div class="nm"><b>${v.name}</b><span>Delivering to ${g.hall}</span></div><div class="pr"><b>${naira(share(v,me?n:n+1))}</b><span>${me?'your share':'your share'} · <s>${naira(fee)}</s></span></div></div></div>
-        <div class="g-body"><div class="g-seg">${Array.from({length:g.need},(_,k)=>`<i class="${k<g.n?'f':(me&&k===g.n?'me':'')}"></i>`).join('')}</div>
-        <div class="g-stats"><div>${mS('users3')}<span>Joined</span><b>${n}/${g.need}</b></div><div>${mS('clock')}<span>Spots</span><b>${left>0?left+' left':'Full'}</b></div><div>${mS('walk')}<span>Shop</span><b>${walk(v)} min</b></div></div>
-        <div class="g-act"><button type="button" class="g-ghost" data-mshop="${id}">View shop</button><button type="button" class="g-go" data-mjoin="${id}">${me?'You’re in':'Join group'}<i>${me?mS('check'):mS('arrow')}</i></button></div></div></div>`;}).join('')}
+        <div class="g-cap"><div class="nm"><b>${v.name}</b><span>To ${g.hall}</span></div><div class="pr"><b>${naira(share(v,me?n:n+1))}</b><span><s>${naira(fee)}</s></span></div></div></div>
+        <div class="g-body gc-b"><!--m345--><div class="gc-f">${(window.gpMembers?gpMembers(id,v,g):(g.faces||[]).map(c=>({c,nm:' '}))).slice(0,g.n).map(m=>`<i style="background:${/^#fff(fff)?$/i.test(m.c)?'#CFE3FF':m.c}">${(m.nm||' ')[0]}</i>`).join('')}${me?'<i class="you">You</i>':''}${Array.from({length:Math.max(0,left)},()=>'<i class="e"></i>').join('')}</div><button type="button" class="g-go" data-mjoin="${id}">${me?'You’re in':'Join'}<i>${me?mS('check'):mS('arrow')}</i></button></div></div></div>`;}).join('')}
     <p class="m-note">You only pay when the shop confirms.</p>`;}
   if(t==='chats')return`<div class="m-h"><h1>Chats</h1></div>${CHATS.length?'':`<div class="m-empty"><span class="ei">${mS('chat')}</span><b>No chats yet</b></div>`}${CHATS.filter(c=>vOf(c.id)).map(c=>{const v=vOf(c.id);return`<button class="m-chat" type="button" data-mtalk="${v.id}">${mLogo(v)}<div><b>${v.name}</b><p>${c.t}</p></div><span class="cm">${c.tm}${c.n?`<em>${c.n}</em>`:''}</span></button>`;}).join('')}`;
   return'';
@@ -5912,7 +5910,7 @@ function members(id,v,g){var out=[],its=v.items||[],h=0;for(var i=0;i<id.length;
     var pick=[[a[0],q]];if(b&&b[0]!==a[0]&&k%2===0)pick.push([b[0],1]);
     out.push({nm:NM[(h+k)%NM.length],c:(g.faces||[])[k]||'#D9CCFF',items:pick,lead:k===0});}return out;}
 function E(x){return String(x||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-function mine(id,v){try{var c=JSON.parse(localStorage.getItem('stafly_cart')||'{}');if(!c||c.shop!==id)return[];var L=[];for(var k in c.q){var it=v.items[k],q=+c.q[k];if(it&&q)L.push([it[0],q,it[1]]);}return L;}catch(_){return[];}}
+window.gpMembers=members;function mine(id,v){try{var c=JSON.parse(localStorage.getItem('stafly_cart')||'{}');if(!c||c.shop!==id)return[];var L=[];for(var k in c.q){var it=v.items[k],q=+c.q[k];if(it&&q)L.push([it[0],q,it[1]]);}return L;}catch(_){return[];}}
 function pr(x){return typeof x==='string'?Number(x.replace('from ','')):Number(x)||0;}
 function page(id){var v=vOf(id),g=GROUPS[id];if(!v||!g)return'<div class="m-h c">'+back()+'<h1>Group</h1><span style="width:46px"></span></div><div class="m-empty"><b>This group has closed</b></div>';
   var me=joined.has(id),n=g.n+(me?1:0),left=g.need-n,fee=v.deliv?v.deliv.fee:0,M=members(id,v,g),my=mine(id,v),cv=(typeof CV==='function')&&CV(v);
@@ -9221,7 +9219,23 @@ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.
   try{var h=window.m2Page('groups');P.innerHTML=h;window.M2PH=h;P.scrollTop=0;}catch(_){}},true);
 </script>
 <style id="m344">
-html body :is(#mPage,#mSub) :is(.g-card:has(.g-seg),.gp-card) .g-art{--tt:#FF7AA8!important}
+html body :is(#mPage,#mSub) :is(.g-card:has(.g-seg),.g-card:has(.gc-b),.gp-card) .g-art{--tt:#FF7AA8!important}
+</style>
+<style id="m345">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .g-media{height:150px!important;min-height:0!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .g-tag{display:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .g-time{left:14px!important;right:auto!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .g-cap .pr span{opacity:.6}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .gc-b{display:flex!important;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 16px 18px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .gc-f{display:flex;align-items:center;min-width:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .gc-f i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12.5px;font-weight:700;color:#121215;margin-left:-8px;box-shadow:0 0 0 2.5px #0E0E11}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .gc-f i:first-child{margin-left:0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .gc-f i.you{background:#fff;font-size:10px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .gc-f i.e{margin-left:6px;background:transparent;box-shadow:none;border:1.5px dashed rgba(255,255,255,.24);box-sizing:border-box}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mPage .g-card:has(.gc-b) .g-go{margin:0!important;flex:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gc-b) .gc-f i{box-shadow:0 0 0 2.5px #fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gc-b) .gc-f i.you{background:#121215;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gc-b) .gc-f i.e{background:transparent;box-shadow:none;border-color:rgba(18,18,21,.22)}
 </style>
 </body>
 </html>
