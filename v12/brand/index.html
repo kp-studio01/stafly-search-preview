@@ -9287,5 +9287,20 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3-g{background:#F4F4F5}
 html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mPage .g-card:has(.gz3) .gz3-a{filter:drop-shadow(0 10px 12px rgba(18,18,21,.12)) drop-shadow(0 1px 2px rgba(18,18,21,.08))}
 </style>
+<script id="m351js">/* m351: dark satellite grade */
+(function(){try{
+var G=window.SATG={dark:{sat:-.55,con:.24,max:.60,min:0,tint:'#0A1320',top:.30,minor:'rgba(255,255,255,.26)',major:'rgba(255,255,255,.72)'},light:{sat:-.05,con:.05,max:.92,min:0,tint:'#0A1320',top:0,minor:'rgba(255,255,255,.35)',major:'rgba(255,255,255,.55)'}};
+var _s=setSat;
+setSat=function(on){_s(on);try{
+  if(!map.getLayer('sat'))return;var g=G[document.body.classList.contains('m-light')?'light':'dark'];
+  if(!map.getLayer('sat-tint')){var L=map.getStyle().layers,i=L.findIndex(function(l){return l.id==='sat'});
+    map.addLayer({id:'sat-tint',type:'background',paint:{'background-color':g.tint,'background-opacity':0}},L[i+1]?L[i+1].id:undefined);}
+  map.setPaintProperty('sat','raster-saturation',g.sat);map.setPaintProperty('sat','raster-contrast',g.con);
+  map.setPaintProperty('sat','raster-brightness-max',g.max);map.setPaintProperty('sat','raster-brightness-min',g.min);
+  map.setPaintProperty('sat-tint','background-color',g.tint);map.setPaintProperty('sat-tint','background-opacity',on?g.top:0);
+  if(on){map.setPaintProperty('minor','line-color',g.minor);map.setPaintProperty('major','line-color',g.major);map.setPaintProperty('paths','line-color',g.minor);}
+}catch(_){}};
+if(typeof ready!=='undefined'&&ready)setSat(SAT);
+}catch(_){}})();</script>
 </body>
 </html>
