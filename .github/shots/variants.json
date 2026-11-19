@@ -1,7 +1,1 @@
-{"dark":[
- {"id":"d4","g":{"sat":-0.62,"con":0.3,"max":0.6,"min":0,"top":0.3},"desk":1}
-],"light":[
- {"id":"la","g":{"sat":-0.38,"con":0.22,"max":1,"min":0.04,"top":0},"desk":1,"zooms":[16,15]},
- {"id":"lb","g":{"sat":-0.55,"con":0.2,"max":1,"min":0.06,"top":0.06},"desk":1},
- {"id":"lc","g":{"sat":-0.3,"con":0.3,"max":1,"min":0,"top":0}}
-]}
+{"dark":[{"id":"final","g":{},"desk":1,"zooms":[16,15]}],"light":[{"id":"final","g":{},"desk":1,"zooms":[16,15]}]}
