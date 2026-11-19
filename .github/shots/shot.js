@@ -1,24 +1,16 @@
-const {chromium}=require('playwright');
+// Real-tile screenshots of the satellite map with several grades, for design review.
+const {chromium}=require('playwright');const fs=require('fs');
 (async()=>{const page=process.env.PAGE||'v12/brand/index.html';const b=await chromium.launch();
-const C=(process.env.CENTER||'4.5228,7.5192').split(',').map(Number);const out=[];
-for(const theme of ['dark','light']) for(const [w,h,name] of [[1280,760,'desk'],[390,844,'phone']]){
-  const p=await b.newPage({viewport:{width:w,height:h},deviceScaleFactor:2,colorScheme:theme});
+const V=JSON.parse(fs.readFileSync(__dirname+'/variants.json','utf8'));const out=[];
+for(const theme of ['dark','light']) for(const [w,h,d,name] of [[390,844,2,'phone'],[1280,760,1,'desk']]){
+  const p=await b.newPage({viewport:{width:w,height:h},deviceScaleFactor:d,colorScheme:theme});
   p.on('pageerror',e=>console.log('PAGEERR',e.message));
-  await p.addInitScript(t=>{try{localStorage.setItem('stafly_sat','0');localStorage.setItem('stafly_theme',t);}catch(e){}},theme);
-  await p.goto('http://localhost:8000/'+page,{waitUntil:'domcontentloaded'});await p.waitForTimeout(6000);
-  const ONLY=1,ONLYDESK=1;for(const z of (ONLY?[16.2,17.3]:[16.2,17.3])){await p.evaluate(([c,z])=>{try{map.jumpTo({center:c,zoom:z,pitch:50,bearing:-20});}catch(e){}},[C,z]);await p.waitForTimeout(6000);
-    const f=`shots/${name}-${theme}-z${z}.png`;await p.screenshot({path:f});out.push(f);}
-  if(!ONLY)try{await p.evaluate(()=>m2Nav({t:'explore',dir:V.find(v=>v.ll).id}));await p.waitForTimeout(4000);await p.screenshot({path:`shots/${name}-${theme}-dir.png`});await p.click('#mDir .dir-go');await p.waitForTimeout(4500);await p.keyboard.down('ArrowUp');await p.waitForTimeout(1800);await p.keyboard.up('ArrowUp');await p.waitForTimeout(3500);
-    const f=`shots/${name}-${theme}-walk.png`;await p.screenshot({path:f});out.push(f);await p.evaluate(()=>staflyWalk.stop());await p.waitForTimeout(1500);await p.evaluate(()=>history.back());await p.waitForTimeout(800);}catch(e){console.log('walkerr',e.message);}
-  if(!ONLY)try{await p.evaluate(([c,t])=>{window.__m220h=t==='dark'?21:18;m220Day(true);map.jumpTo({center:c,zoom:16.6,pitch:50,bearing:-20});},[C,theme]);await p.waitForTimeout(5000);
-    await p.screenshot({path:`shots/${name}-${theme}-time.png`});
-    const pt=await p.evaluate(()=>{const W=innerWidth,H=innerHeight;for(let y=H*.35;y<H*.75;y+=12)for(let x=W*.45;x<W*.9;x+=12){const f=map.queryRenderedFeatures([x,y],{layers:['lmk','bld'].filter(i=>map.getLayer(i))});if(f.length)return [x,y];}return null;});
-    console.log('ids',await p.evaluate(()=>map.queryRenderedFeatures({layers:['bld']}).slice(0,5).map(f=>f.id).join(',')));if(pt){await p.mouse.click(pt[0],pt[1]);await p.waitForTimeout(900);console.log('card',name,theme,await p.evaluate(()=>document.getElementById('m220c').className+' '+document.getElementById('m220c').textContent));await p.screenshot({path:`shots/${name}-${theme}-tap.png`});}}catch(e){console.log('timeerr',e.message);}
-  try{await p.evaluate(()=>{window.__m220h=null;try{m220Day(true);}catch(e){}});const id=await p.evaluate(()=>__m221demo());await p.waitForTimeout(2500);
-    await p.evaluate(()=>{const v=__SFO.MINE[0];const s=V.find(x=>x.id===v.shop);map.jumpTo({center:[s.ll[1],s.ll[0]],zoom:16.4,pitch:50,bearing:-20});});await p.waitForTimeout(5000);
-    await p.screenshot({path:`shots/${name}-${theme}-rider.png`});console.log('rider',id,await p.evaluate(()=>document.querySelectorAll('.m221r').length));
-    await p.evaluate(()=>{map.jumpTo({center:[4.5188,7.5214],zoom:17.2,pitch:50,bearing:-20});});await p.waitForTimeout(5000);await p.screenshot({path:`shots/${name}-${theme}-names.png`});
-    console.log('life',await p.evaluate(()=>{try{return map.getSource('m221life')._data.features.length+' '+document.body.className+' z'+map.getZoom()+' moving'+map.isMoving()}catch(e){return e.message}}));}catch(e){console.log('m221err',e.message);}
-  if(name==='desk'&&theme==='dark')console.log('trees',await p.evaluate(()=>{try{return map.getSource('m217t')._data.features.length}catch(e){return e.message}}),'layers',await p.evaluate(()=>map.getStyle().layers.map(l=>l.id).join(',')));
+  await p.addInitScript(t=>{try{localStorage.setItem('stafly_sat','1');localStorage.setItem('stafly_theme',t);}catch(e){}},theme);
+  await p.goto('http://localhost:8000/'+page,{waitUntil:'domcontentloaded'});await p.waitForTimeout(9000);
+  console.log(name,theme,'ready',await p.evaluate(()=>{try{return ready+' sat'+SAT+' '+JSON.stringify(window.SATG&&SATG[document.body.classList.contains('m-light')?'light':'dark'])}catch(e){return e.message}}));
+  for(const v of V[theme]){ if(name==='desk'&&!v.desk)continue;
+    await p.evaluate(([t,g])=>{try{if(window.SATG)Object.assign(SATG[t],g);setSat(true);}catch(e){console.log(e.message)}},[theme,v.g||{}]);
+    for(const z of (v.zooms||[16])){await p.evaluate(z=>{try{map.jumpTo({center:[4.5262,7.5185],zoom:z,pitch:42,bearing:-18});}catch(e){}},z);await p.waitForTimeout(z===16?5000:7000);
+      const f=`shots/${name}-${theme}-${v.id}-z${z}.jpg`;await p.screenshot({path:f,type:'jpeg',quality:88});out.push(f);}}
   await p.close();}
 console.log(out.join('\n'));await b.close();})();
