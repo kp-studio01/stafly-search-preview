@@ -1,7 +1,1 @@
-{"dark":[],"light":[
- {"id":"q1","g":{"sat":-0.5,"con":0.25,"max":1,"min":0.2,"top":0},"desk":1},
- {"id":"q2","g":{"sat":-0.45,"con":0.28,"max":1,"min":0.28,"top":0}},
- {"id":"q3","g":{"sat":-0.52,"con":0.2,"max":1,"min":0.12,"top":0}},
- {"id":"q4","g":{"sat":-0.42,"con":0.18,"max":1,"min":0.16,"top":0.06,"tint":"#F8F8F7"},"desk":1},
- {"id":"q5","g":{"sat":-0.35,"con":0.3,"max":1,"min":0.34,"top":0}}
-]}
+{"dark":[],"light":[{"id":"final","g":{},"desk":1,"zooms":[16]}]}

@@ -5921,9 +5921,9 @@ function page(id){var v=vOf(id),g=GROUPS[id];if(!v||!g)return'<div class="m-h c"
   var youRow=me||my.length?'<div class="gp-m gp-you"><span class="gp-av p">'+gpPic(null)+'</span><div><b>You'+(me?'':'<em>Not in yet</em>')+'</b><span>'+(my.length?my.map(function(x){return E(x[0])+(x[1]>1?' ×'+x[1]:'');}).join(', '):'Nothing picked yet')+'</span></div></div>':'<div class="gp-m gp-open gp-mine"><span class="gp-av">+</span><div><b>Your spot</b><span>Pick what you want from the menu</span></div></div>';
   var sub=my.reduce(function(a,x){return a+pr(x[2])*x[1];},0),shr=share(v,me?n:n+1);
   return'<div class="m-h c">'+back()+'<h1>Group order</h1><button type="button" class="m-circ gp-sh" data-gpshare="'+id+'" aria-label="Invite friends">'+mS('share')+'</button></div>'+
-  '<div class="g-card gp-card"><div class="g-media'+(cv?'':' g-poster')+'">'+(cv?'<img class="g-photo" src="'+cv+'" alt="">':gArt(v,1))+'<span class="g-shade"></span>'+
+  '<div class="g-card gp-card">'+/*m352*/((cv||!(window.CATILL&&CATILL[v.cat]))?('<div class="g-media'+(cv?'':' g-poster')+'">'+(cv?'<img class="g-photo" src="'+cv+'" alt="">':gArt(v,1))+'<span class="g-shade"></span>'+
    '<span class="g-tag">'+mS('users3')+'Group order</span><span class="g-time'+(g.closes<=15?' soon':'')+'">'+mS('clock')+g.closes+' min left</span>'+
-   '<div class="g-cap"><div class="nm"><b>'+E(v.name)+'</b><span>Delivering to '+E(g.hall)+'</span></div><div class="pr"><b>'+naira(shr)+'</b><span>your share · <s>'+naira(fee)+'</s></span></div></div></div>'+
+   '<div class="g-cap"><div class="nm"><b>'+E(v.name)+'</b><span>Delivering to '+E(g.hall)+'</span></div><div class="pr"><b>'+naira(shr)+'</b><span>your share · <s>'+naira(fee)+'</s></span></div></div></div>'):('<div class="gz3"><span class="gz3-g"></span><span class="gz3-a">'+CATILL[v.cat]+'</span><b>'+E(v.name)+'</b><small>To '+E(g.hall)+'</small><div class="gz3-p"><em>'+naira(shr)+'<s>'+naira(fee)+'</s></em><span class="gz3-t'+(g.closes<=15?' soon':'')+'">'+mS('clock')+g.closes+' min left</span></div></div>'))+
    '<div class="g-body"><div class="g-seg">'+Array.from({length:g.need},function(_,k){return'<i class="'+(k<g.n?'f':(me&&k===g.n?'me':''))+'"></i>';}).join('')+'</div>'+
    '<div class="gp-faces"><span>'+faces+'</span><b>'+n+' of '+g.need+' in</b><em>'+(left>0?left+(left===1?' spot':' spots')+' left':'Full')+'</em></div></div></div>'+
   '<div class="m-sh"><b>Who\'s in</b><span>Everyone picks their own</span></div><div class="m-card gp-list">'+rows+youRow+open+'</div>'+
@@ -9289,7 +9289,7 @@ html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.
 </style>
 <script id="m351js">/* m351: dark satellite grade */
 (function(){try{
-var G=window.SATG={dark:{sat:-.62,con:.3,max:.6,min:0,tint:'#0A1320',top:.3,minor:'rgba(255,255,255,.26)',major:'rgba(255,255,255,.72)'},light:{sat:-.65,con:.3,max:1,min:.3,tint:'#F1F3F5',top:0,minor:'rgba(255,255,255,.45)',major:'rgba(255,255,255,.88)'}};
+var G=window.SATG={dark:{sat:-.62,con:.3,max:.6,min:0,tint:'#0A1320',top:.3,minor:'rgba(255,255,255,.26)',major:'rgba(255,255,255,.72)'},light:{sat:-.45,con:.28,max:1,min:.28,tint:'#F1F3F5',top:0,minor:'rgba(255,255,255,.45)',major:'rgba(255,255,255,.88)'}};
 var _s=setSat;
 setSat=function(on){_s(on);try{
   if(!map.getLayer('sat'))return;var g=G[document.body.classList.contains('m-light')?'light':'dark'];
@@ -9302,5 +9302,38 @@ setSat=function(on){_s(on);try{
 }catch(_){}};
 if(typeof ready!=='undefined'&&ready)setSat(SAT);
 }catch(_){}})();</script>
+<style id="m352">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3){position:relative;overflow:hidden!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3{position:relative;display:flex;flex-direction:column;align-items:flex-start;padding:18px 18px 0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3>b{position:relative;z-index:2;max-width:64%;font:600 18px/1.2 "DM Sans",system-ui,sans-serif;letter-spacing:-.01em;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3>small{position:relative;z-index:2;margin-top:5px;font:500 13.5px/1.3 "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.5)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-p{position:relative;z-index:2;display:flex;align-items:center;gap:6px;margin-top:16px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-p :is(em,.gz3-t){display:flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:9px;background:#1E1E24;font:700 12.5px/1 "DM Sans",system-ui,sans-serif;font-style:normal;color:#fff;white-space:nowrap}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-p em s{font-weight:500;opacity:.45}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-p .gz3-t{font-weight:600;color:rgba(255,255,255,.72)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-p .gz3-t.soon{color:#F5C451}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-p .gz3-t svg{width:13px;height:13px;flex:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-a{position:absolute;z-index:1;right:-12px;top:-8px;width:116px;height:116px;transform:rotate(-8deg);pointer-events:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-a svg{display:block;width:100%;height:100%}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-g{position:absolute;z-index:0;right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,122,168,.2),rgba(255,122,168,0))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3>b{color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3>small{color:#6B6B75}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-p :is(em,.gz3-t){background:#F3F3F4;color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-p .gz3-t{color:#55555F}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-p .gz3-t.soon{color:#A86A00}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-a{filter:drop-shadow(0 6px 10px rgba(18,18,21,.14))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-g{background:radial-gradient(closest-side,rgba(255,122,168,.16),rgba(255,122,168,0))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-a svg>ellipse:first-of-type{display:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-a{right:-6px;top:2px;width:112px;height:112px;filter:drop-shadow(0 14px 16px rgba(0,0,0,.34)) drop-shadow(0 2px 3px rgba(0,0,0,.22))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-g{right:-64px;top:-58px;width:240px;height:240px;background:radial-gradient(closest-side,rgba(255,122,168,.2),rgba(255,122,168,.07) 55%,rgba(255,122,168,0))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-a{filter:drop-shadow(0 12px 14px rgba(60,30,45,.14)) drop-shadow(0 2px 3px rgba(60,30,45,.08))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-g{background:radial-gradient(closest-side,rgba(255,122,168,.18),rgba(255,122,168,.06) 55%,rgba(255,122,168,0))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-g{right:-34px;top:-40px;width:176px;height:176px;border-radius:50%;background:#16161A}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3-a{filter:drop-shadow(0 10px 12px rgba(0,0,0,.42)) drop-shadow(0 1px 2px rgba(0,0,0,.3))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-g{background:#F4F4F5}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gz3) .gz3-a{filter:drop-shadow(0 10px 12px rgba(18,18,21,.12)) drop-shadow(0 1px 2px rgba(18,18,21,.08))}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .gz3{padding-bottom:4px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gz3) .g-body{position:relative;z-index:2;border-top:0!important;padding-top:14px!important}
+</style>
 </body>
 </html>
