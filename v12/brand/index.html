@@ -5917,9 +5917,7 @@ function page(id){var v=vOf(id),g=GROUPS[id];if(!v||!g)return'<div class="m-h c"
   var youRow=me||my.length?'<div class="gp-m gp-you"><span class="gp-av p">'+gpPic(null)+'</span><div><b>You'+(me?'':'<em>Not in yet</em>')+'</b><span>'+(my.length?my.map(function(x){return E(x[0])+(x[1]>1?' ×'+x[1]:'');}).join(', '):'Nothing picked yet')+'</span></div></div>':'<div class="gp-m gp-open gp-mine"><span class="gp-av">+</span><div><b>Your spot</b><span>Pick what you want from the menu</span></div></div>';
   var sub=my.reduce(function(a,x){return a+pr(x[2])*x[1];},0),shr=share(v,me?n:n+1);
   return'<div class="m-h c">'+back()+'<h1>Group order</h1><button type="button" class="m-circ gp-sh" data-gpshare="'+id+'" aria-label="Invite friends">'+mS('share')+'</button></div>'+
-  '<div class="g-card gp-card">'+/*m352*/((cv||!(window.CATILL&&CATILL[v.cat]))?('<div class="g-media'+(cv?'':' g-poster')+'">'+(cv?'<img class="g-photo" src="'+cv+'" alt="">':gArt(v,1))+'<span class="g-shade"></span>'+
-   '<span class="g-tag">'+mS('users3')+'Group order</span><span class="g-time'+(g.closes<=15?' soon':'')+'">'+mS('clock')+g.closes+' min left</span>'+
-   '<div class="g-cap"><div class="nm"><b>'+E(v.name)+'</b><span>Delivering to '+E(g.hall)+'</span></div><div class="pr"><b>'+naira(shr)+'</b><span>your share · <s>'+naira(fee)+'</s></span></div></div></div>'):('<div class="gz3"><span class="gz3-g"></span><span class="gz3-a">'+CATILL[v.cat]+'</span><b>'+E(v.name)+'</b><small>To '+E(g.hall)+'</small><div class="gz3-p"><em>'+naira(shr)+'<s>'+naira(fee)+'</s></em><span class="gz3-t'+(g.closes<=15?' soon':'')+'">'+mS('clock')+g.closes+' min left</span></div></div>'))+
+  '<div class="g-card gp-card">'+/*m358*/window.gq6({id:id,v:v,g:g,shr:shr,fee:fee,cv:cv,naira:naira})+
    '<div class="g-body"><div class="g-seg">'+Array.from({length:g.need},function(_,k){return'<i class="'+(k<g.n?'f':(me&&k===g.n?'me':''))+'"></i>';}).join('')+'</div>'+
    '<div class="gp-faces"><span>'+faces+'</span><b>'+n+' of '+g.need+' in</b><em>'+(left>0?left+(left===1?' spot':' spots')+' left':'Full')+'</em></div></div></div>'+
   '<div class="m-sh"><b>Who\'s in</b><span>Everyone picks their own</span></div><div class="m-card gp-list">'+rows+youRow+open+'</div>'+
@@ -5935,7 +5933,7 @@ function joinFx(id,v,cb){var g=GROUPS[id],c=document.querySelector('#mSub .gp-ca
   var fs=c.querySelector('.gp-faces>span');if(fs)fs.insertAdjacentHTML('beforeend','<i class="you p gx-drop">'+gpPic(null)+'</i>');
   var b=c.querySelector('.gp-faces b');if(b)b.textContent=n+' of '+g.need+' in';
   var em=c.querySelector('.gp-faces em');if(em){em.classList.add('gx-tick');setTimeout(function(){em.textContent=left>0?left+(left===1?' spot':' spots')+' left':'Full';},180);}
-  var pb=c.querySelector('.g-cap .pr b');if(pb){var t0=performance.now();pb.classList.add('gx-cnt');(function f(t){var k=Math.min(1,(t-t0)/700),e=1-Math.pow(1-k,3);pb.textContent=naira(Math.round(fee+(shr-fee)*e));if(k<1)requestAnimationFrame(f);})(t0);}
+  var pb=c.querySelector('.g-cap .pr b')||c.querySelector('.gq6-pr');if(pb){var t0=performance.now();pb.classList.add('gx-cnt');(function f(t){var k=Math.min(1,(t-t0)/700),e=1-Math.pow(1-k,3);pb.textContent=naira(Math.round(fee+(shr-fee)*e));if(k<1)requestAnimationFrame(f);})(t0);}
   var you=document.querySelector('#mSub .gp-you');if(you){you.classList.add('gx-in');var tg=you.querySelector('b em');if(tg)tg.textContent='In';}
   var bt=document.querySelector('#mSub [data-gpgo]');if(bt){bt.classList.add('gx-ok');bt.innerHTML='You’re in ✓';}
   setTimeout(cb,1150);}
@@ -9406,6 +9404,44 @@ window.gq5=function(o){var v=o.v,g=o.g,id=o.id,E=function(x){return String(x==nu
  return'<div class="g-card gq5'+(o.me?' in':'')+'"><div class="gq5-m'+(cv?'':' il')+'">'+ph+'<span class="gq5-s"></span><span class="gq5-t'+(g.closes<=15?' soon':'')+'"><u></u>'+t+'</span><div class="gq5-n"><b>'+E(v.name)+'</b><span>To '+E(g.hall)+'</span></div></div>'+
   '<div class="gq5-p"><strong>'+o.naira(o.sh)+'</strong><s>'+o.naira(o.fee)+'</s>'+(save>0?'<em>Save '+save+'%</em>':'')+'</div><div class="gq5-g">'+seg+'</div>'+
   '<div class="gq5-b"><span class="gq5-f">'+faces+'</span><p><b>'+o.n+'/'+g.need+'</b> joined'+(left?' · '+left+(left===1?' spot':' spots'):'')+'</p><button type="button" class="gq5-go" data-mjoin="'+E(id)+'">'+(o.me?'You’re in':'Join')+'<i>'+(o.me?o.mS('check'):o.mS('arrow'))+'</i></button></div></div>';};
+</script>
+<style id="m358">
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6){position:relative;padding:6px!important;border-radius:30px!important;overflow:hidden!important;background:#121216!important;border:1px solid rgba(255,255,255,.07)!important;box-shadow:none!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-m{position:relative;height:176px;border-radius:24px;overflow:hidden;background:#1B1B21}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-m>img{display:block;width:100%;height:100%;object-fit:cover}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-m.il{background:linear-gradient(160deg,#24242B,#17171C)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-il{position:absolute;right:10px;bottom:-26px;width:180px;height:180px}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-il svg{display:block;width:100%;height:100%}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-il svg>ellipse:first-of-type{display:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-s{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,0) 34%,rgba(0,0,0,.66) 100%)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-m.il .gq5-s{display:none}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-t{position:absolute;left:10px;top:10px;display:flex;align-items:center;gap:7px;height:28px;padding:0 11px 0 9px;border-radius:999px;background:rgba(24,24,28,.72);font:600 12.5px/1 "DM Sans",system-ui,sans-serif;letter-spacing:-.01em;color:#fff;white-space:nowrap}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-t u{width:8px;height:8px;border-radius:50%;background:#F5A524;box-shadow:0 0 0 2.5px rgba(245,165,36,.25)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-n{position:absolute;left:16px;right:16px;bottom:13px;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-n b{display:block;font:600 23px/1.1 "DM Sans",system-ui,sans-serif;letter-spacing:-.035em;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-n span{display:block;margin-top:4px;font:500 13.5px/1.2 "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.86);text-shadow:0 1px 6px rgba(0,0,0,.45)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-p{display:flex;align-items:baseline;gap:9px;padding:18px 12px 0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-p strong{font:700 34px/1 "DM Sans",system-ui,sans-serif;letter-spacing:-.045em;color:#fff}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-p s{font:500 14.5px/1 "DM Sans",system-ui,sans-serif;color:rgba(255,255,255,.42)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gq5-p em{margin-left:auto;align-self:center;height:26px;padding:0 10px;display:inline-flex;align-items:center;border-radius:999px;font:600 12.5px/1 "DM Sans",system-ui,sans-serif;font-style:normal;color:#FF8FB5;background:rgba(255,122,168,.14)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .g-body{background:transparent!important;border-top:0!important;padding:16px 12px 12px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .g-seg{gap:4px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .g-seg i{height:3px!important;border-radius:3px!important;background:rgba(255,255,255,.12)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .g-seg i.f,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .g-seg i.me{background:#F4F4F6!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on #mSub .g-card:has(.gq6) .gp-faces{margin-top:14px!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6){background:#fff!important;border-color:rgba(18,18,21,.05)!important;box-shadow:0 1px 2px rgba(18,18,21,.04),0 14px 30px -18px rgba(18,18,21,.18)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6) .gq5-m.il{background:linear-gradient(160deg,#F4F4F6,#ECECEF)}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6) .gq5-p strong{color:#121215}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6) .gq5-p s{color:#9A9AA3}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6) .gq5-p em{color:#E0457F;background:#FFE7F0}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6) .g-seg i{background:rgba(18,18,21,.09)!important}
+html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6) .g-seg i.f,html body.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m2on.m-light #mSub .g-card:has(.gq6) .g-seg i.me{background:#17171B!important}
+</style><script id="m358js">
+window.gq6=function(o){var v=o.v,g=o.g,id=o.id,E=function(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+ var cv=o.cv||(window.GPH&&GPH[id]?'../lib/gph/'+id+'.jpg':''),ill=window.CATILL&&CATILL[v.cat];
+ var t=g.closes>=60?(Math.round(g.closes/60)+' hr left'):(g.closes+' min left'),save=o.fee>0?Math.round((1-o.shr/o.fee)*100):0;
+ return'<div class="gq6"><div class="gq5-m'+(cv?'':' il')+'">'+(cv?'<img src="'+E(cv)+'" alt="">':'<span class="gq5-il">'+(ill||'')+'</span>')+'<span class="gq5-s"></span><span class="gq5-t'+(g.closes<=15?' soon':'')+'"><u></u>'+t+'</span><div class="gq5-n"><b>'+E(v.name)+'</b><span>To '+E(g.hall)+'</span></div></div>'+
+  '<div class="gq5-p"><strong class="gq6-pr">'+o.naira(o.shr)+'</strong><s>'+o.naira(o.fee)+'</s>'+(save>0?'<em>Save '+save+'%</em>':'')+'</div></div>';};
 </script>
 </body>
 </html>
